@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+
+		<link rel="stylesheet" href="css/login/login.css">
+	</head>
+
+	<body>
+		<div>
+
+			<div class="sfmodal modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: block;">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span>
+							</button>
+							<h4 class="modal-title">登录</h4> </div>
+						<div class="modal-body">
+							<p class="sfModal-content">
+								<div class="row bg-white login-modal">
+									<div class="col-md-4 col-sm-12 col-md-push-7 login-wrap">
+										<h1 class="h4 text-muted login-title">用户登录</h1>
+										<form action="/api/user/login" method="POST" role="form" class="mt30">
+											<div class="form-group">
+												<label class="control-label">Email</label>
+												<input type="email" class="form-control" name="mail" required="" placeholder="hello@segmentfault.com">
+											</div>
+											<div class="form-group">
+												<label class="control-label">密码</label>
+												<input type="password" class="form-control" name="password" required="" placeholder="密码">
+											</div>
+											<div class="form-group clearfix">
+												<div class="checkbox pull-left">
+													<label>
+														<input name="remember" type="checkbox" value="1" checked=""> 记住登录状态</label>
+												</div>
+												<button type="submit" class="btn btn-primary pull-right pl20 pr20">登录</button>
+											</div>
+										</form>
+										<p class="h4 text-muted visible-xs-block h4">快速登录</p>
+										<div class="widget-login mt30">
+											<p class="text-muted mt5 mr10 pull-left hidden-xs">快速登录</p>
+											<a href="/user/oauth/weixin" class="btn pl5 pr5 mb5 btn-default btn-sm btn-sn-wechat"><span class="icon-sn-wechat"></span> <strong class="visible-xs-inline">微信账号</strong></a>
+											<a href="/user/oauth/weibo" class="btn pl5 pr5 mb5 btn-default btn-sm btn-sn-weibo"><span class="icon-sn-weibo"></span> <strong class="visible-xs-inline">新浪微博账号</strong></a>
+											<a href="/user/oauth/qq" class="btn pl5 pr5 mb5 btn-default btn-sm btn-sn-qq"><span class="icon-sn-qq"></span> <strong class="visible-xs-inline">QQ 账号</strong></a>
+										</div>
+									</div>
+									<div class="login-vline hidden-xs hidden-sm"></div>
+									<div class="col-md-4 col-md-pull-3 col-sm-12 login-wrap">
+										<h1 class="h4 text-muted login-title">创建新账号</h1>
+										<form action="/api/user/register" method="POST" role="form" class="mt30">
+											<div class="form-group">
+												<label for="name" class="control-label">用户名</label>
+												<input type="text" class="form-control" name="name" required="" placeholder="字母、数字等，用户名唯一">
+											</div>
+											<div class="form-group">
+												<label for="mail" class="control-label">Email</label>
+												<input type="hidden" name="mail">
+												<div class="typehelper" style="position: relative;">
+													<input type="email" class="form-control register-mail" name="mail" required="" placeholder="hello@segmentfault.com">
+													<ul class="dropdown-menu" role="menu" style="display: none; min-width: 297px;"></ul>
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="password" class="control-label">密码</label>
+												<input type="password" class="form-control" name="password" required="" placeholder="不少于 6 位">
+											</div>
+											<div class="form-group" style="display:none;">
+												<label class="required control-label">验证码</label>
+												<input type="text" class="form-control" id="captcha" name="captcha" placeholder="请输入下方的验证码">
+												<div class="mt10">
+													<a id="loginReloadCaptcha" href="javascript:void(0)">
+														<img data-src="/user/captcha?w=240&amp;h=50" class="captcha" width="240" height="50">
+													</a>
+												</div>
+											</div>
+											<div class="form-group clearfix">
+												<div class="checkbox pull-left">
+													同意并接受<a href="/tos" target="_blank">《服务条款》</a>
+												</div>
+												<button type="submit" class="btn btn-primary pl20 pr20 pull-right">注册</button>
+											</div>
+										</form>
+									</div>
+								</div>
+								<div class="text-center text-muted mt30">
+									<a href="/user/forgot" class="ml5">找回密码</a>
+								</div>
+							</p>
+						</div>
+						<div class="modal-footer hidden"></div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</body>
+
+</html>

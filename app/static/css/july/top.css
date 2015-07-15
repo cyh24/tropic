@@ -1,0 +1,35 @@
+/*returnTop*/
+
+p#back-to-top {
+	position: fixed;
+	display: none;
+	bottom: 100px;
+	right: 40px;
+}
+p#back-to-top a {
+	text-align: center;
+	text-decoration: none;
+	color: #d1d1d1;
+	display: block;
+	width: 64px;
+	-moz-transition: color 1s;
+	-webkit-transition: color 1s;
+	-o-transition: color 1s;
+}
+p#back-to-top a:hover {
+	color: #979797;
+}
+p#back-to-top a span {
+	background: transparent url(/Public/Image/top/top_arrow.png?150501) no-repeat top right;
+	border-radius: 6px;
+	display: block;
+	height: 64px;
+	width: 57px;
+	margin-bottom: 5px;
+	-moz-transition: background 1s;
+	-webkit-transition: background 1s;
+	-o-transition: background 1s;
+}
+#back-to-top a:hover span {
+	background: transparent url(/Public/Image/top/top_arrow.png?150501) no-repeat top right;
+}
