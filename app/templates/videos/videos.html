@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+	{% include "include.html"%}
+
+	<link rel="stylesheet" href="/static/css/txkt/courseList.css">
+
+	<body>
+		{% include "header.html" %}
+		<div class="wrap" style="margin-left: 10%; margin-right: 10%;">
+			<div class="main autoM clearfix">
+				<div class="main-left">
+					<div class="sort-nav sort-nav-sml clearfix">
+						<dl class="sort-nav-order sort-nav-order-my">
+							<dd id="auto-test-2"><a href="/cgi-bin/courseList?mt=1001" class="cur" data-sort="0" data-action="zonghe">综合排序</a>
+							</dd>
+							<dd id="auto-test-4"><a href="/cgi-bin/courseList?mt=1001&amp;sort=3" class="" data-sort="3" data-action="newpublish">最新</a>
+							</dd>
+							<dd id="auto-test-5"><a href="/cgi-bin/courseList?mt=1001&amp;sort=5" class="" data-sort="5" data-action="score">评分</a>
+							</dd>
+							<dd id="auto-test-6"><a href="/cgi-bin/courseList?mt=1001&amp;sort=1" class="" data-sort="1" data-action="popular">人气</a>
+							</dd>
+							<dd id="auto-test-17"><a href="/cgi-bin/courseList?mt=1001&amp;sort=2" class="price-item-my " data-sort="2" data-action="price">价格<b class="icon icon-price-unselect pngFix"></b></a>
+							</dd>
+						</dl>
+
+						<dl class="sort-nav-order sort-nav-right">
+							<dd class="video-type"><a class="video-type-item " data-video="zhibo" data-action="look_zhibo" href="/testupload/" data-video-val="1">上传视频</a>
+								<!--<a class="video-type-item curr_video" data-video="lubo" data-action="look_lubo" href="/cgi-bin/courseList?mt=1001&amp;show_video=0"
+							data-video-val="0">只看录播</a>-->
+							</dd>
+							<!--<dd id="auto-test-7">
+							<ul class="date-ctrl">
+								<li class="field-start">
+									<input placeholder="开课日期" id="js_start" data-tdw="action=date-click&amp;ver3=1" readonly="1" class="ipt" type="text">
+									<a href="javascript:void(0)" id="js_start_clear" class="clear-btn" title="清空"></a><i class="calendar icon" data-for="js_start"></i>
+								</li>
+							</ul>
+						</dd>-->
+						</dl>
+
+					</div>
+					<div class="market-bd market-bd-6 course-list">
+						<ul class="market-list-mod" id="course_list">
+
+							{% for s in serials%}
+							<li class="mlm-item" data-cid="66578">
+								<div class="course-card course-card1  course-card-nobtn mod-course-card_lu">
+									<div class="course-face">
+										<a href="http://10.2.15.12:8888/video/?serial_id={{s.id}}">
+											<img width="220" height="124" src="http://10.2.15.12/static/video/{{s.logo_img}}" onerror="this.src='http://9.url.cn/edu/img/img-err.png';this.onerror=null;">
+											<i class="icon-card-lu"></i>
+										</a>
+									</div>
+									<div class="course-title"> <a href="">{{s.title}}</a> </div>
+									<div class="course-emphasis">
+										<span class="course-price course-price-free"> 免费 </span>
+										<span class="icon-sep"></span>
+										<a class="course-agency nor-link" href="" title="">
+											<span class="course-agency-name">{{s.teacher.name}}</span></a>
+									</div>
+									<div class="course-emphasis course-relations">
+										<span class="course-num">  {{s.watch_num}} 观看  </span>
+									</div>
+								</div>
+							</li>
+							{% endfor %}
+
+						</ul>
+					</div>
+				</div>
+				<div class="main-right">
+					<div class="main-right-top">热门推荐</div>
+					<div class="main-right-list">
+
+						<div class="mlm-item">
+							<div class="course-card course-card2 ">
+								<div class="course-face">
+									<a href="">
+										<img alt="" width="220" height="124" src="" onerror="this.src='http://9.url.cn/edu/img/img-err.png';this.onerror=null;">
+										<span class=""></span>
+									</a>
+								</div>
+								<div class="course-title">
+									<a href="">xxx</a>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</body>
+
+</html>

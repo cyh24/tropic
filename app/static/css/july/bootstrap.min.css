@@ -734,8 +734,8 @@ pre code {
 .container {
 	margin-right: auto;
 	margin-left: auto;
-	padding-left: 115px;
-	padding-right: 115px
+	padding-left: 15px;
+	padding-right: 15px
 }
 @media (min-width: 768px) {
 	.container {

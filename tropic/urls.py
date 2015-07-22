@@ -22,5 +22,10 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^index/', 'app.views.index')
+    url(r'^index/', 'app.views.index'),
+    url(r'^$', 'app.views.index'),
+    url(r'^login/', 'app.views.login_ui'),
+    url(r'^login-do/', 'app.views.login_do'),
+    url(r'^logout/', 'app.views.log_out'),
+    url(r'^videos/', 'app.views.videos_ui')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

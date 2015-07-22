@@ -1,0 +1,232 @@
+{% block extrastyle %}
+<link href="/static/css/july/bootstrap.min.css" rel="stylesheet">
+<link href="data:text/css;charset=utf-8," data-href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap-theme.min.css" rel="stylesheet" id="bs-theme-stylesheet">
+<link href="/static/css/july/font-awesome.css" rel="stylesheet">
+<link href="/static/css/july/icon.css" rel="stylesheet">
+<link href="/static/css/july/prettify.css" rel="stylesheet">
+
+<!--
+		<link href="/static/css/july/top.css" rel="stylesheet">
+        -->
+<link href="/static/css/july/styles.css" rel="stylesheet"> {% endblock %}
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<div class="navbar navbar-inverse navbar-fixed-top headheight">
+			<div class="container aw-top-menu-wrap">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand logo " style="color:#fff;" href="/index/">
+						<p>回归线</p>
+					</a>
+					<a class="navbar-brand logo " style="color:#fff;">
+						<strong>{{page_title}}</strong>
+					</a>
+				</div>
+				<div class="navbar-collapse collapse">
+					<style>
+						.navbar-nav #indexpage {
+							width: 62px;
+							height: 52px;
+						}
+						.navbar-nav #algorithm,
+						.navbar-nav #all-video,
+						.navbar-nav #ask-park {
+							width: 62px;
+							height: 52px;
+						}
+						.navbar-nav #machinelearning #julyapp {
+							width: 92px;
+							height: 52px;
+						}
+					</style>
+
+					<div class="navbar-collapse collapse">
+
+						<ul class="nav navbar-nav  navbar-nav-font-size">
+							<li id="indexpage" class="active"><a href="">首页</a>
+							</li>
+							<li id="algorithm"><a href="/videos/">视频</a>
+							</li>
+							<li id="all-video"><a href="">文章</a>
+							</li>
+							<li id="ask-park"><a href="">社区</a>
+							</li>
+						</ul>
+
+						<form class="aw-search-box navbar-form navbar-left" role="search" action="">
+							<div class="form-group" style="position:relative">
+								<input type="text" class="form-control " placeholder="搜索视频" name="key_word" style="width:200px;">
+								<input type="hidden" value="1" name="category">
+								<span title="搜索" id="global_search_btns" onclick=""><i class="fa fa-search" style="margin-top: 4px;"></i></span>
+							</div>
+						</form>
+
+						<div class="nav navbar-nav navbar-right">
+
+
+							{% if login_state == False %}
+							<li id="unlogin" data-toggle="modal" data-target="/login/">
+								<a href="/login/">登陆</a>
+							</li>
+
+							<li id="unregeister" data-toggle="modal" data-target="#register">
+								<a href="/register/">注册</a>
+							</li>
+
+							{% else %}
+
+							<li id="login_name" class=" aw-user-nav">
+								<a href="" class="aw-user-nav-dropdown">
+
+									<img src="http://ask.julyedu.com/uploads/avatar/000/00/07/70_avatar_min.jpg">
+
+								</a>
+								<span id="uname_id" style="display: none">770</span>
+								<ul class="dropdown-menu  dropdown-menu-list" role="menu">
+
+									<!--<li><a href="http://ask.julyedu.com/inbox/"><i class="icon icon-inbox"></i> 私信<span class="badge badge-important hide" id="inbox_unread">0</span></a>
+										</li>-->
+									<li><a href=""><i class="icon icon-cart"></i> 购物车</a>
+									</li>
+									<li><a href=""><i class="icon icon-draft"></i> 收藏课程</a>
+									</li>
+									<li><a href=""><i class="icon icon-attach"></i> 已买课程</a>
+									</li>
+
+									<li><a href=""><i class="icon icon-setting"></i> 设置</a>
+									</li>
+
+									<li id="logout"><a href=""><i class="icon icon-logout"></i> 退出</a>
+									</li>
+								</ul>
+							</li>
+
+							<li>
+								<div id="notificationsEle" class="aw-top-nav navbar">
+
+									<a href="/logout/"><i class="icon icon-logout"></i>退出</a>
+									<span class="badge badge-important" style="display:none" id="notifications_unread" value="1">1</span>
+								</div>
+							</li>
+
+							{% endif %}
+
+						</div>
+					</div>
+					</li>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Marketing messaging and featurettes
+================================================== -->
+<!-- Wrap the rest of the page in another container to center all the content. -->
+
+<div class="container description">
+
+</div>
+<!-- FOOTER -->
+
+<!-- script references -->
+<meta charset="UTF-8">
+<script src="/static/js/july/jquery.js"></script>
+<script src="/static/js/july/bootstrap.min.js"></script>
+<script src="/static/js/july/prettify.js"></script>
+<script src="/static/js/july/acknowledgeinput.js"></script>
+<script src="/static/js/july/handlebars-v3.0.0.js"></script>
+<script src="/static/js/july/myweb.js"></script>
+<script src="/static/js/july/common.js"></script>
+<script src="/static/js/july/aws.js"></script>
+
+<script type="text/javascript">
+	$(function() {
+		$("#login_name").mouseover(function() {
+			$(this).addClass("open")
+		}).mouseout(function() {
+			$(this).removeClass('open')
+		});
+		var uid = null;
+		uid = 770;
+		if (uid) {
+			$.ajax({
+				type: "post",
+				url: "",
+				data: {
+					"uid": uid
+				},
+				success: function(data) {
+					if (data) {
+						var count = data.total;
+						if (count == 0) {
+							$("#isAllHistory a").attr("href", "");
+						} else {
+							$("#isAllHistory a").attr("href", "" + count);
+							$(".badge").html(count);
+						}
+					}
+				},
+				error: function(request) {}
+			});
+			$.ajax({
+				url: "",
+				dataType: 'json',
+				success: function(res) {
+					if (!res.code && res.data.unread_count) {
+						$("#Notice .badge").html(res.data.unread_count);
+					}
+				}
+			});
+		}
+		//搜索按钮
+		$("#global_search_btns").click(function() {
+			$(this).parent().parent().submit();
+		});
+		//菜单栏下拉效果
+		$(".navbar-toggle").click(function() {
+			if ($("#bigbrother").length > 0) {
+				$("#bigbrother").remove();
+			} else {
+				$('body').prepend("<div style='height:350px' id='bigbrother'></div>");
+			}
+		});
+		notificationDia();
+
+		function notificationDia() {
+			var notification_unread_num = $('#notifications_unread').val();
+			$('#notificationsEle').mouseover(function() {
+				if (!notification_unread_num) {
+					$('#header_notification_list').html('<p align="center" style="font-size:14px;">没有未读通知</p>');
+				}
+				$('#notifyDia').css('display', 'block');
+			}).mouseout(function() {
+				$('#notifyDia').css('display', 'none');
+			});
+		}
+		$('#cnzz_stat_icon_1254142921 img').attr('src', 'img/cnzz.png');
+	});
+</script>
+
+<script type="text/javascript">
+	$(function() {
+		$("#machinelearning").addClass("active");
+		$("#finished ul li").mouseover(function() {
+			$(".panel-default .panel-body").show();
+			$("#show-hide").html("点击隐藏");
+		});
+		$("#show-hide").click(function() {
+			if ($(".panel-default .panel-body").is(":hidden")) {
+				$(".panel-default .panel-body").show();
+				$(this).html("点击隐藏");
+			} else {
+				$(".panel-default .panel-body").hide();
+				$(this).html("点击展开");
+			}
+		});
+	});
+</script>
