@@ -3,7 +3,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from django.http import HttpResponse,HttpResponseRedirect 
+from django.http import HttpResponse,HttpResponseRedirect, JsonResponse
 from django.shortcuts import render_to_response 
 from django.template import RequestContext 
 from django.views.decorators.csrf import csrf_exempt 
@@ -20,6 +20,9 @@ from models import *
 import time
 import os
 import sys
+
+
+from qiniu_cyh import *
 
 HOMEPAGE = 'http://127.0.0.1:8888'
 
@@ -110,3 +113,20 @@ def videos_ui(request):
     msg = init_msg(request)
 
     return render_to_response('videos/videos.html', msg)
+
+
+def upload_ui(request):
+    msg = init_msg(request)
+
+    return render_to_response('upload/upload.html', msg)
+
+Qiniu = QiniuProcess()
+def qiniu_uptoken(request):
+    uptoken = Qiniu.upload_token()
+    print uptoken
+
+    msg = {}
+    msg['uptoken'] = uptoken
+
+    return JsonResponse(msg)
+

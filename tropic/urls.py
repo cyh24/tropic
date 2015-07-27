@@ -27,5 +27,7 @@ urlpatterns = patterns('',
     url(r'^login/', 'app.views.login_ui'),
     url(r'^login-do/', 'app.views.login_do'),
     url(r'^logout/', 'app.views.log_out'),
+    url(r'^upload/', 'app.views.upload_ui'),
+    url(r'^qiniu-uptoken/', 'app.views.qiniu_uptoken'),
     url(r'^videos/', 'app.views.videos_ui')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
