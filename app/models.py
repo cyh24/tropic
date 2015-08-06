@@ -16,7 +16,7 @@ class QiniuFile(models.Model):
     bucket = models.CharField(max_length=50)
     domain = models.CharField(max_length=100)
 
-    need_authority = Models.BooleanField()
+    need_authority = models.BooleanField()
 
     size_int = models.IntegerField(default=0)
     size_str = models.CharField(max_length=50, default="0")
@@ -45,7 +45,7 @@ class Video(QiniuFile):
     tags = models.CharField(max_length=200)
 
     video_time = models.CharField(max_length=20, default="00:00:00")
-    money      = models.Decimal(default=0.0)
+    money      = models.FloatField(default=0.0)
 
     watch_num    = models.IntegerField(default=0)
     like_num     = models.IntegerField(default=0)

@@ -22,9 +22,8 @@ import os
 import sys
 
 
-from qiniu_cyh import *
 
-HOMEPAGE = 'http://127.0.0.1:8888'
+HOMEPAGE = 'http://el.tropic.com.cn'
 
 @csrf_exempt 
 
@@ -120,13 +119,4 @@ def upload_ui(request):
 
     return render_to_response('upload/upload.html', msg)
 
-Qiniu = QiniuProcess()
-def qiniu_uptoken(request):
-    uptoken = Qiniu.upload_token()
-    print uptoken
-
-    msg = {}
-    msg['uptoken'] = uptoken
-
-    return JsonResponse(msg)
 
