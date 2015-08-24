@@ -20,12 +20,9 @@ def upload_ui(request):
     return render_to_response('upload/upload.html', data)
 
 def uptoken(request):
-    if request.GET != None:
-        print "request.GET"
-        print request.GET
-        for k in request.GET:
-            print k
-    key   = "keykeykey"
+    key = ""
+    if request.GET.has_key("key"):
+        key = request.GET["key"]
     try:
         token = q.upload_token(BUCKET_NAME, key)
     except Exception, e:
