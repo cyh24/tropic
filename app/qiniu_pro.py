@@ -20,7 +20,12 @@ def upload_ui(request):
     return render_to_response('upload/upload.html', data)
 
 def uptoken(request):
-    key   = "favicon.ico"
+    if request.GET != None:
+        print "request.GET"
+        print request.GET
+        for k in request.GET:
+            print k
+    key   = "keykeykey"
     try:
         token = q.upload_token(BUCKET_NAME, key)
     except Exception, e:

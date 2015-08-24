@@ -5,6 +5,7 @@
 
 
 $(function() {
+    var my_key = "";
     var uploader = Qiniu.uploader({
         runtimes: 'html5,flash,html4',
         browse_button: 'pickfiles',
@@ -14,7 +15,7 @@ $(function() {
         flash_swf_url: 'js/plupload/Moxie.swf',
         dragdrop: true,
         chunk_size: '4mb',
-        uptoken_url: '/uptoken/',
+        //uptoken_url: '/uptoken/',
         domain: 'http://7xklh2.media1.z0.glb.clouddn.com',
 
         //uptoken_url: $('#uptoken_url').val(),
@@ -66,16 +67,14 @@ $(function() {
                 var progress = new FileProgress(err.file, 'fsUploadProgress');
                 progress.setError();
                 progress.setStatus(errTip);
+            },
+            'Key': function(up, file) {
+                var key = file.name;
+                my_key = key;
+                return key
             }
 
-            // ,
-            // 'Key': function(up, file) {
-            //     var key = "";
-            //     // do something with key
-            //     return key
-            // }
-
-        }
+        },
     });
 
     uploader.bind('FileUploaded', function() {

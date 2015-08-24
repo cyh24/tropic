@@ -119,4 +119,7 @@ def upload_ui(request):
 
     return render_to_response('upload/upload.html', msg)
 
+def wechat_pay(request):
+    pass
+
 

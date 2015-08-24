@@ -1,0 +1,32 @@
+<html lang="zh-CN">
+
+	{% include "include.html"%}
+	
+	<link href="/static/css/july/login.css" rel="stylesheet" type="text/css">
+	<link href="/static/css/july/common.css" rel="stylesheet" type="text/css">
+
+	<body>
+		{% include "header.html"%}
+
+		<div class="aw-login-box">
+			<div class="mod-body clearfix" >
+				<div class="content pull-left" style="margin-top:80px;">
+
+				<div style="color:#556B2F;font-size:20px;font-weight: bolder;text-align:center;
+							margin-left:auto; margin-right:auto;">下单成功，请微信扫描二维码支付
+
+							{{result}}
+				</div>
+				
+				
+				<p><img alt="模式二之扫码支付" src= "/static/images/{{img_name}}" style="width:150px;height:150px;"/></p>
+
+				</div>
+			</div>
+			<div class="mod-footer">
+			</div>
+		</div>
+
+	</body>
+
+</html>

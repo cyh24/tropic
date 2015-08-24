@@ -29,5 +29,6 @@ urlpatterns = patterns('',
     url(r'^logout/', 'app.views.log_out'),
     url(r'^upload/', 'app.qiniu_pro.upload_ui'),
     url(r'^uptoken/', 'app.qiniu_pro.uptoken'),
+    url(r'^wechat-pay/', 'app.pay.wechat_pay'),
     url(r'^videos/', 'app.views.videos_ui')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
