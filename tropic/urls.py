@@ -28,6 +28,7 @@ urlpatterns = patterns('',
     url(r'^login-do/', 'app.views.login_do'),
     url(r'^logout/', 'app.views.log_out'),
     url(r'^upload/', 'app.qiniu_pro.upload_ui'),
+    url(r'^upload-post/', 'app.db_pro.upload_post'),
     url(r'^uptoken/', 'app.qiniu_pro.uptoken'),
     url(r'^wechat-pay/', 'app.pay.wechat_pay'),
     url(r'^videos/', 'app.views.videos_ui')
