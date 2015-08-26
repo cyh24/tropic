@@ -494,6 +494,7 @@
 	margin-top: 14px
 }
 .main {
+	/*min-width: 980px;*/
 	min-height: 600px;
 	padding-left: 10px;
 	padding-right: 10px;
@@ -502,7 +503,8 @@
 	zoom: 1
 }
 .main-left {
-	width: 70%;
+	/*width: 70%;*/
+	/*min-width: 880px;*/
 	float: left
 }
 .main-right {
@@ -786,14 +788,20 @@
 	overflow: visible
 }
 .market-bd-6 .market-list-mod {
-	width: 944px!important;
-	margin-left: -8px
+	width: 980px!important;
+	margin-left: -55px
 }
 .market-bd-6 .mlm-item {
+	float: left;
+	padding: 7px;
 	margin: 0 0 28px 0!important
 }
 .warn-empty {
 	margin-top: 270px
+}
+.item-img {
+  width: 203px;
+  height: 124px;
 }
 .course-card {
 	padding: 0;
@@ -804,7 +812,7 @@
 }
 .course-card .course-face a,
 .course-card .course-face img {
-	width: 220px
+	/*width: 220px*/
 }
 .course-card .course-face .course-time {
 	background-color: transparent;
@@ -822,7 +830,7 @@
 	margin: 0 10px
 }
 .course-card .course-emphasis {
-	margin-top: 4px;
+	margin-top: 5px;
 	height: 20px;
 	overflow: hidden
 }
@@ -842,7 +850,7 @@
 	margin-top: 4px
 }
 .course-card .course-relations {
-	margin-top: 10px
+	margin-top: 2px
 }
 .course-card1 {
 	padding: 6px 7px!important;

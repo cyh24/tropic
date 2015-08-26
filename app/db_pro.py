@@ -24,7 +24,7 @@ import sys
 from common import *
 from config import *
 
-LOGO_FOLD = "storage/logo-images/"
+LOGO_FOLD = "app/static/storage/logo-images/"
 
 def upload_post(request):
     if request.method == "POST":
@@ -37,7 +37,8 @@ def upload_post(request):
         print "logo: ", path
 
     try:
-        if save_video(request, path) == True:
+        path_logo = path[3:]
+        if save_video(request, path_logo) == True:
             return HttpResponse("OK.") 
         else:
             return HttpResponse("Fail.") 

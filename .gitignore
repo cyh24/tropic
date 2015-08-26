@@ -1,2 +1,2 @@
 *.pyc
-storage/*
+app/static/storage/*

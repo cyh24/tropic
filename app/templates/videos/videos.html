@@ -4,9 +4,11 @@
 	{% include "include.html"%}
 
 	<link rel="stylesheet" href="/static/css/txkt/courseList.css">
+	<link rel="stylesheet" href="/static/css/txkt/common.css">
 
 	<body>
 		{% include "header.html" %}
+
 		<div class="wrap" style="margin-left: 10%; margin-right: 10%;">
 			<div class="main autoM clearfix">
 				<div class="main-left">
@@ -40,33 +42,49 @@
 						</dl>
 
 					</div>
+
 					<div class="market-bd market-bd-6 course-list">
 						<ul class="market-list-mod" id="course_list">
 
-							{% for s in serials%}
-							<li class="mlm-item" data-cid="66578">
+							{% for v in videos%}
+							<li class="mlm-item">
 								<div class="course-card course-card1  course-card-nobtn mod-course-card_lu">
 									<div class="course-face">
-										<a href="http://10.2.15.12:8888/video/?serial_id={{s.id}}">
-											<img width="220" height="124" src="http://10.2.15.12/static/video/{{s.logo_img}}" onerror="this.src='http://9.url.cn/edu/img/img-err.png';this.onerror=null;">
+										<a href="">
+											<img class="item-img" src="{{v.logo_img}}" onerror="this.src='http://9.url.cn/edu/img/img-err.png';this.onerror=null;">
 											<i class="icon-card-lu"></i>
 										</a>
 									</div>
-									<div class="course-title"> <a href="">{{s.title}}</a> </div>
+									<div class="course-title"> <a href="">{{v.title}}</a> </div>
 									<div class="course-emphasis">
-										<span class="course-price course-price-free"> 免费 </span>
+										<span class="course-price course-price-free" style="float: left;"> 免费 </span>
 										<span class="icon-sep"></span>
 										<a class="course-agency nor-link" href="" title="">
-											<span class="course-agency-name">{{s.teacher.name}}</span></a>
+											<span class="course-agency-name">{{v.teacher_name}}</span></a>
 									</div>
-									<div class="course-emphasis course-relations">
-										<span class="course-num">  {{s.watch_num}} 观看  </span>
+									<div class="course-emphasis course-relations" style="float: left;">
+										<span class="course-num">  {{v.watch_num}} 观看  </span>
+									</div>
+									<div class="course-emphasis course-relations" style="float: left;">
+										<span class="course-num">  &nbsp;,&nbsp;{{v.watch_num}} 赞  </span>
 									</div>
 								</div>
 							</li>
 							{% endfor %}
 
 						</ul>
+					</div>
+
+					<div class="clear"></div>
+					<div class="sort-page">
+						<a href="" class="page-btn" style="width: 100px;">上一页</a>
+						<a href="" data-page="1" class="page-btn page-btn-cur">1</a>
+						<a href="" data-page="2" class="page-btn ">2</a>
+						<a href="" data-page="3" class="page-btn ">3</a>
+						<span>...</span>
+						<a href="" data-page="62" class="page-btn">62</a>
+						<a href="" data-page="63" class="page-btn">63</a>
+						<a href="" data-page="2" class="page-btn" style="width: 100px;">下一页</a>
 					</div>
 				</div>
 				<div class="main-right">

@@ -33,7 +33,8 @@ def paginator_show(request, msg_list, page_size=16):
     #before_range_num = 6
     try:
         page = 1
-        #page = int(request.GET.get("page", 1))
+        if request.GET.has_key('page'):
+            page = int(request.GET['page'])
         if page < 1:
             page = 1
     except ValueError:
@@ -110,6 +111,11 @@ def log_out(request):
 
 def videos_ui(request):
     msg = init_msg(request)
+
+    videos = Video.objects.all().reverse()
+    subVideos = paginator_show(request, videos)
+
+    msg['videos'] = subVideos
 
     return render_to_response('videos/videos.html', msg)
 
