@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+	{% include "include.html"%}
+	<link rel="stylesheet" href="/static/css/july/video.css">
+
+	<link href="/static/video-js/video-js.css" rel="stylesheet" type="text/css">
+	<script src="/static/video-js/video.js"></script>
+
+	<body>
+		{% include "header.html" %}
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<ol class="breadcrumb">
+						<li><a href="/">首页</a></li>
+						<li><a href="/video/index">全部视频</a></li>
+						<li class="active">函数精讲</li>
+					</ol>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-9">
+					<div style="margin-right: 30px;">
+						<div class="video_player">
+							<div style="width: 100%; height: 100%;">
+								<!--<video src="http://7xlcrn.com1.z0.glb.clouddn.com/testd.mp4" controls="controls" style="width: 100%; height: 100%;">
+									your browser does not support the video tag
+								</video>-->
+								<video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="100%" height="100%" poster="http://video-js.zencoder.com/oceans-clip.png" data-setup="{}">
+									<source src="http://video-js.zencoder.com/oceans-clip.mp4" type='video/mp4'></source> />
+									<source src="http://video-js.zencoder.com/oceans-clip.webm" type='video/webm'></source> />
+									<source src="http://video-js.zencoder.com/oceans-clip.ogv" type='video/ogg'></source> />
+									<track kind="captions" src="demo.captions.vtt" srclang="en" label="English"></track>
+									<!-- Tracks need an ending tag thanks to IE9 -->
+									<track kind="subtitles" src="demo.captions.vtt" srclang="en" label="English"></track>
+									<!-- Tracks need an ending tag thanks to IE9 -->
+									<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+								</video>
+							</div>
+						</div>
+
+						<div class="share-btn" style="margin-top: 10px;">
+							<div class="Clearfix">
+								<div class="btn-group pull-right">
+
+									<button title="浏览量" type="button" data-id="59" class="disabled btn btn-default" style="color:#548cff;">
+										<span class="fa fa-file-video-o" style="padding-right: 5px;"></span><span class="badge">1</span>
+									</button>
+
+									<button type="button" id="vote_up" data-id="59" class="btn btn-default" style="color:#548cff;">
+										<span class="fa fa-thumbs-o-up"></span><span class="votes_up_num">0</span>
+									</button>
+									<!--<button type="button" class="btn btn-default" style="color:#f00;">-->
+									<!--<span class="fa fa-thumbs-o-down"></span> 243-->
+									<!--</button>-->
+
+									<!-- JiaThis Button BEGIN -->
+									<button type="button" class="btn btn-default" id="shareout_button">
+										<!-- <a href="" class="jiathis jiathis_txt" target="_blank"><span class="fa fa-share-square-o"></span> 分享</a> -->
+										<a class="text-color-999 dropdown-toggle" data-toggle="dropdown" id="shareout_a">
+											<span class="fa fa-share-square-o"></span> 分享</a>
+
+										<ul class=" aw-dropdown dropdown-menu-list dropdown-menu  shareout" role="menu">
+
+											<li><a onclick="AWS.User.share_out('tsina');"><i class="icon icon-weibo "></i> 微博</a></li>
+											<li><a onclick="AWS.User.share_out('qzone');"><i class="icon icon-qzone "></i> QZONE</a></li>
+											<li>
+												<a onclick="AWS.User.share_out('weixin');">
+													<i class=" icon icon-wechat"></i>微信</a>
+											</li>
+										</ul>
+
+										<!--<a class="jiathis_counter_style_margin:3px 0 0 2px"></a> -->
+									</button>
+
+									<!-- JiaThis Button END -->
+
+									<button type="button" class="btn btn-default">
+										<a href="" target="_self">PPT下载</a>
+									</button>
+								</div>
+
+							</div>
+
+						</div>
+
+						<div class="clear" style="margin-top: 50px;"></div>
+						<h4>评论</h4>
+						<hr>
+						<textarea class="form-control" rows="3" id="comment_text" placeholder="" onfocus="if(value=='有没有什么问题要问导师的？'){value='';this.style.color='black';}" onblur="if (value ==''){value='有没有什么问题要问导师的？';this.style.color='gray';}">有没有什么问题要问导师的？</textarea>
+						<input type="hidden" id="comment_reply" value="0">
+						<br>
+						<div style="height:35px;text-align:right">
+							<button class="btn btn-primary" data-parent_id="0" data-id="6" id="addcomment">提交</button>
+						</div>
+						<div id="comments" class="comment">
+							<h4>全部评论&nbsp;&nbsp;<span class="small">共<span id="comments_sumer">1</span>条</span></h4>
+							<div class="comment_many">
+
+								<div class="comment-lists">
+									<div class="comment-item" style="padding-bottom:5px;">
+										<div class="mod-head">
+											<a class="anchor" name="answer_1225"></a>
+											<!-- 用户头像 -->
+											<a class="aw-user-img aw-border-radius-5" href="http://ask.julyedu.com/people/Abac" data-id="2474">
+												<img src="http://ask.julyedu.com//uploads/avatar/000/00/39/66_avatar_min.jpg" alt=""></a>
+											<!-- end 用户头像 -->
+											<div class="title">
+												<a class="aw-user-name" href="http://ask.julyedu.com/people/Abac" data-id="3966">Abac</a> •
+												<span style="margin-top:5px;">147天前</span>
+
+												<a data_user_name="Abac" data_user_id="3966" data_comment_id="22" href="javascript:void(0);" class="comment_btn pull-right">
+													<span class="fa fa-comments-o" style="color:#00458a;"></span> 回复
+												</a>
+											</div>
+										</div>
+
+										<div class="mod-body clearfix">
+											<!-- 评论内容 -->
+											递归解决LCA问题的复杂度不是O(logn)而是O(n)吧？F(N)=2*F(N/2)，N是树中节点的数量。
+											<!-- end 评论内容 -->
+											<!-- 社交操作 -->
+											<div class="meta clearfix">
+											</div>
+
+											<!-- end 社交操作 -->
+										</div>
+									</div>
+								</div>
+
+								<div class="hide" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false">
+									<div class="modal-header">
+										<h5>加载中...</h5>
+									</div>
+									<div class="modal-body">
+										<div class="progress progress-striped active col-md-offset-0" style="padding:0;">
+											<div class="progress-bar" style="width: 100%;"></div>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix">
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="col-sm-3">
+					<!--导师简介-->
+					<h4>导师简介</h4>
+					<div class="teacher">
+						<div class="base">
+
+							<img src="/static/images/teacher.png" width="60px" height="60px" class="pull-left">
+							<p class="name">曹博</p>
+						</div>
+						<p class="info">曹鹏博士（javaman，人称彩票哥），中科院博士毕业，浙大OJ排名第一，曾就职雅虎北研、后就职Rocket Fuel。 </p>
+					</div>
+					<!--END导师简介-->
+					<!--视频简介-->
+					<h4>视频简介</h4>
+					<div>
+						<p>从70多道阿里巴巴历年笔试面试题中精选7道典型例题精讲。</p>
+					</div>
+
+					<br>
+					<br>
+					<br>
+					<h4 style="margin-top:-1%;">相关视频</h4>
+					<div>
+						<div class="relate-item">
+							<a href="">
+								<img class="video-img" alt="" src="/static/storage/logo-images/150826142843-m8Hu-sdf.png">
+								<div class="mask" style="display: none;"></div>
+								<i class="icon_playvideo" style="display: none;"></i>
+
+								<div style="margin-top: 10px;text-align:center;">阿里巴巴面试题精讲</div>
+
+							</a>
+
+							<!--<div class="row clearfix" style="margin-top:5px; font-size:12px;height:10px;">-->
+							<div class="col-md-6 col-xs-6" style="text-align:left;">
+								<i class="fa fa-clock-o"></i>&nbsp;39分钟 </div>
+							<div class="col-md-6 col-xs-6" style="text-align:right;">
+								<i class="fa fa-play-circle-o"></i>&nbsp;16544 </div>
+							<!--</div>-->
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+
+</html>

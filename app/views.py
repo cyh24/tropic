@@ -119,6 +119,10 @@ def videos_ui(request):
 
     return render_to_response('videos/videos.html', msg)
 
+def play_ui(request):
+    msg = init_msg(request)
+
+    return render_to_response('videos/play.html', msg)
 
 @csrf_protect
 def upload_ui(request):
