@@ -32,5 +32,8 @@ urlpatterns = patterns('',
     url(r'^uptoken/', 'app.qiniu_pro.uptoken'),
     url(r'^wechat-pay/', 'app.pay.wechat_pay'),
     url(r'^videos/$', 'app.views.videos_ui'),
-    url(r'^videos/play/$', 'app.views.play_ui')
+    url(r'^videos/play/$', 'app.views.play_ui'),
+    url(r'^space/$', 'app.views.space_index'),
+    url(r'^space/index/$', 'app.views.space_index'),
+    url(r'^user/setprofile/$', 'app.views.setprofile')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

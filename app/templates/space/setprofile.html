@@ -1,0 +1,77 @@
+<html lang="zh-CN">
+
+	{% include "include.html"%}
+	<link href="/static/css/space/setting.css" rel="stylesheet">
+	<!--<link href="/static/css/space/common-less.css" rel="stylesheet">-->
+
+	<body style="background-color: #edeff0;">
+		{% include "header.html"%}
+
+		<div id="main">
+
+			<div class="wcontainer clearfix">
+				<div class="setting-left l">
+					<ul class="wrap-boxes" style="list-style-type:none;">
+						<li class="subnav-active" style="">
+							<a href="/user/setprofile" class="onactive">个人资料</a>
+						</li>
+						<li>
+							<a href="/user/setavator">头像设置</a>
+						</li>
+						<li>
+							<a href="/user/setverifyemail">邮箱验证</a>
+						</li>
+						<li>
+							<a href="/user/setresetpwd">修改密码</a>
+						</li>
+						<li>
+							<a no-pjajx="" href="/user/setbindsns">绑定帐号</a>
+						</li>
+					</ul>
+				</div>
+				<div class="setting-right ">
+					<div class="setting-right-wrap wrap-boxes settings">
+
+						<div id="setting-profile" class="setting-wrap setting-profile">
+							<form id="profile">
+								<div class="wlfg-wrap">
+									<label class="my-label" for="nick">昵称</label>
+									<div class="rlf-group">
+										<input type="text" name="nickname" id="nick" autocomplete="off" data-validate="nick" class="rlf-input rlf-input-nick" value="cyh24" placeholder="请输入昵称.">
+										<p class="rlf-tip-wrap"></p>
+									</div>
+								</div>
+								
+								<div class="wlfg-wrap">
+									<label class="my-label">性别</label>
+									<div class="rlf-group rlf-radio-group">
+										<label>
+											<input type="radio" hidefocus="true" value="0" name="sex">保密</label>
+										<label>
+											<input type="radio" hidefocus="true" value="1" checked="checked" name="sex">男</label>
+										<label>
+											<input type="radio" hidefocus="true" value="2" name="sex">女</label>
+									</div>
+									<p class="rlf-tip-wrap"></p>
+								</div>
+								
+								<div class="wlfg-wrap">
+									<label class="my-label" for="aboutme">个性签名</label>
+									<div class="rlf-group">
+										<textarea name="aboutme" id="aboutme" cols="30" rows="5" class="textarea">这位童鞋很懒，什么也没有留下～～！</textarea>
+										<p class="rlf-tip-wrap"></p>
+									</div>
+								</div>
+								<div class="wlfg-wrap">
+									<div class="rlf-group" style="width: 417px; margin-top: 15px;">
+										<span id="profile-submit" hidefocus="true" aria-role="button" class="rlf-btn-green btn-block profile-btn">保存</span>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</body>

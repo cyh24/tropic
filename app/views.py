@@ -124,6 +124,16 @@ def play_ui(request):
 
     return render_to_response('videos/play.html', msg)
 
+def space_index(request):
+    msg = init_msg(request)
+
+    return render_to_response('space/index.html', msg)
+
+def setprofile(request):
+    msg = init_msg(request)
+
+    return render_to_response('space/setprofile.html', msg)
+
 @csrf_protect
 def upload_ui(request):
     msg = init_msg(request)
