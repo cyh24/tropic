@@ -4,10 +4,21 @@
 
 	<body>
 		{% include "header.html"%}
+		<style>
+			.search-logo {
+				position: absolute;
+				left: 50%;
+				margin-left: -145px;
+				margin-top: -110px;
+			}
+		</style>
 
-		<div class="wrap" style="margin-top: 160px; margin-left: 10%; margin-right: 10%;">
-			<img src="/static/images/title.jpg" style="margin-left: 35%; width:20%; margin-bottom: 15px;" />
-			<div class="post-topheader">
+		<div class="wrap" style="margin-left: 10%; margin-right: 10%;">
+			<div class="search-logo">
+				<img src="/static/images/title.jpg" />
+			</div>
+		
+			<div class="post-topheader" style="margin-top: 260px;">
 				<div class="container">
 					<ul class="search-category nav nav-pills">
 						<li class="active"><a href="/search?q=">全部</a>

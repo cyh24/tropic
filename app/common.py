@@ -16,3 +16,6 @@ def handle_uploaded_photo(path, f):
         for chunk in f.chunks():
             info.write(chunk)
     return f
+
+def printError(e):
+	print str(e)

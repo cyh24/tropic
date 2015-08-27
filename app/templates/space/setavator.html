@@ -1,0 +1,63 @@
+<html lang="zh-CN">
+
+	{% include "include.html"%}
+	<link href="/static/css/space/setting.css" rel="stylesheet">
+	<!--<link href="/static/css/space/common-less.css" rel="stylesheet">-->
+
+	<body style="background-color: #edeff0;">
+		{% include "header.html"%}
+
+		<div id="main">
+
+			<div class="wcontainer clearfix">
+				<div class="setting-left l">
+					<ul class="wrap-boxes" style="list-style-type:none;">
+						<li>
+							<a href="/user/setprofile">个人资料</a>
+						</li>
+						<li class="subnav-active">
+							<a href="/user/setavator" class="onactive">头像设置</a>
+						</li>
+						<!--<li>
+							<a href="/user/setverifyemail">邮箱验证</a>
+						</li>
+						<li>
+							<a href="/user/setresetpwd">修改密码</a>
+						</li>
+						<li>
+							<a no-pjajx="" href="/user/setbindsns">绑定帐号</a>
+						</li>-->
+					</ul>
+				</div>
+				<div class="setting-right ">
+					<div class="setting-right-wrap wrap-boxes settings">
+						<div id="setting-avator" class="setting-wrap setting-avator clearfix">
+							<div class="avator-img l">
+								<div><img src="http://img.mukewang.com//5333a1360001954902000200.jpg" width="220" height="220"></div>
+								<div>
+									<input type="button" hidefocus="true" value="换一换" class="js-avator-try avator-try" style="outline: none; border: none;">
+								</div><div class="avator-btn-group">
+								<div id="avator-btns" class="avator-btn-inner">
+									<div class="avator-btn-wrap">
+										<form target="uploadtarget" action="postpic" method="post" enctype="multipart/form-data">
+											<a href="javascript:void(0)" hidefocus="true" class="avator-btn-fake">上传头像</a>
+											<input type="file" title="上传头像" name="fileField" id="upload" accept="image/*">
+											<input type="hidden" name="type" value="1">
+										</form>
+										<iframe src="about:blank" id="uploadtarget" name="uploadtarget" frameborder="0" style="display:none;"></iframe>
+									</div>
+								</div>
+								<div class="avator-upload-wrap2" style="display:none;">
+									<span hidefocus="true" id="avator-btn-save" aria-role="button" class="rlf-btn-green btn-block">保存</span>
+								</div>
+							</div>
+							
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</body>

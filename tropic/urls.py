@@ -27,13 +27,15 @@ urlpatterns = patterns('',
     url(r'^login/', 'app.views.login_ui'),
     url(r'^login-do/', 'app.views.login_do'),
     url(r'^logout/', 'app.views.log_out'),
-    url(r'^upload/', 'app.qiniu_pro.upload_ui'),
+    url(r'^upload/', 'app.views.upload_ui'),
     url(r'^upload-post/', 'app.db_pro.upload_post'),
     url(r'^uptoken/', 'app.qiniu_pro.uptoken'),
-    url(r'^wechat-pay/', 'app.pay.wechat_pay'),
     url(r'^videos/$', 'app.views.videos_ui'),
     url(r'^videos/play/$', 'app.views.play_ui'),
     url(r'^space/$', 'app.views.space_index'),
     url(r'^space/index/$', 'app.views.space_index'),
-    url(r'^user/setprofile/$', 'app.views.setprofile')
+    url(r'^user/setprofile/$', 'app.views.setprofile'),
+    url(r'^user/setavator/$', 'app.views.setavator'),
+    url(r'^user/setbindsns/$', 'app.views.setbindsns'),
+    url(r'^test/', 'app.views.test')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

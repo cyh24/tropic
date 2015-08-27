@@ -14,18 +14,13 @@ class QiniuPro():
     def __init__(self):
         self.auth = Auth(ACCESS_KEY, SECRET_KEY)
 
-    def download_private_url(key, expires=7200):
-        base_url = 'http://%s/%s' % (DOMAIN, key)
+    def download_private_url(self, key, expires=7200):
+        base_url = '%s/%s' % (DOMAIN, key)
         private_url = self.auth.private_download_url(base_url, expires)
-        print private_url
+        return private_url
 
 Qiniu = QiniuPro()
 
-def upload_ui(request):
-    data = {}
-    data['domain']       = DOMAIN
-    data['uptoken_url']  = 'uptoken'
-    return render_to_response('upload/upload.html', data)
 
 def uptoken(request):
     key = ""

@@ -20,23 +20,30 @@ from models import *
 import time
 import os
 import sys
+from qiniu_pro import *
+from db_pro import *
 
 
 
-HOMEPAGE = 'http://el.tropic.com.cn'
+HOMEPAGE = 'http://127.0.0.1:9999'
+PAGE_SIZE = 16
 
 @csrf_exempt 
 
 @csrf_protect 
-def paginator_show(request, msg_list, page_size=16):
+def paginator_show(request, msg_list, page_size):
     #after_range_num  = 5
     #before_range_num = 6
+    page = 1
     try:
-        page = 1
         if request.GET.has_key('page'):
             page = int(request.GET['page'])
         if page < 1:
             page = 1
+
+        total_page = (len(msg_list) + page_size)/page_size
+        if page > total_page:
+            page = total_page
     except ValueError:
         page = 1
 
@@ -54,7 +61,7 @@ def paginator_show(request, msg_list, page_size=16):
 
     #template_var["page_objects"] = msg_list
     #template_var["page_range"]   = page_range
-    return msg_list
+    return msg_list, page
 
 
 
@@ -69,6 +76,13 @@ def init_msg(request):
         msg['next'] = request.GET['next']
 
     return msg
+
+def test(request):
+    print "TEST"
+    msg = init_msg(request)
+
+    return render_to_response('test.html', msg)
+
 
 def index(request):
     msg = init_msg(request)
@@ -109,20 +123,87 @@ def log_out(request):
 
     return HttpResponseRedirect(HOMEPAGE)
 
+def paginator_bar(cur_page, total_page):
+    pages_before = []
+    pages_after  = []
+    Num = 5
+
+    if total_page <= Num:
+        for i in range(cur_page-1):
+            pages_before.append(i+1)
+        for i in range(cur_page+1, total_page+1):
+            pages_after.append(i+1)
+    elif cur_page <= Num/2:
+        for i in range(cur_page-1):
+            pages_before.append(i+1)
+        for i in range(cur_page, cur_page+Num/2+1):
+            pages_after.append(i+1)
+    elif (total_page - cur_page) <= Num/2:
+        for i in range(total_page - Num, cur_page-1):
+            pages_before.append(i+1)
+        for i in range(cur_page, total_page):
+            pages_after.append(i+1)
+    else:
+        for i in range(cur_page-Num/2-1, cur_page-1):
+            pages_before.append(i+1)
+        for i in range(cur_page, cur_page + Num/2):
+            pages_after.append(i+1)
+
+    return pages_before, pages_after
+
+
 def videos_ui(request):
+
     msg = init_msg(request)
 
-    videos = Video.objects.all().reverse()
-    subVideos = paginator_show(request, videos)
+    videos, msg = get_order_videos(request, msg)
 
-    msg['videos'] = subVideos
+    total_page = (len(videos)+PAGE_SIZE)/PAGE_SIZE
+    subVideos, cur_page = paginator_show(request, videos, PAGE_SIZE)
+
+
+    pages_before, pages_after = paginator_bar(cur_page, total_page)
+
+    msg['videos']     = subVideos
+    msg['cur_page']   = cur_page
+    msg['pages_before'] = pages_before
+    msg['pages_after']  = pages_after
+    msg['pre_page']   = cur_page - 1
+    msg['after_page'] = cur_page + 1
+
+    msg['interest_videos'] = get_interest_videos()
 
     return render_to_response('videos/videos.html', msg)
 
 def play_ui(request):
     msg = init_msg(request)
 
-    return render_to_response('videos/play.html', msg)
+    if request.GET.has_key('video-id'):
+        try:
+            video_id = int(request.GET['video-id'])
+            video = Video.objects.filter(id=video_id).all()
+            if video != None:
+                video = video[0]
+                msg['video'] = video
+            else:
+                 return render_to_response('videos/play-error.html', msg)
+
+            key = video.key
+            video_url = Qiniu.download_private_url("oceans-clip_clip.mp4")
+            
+            msg['video_url'] = video_url
+            print "Video URL: ", video_url
+
+            add_watch_num(video_id)
+            return render_to_response('videos/play.html', msg)
+
+        except Exception, e:
+            print "error: ", str(e)
+    
+    
+    return render_to_response('videos/play-error.html', msg)
+
+
 
 def space_index(request):
     msg = init_msg(request)
@@ -134,13 +215,24 @@ def setprofile(request):
 
     return render_to_response('space/setprofile.html', msg)
 
-@csrf_protect
-def upload_ui(request):
+def setavator(request):
     msg = init_msg(request)
 
-    return render_to_response('upload/upload.html', msg)
+    return render_to_response('space/setavator.html', msg)
 
-def wechat_pay(request):
-    pass
+def setbindsns(request):
+    msg = init_msg(request)
+
+    return render_to_response('space/setbindsns.html', msg)
+
+@login_required(login_url='/login/')
+@csrf_protect
+def upload_ui(request):
+    data = init_msg(request)
+    data['domain']       = DOMAIN
+    data['uptoken_url']  = 'uptoken'
+    return render_to_response('upload/upload.html', data)
+
+
 
 

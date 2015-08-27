@@ -151,3 +151,53 @@ def save_video(request, logo_path, need_authority=True):
         print str(e)
         return False
 
+def add_watch_num(video_id):
+    try:
+        video = Video.objects.filter(id=video_id).all()
+        if video != None:
+            video = video[0]
+            video.watch_num += 1
+            video.save()
+    except Exception, e:
+        print "Error: add_watch_num.\nError: " + str(e)
+
+
+def get_interest_videos():
+    try:
+        videos = Video.objects.order_by('release_date')
+        if len(videos) > 4:
+            return videos[:4]
+        return videos
+    except Exception, e:
+        print str(e)
+    return None
+
+def get_order_videos(request, msg):
+    try:
+        if request.GET.has_key('order_by'):
+            order_by = request.GET['order_by']
+            if order_by == "new":
+                order_key = 'release_date'
+            elif order_by == "like":
+                order_key = 'like_num'
+            elif order_by == "popular":
+                order_key = '-watch_num'
+            elif order_by == "price":
+                flag = request.GET['flag']
+                if flag == "up":
+                    msg['up_down'] = "down"
+                    order_key = '-money'
+                else:
+                    msg['up_down'] = "up"
+                    order_key = 'money'
+            else:
+                order_key = 'release_date'
+            videos = Video.objects.order_by(order_key)
+
+            return videos, msg
+
+    except Exception, e:
+        printError(e)
+
+    videos = Video.objects.order_by('release_date')
+    return videos, msg

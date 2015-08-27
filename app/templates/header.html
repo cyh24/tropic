@@ -46,7 +46,7 @@
 					<div class="navbar-collapse collapse">
 
 						<ul class="nav navbar-nav  navbar-nav-font-size">
-							<li id="indexpage" class="active"><a href="">首页</a>
+							<li id="indexpage" class="active"><a href="/index/">首页</a>
 							</li>
 							<li id="algorithm"><a href="/videos/">视频</a>
 							</li>
@@ -66,7 +66,6 @@
 
 						<div class="nav navbar-nav navbar-right">
 
-
 							{% if login_state == False %}
 							<li id="unlogin" data-toggle="modal" data-target="/login/">
 								<a href="/login/">登陆</a>
@@ -79,12 +78,12 @@
 							{% else %}
 
 							<li id="login_name" class=" aw-user-nav">
-								<a href="" class="aw-user-nav-dropdown">
+								<a href="/space/" class="aw-user-nav-dropdown">
 
 									<img src="http://ask.julyedu.com/uploads/avatar/000/00/07/70_avatar_min.jpg">
 
 								</a>
-								<span id="uname_id" style="display: none">770</span>
+
 								<ul class="dropdown-menu  dropdown-menu-list" role="menu">
 
 									<!--<li><a href="http://ask.julyedu.com/inbox/"><i class="icon icon-inbox"></i> 私信<span class="badge badge-important hide" id="inbox_unread">0</span></a>
@@ -96,10 +95,10 @@
 									<li><a href=""><i class="icon icon-attach"></i> 已买课程</a>
 									</li>
 
-									<li><a href=""><i class="icon icon-setting"></i> 设置</a>
+									<li><a href="/user/setprofile/"><i class="icon icon-setting"></i> 设置</a>
 									</li>
 
-									<li id="logout"><a href=""><i class="icon icon-logout"></i> 退出</a>
+									<li id="logout"><a href="/logout/"><i class="icon icon-logout"></i> 退出</a>
 									</li>
 								</ul>
 							</li>
@@ -116,7 +115,6 @@
 
 						</div>
 					</div>
-					</li>
 
 				</div>
 			</div>
@@ -137,12 +135,12 @@
 <meta charset="UTF-8">
 <script src="/static/js/july/jquery.js"></script>
 <script src="/static/js/july/bootstrap.min.js"></script>
-<script src="/static/js/july/prettify.js"></script>
+<!--<script src="/static/js/july/prettify.js"></script>
 <script src="/static/js/july/acknowledgeinput.js"></script>
 <script src="/static/js/july/handlebars-v3.0.0.js"></script>
 <script src="/static/js/july/myweb.js"></script>
 <script src="/static/js/july/common.js"></script>
-<script src="/static/js/july/aws.js"></script>
+<script src="/static/js/july/aws.js"></script>-->
 
 <script type="text/javascript">
 	$(function() {
@@ -151,38 +149,39 @@
 		}).mouseout(function() {
 			$(this).removeClass('open')
 		});
-		var uid = null;
-		uid = 770;
-		if (uid) {
-			$.ajax({
-				type: "post",
-				url: "",
-				data: {
-					"uid": uid
-				},
-				success: function(data) {
-					if (data) {
-						var count = data.total;
-						if (count == 0) {
-							$("#isAllHistory a").attr("href", "");
-						} else {
-							$("#isAllHistory a").attr("href", "" + count);
-							$(".badge").html(count);
-						}
-					}
-				},
-				error: function(request) {}
-			});
-			$.ajax({
-				url: "",
-				dataType: 'json',
-				success: function(res) {
-					if (!res.code && res.data.unread_count) {
-						$("#Notice .badge").html(res.data.unread_count);
-					}
-				}
-			});
-		}
+//		var uid = null;
+//		uid = 770;
+//		if (uid) {
+//			$.ajax({
+//				type: "post",
+//				url: "",
+//				data: {
+//					"uid": uid
+//				},
+//				success: function(data) {
+//					if (data) {
+//						var count = data.total;
+//						if (count == 0) {
+//							$("#isAllHistory a").attr("href", "");
+//						} else {
+//							$("#isAllHistory a").attr("href", "" + count);
+//							$(".badge").html(count);
+//						}
+//					}
+//				},
+//				error: function(request) {}
+//			});
+//			$.ajax({
+//				url: "",
+//				dataType: 'json',
+//				success: function(res) {
+//					if (!res.code && res.data.unread_count) {
+//						$("#Notice .badge").html(res.data.unread_count);
+//					}
+//				}
+//			});
+//		}
+
 		//搜索按钮
 		$("#global_search_btns").click(function() {
 			$(this).parent().parent().submit();

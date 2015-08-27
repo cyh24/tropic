@@ -494,7 +494,7 @@
 	margin-top: 14px
 }
 .main {
-	/*min-width: 980px;*/
+	min-width: 1199px;
 	min-height: 600px;
 	padding-left: 10px;
 	padding-right: 10px;
@@ -825,6 +825,7 @@
 	padding-bottom: 6px;
 	overflow: hidden
 }
+
 .course-card .icon-sep {
 	width: 1px;
 	margin: 0 10px
@@ -1068,3 +1069,15 @@
 .label-show-more.open i {
 	background-image: url('http://9.url.cn/edu/img/sprite/courseList.0a868.png')
 }
+
+.item-price-free {
+  color: #5FB41B;
+}
+.item-price {
+  color: #E85308;
+}
+
+.item-tt-link {
+  color: #333;
+}
+.item-tt-link:hover {color: #62B4F7;}

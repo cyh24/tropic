@@ -14,15 +14,16 @@
 				<div class="main-left">
 					<div class="sort-nav sort-nav-sml clearfix">
 						<dl class="sort-nav-order sort-nav-order-my">
-							<dd id="auto-test-2"><a href="/cgi-bin/courseList?mt=1001" class="cur" data-sort="0" data-action="zonghe">综合排序</a>
+							<dd id="auto-test-2"><a href="/videos/" class="cur" data-sort="0" data-action="zonghe">综合排序</a>
 							</dd>
-							<dd id="auto-test-4"><a href="/cgi-bin/courseList?mt=1001&amp;sort=3" class="" data-sort="3" data-action="newpublish">最新</a>
+							<dd id="auto-test-4"><a href="/videos/?order_by=new" class="" data-sort="3" data-action="newpublish">最新</a>
 							</dd>
-							<dd id="auto-test-5"><a href="/cgi-bin/courseList?mt=1001&amp;sort=5" class="" data-sort="5" data-action="score">评分</a>
+							<dd id="auto-test-5"><a href="/videos/?order_by=like" class="" data-sort="5" data-action="score">评分</a>
 							</dd>
-							<dd id="auto-test-6"><a href="/cgi-bin/courseList?mt=1001&amp;sort=1" class="" data-sort="1" data-action="popular">人气</a>
+							<dd id="auto-test-6"><a href="/videos/?order_by=popular" class="" data-sort="1" data-action="popular">人气</a>
 							</dd>
-							<dd id="auto-test-17"><a href="/cgi-bin/courseList?mt=1001&amp;sort=2" class="price-item-my " data-sort="2" data-action="price">价格<b class="icon icon-price-unselect pngFix"></b></a>
+							
+							<dd id="auto-test-17"><a href="/videos/?order_by=price&flag={{up_down}}" class="price-item-my " data-sort="2" data-action="price">价格<b class="icon icon-price-unselect pngFix"></b></a>
 							</dd>
 						</dl>
 
@@ -50,23 +51,29 @@
 							<li class="mlm-item">
 								<div class="course-card course-card1  course-card-nobtn mod-course-card_lu">
 									<div class="course-face">
-										<a href="">
+										<a href="/videos/play/?video-id={{v.id}}">
 											<img class="item-img" src="{{v.logo_img}}" onerror="this.src='http://9.url.cn/edu/img/img-err.png';this.onerror=null;">
 											<i class="icon-card-lu"></i>
 										</a>
 									</div>
-									<div class="course-title"> <a href="">{{v.title}}</a> </div>
+									<div class="course-title"> <a href="/videos/play/?video-id={{v.id}}" class="item-tt-link">{{v.title}}</a> </div>
 									<div class="course-emphasis">
-										<span class="course-price course-price-free" style="float: left;"> 免费 </span>
+										{% if v.money == 0 %}
+										<span class="course-price course-price-free item-price-free" style="float: left;"> 免费 </span>
+										{% else %}
+										<span class="course-price course-price-free item-price" style="float: left;">¥{{v.money}}</span>
+										{% endif %}
+										
 										<span class="icon-sep"></span>
 										<a class="course-agency nor-link" href="" title="">
-											<span class="course-agency-name">{{v.teacher_name}}</span></a>
+											<span class="course-agency-name">{{v.teacher_name}}</span>
+										</a>
 									</div>
 									<div class="course-emphasis course-relations" style="float: left;">
 										<span class="course-num">  {{v.watch_num}} 观看  </span>
 									</div>
 									<div class="course-emphasis course-relations" style="float: left;">
-										<span class="course-num">  &nbsp;,&nbsp;{{v.watch_num}} 赞  </span>
+										<span class="course-num">  &nbsp;,&nbsp;{{v.like_num}} 赞  </span>
 									</div>
 								</div>
 							</li>
@@ -76,36 +83,55 @@
 					</div>
 
 					<div class="clear"></div>
+					
 					<div class="sort-page">
-						<a href="" class="page-btn" style="width: 100px;">上一页</a>
-						<a href="" data-page="1" class="page-btn page-btn-cur">1</a>
-						<a href="" data-page="2" class="page-btn ">2</a>
-						<a href="" data-page="3" class="page-btn ">3</a>
-						<span>...</span>
-						<a href="" data-page="62" class="page-btn">62</a>
-						<a href="" data-page="63" class="page-btn">63</a>
-						<a href="" data-page="2" class="page-btn" style="width: 100px;">下一页</a>
+						<a href="/videos/?page={{pre_page}}" class="page-btn" style="width: 100px;">上一页</a>
+						{% for i in pages_before %}
+						<a href="/videos/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a>
+						{% endfor %}
+						<a href="/videos/?page={{cur_page}}" data-page={{cur_page}} class="page-btn page-btn-cur">{{cur_page}}</a>
+						{% for i in pages_after %}
+						<a href="/videos/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a>
+						{% endfor %}
+						<a href="/videos/?page={{after_page}}" data-page="2" class="page-btn" style="width: 100px;">下一页</a>
 					</div>
+				
+
 				</div>
 				<div class="main-right">
-					<div class="main-right-top">热门推荐</div>
+					<div class="main-right-top">热门推荐</div>{% for v in interest_videos %}
 					<div class="main-right-list">
 
+						
 						<div class="mlm-item">
 							<div class="course-card course-card2 ">
 								<div class="course-face">
-									<a href="">
-										<img alt="" width="220" height="124" src="" onerror="this.src='http://9.url.cn/edu/img/img-err.png';this.onerror=null;">
+									<a href="/videos/play/?video-id={{v.id}}">
+										<img alt="" width="220" height="124" src={{v.logo_img}} onerror="this.src='http://9.url.cn/edu/img/img-err.png';this.onerror=null;">
 										<span class=""></span>
 									</a>
 								</div>
 								<div class="course-title">
-									<a href="">xxx</a>
+									<a href="/videos/play/?video-id={{v.id}}" class="item-tt-link">{{v.title}}</a>
+									<div class="item-line">
+										{% if v.money == 0%}
+										<span class="line-cell item-price-free" style="float: left;"> 免费 </span>
+										{% else %}
+										<span class="line-cell item-price">¥{{v.money}}</span>
+										{% endif %}
+										
+										<span class="icon-sep"></span>
+										
+										<span class="item-source">
+											<a href="" class="item-source-link" >{{v.teacher_name}}</a>
+										</span> 
+									</div>
 								</div>
 							</div>
 						</div>
+						
 
-					</div>
+					</div>{% endfor%}
 				</div>
 
 			</div>

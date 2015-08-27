@@ -74,7 +74,6 @@ h4 {
     width:80px;
     height: 100px;
     cursor: pointer;
-    background-image:url("/Public/Image/player_icon.png");
     background-size: 50px 50px;
     background-repeat: no-repeat;
 }
