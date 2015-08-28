@@ -110,6 +110,18 @@ def kind_deal(kind):
     if kind not in db_klist:
         save_kind(kind)
 
+def get_video_by_id(video_id):
+    try:
+        video_id = int(video_id)
+        video = Video.objects.filter(id=video_id).all()
+        if video != None:
+            video = video[0]
+            return video
+    except Exception, e:
+        printError(e)
+
+    return None
+
 def save_video(request, logo_path, need_authority=True):
     video = Video()
     video.bucket = BUCKET_NAME
@@ -201,3 +213,42 @@ def get_order_videos(request, msg):
 
     videos = Video.objects.order_by('release_date')
     return videos, msg
+
+
+
+def add_like_num(video_id):
+    try:
+        video = Video.objects.filter(id=video_id).all()
+        if video != None:
+            video = video[0]
+            video.like_num += 1
+            video.save()
+    except Exception, e:
+        printError("Error: add_watch_num.\nError: " + str(e))
+
+
+def add_comment(request):
+    json = {}
+    try:
+        if request.GET.has_key('video_id'):
+            video_id = int(request.GET['video_id'])
+        if request.GET.has_key('follow_id'):
+            follow_id = int(request.GET['follow_id'])
+        if request.GET.has_key('content'):
+            content = request.GET['content'].encode('utf-8')
+        print video_id, follow_id, content
+
+        comment = Comment()
+        comment.user_name = "cyh"
+        comment.user_pic  = "http://ask.julyedu.com/uploads/avatar/000/00/07/70_avatar_min.jpg"
+        comment.follow_id = follow_id
+        comment.comment    = content
+
+        comment.save()
+
+        video = get_video_by_id(video_id)
+        video.comments.add(comment)
+        video.save()
+
+    except Exception, e:
+        printError(e)

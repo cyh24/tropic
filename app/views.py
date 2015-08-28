@@ -189,12 +189,26 @@ def play_ui(request):
                  return render_to_response('videos/play-error.html', msg)
 
             key = video.key
-            video_url = Qiniu.download_private_url("oceans-clip_clip.mp4")
+            video_url = Qiniu.download_private_url(key)
             
             msg['video_url'] = video_url
-            print "Video URL: ", video_url
-
+            # add the watch number
             add_watch_num(video_id)
+
+            try:
+                # get the video's comments
+                comments = Video.objects.filter(id=video_id)[0].comments.all().order_by('release_date')
+                new_comments = []
+                if len(comments) > 0:
+                    for cc in comments:
+                        cc.release_date = str(cc.release_date).split(' ')[0]
+                        new_comments.append(cc)
+
+                msg['comments'] = new_comments
+                msg['comments_num'] = len(comments)
+            except Exception, e:
+                printError(e)
+
             return render_to_response('videos/play.html', msg)
 
         except Exception, e:
@@ -234,5 +248,26 @@ def upload_ui(request):
     return render_to_response('upload/upload.html', data)
 
 
+def voteup(request):
+    json = {}
 
+    if request.GET.has_key('video_id'):
+        try:
+            video_id = int(request.GET['video_id'])
+            add_like_num(video_id)
+        except Exception, e:
+            printError(e)
 
+    return JsonResponse(json)
+
+@login_required(login_url='/login/')
+@csrf_protect
+def comment_add(request):
+    json = {}
+    try:
+       add_comment(request)
+
+    except Exception, e:
+        printError(e)
+
+    return JsonResponse(json)

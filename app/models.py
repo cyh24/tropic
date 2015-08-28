@@ -27,10 +27,12 @@ class QiniuFile(models.Model):
         abstract = True
 
 class Comment(models.Model):
+    #video_id     = models.IntegerField()
+
     user_name    = models.CharField(max_length=20)
     user_pic     = models.CharField(max_length=200)
 
-    follow_id    = models.IntegerField(default=0)
+    follow_id    = models.IntegerField()
 
     comment      = models.CharField(max_length=2048)
     release_date = models.DateTimeField(auto_now=True)

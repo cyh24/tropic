@@ -7,6 +7,160 @@
 	<link href="/static/video-js/video-js.css" rel="stylesheet" type="text/css">
 	<script src="/static/video-js/video.js"></script>
 
+
+	<script>
+//  $(function (){
+//		alert("");
+//      $('#addcomment').click(function(){
+//      	alert("");
+//          if($("#comments").is(":hidden")){
+//              $("#comments").show();
+//          }
+//          var parent_id = $('#comment_reply').val()
+//          var id = $(this).attr('data-id')
+//          var content = $('#comment_text').val()
+//
+//          if(content.length < 5){
+//              alert('评论内容不能少于5个字哦~')
+//              return false
+//          }
+//
+//          var data = 'parent_id='+parent_id+'&id='+id+'&content='+content
+//
+//          $.ajax({
+//              url: "/vcomment/publish/",
+//              type: "POST",
+//              context: document.body,
+//              data: data,
+//              success: function(obj){
+//                  if(obj.code != 0){
+//                      alert(obj.message)
+//                      return ;
+//                  }
+//                  var comments_sumer = parseInt( $('#comments_sumer').html() )
+//                  $('#comments_sumer').html(comments_sumer+1)
+//                  load_comments()
+//                  $('#comment_text').val('')
+//                  $('#comment_reply').val(0)
+//                  $('#addcomment').attr('data-parent_id',0)
+//              }
+//          });
+//     })
+
+//      load_comments()
+//      function load_comments(page){
+//          var video_id = $('#vedio_id').html()
+//          if(page == undefined){
+//              page = 1
+//          }else{
+//              page = parseInt(page)
+//          }
+//
+//          $('#comments .comment-lists').empty()
+//          $('#pleaseWaitDialog').removeClass('hide')
+//
+//          $.ajax({
+//              url: "/vcomment/lists/id/"+video_id+'/page/'+page,
+//              context: document.body,
+//              success: function(obj){
+//                  $('#pleaseWaitDialog').addClass('hide')
+//                  if(obj.code == 1){
+//                      alert(obj.message)
+//                      return ;
+//                  }
+//                  if(obj.data.length == 0){
+//                      $("#comments").hide();
+//                  }
+//                  var source   = $("#comment-template").html();
+//                  var template = Handlebars.compile(source);
+//                  var context = {comments:obj.data};
+//                  var html    = template(context);
+//                  $('#comments .comment-lists').html(html);
+//
+//                  $('pre').each(function(i, block) {
+//                      $(this).addClass('prettyprint');
+//                        prettyPrint();
+//                  });
+//              }
+//          });
+//      }
+
+//  });
+
+
+	
+		var VOTE_FLAG = 1;
+
+		function voteUpAction() {
+			if (VOTE_FLAG == 1) {
+				VOTE_FLAG = 0;
+			} else {
+				return 0;
+			}
+			$.ajax({
+				type: "GET",
+				url: "/voteup/",
+				data: {
+					video_id: {{video.id}},
+				},
+				dataType: "json",
+				success: function(data) {
+					var num = Number($("#id-like-num").html());
+					if(!isNaN(num))
+					{
+          				$("#id-like-num").html(num+1);
+          			}
+          			else
+          			{
+          				$("#id-like-num").html(1);
+          			}
+				}
+          			
+			});
+		}
+		
+		function add_comment(){
+		
+            var content = $('#comment_text').val();
+  
+            if( content =='有没有什么问题要问导师的？' || content.length < 3){
+                alert('评论内容不能少于3个字哦~');
+                return false
+            }
+
+            $.ajax({
+                url: "/add-comment/",
+                type: "GET",
+  				dataType: "json",
+                data: {
+                	follow_id: follow_id,
+                	content: content,
+                	video_id: {{video.id}},
+                },
+                success: function(obj){
+                    
+                    window.location.reload();
+                    
+                }
+            });
+		}
+		
+		
+		
+		var follow_id = -1;
+		function replay(self)
+		{
+			data_comment_name = document.getElementById(self.id).getAttribute('data-comment-name')
+			data_comment_id = document.getElementById(self.id).getAttribute('data-comment-id')
+			follow_id = Number(data_comment_id)
+			document.getElementById("comment_text").value = "回复 " + data_comment_name + ": ";
+			document.getElementById("comment_text").focus();
+		}
+		
+		
+		
+	</script>
+
 	<body>
 		{% include "header.html" %}
 		<div class="container">
@@ -29,7 +183,7 @@
 								</video>-->
 								<video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="100%" height="100%" poster="http://video-js.zencoder.com/oceans-clip.png" data-setup="{}">
 									<source src="{{video_url}}" type='video/mp4'></source> />
-									
+
 									<!--<source src="http://video-js.zencoder.com/oceans-clip.mp4" type='video/mp4'></source> />
 									<source src="http://video-js.zencoder.com/oceans-clip.webm" type='video/webm'></source> />
 									<source src="http://video-js.zencoder.com/oceans-clip.ogv" type='video/ogg'></source> />-->
@@ -46,12 +200,13 @@
 							<div class="Clearfix">
 								<div class="btn-group pull-right">
 
-									<button title="浏览量" type="button" data-id="59" class="disabled btn btn-default" style="color:#548cff;">
+									<button title="浏览量" type="button" class="disabled btn btn-default" style="color:#548cff;">
 										<span class="fa fa-file-video-o" style="padding-right: 5px;"></span><span class="badge">{{video.watch_num}}</span>
 									</button>
 
-									<button type="button" id="vote_up" data-id="59" class="btn btn-default" style="color:#548cff;">
-										<span class="fa fa-thumbs-o-up"></span><span class="votes_up_num">{{video.like_num}}</span>
+									<button type="button" id="vote_up" class="btn btn-default" style="color:#548cff;" onclick="voteUpAction()">
+										<span class="fa fa-thumbs-o-up"></span>
+										<span id="id-like-num" class="votes_up_num">{{video.like_num}}</span>
 									</button>
 									<!--<button type="button" class="btn btn-default" style="color:#f00;">-->
 									<!--<span class="fa fa-thumbs-o-down"></span> 243-->
@@ -65,10 +220,10 @@
 
 										<ul class=" aw-dropdown dropdown-menu-list dropdown-menu  shareout" role="menu">
 
-											<li><a onclick="AWS.User.share_out('tsina');"><i class="icon icon-weibo "></i> 微博</a></li>
-											<li><a onclick="AWS.User.share_out('qzone');"><i class="icon icon-qzone "></i> QZONE</a></li>
+											<li><a onclick=""><i class="icon icon-weibo "></i> 微博</a></li>
+											<li><a onclick=""><i class="icon icon-qzone "></i> QZONE</a></li>
 											<li>
-												<a onclick="AWS.User.share_out('weixin');">
+												<a onclick="">
 													<i class=" icon icon-wechat"></i>微信</a>
 											</li>
 										</ul>
@@ -90,29 +245,30 @@
 						<div class="clear" style="margin-top: 50px;"></div>
 						<h4>评论</h4>
 						<hr>
-						<textarea class="form-control" rows="3" id="comment_text" placeholder="" onfocus="if(value=='有没有什么问题要问导师的？'){value='';this.style.color='black';}" onblur="if (value ==''){value='有没有什么问题要问导师的？';this.style.color='gray';}">有没有什么问题要问导师的？</textarea>
+						<textarea class="form-control" rows="3" id="comment_text" placeholder="" onfocus="if(value=='有没有什么问题要问导师的？'){value='';this.style.color='black';follow_id=-1;}" onblur="if (value ==''){value='有没有什么问题要问导师的？';this.style.color='gray';follow_id=-1;}">有没有什么问题要问导师的？</textarea>
 						<input type="hidden" id="comment_reply" value="0">
 						<br>
 						<div style="height:35px;text-align:right">
-							<button class="btn btn-primary" data-parent_id="0" data-id="6" id="addcomment">提交</button>
+							<button type="button" class="btn btn-primary" id="addcomment" onclick="add_comment()" >提交</button>
 						</div>
 						<div id="comments" class="comment">
-							<h4>全部评论&nbsp;&nbsp;<span class="small">共<span id="comments_sumer">1</span>条</span></h4>
+							<h4>全部评论&nbsp;&nbsp;<span class="small">共<span id="comments_sumer"> {{comments_num}} </span>条</span></h4>
 							<div class="comment_many">
-
 								<div class="comment-lists">
+									
+									{% for comment in comments %}
 									<div class="comment-item" style="padding-bottom:5px;">
 										<div class="mod-head">
-											<a class="anchor" name="answer_1225"></a>
+											<a class="anchor"></a>
 											<!-- 用户头像 -->
-											<a class="aw-user-img aw-border-radius-5" href="http://ask.julyedu.com/people/Abac" data-id="2474">
-												<img src="http://ask.julyedu.com//uploads/avatar/000/00/39/66_avatar_min.jpg" alt=""></a>
+											<a class="aw-user-img aw-border-radius-5" href="" >
+												<img src={{comment.user_pic}} alt=""></a>
 											<!-- end 用户头像 -->
 											<div class="title">
-												<a class="aw-user-name" href="http://ask.julyedu.com/people/Abac" data-id="3966">Abac</a> •
-												<span style="margin-top:5px;">147天前</span>
+												<a class="aw-user-name" href="" >{{comment.user_name}}</a> •
+												<span style="margin-top:5px;">{{comment.release_date}}</span>
 
-												<a data_user_name="Abac" data_user_id="3966" data_comment_id="22" href="javascript:void(0);" class="comment_btn pull-right">
+												<a id="id-comment-{{comment.id}}" data-comment-id={{comment.id}} data-comment-name={{comment.user_name}} class="comment_btn pull-right" href="javascript:void(0)" onclick="replay(this)">
 													<span class="fa fa-comments-o" style="color:#00458a;"></span> 回复
 												</a>
 											</div>
@@ -120,15 +276,14 @@
 
 										<div class="mod-body clearfix">
 											<!-- 评论内容 -->
-											递归解决LCA问题的复杂度不是O(logn)而是O(n)吧？F(N)=2*F(N/2)，N是树中节点的数量。
+											{{comment.comment}}
 											<!-- end 评论内容 -->
-											<!-- 社交操作 -->
 											<div class="meta clearfix">
 											</div>
-
-											<!-- end 社交操作 -->
 										</div>
 									</div>
+									{% endfor %}
+									
 								</div>
 
 								<div class="hide" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false">
