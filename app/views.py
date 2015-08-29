@@ -22,6 +22,7 @@ import os
 import sys
 from qiniu_pro import *
 from db_pro import *
+from wechat_pro import *
 
 
 @csrf_exempt 
@@ -83,6 +84,12 @@ def test(request):
 def index(request):
     msg = init_msg(request)
 
+    try:
+        print "Wechat-User: ", WxAuth.get_user(request)
+
+    except Exception, e:
+        printError(e)
+
     return render_to_response('index.html', msg)
 
 
@@ -94,7 +101,8 @@ def login_ui(request):
 
 def wechat_login(request):
 
-    login_url = "https://open.weixin.qq.com/connect/qrconnect?appid=%s&redirect_uri=%s&response_type=%s&scope=%s&state=%s#wechat_redirect"%(APPID, REDIRECT_URL, RESPONSE_TYPE, SCOPE, STATE)
+    #login_url = "https://open.weixin.qq.com/connect/qrconnect?appid=%s&redirect_uri=%s&response_type=%s&scope=%s&state=%s#wechat_redirect"%(APP_ID, REDIRECT_URL, RESPONSE_TYPE, SCOPE, STATE)
+    login_url = WxAuth.get_authorize_url(request)
 
     return HttpResponseRedirect(login_url)
 
