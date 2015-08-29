@@ -2,6 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
+class Account(User):
+
+    user_pic = models.CharField(max_length=200)
+    info     = models.CharField(max_length=400)
+
+    class Meta:
+        db_table = u'account'
+
 class Teacher(models.Model):
     name = models.CharField(max_length=20)
     pic  = models.CharField(max_length=200)

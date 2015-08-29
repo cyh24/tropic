@@ -9,86 +9,7 @@
 
 
 	<script>
-//  $(function (){
-//		alert("");
-//      $('#addcomment').click(function(){
-//      	alert("");
-//          if($("#comments").is(":hidden")){
-//              $("#comments").show();
-//          }
-//          var parent_id = $('#comment_reply').val()
-//          var id = $(this).attr('data-id')
-//          var content = $('#comment_text').val()
-//
-//          if(content.length < 5){
-//              alert('评论内容不能少于5个字哦~')
-//              return false
-//          }
-//
-//          var data = 'parent_id='+parent_id+'&id='+id+'&content='+content
-//
-//          $.ajax({
-//              url: "/vcomment/publish/",
-//              type: "POST",
-//              context: document.body,
-//              data: data,
-//              success: function(obj){
-//                  if(obj.code != 0){
-//                      alert(obj.message)
-//                      return ;
-//                  }
-//                  var comments_sumer = parseInt( $('#comments_sumer').html() )
-//                  $('#comments_sumer').html(comments_sumer+1)
-//                  load_comments()
-//                  $('#comment_text').val('')
-//                  $('#comment_reply').val(0)
-//                  $('#addcomment').attr('data-parent_id',0)
-//              }
-//          });
-//     })
 
-//      load_comments()
-//      function load_comments(page){
-//          var video_id = $('#vedio_id').html()
-//          if(page == undefined){
-//              page = 1
-//          }else{
-//              page = parseInt(page)
-//          }
-//
-//          $('#comments .comment-lists').empty()
-//          $('#pleaseWaitDialog').removeClass('hide')
-//
-//          $.ajax({
-//              url: "/vcomment/lists/id/"+video_id+'/page/'+page,
-//              context: document.body,
-//              success: function(obj){
-//                  $('#pleaseWaitDialog').addClass('hide')
-//                  if(obj.code == 1){
-//                      alert(obj.message)
-//                      return ;
-//                  }
-//                  if(obj.data.length == 0){
-//                      $("#comments").hide();
-//                  }
-//                  var source   = $("#comment-template").html();
-//                  var template = Handlebars.compile(source);
-//                  var context = {comments:obj.data};
-//                  var html    = template(context);
-//                  $('#comments .comment-lists').html(html);
-//
-//                  $('pre').each(function(i, block) {
-//                      $(this).addClass('prettyprint');
-//                        prettyPrint();
-//                  });
-//              }
-//          });
-//      }
-
-//  });
-
-
-	
 		var VOTE_FLAG = 1;
 
 		function voteUpAction() {
@@ -157,6 +78,10 @@
 			document.getElementById("comment_text").focus();
 		}
 		
+		function star()
+		{
+			
+		}
 		
 		
 	</script>
@@ -208,9 +133,12 @@
 										<span class="fa fa-thumbs-o-up"></span>
 										<span id="id-like-num" class="votes_up_num">{{video.like_num}}</span>
 									</button>
-									<!--<button type="button" class="btn btn-default" style="color:#f00;">-->
-									<!--<span class="fa fa-thumbs-o-down"></span> 243-->
-									<!--</button>-->
+									
+
+									<button type="button" id="vote_up" class="btn btn-default" style="color:#548cff;" onclick="">
+										<span class="fa fa-star-o"></span>
+										<span  class="votes_up_num">收藏</span>
+									</button>
 
 									<!-- JiaThis Button BEGIN -->
 									<button type="button" class="btn btn-default" id="shareout_button">
@@ -233,9 +161,9 @@
 
 									<!-- JiaThis Button END -->
 
-									<button type="button" class="btn btn-default">
+									<!--<button type="button" class="btn btn-default">
 										<a href="" target="_self">PPT下载</a>
-									</button>
+									</button>-->
 								</div>
 
 							</div>

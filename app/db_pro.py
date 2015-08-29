@@ -191,7 +191,7 @@ def get_order_videos(request, msg):
             if order_by == "new":
                 order_key = 'release_date'
             elif order_by == "like":
-                order_key = 'like_num'
+                order_key = '-like_num'
             elif order_by == "popular":
                 order_key = '-watch_num'
             elif order_by == "price":

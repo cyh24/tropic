@@ -24,10 +24,6 @@ from qiniu_pro import *
 from db_pro import *
 
 
-
-HOMEPAGE = 'http://127.0.0.1:9999'
-PAGE_SIZE = 16
-
 @csrf_exempt 
 
 @csrf_protect 
@@ -95,6 +91,12 @@ def login_ui(request):
     msg = init_msg(request)
 
     return render_to_response('login/login.html', msg)
+
+def wechat_login(request):
+
+    login_url = "https://open.weixin.qq.com/connect/qrconnect?appid=%s&redirect_uri=%s&response_type=%s&scope=%s&state=%s#wechat_redirect"%(APPID, REDIRECT_URL, RESPONSE_TYPE, SCOPE, STATE)
+
+    return HttpResponseRedirect(login_url)
 
 
 
