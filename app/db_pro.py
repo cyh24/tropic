@@ -138,7 +138,7 @@ def save_video(request, logo_path, need_authority=True):
     if data.has_key('tag'):
         tagStr = data['tag']
         tag_list = tagStr.split()
-        tag_len = len(tag_list)
+        tag_len = get_len(tag_list)
         for i in range(tag_len):
             if i != 0:
                 tagStr += " " + tag_list[i]
@@ -179,17 +179,31 @@ def add_watch_num(video_id):
 def get_interest_videos():
     try:
         videos = Video.objects.order_by('release_date')
-        if len(videos) > 4:
+        if get_len(videos) > 4:
             return videos[:4]
         return videos
     except Exception, e:
         print str(e)
     return None
 
-def get_order_videos(request, msg):
+
+def get_search_videos(request):
+    try:
+        if request.GET.has_key('title'):
+            q_title = request.GET['title'].encode('utf8')
+            videos = Video.objects.filter( title__icontains=q_title).all()
+            return videos
+
+    except Exception, e:
+        printError(e)
+
+    return None
+
+def get_order_videos(request, videos, msg):
     try:
         if request.GET.has_key('order_by'):
             order_by = request.GET['order_by']
+            msg['cur'] = order_by
             if order_by == "new":
                 order_key = 'release_date'
             elif order_by == "like":
@@ -206,15 +220,15 @@ def get_order_videos(request, msg):
                     order_key = 'money'
             else:
                 order_key = 'release_date'
-            videos = Video.objects.order_by(order_key)
+            m_videos = videos.order_by(order_key)
 
-            return videos, msg
+            return m_videos, msg
 
     except Exception, e:
         printError(e)
 
-    videos = Video.objects.order_by('release_date')
-    return videos, msg
+    m_videos = videos.order_by('release_date')
+    return m_videos, msg
 
 
 
@@ -292,7 +306,7 @@ def check_wx_openid(user):
         openid = user['openid']
         account = Account.objects.filter(openid=openid).all()
 
-        if len(account) < 1:
+        if get_len(account) < 1:
             create_account(user)
             return True
         else:

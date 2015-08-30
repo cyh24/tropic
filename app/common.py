@@ -5,6 +5,11 @@ import datetime
 import time
 import string
 import re
+import StringIO
+import qrcode
+import base64, zlib
+import Image
+from django.core.cache import cache
 
 def getRandomStr(num=4):
 
@@ -20,7 +25,7 @@ def handle_uploaded_photo(path, f):
     return f
 
 def printError(e):
-	print str(e)
+    print "Error: ", str(e)
 
 def checkMobile(request):
     try:
@@ -48,3 +53,33 @@ def checkMobile(request):
     print "...User from pc...\n"
 
     return False
+
+
+def get_len(List):
+    length = 0
+    try:
+        if List == None:
+            length = 0
+        else:
+            length = len(List)
+
+    except Exception, e:
+        printError(e)
+
+    return length
+
+def get_qrcode(url):
+    try:
+        img = qrcode.make(url)
+        rdn_str = getRandomStr()
+        path = "app/static/storage/qrcode/" + rdn_str + ".png"
+
+        img.save(path)
+
+        return "/static/storage/qrcode/" + rdn_str + ".png"
+
+    except Exception, e:
+        printError(e)
+
+    return None
+

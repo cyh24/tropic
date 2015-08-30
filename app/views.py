@@ -38,15 +38,15 @@ def paginator_show(request, msg_list, page_size):
         if page < 1:
             page = 1
 
-        total_page = (len(msg_list) + page_size)/page_size
+        total_page = (get_len(msg_list) + page_size)/page_size
         if page > total_page:
             page = total_page
     except ValueError:
         page = 1
 
-    paginator = Paginator(msg_list, page_size)
     
     try:
+        paginator = Paginator(msg_list, page_size)
         msg_list = paginator.page(page)
     except(EmptyPage, PageNotAnInteger):
         msg_list = paginator.page(1)
@@ -114,6 +114,14 @@ def wechat_login(request):
 
     return HttpResponseRedirect(login_url)
 
+def wechat_share(request):
+
+    url = "http://facebuaa.cn"
+    qrcode_url = get_qrcode(url)
+    print qrcode_url
+    json={'qrcode_url': qrcode_url}
+
+    return JsonResponse(json)
 
 def excute_login(request, username, password):
     try:
@@ -190,9 +198,10 @@ def videos_ui(request):
 
     msg = init_msg(request)
 
-    videos, msg = get_order_videos(request, msg)
+    videos = Video.objects.all()
+    videos, msg = get_order_videos(request, videos, msg)
 
-    total_page = (len(videos)+PAGE_SIZE)/PAGE_SIZE
+    total_page = (get_len(videos)+PAGE_SIZE)/PAGE_SIZE
     subVideos, cur_page = paginator_show(request, videos, PAGE_SIZE)
 
 
@@ -208,6 +217,30 @@ def videos_ui(request):
     msg['interest_videos'] = get_interest_videos()
 
     return render_to_response('videos/videos.html', msg)
+
+def search_result(request):
+
+    msg = init_msg(request)
+
+    #videos, msg = get_order_videos(request, msg)
+    videos = get_search_videos(request)
+
+    total_page = (get_len(videos)+PAGE_SIZE)/PAGE_SIZE
+    subVideos, cur_page = paginator_show(request, videos, PAGE_SIZE)
+
+
+    pages_before, pages_after = paginator_bar(cur_page, total_page)
+
+    msg['videos']     = subVideos
+    msg['cur_page']   = cur_page
+    msg['pages_before'] = pages_before
+    msg['pages_after']  = pages_after
+    msg['pre_page']   = cur_page - 1
+    msg['after_page'] = cur_page + 1
+
+    msg['interest_videos'] = get_interest_videos()
+
+    return render_to_response('videos/search_result.html', msg)
 
 def play_ui(request):
     msg = init_msg(request)
@@ -233,13 +266,13 @@ def play_ui(request):
                 # get the video's comments
                 comments = Video.objects.filter(id=video_id)[0].comments.all().order_by('release_date')
                 new_comments = []
-                if len(comments) > 0:
+                if get_len(comments) > 0:
                     for cc in comments:
                         cc.release_date = str(cc.release_date).split(' ')[0]
                         new_comments.append(cc)
 
                 msg['comments'] = new_comments
-                msg['comments_num'] = len(comments)
+                msg['comments_num'] = get_len(comments)
             except Exception, e:
                 printError(e)
 

@@ -38,10 +38,11 @@ urlpatterns = patterns('',
     url(r'^user/setavator/$', 'app.views.setavator'),
     url(r'^user/setbindsns/$', 'app.views.setbindsns'),
     url(r'^voteup/$', 'app.views.voteup'),
+    url(r'^search/$', 'app.views.search_result'),
     url(r'^add-comment/$', 'app.views.comment_add'),
 
     url(r'^wechat-login/$', 'app.views.wechat_login'), 
-
+    url(r'^wechat-share/$', 'app.views.wechat_share'), 
 
     url(r'^test/', 'app.views.test')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

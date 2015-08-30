@@ -1,4 +1,7 @@
 @charset "UTF-8";
+
+.sort-nav-order dd .cur .iconfont {color: #fff; position: absolute; right: 9px; font-size: 14px; top: 13px;}
+
 .filter_dropdown .dropdown-title {
 	display: inline-block;
 	vertical-align: middle
@@ -737,7 +740,7 @@
 	padding-right: 26px!important;
 	background-position: 46px 12px;
 	background-repeat: no-repeat;
-	background-image: url('http://9.url.cn/edu/img/courseListV2/price_unselect.gif')
+	background-image: url('price_unselect.gif')
 }
 .price-item-my.cur {
 	background-image: none

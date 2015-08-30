@@ -1,4 +1,9 @@
 @charset "UTF-8";
+@font-face {font-family: 'webfont'; src: url('webfont.eot') format("embedded-opentype"), url('webfont.woff') format("woff"), url('webfont.ttf') format("truetype"); font-weight: normal; font-style: normal;}
+.iconfont {font-family: 'webfont'; speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; font-size: 16px; position: relative; vertical-align: -2px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
+.i-arrow-bottom:before {content: "\e605";}
+.i-arrow-top:before {content: "\e606";}
+
 
 .page-prev-btn,
 .page-next-btn {
