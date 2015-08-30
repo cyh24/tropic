@@ -15,6 +15,8 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage, PageNotAnIn
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 
+from django.db import transaction
+
 
 from models import *
 import time
@@ -252,3 +254,55 @@ def add_comment(request):
 
     except Exception, e:
         printError(e)
+
+def create_account(wx_user):
+    try:
+        open_id = wx_user['openid']
+        with transaction.atomic():
+            user = User()
+            user.username = open_id
+            user.set_password("Z!"+open_id+"1!")
+            user.save()
+        
+            account = Account()
+            account.user = user
+            account.openid = open_id
+            account.user_pic = wx_user['headimgurl']
+            sex = wx_user['sex']
+            try:
+                sex = int(sex)
+                if sex != 0 and sex != 1:
+                    sex = -1
+            except Exception, e:
+                sex = -1
+                printError(e)
+            account.sex = sex
+            account.info = "这家伙很懒，什么都没留~"
+
+            account.save()
+            return True
+    except Exception, e:
+        printError(e)
+
+    return False
+
+
+def check_wx_openid(user):
+    try:
+        openid = user['openid']
+        account = Account.objects.filter(openid=openid).all()
+
+        if len(account) < 1:
+            create_account(user)
+            return True
+        else:
+            account = account[0]
+            return True
+
+    except Exception, e:
+        printError(e)
+
+    return False
+
+
+

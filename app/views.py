@@ -82,13 +82,22 @@ def test(request):
 
 
 def index(request):
-    msg = init_msg(request)
-
     try:
-        print "Wechat-User: ", WxAuth.get_user(request)
+        wechat_user = WxAuth.get_user(request)
+
+        if wechat_user != None:
+            print "Wechat-User: ", wechat_user
+
+            if check_wx_openid(wechat_user) == True:
+                wx_login_do(request, wechat_user)
+        else:
+            print "Wechat-User: None."
 
     except Exception, e:
         printError(e)
+
+    msg = init_msg(request)
+
 
     return render_to_response('index.html', msg)
 
@@ -100,13 +109,28 @@ def login_ui(request):
     return render_to_response('login/login.html', msg)
 
 def wechat_login(request):
-
     #login_url = "https://open.weixin.qq.com/connect/qrconnect?appid=%s&redirect_uri=%s&response_type=%s&scope=%s&state=%s#wechat_redirect"%(APP_ID, REDIRECT_URL, RESPONSE_TYPE, SCOPE, STATE)
     login_url = WxAuth.get_authorize_url(request)
 
     return HttpResponseRedirect(login_url)
 
 
+def excute_login(request, username, password):
+    try:
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                print "user pass."
+    except Exception, e:
+        printError(e)
+
+
+def wx_login_do(request, user):
+    username = user['openid']
+    password = "Z!"+username+"1!"
+
+    excute_login(request, username, password)
 
 def login_do(request):
     msg = init_msg(request)

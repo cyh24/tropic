@@ -2,9 +2,17 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
-class Account(User):
+class Account(models.Model):
+    user = models.OneToOneField(User, unique=True, verbose_name='user_account')
+
+    openid   = models.CharField(max_length=100, unique=True)
+
 
     user_pic = models.CharField(max_length=200)
+    nickname = models.CharField(max_length=20)
+
+    phone    = models.CharField(max_length=20)
+    sex      = models.IntegerField(default=-1)
     info     = models.CharField(max_length=400)
 
     class Meta:
