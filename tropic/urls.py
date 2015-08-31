@@ -24,19 +24,26 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^index/', 'app.views.index'),
     url(r'^$', 'app.views.index'),
+
     url(r'^login/', 'app.views.login_ui'),
     url(r'^login-do/', 'app.views.login_do'),
     url(r'^logout/', 'app.views.log_out'),
+
     url(r'^upload/', 'app.views.upload_ui'),
     url(r'^upload-post/', 'app.db_pro.upload_post'),
     url(r'^uptoken/', 'app.qiniu_pro.uptoken'),
+
     url(r'^videos/$', 'app.views.videos_ui'),
     url(r'^videos/play/$', 'app.views.play_ui'),
+    url(r'^videos/manage/$', 'app.views.videos_manage'),
+
     url(r'^space/$', 'app.views.space_index'),
     url(r'^space/index/$', 'app.views.space_index'),
+
     url(r'^user/setprofile/$', 'app.views.setprofile'),
     url(r'^user/setavator/$', 'app.views.setavator'),
     url(r'^user/setbindsns/$', 'app.views.setbindsns'),
+
     url(r'^voteup/$', 'app.views.voteup'),
     url(r'^search/$', 'app.views.search_result'),
     url(r'^add-comment/$', 'app.views.comment_add'),

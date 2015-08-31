@@ -21,67 +21,60 @@
 				type: "GET",
 				url: "/voteup/",
 				data: {
-					video_id: {{video.id}},
+					video_id: {
+						{
+							video.id
+						}
+					},
 				},
 				dataType: "json",
 				success: function(data) {
 					var num = Number($("#id-like-num").html());
-					if(!isNaN(num))
-					{
-          				$("#id-like-num").html(num+1);
-          			}
-          			else
-          			{
-          				$("#id-like-num").html(1);
-          			}
+					if (!isNaN(num)) {
+						$("#id-like-num").html(num + 1);
+					} else {
+						$("#id-like-num").html(1);
+					}
 				}
-          			
 			});
 		}
-		
-		function add_comment(){
-		
-            var content = $('#comment_text').val();
-  
-            if( content =='有没有什么问题要问导师的？' || content.length < 3){
-                alert('评论内容不能少于3个字哦~');
-                return false
-            }
 
-            $.ajax({
-                url: "/add-comment/",
-                type: "GET",
-  				dataType: "json",
-                data: {
-                	follow_id: follow_id,
-                	content: content,
-                	video_id: {{video.id}},
-                },
-                success: function(obj){
-                    
-                    window.location.reload();
-                    
-                }
-            });
+		function add_comment() {
+			var content = $('#comment_text').val();
+			if (content == '有没有什么问题要问导师的？' || content.length < 3) {
+				alert('评论内容不能少于3个字哦~');
+				return false
+			}
+			$.ajax({
+				url: "/add-comment/",
+				type: "GET",
+				dataType: "json",
+				data: {
+					follow_id: follow_id,
+					content: content,
+					video_id: {
+						{
+							video.id
+						}
+					},
+				},
+				success: function(obj) {
+					window.location.reload();
+				}
+			});
 		}
-		
-		
-		
 		var follow_id = -1;
-		function replay(self)
-		{
+
+		function replay(self) {
 			data_comment_name = document.getElementById(self.id).getAttribute('data-comment-name')
 			data_comment_id = document.getElementById(self.id).getAttribute('data-comment-id')
 			follow_id = Number(data_comment_id)
 			document.getElementById("comment_text").value = "回复 " + data_comment_name + ": ";
 			document.getElementById("comment_text").focus();
 		}
-		
-		function star()
-		{
-			
-		}
-		
+
+		function star() {}
+
 		function wechat_share() {
 			$.ajax({
 				type: "GET",
@@ -91,20 +84,17 @@
 				},
 				dataType: "json",
 				success: function(data) {
-                    qrcode_url = data['qrcode_url'];
-                    
-                    document.getElementById('qrcodeWrap').style.display = "block";
-                    document.getElementById('id-qrcode').src = qrcode_url;
-                }
-          			
+					qrcode_url = data['qrcode_url'];
+					document.getElementById('qrcodeWrap').style.display = "block";
+					document.getElementById('id-qrcode').src = qrcode_url;
+				}
 			});
 		}
-		
-		function qrcode_close()
-		{
+
+		function qrcode_close() {
 			document.getElementById('qrcodeWrap').style.display = "none";
 		}
-		
+
 		function addListener(element, e, fn) {
 			if (element.addEventListener) {
 				element.addEventListener(e, fn, false);
@@ -116,24 +106,22 @@
 			function(evt) {
 				var evt = window.event ? window.event : evt,
 					target = evt.srcElement || evt.target;
-				if (target.id == "qrcodeContainer") {
-				} else {
+				if (target.id == "qrcodeContainer") {} else {
 					document.getElementById('qrcodeWrap').style.display = "none";
 				}
 			})
-		
 	</script>
 
 	<body>
 		{% include "header.html" %}
-		
-		<div id="qrcodeWrap" style="display:none;" >
+
+		<div id="qrcodeWrap" style="display:none;">
 			<div class="mask"></div>
-			<div id="qrcodeContainer" class="qrcode-container" >
+			<div id="qrcodeContainer" class="qrcode-container">
 				<div class="qrcode-top"></div>
 				<div class="qrcode-center">
 					<div class="qc-center">
-						<div id="rqcode" >
+						<div id="rqcode">
 							<!--<canvas width="190" height="190" style="display: none;"></canvas>-->
 							<img id="id-qrcode" alt="Scan me!" style="width:200px; height:200px;">
 						</div>
@@ -159,22 +147,19 @@
 				<div class="col-sm-9">
 					<div style="margin-right: 30px;">
 						<div class="video_player">
-							<div style="width: 100%; height: 100%;">
-								<!--<video src="http://7xlcrn.com1.z0.glb.clouddn.com/testd.mp4" controls="controls" style="width: 100%; height: 100%;">
-									your browser does not support the video tag
-								</video>-->
-								<video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="100%" height="100%" poster="http://video-js.zencoder.com/oceans-clip.png" data-setup="{}">
-									<source src="{{video_url}}" type='video/mp4'></source>
-
-									<!--<source src="http://video-js.zencoder.com/oceans-clip.mp4" type='video/mp4'></source> />
-									<source src="http://video-js.zencoder.com/oceans-clip.webm" type='video/webm'></source> />
-									<source src="http://video-js.zencoder.com/oceans-clip.ogv" type='video/ogg'></source> />-->
-									<!--<track kind="captions" src="demo.captions.vtt" srclang="en" label="English"></track>-->
-									<!-- Tracks need an ending tag thanks to IE9 -->
-									<!--<track kind="subtitles" src="demo.captions.vtt" srclang="en" label="English"></track>-->
-									<!-- Tracks need an ending tag thanks to IE9 -->
-									<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-								</video>
+							<div style="width: 100%; height: 100%; background-color: #000000;">
+								<div id="" class="" style="display: block;">
+									<div class="video-try-over2">
+										<div class="over-wrap2" >
+											<p>尊敬的用户：该视频需要付费观看</p>
+											<p class="p-orange">¥{{video.money}}&nbsp;&nbsp;<span class="p-gray">|&nbsp;&nbsp;共1节课</span></p>
+											<p>
+												<a href="javascript:;" id="js_video_apply" class="btn2-primary over-btn">立即购买</a>
+												<!--<a href="javascript:;" id="js_video_replay" class="btn-primary over-btn">重新播放</a>-->
+											</p>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 

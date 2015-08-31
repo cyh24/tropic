@@ -1,0 +1,33 @@
+.mask {width: 100%; height: 100%; position: fixed; _position: absolute; top: 0; left: 0; z-index: 995;}
+.mask, .ptlogin-mask, .modal-bg {background-color: #000 !important; filter: alpha(opacity=60) !important; opacity: 0.6 !important;}
+
+
+
+.qrcode-container {background: #f3f6f9; width: 300px; height: 600px; border-color: #cecece; border-style: none \0; border-width: 2px; border-radius: 50px; padding: 0; position: fixed; top: 50%; left: 50%; margin-left: -177px; margin-top: -335px; z-index: 999;}
+.qrcode-container .qrcode-top {margin-top: 43px; width: 60px; height: 10px; margin-left: 120px; border-radius: 4px; margin-bottom: 25px; background-image: url('http://9.url.cn/edu/cms/common/img/siderbar/img/top.png'); background-repeat: no-repeat;}
+.qrcode-container .qrcode-center {border: 1px solid #cecece; width: 282px; height: 420px; text-align: center; background: #fff; margin-left: 8px;}
+.qrcode-container .qrcode-bottom {margin-left: 116px; margin-top: 16px; width: 64px; height: 64px; border: none; background-image: url('http://9.url.cn/edu/cms/common/img/siderbar/img/bottom.png'); background-repeat: no-repeat;}
+.qrcode-center .qc-top {height: 53px; line-height: 53px; vertical-align: middle; margin: 42px 50px 24px 50px;}
+.qrcode-center .qc-top div {display: inline-block; vertical-align: middle; zoom: 1;}
+.qrcode-center .qc-top .qct-logo {width: 46px; height: 53px; background-image: url('http://9.url.cn/edu/cms/common/img/siderbar/img/logo.png'); background-repeat: no-repeat;}
+.qrcode-center .qc-top .qct-title {font-size: 28px; font-family: "Microsoft YaHei"; margin-left: 20px;}
+.qrcode-center .qc-center {width: 190px; height: 190px; margin-left: 45px; overflow: hidden; position: relative; margin-top: 60px; z-index: 10;}
+.qrcode-center .qc-center .qc-logo {height: 40px; width: 40px; position: absolute; top: 75px; left: 75px; z-index: 30; background-image: url('http://9.url.cn/edu/activity/better_pc/img/logo.2acd5d5.png'); background-repeat: no-repeat;}
+.qrcode-center .qc-bottom {margin-top: 35px; height: 50px; line-height: 25px; padding: 0 24px; font-size: 14px; font-family: "Microsoft YaHei"; text-align: left;}
+
+/*.video-mask {position: absolute; top: 0; left: 0; bottom: 69px; width: 100%; background: #000; display: none;}*/
+
+.video-try-over2 { padding-top: 20%; left: 0; width: 100%; background-color: #000; color: #d3d3d3; text-align: center; font-size: 15px;}
+.video-try-over2 .over-wrap2 p {margin-bottom: 20px;}
+.video-try-over2 .over-wrap2 .p-orange {color: #ff9a00;}
+.video-try-over2 .over-wrap2 .p-gray {color: #D3D3D3;}
+.video-try-over2 .over-wrap2 .over-btn {width: 110px; height: 28px; line-height: 28px; margin: 0 10px;}
+.video-try-over2 .video-try-over__price {color: #ff9b0;}
+
+.btn2-primary { display: inline-block; vertical-align: middle; cursor: pointer; font-size: 15px; text-align: center; border-radius: 2px; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;}
+.btn-default {background-color: #04acf7; color: #ffffff;}
+.btn-default:hover {background-color: #04bbf7;}
+.btn-default:active {background-color: #038dcc;}
+.btn2-primary {background-color: #ff9a00; color: #fff;}
+.btn2-primary:hover {background-color: #ffad2f;}
+.btn2-primary:active {background-color: #ed7b00;}

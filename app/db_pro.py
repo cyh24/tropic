@@ -130,7 +130,8 @@ def save_video(request, logo_path, need_authority=True):
     video.domain = DOMAIN
     video.need_authority = need_authority
     video.logo_img = logo_path
-    video.teacher_name = "cyh"
+
+    video.teacher = Account.objects.filter(user=request.user).all()[0]
 
     data = request.POST
     if data.has_key('title'):
@@ -157,6 +158,8 @@ def save_video(request, logo_path, need_authority=True):
         video.logo_img = data['logo'].encode('utf-8')
     if data.has_key('desc'):
         video.info = data['desc'].encode('utf-8')
+    if data.has_key('money'):
+        video.money = float(data['money'].encode('utf-8'))
 
     try:
         video.save()
@@ -255,8 +258,7 @@ def add_comment(request):
         print video_id, follow_id, content
 
         comment = Comment()
-        comment.user_name = "cyh"
-        comment.user_pic  = "http://ask.julyedu.com/uploads/avatar/000/00/07/70_avatar_min.jpg"
+        comment.user = Account.objects.filter(user=request.user).all()[0]
         comment.follow_id = follow_id
         comment.comment    = content
 
@@ -269,7 +271,7 @@ def add_comment(request):
     except Exception, e:
         printError(e)
 
-def create_account(wx_user):
+def create_account_given_wx(wx_user):
     try:
         open_id = wx_user['openid']
         with transaction.atomic():
@@ -300,14 +302,30 @@ def create_account(wx_user):
 
     return False
 
-
-def check_wx_openid(user):
+def create_account_given_user(user):
     try:
-        openid = user['openid']
+        account = Account()
+        account.user = user
+        account.nickname = user.username
+        account.user_pic = "http://ask.julyedu.com/uploads/avatar/000/00/07/70_avatar_min.jpg"
+
+        account.info = "这家伙很懒，什么都没留~"
+
+        account.save()
+        return True
+    except Exception, e:
+        printError(e)
+
+    return False
+
+
+def check_wx_openid(wx_user):
+    try:
+        openid = wx_user['openid']
         account = Account.objects.filter(openid=openid).all()
 
         if get_len(account) < 1:
-            create_account(user)
+            create_account_given_wx(wx_user)
             return True
         else:
             account = account[0]
@@ -318,5 +336,17 @@ def check_wx_openid(user):
 
     return False
 
+def exist_user_account(user):
+    try:
+        account = Account.objects.filter(user=user).all()
+
+        if get_len(account) < 1:
+            create_account_given_user(user)
+            return True
+
+    except Exception, e:
+        printError(e)
+
+    return False
 
 

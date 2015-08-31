@@ -115,8 +115,10 @@ def wechat_login(request):
     return HttpResponseRedirect(login_url)
 
 def wechat_share(request):
-
     url = "http://facebuaa.cn"
+    if request.GET.has_key('cur_url'):
+        url = request.GET['cur_url']
+
     qrcode_url = get_qrcode(url)
     print qrcode_url
     json={'qrcode_url': qrcode_url}
@@ -152,6 +154,10 @@ def login_do(request):
         if user.is_active:
             login(request, user)
             print "user pass."
+
+            # judge whether db exist accout related to the user.
+            exist_user_account(user)
+
             if msg.has_key('next'):
                 return HttpResponseRedirect( HOMEPAGE+ msg['next'])
             else:
@@ -218,6 +224,12 @@ def videos_ui(request):
 
     return render_to_response('videos/videos.html', msg)
 
+
+def videos_manage(request):
+    msg = init_msg(request)
+    return render_to_response('videos/videos-manage.html', msg)
+
+
 def search_result(request):
 
     msg = init_msg(request)
@@ -276,7 +288,12 @@ def play_ui(request):
             except Exception, e:
                 printError(e)
 
-            return render_to_response('videos/play.html', msg)
+
+            # check whether need pay for the play
+            if video.money <= 0:
+                return render_to_response('videos/play.html', msg)
+            else:
+                return render_to_response('videos/play-prohibited.html', msg)
 
         except Exception, e:
             print "error: ", str(e)

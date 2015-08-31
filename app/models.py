@@ -5,7 +5,7 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 class Account(models.Model):
     user = models.OneToOneField(User, unique=True, verbose_name='user_account')
 
-    openid   = models.CharField(max_length=100, unique=True)
+    openid   = models.CharField(max_length=100)
 
 
     user_pic = models.CharField(max_length=200)
@@ -17,15 +17,6 @@ class Account(models.Model):
 
     class Meta:
         db_table = u'account'
-
-class Teacher(models.Model):
-    name = models.CharField(max_length=20)
-    pic  = models.CharField(max_length=200)
-
-    info = models.CharField(max_length=400)
-
-    class Meta:
-        db_table = u'teacher'
 
 class QiniuFile(models.Model):
     key    = models.CharField(max_length=200)
@@ -43,10 +34,28 @@ class QiniuFile(models.Model):
         abstract = True
 
 class Comment(models.Model):
-    #video_id     = models.IntegerField()
+    user = models.ForeignKey(Account, unique=False)
 
-    user_name    = models.CharField(max_length=20)
-    user_pic     = models.CharField(max_length=200)
+    def __get_user_pic(self):
+        try:
+            if self.user != None:
+                return self.user.user_pic
+        except Exception, e:
+            print str(e)
+
+        return None
+
+    def __get_user_name(self):
+        try:
+            if self.user != None:
+                return self.user.nickname
+        except Exception, e:
+            print str(e)
+
+        return None
+
+    user_name = property(__get_user_name)
+    user_pic  = property(__get_user_pic)
 
     follow_id    = models.IntegerField()
 
@@ -68,8 +77,28 @@ class Kind(models.Model):
         db_table = u'kind'
 
 class Video(QiniuFile):
-    #teacher = models.ForeignKey(Teacher, unique=False)
-    teacher_name = models.CharField(max_length=20)
+    teacher = models.ForeignKey(Account, unique=False)
+    def __get_teacher_name(self):
+        try:
+            if self.teacher != None:
+                return self.teacher.nickname
+        except Exception, e:
+            print str(e)
+
+        return None
+
+    def __get_teacher_pic(self):
+        try:
+            if self.teacher != None:
+                return self.teacher.user_pic
+        except Exception, e:
+            print str(e)
+
+        return None
+
+    teacher_name = property(__get_teacher_name)
+    teacher_pic  = property(__get_teacher_pic)
+
 
     title    = models.CharField(max_length=50)
     logo_img = models.CharField(max_length=200)
@@ -84,10 +113,18 @@ class Video(QiniuFile):
     watch_num    = models.IntegerField(default=0)
     like_num     = models.IntegerField(default=0)
     share_num    = models.IntegerField(default=0)
-    comments_num = models.IntegerField(default=0)
 
     comments     = models.ManyToManyField(Comment)
-    
+
+    def __get_comments_num(self):
+        try:
+            if self.comments != None:
+                return self.comments.count()
+        except Exception, e:
+            print str(e)
+
+        return 0
+    comments_num = property(__get_comments_num)
 
     info = models.CharField(max_length=400, default="")
 

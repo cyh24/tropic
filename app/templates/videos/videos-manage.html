@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+	{% include "include.html"%}
+	<link rel="stylesheet" href="/static/css/txkt/manage.css" />
+
+	<body>
+		{% include "header.html" %}
+		<div class="site_container">
+			<div class="container_inner contain_guide">
+				<!-- 导航栏 开始 -->
+				<div class="user_navigate" id="side_nav">
+					<div class="user_info">
+						<div class="navi_avater">
+							<img src="http://q1.qlogo.cn/g?b=qq&amp;k=bgIpicY2o7oUPpMPhSQOKww&amp;s=100&amp;t=1380206504" alt="" class="__avatar" width="120" height="120" style="visibility: visible;">
+							<span class="mask"></span>
+							<!--<a href="javascript:;" class="option_toggle">
+								<i class="icon_uacc"></i>
+								<span class="inner">账号管理</span>
+							</a>-->
+							<i id="__avatarType" class="icon_account_qq" style="visibility: visible;"></i>
+						</div>
+						<h4 class="user_title __nickname">ZeroCool</h4>
+						<div class="level_option">
+							<a href="/u/hlw/hlw_index.html" class="_icon_vip" style="visibility: hidden; display: none;" _hot="uc.side.hlwicon"><i class="ico_vip"></i></a>
+							<a target="_blank" href="javascript:" class="_icon_vplus" style="visibility: hidden; display: none;" _hot="uc.side.vplusicon"><i class="icon_vplus"></i></a>
+						</div>
+						<!--<div class="user_holly">
+							<span class="desc _vip_desc">开通会员 大片抢先看</span><a href="javascript:" title="立即开通" _hot="uc.side.payicon" class="icon_renews _vip_btn">立即开通</a>
+						</div>-->
+					</div>
+
+					<ul class="navigate_list">
+
+						<li class="item ">
+							<a href="/u/upload.html" class="navi_inner _upload" _hot="uc.side._upload"><i class="icon2_upload"></i><span class="text">上传视频</span></a>
+						</li>
+
+						<li class="item ">
+							<a href="/u/videos" class="navi_inner _vmanage current" _hot="uc.side._vmanage"><i class="icon2_vmanage"></i><span class="text">视频管理</span></a>
+						</li>
+
+						<li class="item ">
+							<a href="/u/data" class="navi_inner _data" _hot="uc.side._data"><i class="icon2_data"></i><span class="text">数据统计</span></a>
+						</li>
+
+					</ul>
+				</div>
+				<!-- 导航栏 结束 -->
+
+				<div class="main_content" id="video_view">
+					<ul class="mod_tab_list"  >
+						<li class="item current _videoBtn" >
+							<a  class="txt" >视频  2</a>
+						</li>
+						<li class="item _coverBtn">
+							<a class="txt" >专辑  0</a>
+						</li>
+					</ul>
+
+					<div class="filter_bar">
+						<div class="btn_item item_allist"><span class="inner">批量操作</span><i class="arrow"></i>
+							<div class="btn_list">
+								<ul class="items">
+									<li style="display:none"><a href="javascript:" class="inner _cull" _hot="uc.manage.batch.cull">推荐视频</a></li>
+									<li><a href="javascript:" class="inner _move_cover" _hot="uc.manage.batch.add">添加到专辑</a></li>
+									<li><a href="javascript:" class="inner _del_video" _hot="uc.manage.batch.del">删除</a></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="layout_toggle _filter">
+							<div class="btn_item item_allist"><span class="inner _current_type">全部</span><i class="arrow"></i>
+								<ul class="btn_list _btn_list">
+									<li class="items items_border">
+										<a href="#video/1" class="_type1 inner" _hot="uc.manage.sort.time">上传时间(从新到旧)</a>
+										<a href="#video/3" class="_type3 inner" _hot="uc.manage.sort.more">观看次数(从多到少)</a>
+										<a href="#video/4" class="_type4 inner" _hot="uc.manage.sort.less">观看次数(从少到多)</a>
+									</li>
+									<li class="items">
+										<a href="#video/0" class="_type0 inner" _hot="uc.manage.filter.all">全部视频</a>
+										<a href="#video/5" class="_type5 inner" _hot="uc.manage.filter.passed">已发布</a>
+										<a href="#video/6" class="_type6 inner" _hot="uc.manage.filter.unpass">未发布</a>
+										<a href="#video/7" class="_type7 inner" _hot="uc.manage.filter.added">已加入专辑</a>
+										<a href="#video/8" class="_type8 inner" _hot="uc.manage.filter.unadd">未加入专辑</a>
+										<a href="#video/9" class="_type9 inner" _hot="uc.manage.filter.culled">已推荐视频</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+
+					</div>
+
+					<ul class="video_list" id="video_list">
+						<li class="item_title">
+							<div class="item_a">
+								<input type="checkbox" class="_check_all">
+							</div>
+							<div class="item_b"><span class="text">视频截图</span></div>
+							<div class="item_c">指数</div>
+							<div class="item_d">操作</div>
+						</li>
+						<li class="list_item">
+							<div class="item_a">
+								<input type="checkbox" class="_check_video" data-vid="o0163afhpan"> </div>
+							<div class="item_b">
+								<a href="/page/o/a/n/o0163afhpan.html" target="_blank" class="img" _hot="uc.manage.li.img"> <img onerror="picerr(this)" src="http://vpic.video.qq.com/34635943/o0163afhpan.jpg?4803416" alt="testd" width="175px" height="100px"> </a>
+								<div class="video_detail">
+									<h3 class="title"> <a _hot="uc.manage.li.title" href="/page/o/a/n/o0163afhpan.html" target="_blank" title="testd">testd</a> </h3>
+									<h6 class="desc"> 创建于：2015-08-24 <span class="album_info _covers" title="">  </span> </h6> </div>
+							</div>
+							<div class="item_c">
+								<ol class="trend_list">
+									<li class="item"><i class="icon2_play"></i><span class="nums">2</span></li>
+									<li class="item"><i class="icon2_star"></i><span class="nums _comment_num">0</span></li>
+								</ol>
+							</div>
+							<div class="item_d">
+								<ol class="option_list">
+									<li class="item"> <a href="javascript:" class="btn_normal _edit_video" data-vid="o0163afhpan" _hot="uc.manage.li.edit"><i class="icon_edited"></i><span class="inner">编辑</span></a>
+										<a href="javascript:" class="btn_normal _del_video" data-vid="o0163afhpan" _hot="uc.manage.li.del"><i class="icon_delete"></i><span class="inner">删除</span></a>
+									</li>
+									<li class="item"><a href="javascript:" class="btn_normal _move_cover" data-vid="o0163afhpan" _hot="uc.manage.li.cover"><i class="icon_add"></i><span class="inner">添加到专辑</span></a></li>
+								</ol>
+							</div>
+						</li>
+
+					</ul>
+
+					<div class="mod_pages"><a href="#video/null/0" style="display: none;">上一页</a> <a href="#video/null/1" class="current">1</a> <a href="#video/null/2" style="display: none;">下一页</a></div>
+				</div>
+
+				<div class="main_content" id="cover_view" style="display:none">
+					<ul class="mod_tab_list">
+						<li class="item _videoBtn"><a class="txt" href="#video" _hot="uc.manage.videotab">视频 <i class="nums">2</i></a></li>
+						<li class="item current _coverBtn"><a class="txt" href="#cover" _hot="uc.manage.covertab">专辑 <i class="nums">0</i></a></li>
+					</ul>
+
+					<div class="filter_bar">
+						<a href="javascript:" class="btn_item item_newalbum  _add_cover" _hot="uc.manage.cover.add"><i class="icon_plus_cn"></i><span class="inner">新建专辑</span></a>
+					</div>
+
+					<div class="album_wrap">
+						<ul class="album_list cf" id="cover_list">
+						</ul>
+					</div>
+
+					<div class="mod_pages"><a href="#cover/0" style="display: none;">上一页</a> <a href="#cover/1" class="current">1</a> <a href="#cover/2" style="display: none;">下一页</a></div>
+				</div>
+
+				<div class="main_content" id="cover_edit_view" style="display:none">
+					<div class="breadcrumbs">
+						<i class="arrow"></i><a href="#cover" class="inner" _hot="uc.manage.covewr.list">返回原专辑</a>
+					</div>
+
+					<div class="album_cover">
+						<div>
+							<div class="cover_figure"> <span class="desc"><em class="nums">0</em>个视频</span>
+								<a href="#cover_edit/"> <img alt="" src="http://imgcache.qq.com/mediastyle/tenvideo/css/img/upload_status_default.png" onerror="picerr(this)" title="封面图更新会有所延迟，请耐心等候"> </a>
+							</div>
+							<h4 class="cover_title"><a href="javascript:" title=""></a></h4>
+							<div class="cover_data"> <span class="item item_date">0 创建</span> <span class="item item_nums"><i class="icon2_play"></i>0</span> </div>
+						</div>
+					</div>
+
+					<ul class="video_list">
+						<li class="item_title">
+							<div class="item_a"><span class="title">序号</span></div>
+							<div class="item_b"><span class="text">视频截图</span></div>
+							<div class="item_c">指数</div>
+							<div class="item_d">操作</div>
+						</li>
+					</ul>
+					<ul class="video_list toggle_drag">
+					</ul>
+
+					<div class="mod_load_page _load_page" style="display: none;">
+						<div class="load_line">
+							<div class="load_wrap">
+								<p class="load_title _btn"><a href="javascript:" _hot="uc.manage.cover.more">加载更多</a></p>
+								<p class="load_title loading_status _loading" style="display: none;"><a href="javascript:">加载中...</a></p>
+								<p class="load_desc">还有0记录</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</body>
+
+</html>
