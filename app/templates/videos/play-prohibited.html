@@ -7,9 +7,10 @@
 
 	<link href="/static/video-js/video-js.css" rel="stylesheet" type="text/css">
 	<script src="/static/video-js/video.js"></script>
+	<script type="text/javascript" src="/static/js/popwin.js"></script>
 
 	<script>
-		var VOTE_FLAG = 1;
+	var VOTE_FLAG = 1;
 
 		function voteUpAction() {
 			if (VOTE_FLAG == 1) {
@@ -21,60 +22,67 @@
 				type: "GET",
 				url: "/voteup/",
 				data: {
-					video_id: {
-						{
-							video.id
-						}
-					},
+					video_id: {{video.id}},
 				},
 				dataType: "json",
 				success: function(data) {
 					var num = Number($("#id-like-num").html());
-					if (!isNaN(num)) {
-						$("#id-like-num").html(num + 1);
-					} else {
-						$("#id-like-num").html(1);
-					}
+					if(!isNaN(num))
+					{
+          				$("#id-like-num").html(num+1);
+          			}
+          			else
+          			{
+          				$("#id-like-num").html(1);
+          			}
 				}
+          			
 			});
 		}
+		
+		function add_comment(){
+		
+            var content = $('#comment_text').val();
+  
+            if( content =='有没有什么问题要问导师的？' || content.length < 3){
+                alert('评论内容不能少于3个字哦~');
+                return false
+            }
 
-		function add_comment() {
-			var content = $('#comment_text').val();
-			if (content == '有没有什么问题要问导师的？' || content.length < 3) {
-				alert('评论内容不能少于3个字哦~');
-				return false
-			}
-			$.ajax({
-				url: "/add-comment/",
-				type: "GET",
-				dataType: "json",
-				data: {
-					follow_id: follow_id,
-					content: content,
-					video_id: {
-						{
-							video.id
-						}
-					},
-				},
-				success: function(obj) {
-					window.location.reload();
-				}
-			});
+            $.ajax({
+                url: "/add-comment/",
+                type: "GET",
+  				dataType: "json",
+                data: {
+                	follow_id: follow_id,
+                	content: content,
+                	video_id: {{video.id}},
+                },
+                success: function(obj){
+                    
+                    window.location.reload();
+                    
+                }
+            });
 		}
+		
+		
+		
 		var follow_id = -1;
-
-		function replay(self) {
+		function replay(self)
+		{
 			data_comment_name = document.getElementById(self.id).getAttribute('data-comment-name')
 			data_comment_id = document.getElementById(self.id).getAttribute('data-comment-id')
 			follow_id = Number(data_comment_id)
 			document.getElementById("comment_text").value = "回复 " + data_comment_name + ": ";
 			document.getElementById("comment_text").focus();
 		}
-
-		function star() {}
-
+		
+		function star()
+		{
+			
+		}
+		
 		function wechat_share() {
 			$.ajax({
 				type: "GET",
@@ -84,17 +92,20 @@
 				},
 				dataType: "json",
 				success: function(data) {
-					qrcode_url = data['qrcode_url'];
-					document.getElementById('qrcodeWrap').style.display = "block";
-					document.getElementById('id-qrcode').src = qrcode_url;
-				}
+                    qrcode_url = data['qrcode_url'];
+                    
+                    document.getElementById('qrcodeWrap').style.display = "block";
+                    document.getElementById('id-qrcode').src = qrcode_url;
+                }
+          			
 			});
 		}
-
-		function qrcode_close() {
+		
+		function qrcode_close()
+		{
 			document.getElementById('qrcodeWrap').style.display = "none";
 		}
-
+		
 		function addListener(element, e, fn) {
 			if (element.addEventListener) {
 				element.addEventListener(e, fn, false);
@@ -106,10 +117,25 @@
 			function(evt) {
 				var evt = window.event ? window.event : evt,
 					target = evt.srcElement || evt.target;
-				if (target.id == "qrcodeContainer") {} else {
+				if (target.id == "qrcodeContainer") {
+				} else {
 					document.getElementById('qrcodeWrap').style.display = "none";
 				}
 			})
+
+		function show_pay() {
+			document.getElementById('id-go-pay').style.display = "block";
+		}
+		
+		function hide_pay() {
+			document.getElementById('id-go-pay').style.display = "none";
+		}
+		
+		function goto_pay(){
+			hide_pay();
+			popWin.showWin("492","360","购买课程","http://127.0.0.1:9999/pay");
+		}
+		
 	</script>
 
 	<body>
@@ -133,6 +159,51 @@
 			</div>
 		</div>
 
+		<div id="id-go-pay" style="display: none;">
+			<div class="mask" style="display: block;"></div>
+			<div class="tips tips-buy-course alert-tips" style="margin-top: -146.5px;">
+				<div class="tips-hd">购买课程</div>
+				<div class="tips-bd">
+					<div class="mod-course-banner">
+						<img src="http://10.url.cn/qqcourse_logo_rn/ajNVdqHZLLAvc6DhDpeYHapU3BkicvpAiaESugf3B0VdLLBOMkwrEM0HCB97iajLU8mlibfAKUc6e2E/90" alt="零基础学Android：常用案例(11)" class="mod-course-banner__img">
+						<div class="mod-course-banner__content">
+							<h3 class="mod-course-banner__title" title="零基础学Android：常用案例(11)">零基础学Android：常用案例(11)</h3>
+							<div class="mod-course-banner__content-line">
+								<span class="mod-course-banner__c-light">共1课时</span>
+								<span class="mod-course-banner__sep">|</span>
+								<a href="http://mooc.ke.qq.com" target="_blank" class="mod-course-banner__c-light" title="美联航达">美联航达</a>
+							</div>
+						</div>
+					</div>
+					<div class="mod-course-banner_row clearfix">
+						<div class="mod-course-banner_col1">价格</div>
+						<div class="mod-course-banner_col2">
+							<span class="mod-course-banner__price ">  ¥<span class="fontsize-22">9.00</span>
+							</span>
+							<span class="mod-course-banner__c-light">支持微信、财付通、银行卡支付</span>
+						</div>
+					</div>
+					<!--<div class="mod-course-banner_row clearfix hide js-not-chose-tips">
+						<div class="mod-course-banner_col2">
+							<p class="mod-course-banner_tips">
+								<span class="mod-course-banner_tips-icon">
+								
+							</span>请先选择班级</p>
+							<p> </p>
+						</div>
+					</div>-->
+				</div>
+				<div class="tips-tool">
+
+					<a onclick="goto_pay()"  href="#" title="去付款" class="btn-7 modal-accept">去付款</a>
+					<a  href="#" title="取消" onclick="hide_pay()" class="btn-8 modal-cancel">取消</a>
+				</div>
+				<a  href="#" onclick="hide_pay()" class="modal-close btn-close" title="关闭">×</a>
+			</div>
+		</div>
+		
+
+
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
@@ -150,11 +221,12 @@
 							<div style="width: 100%; height: 100%; background-color: #000000;">
 								<div id="" class="" style="display: block;">
 									<div class="video-try-over2">
-										<div class="over-wrap2" >
+										<div class="over-wrap2">
 											<p>尊敬的用户：该视频需要付费观看</p>
 											<p class="p-orange">¥{{video.money}}&nbsp;&nbsp;<span class="p-gray">|&nbsp;&nbsp;共1节课</span></p>
 											<p>
-												<a href="javascript:;" id="js_video_apply" class="btn2-primary over-btn">立即购买</a>
+												<a onclick="show_pay()" class="btn2-primary over-btn">立即购买</a>
+
 												<!--<a href="javascript:;" id="js_video_replay" class="btn-primary over-btn">重新播放</a>-->
 											</p>
 										</div>

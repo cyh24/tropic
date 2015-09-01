@@ -66,7 +66,12 @@ def init_msg(request):
     msg = {}
     msg['login_state'] = False
     if request.user.is_authenticated():
-        msg['login_state'] = True
+        try:
+            msg['login_state'] = True
+            account = Account.objects.filter(user=request.user).all()[0]
+            msg['account'] = account
+        except Exception, e:
+            printError(e)
 
     msg['next'] = '/'
     if request.GET.has_key('next'):
@@ -180,7 +185,7 @@ def paginator_bar(cur_page, total_page):
         for i in range(cur_page-1):
             pages_before.append(i+1)
         for i in range(cur_page+1, total_page+1):
-            pages_after.append(i+1)
+            pages_after.append(i)
     elif cur_page <= Num/2:
         for i in range(cur_page-1):
             pages_before.append(i+1)
@@ -207,7 +212,7 @@ def videos_ui(request):
     videos = Video.objects.all()
     videos, msg = get_order_videos(request, videos, msg)
 
-    total_page = (get_len(videos)+PAGE_SIZE)/PAGE_SIZE
+    total_page = (get_len(videos)+PAGE_SIZE-1)/PAGE_SIZE
     subVideos, cur_page = paginator_show(request, videos, PAGE_SIZE)
 
 
@@ -227,6 +232,32 @@ def videos_ui(request):
 
 def videos_manage(request):
     msg = init_msg(request)
+
+    videos = Video.objects.all()
+    #videos, msg = get_order_videos(request, videos, msg)
+    if get_len(videos) > 0:
+        new_videos = []
+        for v in videos:
+            v.release_date = str(v.release_date).split(' ')[0]
+            new_videos.append(v)
+        videos = new_videos
+
+    total_page = (get_len(videos)+5-1)/5
+    subVideos, cur_page = paginator_show(request, videos, 5)
+
+
+    pages_before, pages_after = paginator_bar(cur_page, total_page)
+
+    msg['videos']     = subVideos
+    msg['videos_len'] = len(videos)
+    msg['cur_page']   = cur_page
+    msg['pages_before'] = pages_before
+    msg['pages_after']  = pages_after
+    msg['pre_page']   = cur_page - 1
+    msg['after_page'] = cur_page + 1
+
+    msg['interest_videos'] = get_interest_videos()
+
     return render_to_response('videos/videos-manage.html', msg)
 
 
@@ -237,7 +268,7 @@ def search_result(request):
     #videos, msg = get_order_videos(request, msg)
     videos = get_search_videos(request)
 
-    total_page = (get_len(videos)+PAGE_SIZE)/PAGE_SIZE
+    total_page = (get_len(videos)+PAGE_SIZE-1)/PAGE_SIZE
     subVideos, cur_page = paginator_show(request, videos, PAGE_SIZE)
 
 
@@ -355,3 +386,10 @@ def comment_add(request):
         printError(e)
 
     return JsonResponse(json)
+
+
+@login_required(login_url='/login/')
+@csrf_protect
+def pay_ui(request):
+    msg = init_msg(request)
+    return render_to_response('pay/pay.html', msg)

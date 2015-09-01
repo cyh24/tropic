@@ -31,3 +31,124 @@
 .btn2-primary {background-color: #ff9a00; color: #fff;}
 .btn2-primary:hover {background-color: #ffad2f;}
 .btn2-primary:active {background-color: #ed7b00;}
+
+.tips-buy-course {width: 576px;}
+.tips-buy-course .tips-des {margin: 20px 0 15px;}
+.tips-buy-course .tips-bd {max-height: 600px; height: auto !important; padding: 40px 40px 10px; overflow: visible;}
+.tips-buy-course .mod-course-banner {width: 490px; height: 90px;}
+.tips-buy-course .mod-course-banner__img {width: 90px; height: 50px; float: left;}
+.tips-buy-course .mod-course-banner__content {margin-left: 16px; width: 380px; min-height: 50px; _height: 50px;}
+.tips-buy-course .mod-course-banner__title {font-size: 18px; max-width: 21em; width: auto !important; margin-top: 0; margin-bottom: 0; height: auto; line-height: 1.5;}
+.tips-buy-course .mod-choose-time {position: relative; width: 490px;}
+.tips-buy-course .mod-choose-time_v2 {width: auto;}
+.tips-buy-course .mod-choose-time__li {background: #FFFFFF;}
+.tips-buy-course .mod-choose-time__li:hover {background: #EFF1F3;}
+.tips-buy-course .mod-choose-time__time {max-width: 434px; _width: 434px;}
+.tips-buy-course .mod-course-banner__price {margin-right: 6px;}
+.tips-buy-course .btn-default {width: 100px; height: 37px; line-height: 37px; font-size: 16px;}
+.tips-buy-course .btn-weak {width: 100px; height: 37px; line-height: 37px; font-size: 16px; border: 1px solid #D9D9D9; background: #F3F3F3;}
+.tips-buy-course .btn-weak:hover {background: #FDFDFD;}
+.tips-buy-course .btn-weak:active {background: #EBEBEB;}
+.tips-buy-course .mod-course-banner_row {width: 500px; margin-bottom: 18px;}
+.tips-buy-course .mod-course-banner_tips {margin-top: -10px; color: #e85308;}
+.tips-buy-course .privilege-checkbox {height: auto; line-height: 25px;}
+.tips-buy-course .privilege-checkbox i {top: 7px;}
+.tips-buy-course .mod-course-banner_tips-icon {display: inline-block; vertical-align: top; margin-right: 6px; margin-top: 6px; width: 14px; height: 14px; background: -234px 0 no-repeat;}
+.tips-buy-course .mod-course-banner_col1 {float: left; width: 40px; padding-top: 3px;}
+.tips-buy-course .mod-course-banner_col2 {float: right; width: 450px;}
+.tips-buy-course .raw-price {text-decoration: line-through;}
+.tips-buy-course .raw-price-range {color: #999; padding-left: 10px;}
+.tips-buy-course .mod-course-banner__price span {font-size: 14px;}
+.tips-buy-course .mod-course-banner__price .fontsize-22 {font-size: 22px;}
+
+
+.tips {position: fixed; _position: absolute; top: 50%; left: 50%; 
+/*width: 490px;*/ 
+margin-left: -245px; z-index: 999; background: #fff; font-size: 14px; border-radius: 4px; overflow: hidden;}
+.tips .tips-hd {height: 30px; line-height: 30px; text-indent: 12px; background: #039ae3; color: #fff;}
+.tips .tips-tool {margin: 20px; text-align: right; *zoom: 1;}
+.tips .tips-tool a {margin-left: 10px;}
+.tips .tips-tool .btn-7, .tips .tips-tool .btn-8 {width: auto; height: 36px; line-height: 36px; border-radius: 2px;}
+.tips .btn-close {font-size: 20px; font-style: normal; position: absolute; right: 12px; top: 0; color: #B4E8E8;}
+.tips .btn-close:hover {color: #FDFDFD;}
+.tips .btn-close:active {color: #125D80;}
+.tips .tips-bd {position: relative; line-height: 24px; max-height: 500px; overflow-y: auto; overflow-x: hidden;}
+.tips .tips-bd .add-uins {margin-left: 20px; margin-top: 15px;}
+.tips .msg {margin-left: 66px; position: relative; top: 10px; word-break: break-all;}
+.tips .mrl22 {margin-left: 22px; margin-right: 22px;}
+.alert-tips {
+	/*width: 450px;*/ 
+	margin-left: -260px;}
+.alert-tips .tips-bd {padding: 30px 40px;}
+
+.mod-course-banner {width: 960px; margin: 0 auto; cursor: default; position: relative;}
+.mod-course-banner__img-wrap {width: 440px; height: 248px; float: left; text-align: center;}
+.mod-course-banner__img {width: 440px; height: 248px;}
+.mod-course-banner__video-mask {position: absolute; width: 440px; height: 248px; top: 0; left: 0;}
+.mod-course-banner__content {position: relative; margin-left: 40px; float: left; width: 480px; min-height: 248px; _height: 248px;}
+.mod-course-banner__btn-wrap-free, .mod-course-banner__btn-wrap-video {position: absolute; bottom: 0;}
+.mod-course-banner__title {font-size: 22px; letter-spacing: 1px; max-width: 480px; width: auto !important; margin-top: -8px; margin-bottom: 5px; height: 33px; line-height: 33px; _margin-top: 0;}
+.mod-course-banner__social {font-size: 12px; color: #666; margin-bottom: 5px;}
+.mod-course-banner__social span, .mod-course-banner__social a {display: inline-block; vertical-align: top;}
+.mod-course-banner__star-wrap {margin-right: 10px; margin-top: -2px; _margin-top: 3px;}
+.mod-course-banner__vote-number {color: #AAAAAA;}
+.mod-course-banner__sep {margin: 0 10px; color: #C6C7C8; font-size: 12px;}
+.mod-course-banner__share {margin-top: 1px; _margin-top: 3px; cursor: pointer; vertical-align: top; position: relative; color: #666;}
+.mod-course-banner__share .i-share {margin-right: 5px;}
+.mod-course-banner__share:hover {color: #333;}
+.mod-course-banner__share .share-panel {display: none; position: absolute; top: 14px; left: 0; *zoom: 1; z-index: 9;}
+.mod-course-banner__share .share-panel-content {display: block; margin-top: 3px; padding: 4px 9px; width: 100px; font-size: 0; line-height: 0; text-align: center; border: 1px solid #dcdcdc; background: #fff;}
+.mod-course-banner__share .share-qq, .mod-course-banner__share .share-qzone, .mod-course-banner__share .share-weixin {display: inline-block; *display: inline; *zoom: 1; width: 26px; height: 26px; background: 0 0 no-repeat;}
+.mod-course-banner__share .share-qq {margin-right: 6px; background-position: 0 -26px; background-position-x: 0; background-position-y: -26px;}
+.mod-course-banner__share .share-qzone {margin-right: 8px; background-position: 0 0; background-position-x: 0; background-position-y: 0;}
+.mod-course-banner__share .share-weixin {background-position: 0 -310px; background-position-x: 0; background-position-y: -310px;}
+.mod-course-banner__share-expand .share-panel {display: block;}
+.mod-course-banner__content-line {margin-bottom: 7px; font-size: 14px; color: #666666;}
+.mod-course-banner__content-line .mod-choose-time {margin-bottom: 12px;}
+.mod-course-banner__content-line .mod-choose-time__tab-link, .mod-course-banner__content-line .mod-choose-time__time {height: 30px; line-height: 30px;}
+.mod-course-banner__text-light {display: inline-block; vertical-align: baseline; margin-right: 10px; color: #999999; width: 60px;}
+.mod-course-banner__c-light {display: inline-block; vertical-align: top; color: #999999;}
+a.mod-course-banner__c-light {width: 283px; vertical-align: top;}
+a.mod-course-banner__c-light:hover {color: #039ae3;}
+a.mod-course-banner__c-light:active {color: #1076B5;}
+.mod-course-banner__text-dark {display: inline-block; vertical-align: baseline; margin-right: 10px; color: #333; width: 60px;}
+.mod-course-banner__price {color: #E85308; vertical-align: baseline;}
+.mod-course-banner__price span {font-size: 22px;}
+.mod-course-banner__price.mod-course-banner__price_free {color: #5FB41B;}
+.mod-course-banner__price .mod-course-card__price_free {font-size: 22px;}
+.mod-course-banner__other-time {position: relative; cursor: pointer; display: inline-block; vertical-align: baseline; width: 110px; float: left;}
+.mod-course-banner__other-time .icon-calender-two-column {display: inline-block; vertical-align: -2px; width: 16px; height: 14px; margin-right: 3px; background: -213px -147px no-repeat;}
+.mod-course-banner__other-time.mod-course-banner__other-time_open {z-index: 99999; zoom: 1; color: #366086;}
+.mod-course-banner__other-time.mod-course-banner__other-time_open .icon-calender-two-column {background: -305px -125px no-repeat;}
+.mod-course-banner__other-time.mod-course-banner__other-time_open .mod-choose-time {display: block; top: 30px; right: -65px; background: #fff;}
+.mod-course-banner__other-time_none {display: none;}
+.mod-course-banner__btn-wrap {margin-top: 16px; font-size: 0; zoom: 1; _width: 320px; _height: 52px;}
+.mod-course-banner__btn-wrap .mod-course-banner__sep {vertical-align: middle; _vertical-align: baseline;}
+.mod-course-banner__btn-wrap .btn-primary, .mod-course-banner__btn-wrap .btn-default {width: 200px; height: 50px; font-size: 16px; line-height: 50px;}
+.mod-course-banner__btn-wrap .btn-in-class {background: #039ae3;}
+.mod-course-banner__btn-wrap .btn-heart {margin-right: 0; margin-left: 20px; width: auto; height: 48px; line-height: 48px; color: #666666; font-size: 14px; background: #F4F5F7; border: none;}
+.mod-course-banner__btn-wrap .btn-heart span {display: inline-block; vertical-align: middle; margin-top: -2px;}
+.mod-course-banner__btn-wrap .btn-heart .i-heart {color: #ccc; font-size: 24px; margin-right: 5px; vertical-align: middle;}
+.mod-course-banner__btn-wrap .btn-heart:hover {background: #F4F5F7; color: #333333;}
+.mod-course-banner__btn-wrap .btn-heart:hover .i-heart {color: #999;}
+.mod-course-banner__btn-wrap .btn-heart_done {width: auto; margin-left: 20px; height: 48px; line-height: 48px; background: #F4F5F7; font-size: 14px; color: #666666; border: none;}
+.mod-course-banner__btn-wrap .btn-heart_done span {display: inline-block; vertical-align: middle; margin-top: -2px;}
+.mod-course-banner__btn-wrap .btn-heart_done .i-heart {color: #e85408; font-size: 24px; margin-right: 5px; vertical-align: middle;}
+.mod-course-banner__btn-wrap .btn-heart_done:hover {background: #F4F5F7;}
+.mod-course-banner__status {position: absolute; bottom: -50px; right: -5px; width: 162px; height: 120px;}
+.mod-course-banner__status.mod-course-banner__class-end {_background: url('http://9.url.cn/edu/img/bg_class_end_ie6.ec33d.png') no-repeat; background: 0 -125px no-repeat;}
+.mod-course-banner__status.mod-course-banner__registered {_background: url('http://9.url.cn/edu/img/bg_registered_ie6.f7e88.png') no-repeat; background: 0 0 no-repeat;}
+.mod-course-banner__status.mod-course-banner__signed-stop {_background: url('http://9.url.cn/edu/img/bg_signed_stop_ie6.dd3c7.png') no-repeat; background: -167px 0 no-repeat;}
+.mod-course-banner__guide {margin-top: 24px; height: 18px; line-height: 18px;}
+.mod-course-banner__guide-protect {display: inline-block; vertical-align: middle; margin-right: 20px; color: #666;}
+.mod-course-banner__guide-protect i {display: inline-block; vertical-align: top; margin-right: 5px; height: 18px; width: 18px; background: -190px -147px;}
+.mod-course-banner__guide-payback {display: inline-block; vertical-align: middle; color: #666;}
+.mod-course-banner__guide-payback i {display: inline-block; vertical-align: top; margin-right: 5px; height: 18px; width: 18px; background: -167px -147px;}
+
+
+.btn-7 {padding: 0 26px; height: 36px; line-height: 36px; background-color: #039ae3; font-size: 16px; color: #fff; display: inline-block; vertical-align: middle; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;}
+.btn-7:hover {background-color: #00acff;}
+.btn-8 {padding: 0 26px; height: 34px; line-height: 34px; background-color: #f3f3f3; font-size: 16px; border: 1px solid #d9d9d9; color: #3a3a3a; display: inline-block; vertical-align: middle; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;}
+.btn-8:hover {background-color: #ebebeb;}
+.btn-disabled, .btn-disabled:hover, .btn-disabled:active {outline: none;}
+

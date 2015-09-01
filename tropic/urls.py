@@ -51,5 +51,7 @@ urlpatterns = patterns('',
     url(r'^wechat-login/$', 'app.views.wechat_login'), 
     url(r'^wechat-share/$', 'app.views.wechat_share'), 
 
+    url(r'^pay/$', 'app.views.pay_ui'), 
+
     url(r'^test/', 'app.views.test')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

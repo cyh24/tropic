@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="/static/css/pay/pay.css" />
+	</head>
+
+	<body>
+		<div class="dialog_content">
+			<div class="prop" id="dlgHeader">
+				<div class="prop_img">
+					<img src="http://10.url.cn/qqcourse_logo_rn/ajNVdqHZLLAvc6DhDpeYHapU3BkicvpAiaESugf3B0VdLLBOMkwrEM0HCB97iajLU8mlibfAKUc6e2E/90" onload="this.height>54?this.height=54:0">
+				</div>
+				<div class="prop_cont">
+					<h2 id="goodsName">零基础学Android：...</h2>
+					<p>
+						<span id="unitPriceTip"></span><span class="special" id="openVipSection" style="display: none;"><a href="javascript:void(0)" id="quickOpen" style="display: none;">一键开通VIP</a><a href="javascript:void(0)" id="slowOpen">开通VIP</a></span>
+						<span class="special tx-success" id="openSuccess" style="display:none"></span><span class="special warning" id="openFail" style="display:none"></span><span id="openWaiting" style="display:none"></span>
+					</p>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="form-horizontal">
+				<div class="control-group tit" style="z-index:102;">
+					<span class="control-label">支付方式：</span>
+					<div class="controls">
+						<div class="controls-option" id="channelList">
+							<label _value="wechat" id="wechatChannel" _type="main" class="selected"><a href="javascript:void(0)" class="radio-box" hidefocus="true">微信支付<i class="icon-check"></i></a></label>
+							<label _value="kj" id="kjChannel" _type="main" class=""><a href="javascript:void(0)" class="radio-box" hidefocus="true">快捷支付<i class="icon-check"></i></a></label>
+							<label _value="bank" id="bankChannel" _type="main" class=""><a href="javascript:void(0)" class="radio-box" hidefocus="true">银行卡<i class="icon-check"></i></a></label>
+							<label _value="tenpay" id="tenpayChannel" _type="main" class=""><a href="javascript:void(0)" class="radio-box" hidefocus="true">财付通<i class="icon-check"></i></a></label>
+						</div>
+						<div class="controls-expanded" id="channelLoading" style="display: none;">
+							<div class="loading warning">
+								<div class="load">
+									<i class="icon-load"></i>加载中，请稍后……
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="dialogWxMini" class="newApp1 appsmall">
+				<p class="img-rwm"><img id="wxImageMini" width="100" height="100" src="http://pay.qq.com/cgi-bin/account/get_qr_image.cgi?size=150&amp;url=http%3A%2F%2Fpay.qq.com%2Fh5%2Fwechat.shtml%3Ft%3D1441116882%26n%3D200308297%26p%3Dattach%253DOfferID%25253D1450000627%252526ServiceCode%25253D-QKTDJ%252526Uin%25253D991698424%252526Count%25253D%2526bank_type%253DWX%2526body%253D%2525E9%25259B%2525B6%2525E5%25259F%2525BA%2525E7%2525A1%252580%2525E5%2525AD%2525A6Android%2525EF%2525BC%25259A...%252528%2525E4%2525B8%2525BA991698424%2525E8%2525B4%2525AD%2525E4%2525B9%2525B0%252529%2526fee_type%253DCNY%2526input_charset%253DUTF-8%2526notify_url%253Dhttp%25253A%25252F%25252Fwechat.pay.qq.com%25252Fcgi-bin%25252Fwechat_notify.fcg%2526out_trade_no%253D20150901200308297%2526partner%253D1000018901%2526spbill_create_ip%253D223.72.182.159%2526stat_data%253Dpay_3_pro_m%2526stat_type%253D33%2526total_fee%253D900%2526sign%253D99033B291313A66AFA8C8F0E7DB064DD%26s%3DSHA1%26si%3Dc24835cc6bc7da73a1f2c84a4bf0663fb8002738%26showwxpaytitle%3D1"></p>
+				<p class="explain"><img src="http://imgcache.qq.com/bossweb/pay/prop_appv2/v2/pic/tips-rwm.png"></p>
+				<p class="price" id="wxPriceMini">￥9</p>
+			</div>
+
+		</div>
+	</body>
+
+</html>

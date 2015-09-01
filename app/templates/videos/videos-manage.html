@@ -11,15 +11,17 @@
 				<div class="user_navigate" id="side_nav">
 					<div class="user_info">
 						<div class="navi_avater">
-							<img src="http://q1.qlogo.cn/g?b=qq&amp;k=bgIpicY2o7oUPpMPhSQOKww&amp;s=100&amp;t=1380206504" alt="" class="__avatar" width="120" height="120" style="visibility: visible;">
-							<span class="mask"></span>
+							<a href="/user/setprofile/">
+								<img src={{account.user_pic}} class="__avatar" width="120" height="120" style="visibility: visible;">
+								<span class="mask"></span>
+							</a>
 							<!--<a href="javascript:;" class="option_toggle">
 								<i class="icon_uacc"></i>
 								<span class="inner">账号管理</span>
 							</a>-->
-							<i id="__avatarType" class="icon_account_qq" style="visibility: visible;"></i>
+							<!--<i id="__avatarType" class="icon_account_qq" style="visibility: visible;"></i>-->
 						</div>
-						<h4 class="user_title __nickname">ZeroCool</h4>
+						<h4 class="user_title __nickname">{{account.nickname}}</h4>
 						<div class="level_option">
 							<a href="/u/hlw/hlw_index.html" class="_icon_vip" style="visibility: hidden; display: none;" _hot="uc.side.hlwicon"><i class="ico_vip"></i></a>
 							<a target="_blank" href="javascript:" class="_icon_vplus" style="visibility: hidden; display: none;" _hot="uc.side.vplusicon"><i class="icon_vplus"></i></a>
@@ -32,15 +34,15 @@
 					<ul class="navigate_list">
 
 						<li class="item ">
-							<a href="/u/upload.html" class="navi_inner _upload" _hot="uc.side._upload"><i class="icon2_upload"></i><span class="text">上传视频</span></a>
+							<a href="/upload/" class="navi_inner _upload" _hot="uc.side._upload"><i class="icon2_upload"></i><span class="text">上传视频</span></a>
 						</li>
 
 						<li class="item ">
-							<a href="/u/videos" class="navi_inner _vmanage current" _hot="uc.side._vmanage"><i class="icon2_vmanage"></i><span class="text">视频管理</span></a>
+							<a href="" class="navi_inner _vmanage current" _hot="uc.side._vmanage"><i class="icon2_vmanage"></i><span class="text">视频管理</span></a>
 						</li>
 
 						<li class="item ">
-							<a href="/u/data" class="navi_inner _data" _hot="uc.side._data"><i class="icon2_data"></i><span class="text">数据统计</span></a>
+							<a href="" class="navi_inner _data" _hot="uc.side._data"><i class="icon2_data"></i><span class="text">数据统计</span></a>
 						</li>
 
 					</ul>
@@ -48,44 +50,49 @@
 				<!-- 导航栏 结束 -->
 
 				<div class="main_content" id="video_view">
-					<ul class="mod_tab_list"  >
-						<li class="item current _videoBtn" >
-							<a  class="txt" >视频  2</a>
+					<ul class="mod_tab_list">
+						<li class="item current _videoBtn">
+							<a class="txt">视频 {{videos_len}} </a>
 						</li>
 						<li class="item _coverBtn">
-							<a class="txt" >专辑  0</a>
+							<a class="txt">专辑  0</a>
 						</li>
 					</ul>
 
 					<div class="filter_bar">
-						<div class="btn_item item_allist"><span class="inner">批量操作</span><i class="arrow"></i>
+						<div class="btn_item item_allist">
+							<span class="inner">批量操作</span>
+							<i class="arrow"></i>
 							<div class="btn_list">
 								<ul class="items">
-									<li style="display:none"><a href="javascript:" class="inner _cull" _hot="uc.manage.batch.cull">推荐视频</a></li>
-									<li><a href="javascript:" class="inner _move_cover" _hot="uc.manage.batch.add">添加到专辑</a></li>
-									<li><a href="javascript:" class="inner _del_video" _hot="uc.manage.batch.del">删除</a></li>
+									<li style="display:">
+										<a href="" class="inner _cull" _hot="uc.manage.batch.cull">推荐视频</a></li>
+									<li><a href="" class="inner _move_cover" _hot="uc.manage.batch.add">添加到专辑</a></li>
+									<li><a href="" class="inner _del_video" _hot="uc.manage.batch.del">删除</a></li>
 								</ul>
 							</div>
 						</div>
 
 						<div class="layout_toggle _filter">
-							<div class="btn_item item_allist"><span class="inner _current_type">全部</span><i class="arrow"></i>
-								<ul class="btn_list _btn_list">
-									<li class="items items_border">
-										<a href="#video/1" class="_type1 inner" _hot="uc.manage.sort.time">上传时间(从新到旧)</a>
-										<a href="#video/3" class="_type3 inner" _hot="uc.manage.sort.more">观看次数(从多到少)</a>
-										<a href="#video/4" class="_type4 inner" _hot="uc.manage.sort.less">观看次数(从少到多)</a>
-									</li>
-									<li class="items">
-										<a href="#video/0" class="_type0 inner" _hot="uc.manage.filter.all">全部视频</a>
-										<a href="#video/5" class="_type5 inner" _hot="uc.manage.filter.passed">已发布</a>
-										<a href="#video/6" class="_type6 inner" _hot="uc.manage.filter.unpass">未发布</a>
-										<a href="#video/7" class="_type7 inner" _hot="uc.manage.filter.added">已加入专辑</a>
-										<a href="#video/8" class="_type8 inner" _hot="uc.manage.filter.unadd">未加入专辑</a>
-										<a href="#video/9" class="_type9 inner" _hot="uc.manage.filter.culled">已推荐视频</a>
-									</li>
-								</ul>
-							</div>
+						<div class="btn_item item_allist">
+							<span class="inner _current_type">全部</span>
+							<i class="arrow"></i>
+							<ul class="btn_list _btn_list">
+								<li class="items items_border">
+									<a href="#video/1" class="_type1 inner" _hot="uc.manage.sort.time">上传时间(从新到旧)</a>
+									<a href="#video/3" class="_type3 inner" _hot="uc.manage.sort.more">观看次数(从多到少)</a>
+									<a href="#video/4" class="_type4 inner" _hot="uc.manage.sort.less">观看次数(从少到多)</a>
+								</li>
+								<li class="items">
+									<a href="#video/0" class="_type0 inner" _hot="uc.manage.filter.all">全部视频</a>
+									<a href="#video/5" class="_type5 inner" _hot="uc.manage.filter.passed">已发布</a>
+									<a href="#video/6" class="_type6 inner" _hot="uc.manage.filter.unpass">未发布</a>
+									<a href="#video/7" class="_type7 inner" _hot="uc.manage.filter.added">已加入专辑</a>
+									<a href="#video/8" class="_type8 inner" _hot="uc.manage.filter.unadd">未加入专辑</a>
+									<a href="#video/9" class="_type9 inner" _hot="uc.manage.filter.culled">已推荐视频</a>
+								</li>
+							</ul>
+						</div>
 						</div>
 
 					</div>
@@ -99,19 +106,21 @@
 							<div class="item_c">指数</div>
 							<div class="item_d">操作</div>
 						</li>
+
+						{% for v in videos %}
 						<li class="list_item">
 							<div class="item_a">
 								<input type="checkbox" class="_check_video" data-vid="o0163afhpan"> </div>
 							<div class="item_b">
-								<a href="/page/o/a/n/o0163afhpan.html" target="_blank" class="img" _hot="uc.manage.li.img"> <img onerror="picerr(this)" src="http://vpic.video.qq.com/34635943/o0163afhpan.jpg?4803416" alt="testd" width="175px" height="100px"> </a>
-								<div class="video_detail">
-									<h3 class="title"> <a _hot="uc.manage.li.title" href="/page/o/a/n/o0163afhpan.html" target="_blank" title="testd">testd</a> </h3>
-									<h6 class="desc"> 创建于：2015-08-24 <span class="album_info _covers" title="">  </span> </h6> </div>
+								<a href="" target="_blank" class="img" _hot="uc.manage.li.img"> <img onerror="picerr(this)" src={{v.logo_img}} alt="testd" width="175px" height="100px"> </a>
+								<div class="video_detail" style="margin-top: 10px;">
+									<h3 class="title"> <a title="testd">{{v.title}}</a> </h3>
+									<h6 class="desc"> 创建于：{{v.release_date}} <span class="album_info _covers" title="">  </span> </h6> </div>
 							</div>
 							<div class="item_c">
 								<ol class="trend_list">
-									<li class="item"><i class="icon2_play"></i><span class="nums">2</span></li>
-									<li class="item"><i class="icon2_star"></i><span class="nums _comment_num">0</span></li>
+									<li class="item"><i class="icon2_play"></i><span class="nums">{{v.watch_num}}</span></li>
+									<li class="item"><i class="icon2_star"></i><span class="nums">{{v.like_num}}</span></li>
 								</ol>
 							</div>
 							<div class="item_d">
@@ -123,10 +132,22 @@
 								</ol>
 							</div>
 						</li>
+						{% endfor %}
 
 					</ul>
-
-					<div class="mod_pages"><a href="#video/null/0" style="display: none;">上一页</a> <a href="#video/null/1" class="current">1</a> <a href="#video/null/2" style="display: none;">下一页</a></div>
+					
+					<div class="mod_pages">
+						<a href="/videos/manage/?page={{pre_page}}" class="page-btn" style="width: 100px;">上一页</a>
+						{% for i in pages_before %}
+						<a href="/videos/manage/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a>
+						{% endfor %}
+						<a href="/videos/manage/?page={{cur_page}}" data-page={{cur_page}} class="current">{{cur_page}}</a>
+						{% for i in pages_after %}
+						<a href="/videos/manage/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a>
+						{% endfor %}
+						<a href="/videos/manage/?page={{after_page}}" data-page="2" class="page-btn" style="width: 100px;">下一页</a>
+					</div>
+					
 				</div>
 
 				<div class="main_content" id="cover_view" style="display:none">
@@ -144,7 +165,13 @@
 						</ul>
 					</div>
 
-					<div class="mod_pages"><a href="#cover/0" style="display: none;">上一页</a> <a href="#cover/1" class="current">1</a> <a href="#cover/2" style="display: none;">下一页</a></div>
+					<!--<div class="mod_pages">
+						<a href="#cover/0" style="display: none;">上一页</a> 
+						<a href="#cover/1" class="current">1</a> 
+						<a href="#cover/2" style="display: none;">下一页</a>
+					</div>-->
+				
+				
 				</div>
 
 				<div class="main_content" id="cover_edit_view" style="display:none">

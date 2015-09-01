@@ -534,8 +534,10 @@ ol {
 	left: -1px;
 	top: 28px;
 	line-height: normal;
-	display: none
+	display: none;
 }
+
+
 .layout_toggle .btn_list {
 	text-align: left
 }
@@ -561,6 +563,10 @@ ol {
 .btn_list .items .inner:hover {
 	color: #ff6700
 }
+
+
+
+
 .layout_toggle {
 	position: absolute;
 	right: 0;
