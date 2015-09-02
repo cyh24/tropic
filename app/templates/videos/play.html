@@ -38,6 +38,33 @@
           			
 			});
 		}
+
+		function collectCancleAction() {
+            collect_state = document.getElementById('btn_collect_cancle').value 
+			$.ajax({
+				type: "GET",
+				url: "/collect/",
+				data: {
+                    collect_state: collect_state,
+					video_id: {{video.id}},
+				},
+				dataType: "json",
+				success: function(data) {
+                    if(data['collect_state'] === '1')
+                    {
+                        document.getElementById('btn_collect_cancle').value = '1';
+                        document.getElementById('icon_collect_cancle').className = 'fa fa-star';
+                    }
+                    else if(data['collect_state'] === '0')
+                    {
+                        document.getElementById('btn_collect_cancle').value = '0';       
+                        document.getElementById('icon_collect_cancle').className = 'fa fa-star-o';
+                    }
+				}
+          			
+			});
+		}
+		
 		
 		function add_comment(){
 		
@@ -191,10 +218,17 @@
 										<span id="id-like-num" class="votes_up_num">{{video.like_num}}</span>
 									</button>
 
-									<button type="button" id="vote_up" class="btn btn-default" style="color:#548cff;" onclick="">
-										<span class="fa fa-star-o"></span>
-										<span class="votes_up_num">收藏</span>
+                                    {% if collect_state == '1'%}
+									<button type="button" id="btn_collect_cancle" class="btn btn-default" style="color:#548cff;" value={{collect_state}} onclick="collectCancleAction()">
+										<span id="icon_collect_cancle" class="fa fa-star"></span>
+								        <span class="votes_up_num">收藏</span>
 									</button>
+                                    {% else %}
+									<button type="button" id="btn_collect_cancle" class="btn btn-default" style="color:#548cff;" value={{collect_state}} onclick="collectCancleAction()">
+										<span id="icon_collect_cancle" class="fa fa-star-o"></span>
+								        <span class="votes_up_num">收藏</span>
+									</button>
+                                    {% endif %}
 
 									<!-- JiaThis Button BEGIN -->
 									<button type="button" class="btn btn-default" id="shareout_button">
@@ -204,8 +238,10 @@
 
 										<ul class=" aw-dropdown dropdown-menu-list dropdown-menu  shareout" role="menu">
 
+                                            <!--
 											<li><a onclick=""><i class="icon icon-weibo "></i> 微博</a></li>
 											<li><a onclick=""><i class="icon icon-qzone "></i> QZONE</a></li>
+                                            -->
 											<li>
 												<a onclick="wechat_share()">
 													<i class=" icon icon-wechat"></i>微信</a>

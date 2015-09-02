@@ -45,6 +45,7 @@ urlpatterns = patterns('',
     url(r'^user/setbindsns/$', 'app.views.setbindsns'),
 
     url(r'^voteup/$', 'app.views.voteup'),
+    url(r'^collect/$', 'app.views.collect'),
     url(r'^search/$', 'app.views.search_result'),
     url(r'^add-comment/$', 'app.views.comment_add'),
 

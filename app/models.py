@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
+
 class Account(models.Model):
     user = models.OneToOneField(User, unique=True, verbose_name='user_account')
 
@@ -107,7 +108,7 @@ class Video(QiniuFile):
     tags_str = models.CharField(max_length=100)
         
 
-    video_time = models.CharField(max_length=20, default="00:00:00")
+    video_time = models.IntegerField(default=0)
     money      = models.FloatField(default=0.0)
 
     watch_num    = models.IntegerField(default=0)
@@ -132,4 +133,38 @@ class Video(QiniuFile):
         db_table = u'video'
 
 
-    
+class Order(models.Model):
+    name = models.CharField(max_length=20)
+    pic  = models.CharField(max_length=200)
+
+    account = models.ForeignKey(Account)
+
+    videos  = models.ManyToManyField(Video)
+    price   = models.FloatField()
+    number  = models.IntegerField()
+
+    release_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+class WatchHistory(models.Model):
+    account = models.ForeignKey(Account)
+    videos  = models.ManyToManyField(Video)
+    class Meta:
+        db_table = u'watch_history'
+
+class CollectVideos(models.Model):
+    account = models.ForeignKey(Account)
+    videos = models.ManyToManyField(Video)
+    class Meta:
+        db_table = u'star_videos'
+
+class PayedOrder(Order):
+    class Meta:
+        db_table = u'payde_order'
+
+class UnpayOrder(Order):
+    class Meta:
+        db_table = u'unpayde_order'
+

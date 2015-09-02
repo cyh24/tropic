@@ -160,6 +160,8 @@ def save_video(request, logo_path, need_authority=True):
         video.info = data['desc'].encode('utf-8')
     if data.has_key('money'):
         video.money = float(data['money'].encode('utf-8'))
+    if data.has_key('minute'):
+        video.video_time = int(data['minute'].encode('utf-8'))
 
     try:
         video.save()
@@ -246,6 +248,81 @@ def add_like_num(video_id):
     except Exception, e:
         printError("Error: add_watch_num.\nError: " + str(e))
 
+def if_video_collected(user, video):
+    try:
+        if user == None:
+            return False
+        account = get_account_from_user(user)
+        collect_videos = get_collect_from_account(account)
+        if collect_videos == None:
+            return False
+        else:
+            videos = collect_videos.videos.all()
+            if get_len(videos) < 1:
+                return False
+            for v in videos:
+                if v == video:
+                    return True
+
+    except Exception, e:
+        printError(e)
+
+    return False
+
+def add_collect_video(user, video_id):
+    try:
+        account = get_account_from_user(user)
+        if account == None:
+            return False
+
+        collect_videos = get_collect_from_account(account)
+        video = get_video_by_id(video_id)
+        videos = collect_videos.videos.all()
+        if get_len(videos) < 1:
+            collect_videos.videos.add(video)
+        else:
+            is_exist = False
+            for v in videos:
+                if v == video:
+                    is_exist = True
+            if is_exist == False:
+                collect_videos.videos.add(video)
+            
+        collect_videos.save()
+        return True
+
+    except Exception, e:
+        printError("Error: add_watch_num.\nError: " + str(e))
+    
+    return False
+
+def cancle_collect_video(user, video_id):
+    try:
+        account = get_account_from_user(user)
+        if account == None:
+            return False
+
+        collect_videos = get_collect_from_account(account)
+        video = get_video_by_id(video_id)
+        videos = collect_videos.videos.all()
+        
+        if get_len(videos) < 1:
+            return True
+        else:
+            t_videos = []
+            for v in videos:
+                if v != video:
+                    t_videos.append(v)
+            collect_videos.videos = t_videos
+            
+        collect_videos.save()
+        return True
+
+    except Exception, e:
+        printError("Error: cancle_collect_video.\nError: " + str(e))
+    
+    return False
+
 
 def add_comment(request):
     json = {}
@@ -313,11 +390,11 @@ def create_account_given_user(user):
         account.info = "这家伙很懒，什么都没留~"
 
         account.save()
-        return True
+        return account
     except Exception, e:
         printError(e)
 
-    return False
+    return None
 
 
 def check_wx_openid(wx_user):
@@ -344,6 +421,88 @@ def exist_user_account(user):
         if get_len(account) < 1:
             create_account_given_user(user)
             return True
+
+    except Exception, e:
+        printError(e)
+
+    return False
+
+
+def get_account_from_user(user):
+    account = None
+    try:
+        account = Account.objects.filter(user=user).all()
+        if get_len(account) < 1:
+            account = create_account_given_user(user)
+        else:
+            account = account[0]
+    except Exception, e:
+        printError(e)
+
+    return account
+
+
+def create_collect_given_account(account):
+    if account == None:
+        return None
+    collect_videos = None
+    try:
+        collect_videos = CollectVideos()
+        collect_videos.account = account
+        collect_videos.save()
+    except Exception, e:
+        printError(e)
+
+    return collect_videos
+
+def get_collect_from_account(account):
+    if account == None:
+        return None
+    collect_videos = None
+    try:
+        collect_videos = CollectVideos.objects.filter(account=account).all()
+        if get_len(collect_videos) < 1:
+            collect_videos = create_collect_given_account(account)
+        else:
+            collect_videos = collect_videos[0]
+
+    except Exception, e:
+        printError(e)
+
+    return collect_videos
+
+
+def add_watch_history(user, video):
+    if user == None:
+        return False
+    try:
+        account = get_account_from_user(user)
+        if account == None:
+            return False
+
+        watch_history = WatchHistory.objects.filter(account=account).all()
+        if get_len(watch_history) < 1:
+            watch_history = WatchHistory()
+            watch_history.account = account
+            watch_history.save()
+        else:
+            watch_history = watch_history[0]
+
+        videos = watch_history.videos.all()
+        if get_len(videos) < 1:
+            watch_history.videos.add(video)
+        else:
+            is_exist = False
+            for v in videos:
+                if v == video:
+                    is_exist = True
+                    break
+            if is_exist == False:
+                print "add watch history."
+                watch_history.videos.add(video)
+
+        watch_history.save()
+        return True
 
     except Exception, e:
         printError(e)

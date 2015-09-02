@@ -10,7 +10,7 @@
 	<script type="text/javascript" src="/static/js/popwin.js"></script>
 
 	<script>
-	var VOTE_FLAG = 1;
+	    var VOTE_FLAG = 1;
 
 		function voteUpAction() {
 			if (VOTE_FLAG == 1) {
@@ -35,6 +35,20 @@
           			{
           				$("#id-like-num").html(1);
           			}
+				}
+          			
+			});
+		}
+
+		function collectAction() {
+			$.ajax({
+				type: "GET",
+				url: "/collect/",
+				data: {
+					video_id: {{video.id}},
+				},
+				dataType: "json",
+				success: function(data) {
 				}
           			
 			});
@@ -165,22 +179,22 @@
 				<div class="tips-hd">购买课程</div>
 				<div class="tips-bd">
 					<div class="mod-course-banner">
-						<img src="http://10.url.cn/qqcourse_logo_rn/ajNVdqHZLLAvc6DhDpeYHapU3BkicvpAiaESugf3B0VdLLBOMkwrEM0HCB97iajLU8mlibfAKUc6e2E/90" alt="零基础学Android：常用案例(11)" class="mod-course-banner__img">
+                        <img src={{video.logo_img}} class="mod-course-banner__img">
 						<div class="mod-course-banner__content">
-							<h3 class="mod-course-banner__title" title="零基础学Android：常用案例(11)">零基础学Android：常用案例(11)</h3>
+                            <h3 class="mod-course-banner__title" title="">[课程名称]: {{video.title}}</h3>
 							<div class="mod-course-banner__content-line">
 								<span class="mod-course-banner__c-light">共1课时</span>
 								<span class="mod-course-banner__sep">|</span>
-								<a href="http://mooc.ke.qq.com" target="_blank" class="mod-course-banner__c-light" title="美联航达">美联航达</a>
+                                <a href="" target="_blank" class="mod-course-banner__c-light">{{video.teacher_name}}</a>
 							</div>
 						</div>
 					</div>
 					<div class="mod-course-banner_row clearfix">
 						<div class="mod-course-banner_col1">价格</div>
 						<div class="mod-course-banner_col2">
-							<span class="mod-course-banner__price ">  ¥<span class="fontsize-22">9.00</span>
+                            <span class="mod-course-banner__price ">  ¥<span class="fontsize-22">{{video.money}}</span>
 							</span>
-							<span class="mod-course-banner__c-light">支持微信、财付通、银行卡支付</span>
+							<span class="mod-course-banner__c-light">支持微信、支付宝支付</span>
 						</div>
 					</div>
 					<!--<div class="mod-course-banner_row clearfix hide js-not-chose-tips">
@@ -223,6 +237,9 @@
 									<div class="video-try-over2">
 										<div class="over-wrap2">
 											<p>尊敬的用户：该视频需要付费观看</p>
+                                            <!--
+                                            <p><font color="green">课程名称：{{video.title}}</font></p>
+                                            -->
 											<p class="p-orange">¥{{video.money}}&nbsp;&nbsp;<span class="p-gray">|&nbsp;&nbsp;共1节课</span></p>
 											<p>
 												<a onclick="show_pay()" class="btn2-primary over-btn">立即购买</a>
@@ -248,7 +265,7 @@
 										<span id="id-like-num" class="votes_up_num">{{video.like_num}}</span>
 									</button>
 
-									<button type="button" id="vote_up" class="btn btn-default" style="color:#548cff;" onclick="">
+									<button type="button" id="vote_up" class="btn btn-default" style="color:#548cff;" onclick="collectAction()">
 										<span class="fa fa-star-o"></span>
 										<span class="votes_up_num">收藏</span>
 									</button>
@@ -261,8 +278,10 @@
 
 										<ul class=" aw-dropdown dropdown-menu-list dropdown-menu  shareout" role="menu">
 
+                                            <!--
 											<li><a onclick=""><i class="icon icon-weibo "></i> 微博</a></li>
 											<li><a onclick=""><i class="icon icon-qzone "></i> QZONE</a></li>
+                                            -->
 											<li>
 												<a onclick="wechat_share()">
 													<i class=" icon icon-wechat"></i>微信</a>

@@ -322,6 +322,13 @@ def play_ui(request):
 
             # check whether need pay for the play
             if video.money <= 0:
+                add_watch_history(request.user, video)
+
+                if if_video_collected(request.user, video):
+                    msg['collect_state'] = '1'
+                else:
+                    msg['collect_state'] = '0'
+
                 return render_to_response('videos/play.html', msg)
             else:
                 return render_to_response('videos/play-prohibited.html', msg)
@@ -370,6 +377,28 @@ def voteup(request):
         try:
             video_id = int(request.GET['video_id'])
             add_like_num(video_id)
+        except Exception, e:
+            printError(e)
+
+    return JsonResponse(json)
+
+def collect(request):
+    json = {}
+
+    if request.GET.has_key('video_id'):
+        try:
+            video_id = int(request.GET['video_id'])
+            collect_state = request.GET['collect_state']
+            if collect_state == '1':
+                if cancle_collect_video(request.user, video_id) == True:
+                    json['collect_state'] = '0'
+                else:
+                    json['collect_state'] = '1'
+            elif collect_state == '0':
+                if add_collect_video(request.user, video_id) == True:
+                    json['collect_state'] = '1'
+                else:
+                    json['collect_state'] = '0'
         except Exception, e:
             printError(e)
 
