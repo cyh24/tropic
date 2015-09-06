@@ -134,37 +134,60 @@ class Video(QiniuFile):
 
 
 class Order(models.Model):
+
+    pay_state = models.BooleanField(default=False)
+
     name = models.CharField(max_length=20)
     pic  = models.CharField(max_length=200)
 
     account = models.ForeignKey(Account)
 
     videos  = models.ManyToManyField(Video)
+    def __get_list_num(self):
+        try:
+            if self.videos != None:
+                return self.videos.count()
+        except Exception, e:
+            print str(e)
+
+        return 0
+    videos_num = property(__get_list_num)
+    
     price   = models.FloatField()
-    number  = models.IntegerField()
+    number  = models.IntegerField(default=1)
 
     release_date = models.DateTimeField(auto_now=True)
 
     class Meta:
-        abstract = True
+        db_table = u'order'
 
 class WatchHistory(models.Model):
     account = models.ForeignKey(Account)
     videos  = models.ManyToManyField(Video)
+    def __get_list_num(self):
+        try:
+            if self.videos != None:
+                return self.videos.count()
+        except Exception, e:
+            print str(e)
+
+        return 0
+    videos_num = property(__get_list_num)
     class Meta:
         db_table = u'watch_history'
 
 class CollectVideos(models.Model):
     account = models.ForeignKey(Account)
     videos = models.ManyToManyField(Video)
+    videos  = models.ManyToManyField(Video)
+    def __get_list_num(self):
+        try:
+            if self.videos != None:
+                return self.videos.count()
+        except Exception, e:
+            print str(e)
+
+        return 0
+    videos_num = property(__get_list_num)
     class Meta:
         db_table = u'star_videos'
-
-class PayedOrder(Order):
-    class Meta:
-        db_table = u'payde_order'
-
-class UnpayOrder(Order):
-    class Meta:
-        db_table = u'unpayde_order'
-

@@ -340,9 +340,56 @@ def play_ui(request):
     return render_to_response('videos/play-error.html', msg)
 
 
-
-def space_index(request):
+def get_space_msg(request, get_videos_method):
     msg = init_msg(request)
+
+    msg['videos'] = None
+
+    msg['v_num']  = 0
+    msg['cur_page']   = 0
+    msg['total_page'] = 0
+    msg['pre_page']   = 0
+    msg['after_page'] = 0
+
+    msg['history_num'] = 0
+    msg['paid_num']    = 0
+    msg['unpay_num']  = 0
+    msg['collect_num'] = 0
+
+    try:
+
+        msg['history_num'] = get_watch_history_num(request.user)
+        msg['paid_num']    = get_paid_num(request.user)
+        msg['unpay_num']   = get_unpay_num(request.user)
+        msg['collect_num'] = get_collect_num(request.user)
+
+        videos, videos_num = get_videos_method(request.user)
+
+        total_page = (get_len(videos)+8-1)/8
+        subVideos, cur_page = paginator_show(request, videos, 8)
+
+
+        msg['videos']     = subVideos
+        msg['v_num']  = videos_num
+
+        msg['cur_page']   = cur_page
+        msg['total_page'] = total_page
+
+        msg['pre_page']   = cur_page - 1
+        msg['after_page'] = cur_page + 1
+        
+    
+    except Exception, e:
+        printError(e)
+
+    return msg
+
+# watching history list
+def space_index(request):
+    msg = get_space_msg(request, get_watch_history)
+    if request.GET.has_key('show_del'):
+        if request.GET['show_del'] == 'True':
+            msg['show_del'] = 'True'
 
     return render_to_response('space/index.html', msg)
 
@@ -360,6 +407,19 @@ def setbindsns(request):
     msg = init_msg(request)
 
     return render_to_response('space/setbindsns.html', msg)
+
+
+def history_del(request):
+    json = {}
+
+    if request.GET.has_key('video_id'):
+        try:
+            video_id = int(request.GET['video_id'])
+            del_watch_history(request.user, video_id)
+        except Exception, e:
+            printError(e)
+
+    return JsonResponse(json)
 
 @login_required(login_url='/login/')
 @csrf_protect

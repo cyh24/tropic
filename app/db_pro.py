@@ -510,3 +510,82 @@ def add_watch_history(user, video):
     return False
 
 
+def get_watch_history(user):
+
+    if user == None:
+        return None, 0
+    try:
+        account = get_account_from_user(user)
+        if account == None:
+            return None, 0
+
+        watch_history = WatchHistory.objects.filter(account=account).all()
+        if get_len(watch_history) < 1:
+            return None, 0
+        else:
+            watch_history = watch_history[0]
+
+        videos = watch_history.videos.all()
+        
+        return videos, watch_history.videos_num
+
+    except Exception, e:
+        printError(e)
+
+    return None, 0
+
+
+def get_watch_history_num(user):
+    try:
+        account = get_account_from_user(user)
+        watch_history = WatchHistory.objects.filter(account=account).all()[0]
+        return watch_history.videos_num
+
+    except Exception, e:
+        printError(e)
+
+    return 0
+
+def del_watch_history(user, video_id):
+    try:
+        account = get_account_from_user(user)
+        watch_history = WatchHistory.objects.filter(account=account).all()[0]
+        temp_video = get_video_by_id(video_id)
+        watch_history.videos.remove(temp_video)
+        watch_history.save()
+    except Exception, e:
+        printError(e)
+
+    return False
+
+def get_collect_num(user):
+    try:
+        account = get_account_from_user(user)
+        collect_videos = CollectVideos.objects.filter(account=account).all()[0]
+        
+        return collect_videos.videos_num
+
+    except Exception, e:
+        printError(e)
+
+    return 0
+
+def get_unpay_num(user):
+    try:
+        account = get_account_from_user(user)
+        unpay_order = Order.objects.filter(account=account).filter(pay_state=False).all()
+        return get_len(unpay_order)
+    except Exception, e:
+        printError(e)
+
+    return 0
+
+def get_paid_num(user):
+    try:
+        account = get_account_from_user(user)
+        paid_order = Order.objects.filter(account=account).filter(pay_state=True).all()
+        return get_len(paid_order)
+    except Exception, e:
+        printError(e)
+
+    return 0

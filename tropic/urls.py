@@ -39,6 +39,9 @@ urlpatterns = patterns('',
 
     url(r'^space/$', 'app.views.space_index'),
     url(r'^space/index/$', 'app.views.space_index'),
+    url(r'^space/collect/$', 'app.views.space_collect'),
+    url(r'^space/paid/$', 'app.views.space_paid'),
+    url(r'^space/shopping-cart/$', 'app.views.space_shopping_cart'),
 
     url(r'^user/setprofile/$', 'app.views.setprofile'),
     url(r'^user/setavator/$', 'app.views.setavator'),
@@ -48,6 +51,8 @@ urlpatterns = patterns('',
     url(r'^collect/$', 'app.views.collect'),
     url(r'^search/$', 'app.views.search_result'),
     url(r'^add-comment/$', 'app.views.comment_add'),
+
+    url(r'^del-history/$', 'app.views.history_del'),
 
     url(r'^wechat-login/$', 'app.views.wechat_login'), 
     url(r'^wechat-share/$', 'app.views.wechat_share'), 
