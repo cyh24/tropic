@@ -385,7 +385,7 @@ def create_account_given_user(user):
         account = Account()
         account.user = user
         account.nickname = user.username
-        account.user_pic = "http://ask.julyedu.com/uploads/avatar/000/00/07/70_avatar_min.jpg"
+        account.user_pic = "/static/samples/boy/junyong02.jpg"
 
         account.info = "这家伙很懒，什么都没留~"
 
@@ -558,6 +558,30 @@ def del_watch_history(user, video_id):
 
     return False
 
+def get_collect(user):
+
+    if user == None:
+        return None, 0
+    try:
+        account = get_account_from_user(user)
+        if account == None:
+            return None, 0
+
+        collect_videos = CollectVideos.objects.filter(account=account).all()
+        if get_len(collect_videos) < 1:
+            return None, 0
+        else:
+            collect_videos = collect_videos[0]
+
+        videos = collect_videos.videos.all()
+        
+        return videos, collect_videos.videos_num
+
+    except Exception, e:
+        printError(e)
+
+    return None, 0
+
 def get_collect_num(user):
     try:
         account = get_account_from_user(user)
@@ -569,6 +593,20 @@ def get_collect_num(user):
         printError(e)
 
     return 0
+
+def del_collect(user, video_id):
+    try:
+        account = get_account_from_user(user)
+        collect_videos = CollectVideos.objects.filter(account=account).all()[0]
+        temp_video = get_video_by_id(video_id)
+        collect_videos.videos.remove(temp_video)
+        collect_videos.save()
+    except Exception, e:
+        printError(e)
+
+    return False
+
+
 
 def get_unpay_num(user):
     try:

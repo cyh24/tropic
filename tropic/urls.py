@@ -57,11 +57,13 @@ urlpatterns = patterns('',
     url(r'^add-comment/$', 'app.views.comment_add'),
 
     url(r'^del-history/$', 'app.views.history_del'),
+    url(r'^del-collect/$', 'app.views.collect_del'),
 
     url(r'^wechat-login/$', 'app.views.wechat_login'), 
     url(r'^wechat-share/$', 'app.views.wechat_share'), 
 
     url(r'^pay/$', 'app.views.pay_ui'), 
+    url(r'^ready-pay/$', 'app.views.ready_pay'), 
 
     url(r'^test/', 'app.views.test')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -385,6 +385,8 @@ def get_space_msg(request, get_videos_method):
 
     return msg
 
+@login_required(login_url='/login/')
+@csrf_exempt
 # watching history list
 def space_index(request):
     msg = get_space_msg(request, get_watch_history)
@@ -392,7 +394,43 @@ def space_index(request):
         if request.GET['show_del'] == 'True':
             msg['show_del'] = 'True'
 
-    return render_to_response('space/index.html', msg)
+    return render_to_response('space/history.html', msg)
+
+
+@login_required(login_url='/login/')
+@csrf_exempt
+# watching history list
+def space_collect(request):
+    msg = get_space_msg(request, get_collect)
+    if request.GET.has_key('show_del'):
+        if request.GET['show_del'] == 'True':
+            msg['show_del'] = 'True'
+
+    return render_to_response('space/collect.html', msg)
+
+@login_required(login_url='/login/')
+@csrf_exempt
+# watching history list
+def space_shopping_cart(request):
+    msg = get_space_msg(request, get_watch_history)
+    if request.GET.has_key('show_del'):
+        if request.GET['show_del'] == 'True':
+            msg['show_del'] = 'True'
+
+    return render_to_response('space/unpay.html', msg)
+
+
+@login_required(login_url='/login/')
+@csrf_exempt
+# watching history list
+def space_paid(request):
+    msg = get_space_msg(request, get_watch_history)
+    if request.GET.has_key('show_del'):
+        if request.GET['show_del'] == 'True':
+            msg['show_del'] = 'True'
+
+    return render_to_response('space/paid.html', msg)
+
 
 def setprofile(request):
     msg = init_msg(request)
@@ -419,6 +457,18 @@ def history_del(request):
         try:
             video_id = int(request.GET['video_id'])
             del_watch_history(request.user, video_id)
+        except Exception, e:
+            printError(e)
+
+    return JsonResponse(json)
+
+def collect_del(request):
+    json = {}
+
+    if request.GET.has_key('video_id'):
+        try:
+            video_id = int(request.GET['video_id'])
+            del_collect(request.user, video_id)
         except Exception, e:
             printError(e)
 
@@ -485,6 +535,13 @@ def comment_add(request):
 def pay_ui(request):
     msg = init_msg(request)
     return render_to_response('pay/pay.html', msg)
+
+@login_required(login_url='/login/')
+@csrf_protect
+def ready_pay(request):
+    json = {}
+    return JsonResponse(json)
+
 
 boy_imgs = []
 with open('app/static/samples/boy.txt') as f:

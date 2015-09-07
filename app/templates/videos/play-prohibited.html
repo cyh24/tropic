@@ -147,7 +147,21 @@
 		
 		function goto_pay(){
 			hide_pay();
-			popWin.showWin("492","360","购买课程","http://127.0.0.1:9999/pay");
+			
+			$.ajax({
+				type: "GET",
+				url: "/ready-pay/",
+				data: {
+					video_id: {{video.id}},
+				},
+				dataType: "json",
+				success: function(data) {
+                   popWin.showWin("492","360","购买课程","http://127.0.0.1:9999/pay");
+                }
+          			
+			});
+			
+			
 		}
 		
 	</script>
