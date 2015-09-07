@@ -589,3 +589,18 @@ def get_paid_num(user):
         printError(e)
 
     return 0
+
+
+def update_account(request):
+    try:
+        account = get_account_from_user(request.user)
+        account.nickname = request.GET['nickname'].encode("utf-8")
+        account.info     = request.GET['info'].encode("utf-8")
+        account.sex      = int(request.GET['sex'])
+
+        account.save()
+        return True
+    except Exception, e:
+        printError(e)
+
+    return False

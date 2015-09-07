@@ -15,6 +15,7 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage, PageNotAnIn
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 
+import random
 
 from models import *
 import time
@@ -23,7 +24,7 @@ import sys
 from qiniu_pro import *
 from db_pro import *
 from wechat_pro import *
-
+USER_PIC_FOLD = "app/static/storage/user-pic/"
 
 @csrf_exempt 
 
@@ -398,6 +399,8 @@ def setprofile(request):
 
     return render_to_response('space/setprofile.html', msg)
 
+@login_required(login_url='/login/')
+@csrf_exempt
 def setavator(request):
     msg = init_msg(request)
 
@@ -482,3 +485,89 @@ def comment_add(request):
 def pay_ui(request):
     msg = init_msg(request)
     return render_to_response('pay/pay.html', msg)
+
+boy_imgs = []
+with open('app/static/samples/boy.txt') as f:
+    boy_imgs = f.readlines()
+girl_imgs = []
+with open('app/static/samples/girl.txt') as f:
+    girl_imgs = f.readlines()
+
+def get_random(imgs):
+    try:
+        if imgs == None:
+            return None
+
+        r_int = random.randint(0, len(imgs)-1)
+        return imgs[r_int]
+
+    except Exception, e:
+        printError(e)
+
+    return None
+
+
+@login_required(login_url='/login/')
+@csrf_protect
+def random_pic(request):
+    json = {}
+    try:
+        account = get_account_from_user(request.user)
+        img = None
+        if account.sex == 1:
+            img = get_random(boy_imgs)
+        elif account.sex == 0:
+            img = get_random(girl_imgs)
+        else:
+            img = get_random(boy_imgs+girl_imgs)
+
+        json['logo_pic'] = img
+        account.user_pic = img
+        account.save()
+
+    except Exception, e:
+        printError(e)
+
+    return JsonResponse(json)
+
+
+@login_required(login_url='/login/')
+@csrf_protect
+def update_profile(request):
+    json = {}
+    json['state'] = 'False'
+    try:
+        if update_account(request) == True:
+            json['state'] = 'True'
+
+    except Exception, e:
+        printError(e)
+
+    return JsonResponse(json)
+
+
+@login_required(login_url='/login/')
+@csrf_protect
+@csrf_exempt
+def update_pic(request):
+    try: 
+        path = None
+        if request.FILES.has_key('pic'):
+            path = USER_PIC_FOLD + getRandomStr() + "-" + request.FILES['pic'].name
+            handle_uploaded_photo(path, request.FILES['pic'])
+        
+
+        path_pic = path[3:]
+
+        account = get_account_from_user(request.user)
+        account.user_pic = path_pic
+        account.save()
+
+    except Exception, e:
+        print str(e)
+    
+    msg = init_msg(request)
+
+    return render_to_response('space/setavator.html', msg)
+    
+

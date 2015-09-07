@@ -3,7 +3,83 @@
 	{% include "include.html"%}
 	<link href="/static/css/space/setting.css" rel="stylesheet">
 	<!--<link href="/static/css/space/common-less.css" rel="stylesheet">-->
+	
+	<link rel="stylesheet" type="text/css" href="/static/css/confirm/xcConfirm.css"/>
 
+	<script src="/static/css/confirm/jquery-1.9.1.min.js" type="text/javascript"></script>
+	<script src="/static/css/confirm/xcConfirm.js" type="text/javascript"></script>
+	
+	<script>
+		window.onload=function(){
+            var state = document.getElementById("id-sex-state").value;
+			state = state.toString();
+
+			if( state === '1')
+			{
+				document.getElementById('sex-man').checked = "checked";
+			}
+			else if( state === '0')
+			{
+				document.getElementById('sex-woman').checked = "checked";
+			}
+			else
+			{
+				document.getElementById('sex-none').checked = "checked";
+			}
+   	 	}
+	
+		function show_msg(data, type)
+		{
+			data = data.toString();
+			if(type == true){
+				window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.success);
+			}
+			else
+				window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.error);
+		}
+		
+		function save_profile()
+		{
+			document.getElementById('id-loading').style.display="block";
+			var sex = -1;
+			if(document.getElementById('sex-man').checked === true)
+			{
+				sex = 1;
+			}
+			else if(document.getElementById('sex-woman').checked === true)
+			{
+				sex = 0;
+			}
+
+			
+			$.ajax({
+                url: "/user/update-profile/",
+                type: "GET",
+  				dataType: "json",
+                data: {
+                	nickname: document.getElementById('id-nickname').value,
+                	info: document.getElementById('id-info').value,
+                	sex: sex,
+                },
+                success: function(obj){
+					document.getElementById('id-loading').style.display="none";
+                	if(obj['state'] == 'True')
+                	{
+                    	show_msg("修改个人信息，修改成功！", true);
+                    }
+                	else
+                	{
+                		show_msg("修改个人信息，修改失败！", false);
+                	}
+                }
+            });
+            
+			
+		}
+		
+	</script>
+	
+	<input type="text" id="id-sex-state" value={{account.sex}} style="display: none;"/>
 	<body style="background-color: #edeff0;">
 		{% include "header.html"%}
 
@@ -37,7 +113,7 @@
 								<div class="wlfg-wrap">
 									<label class="my-label" for="nick">昵称</label>
 									<div class="rlf-group">
-										<input type="text" name="nickname" id="nick" autocomplete="off" data-validate="nick" class="rlf-input rlf-input-nick" value="cyh24" placeholder="请输入昵称.">
+										<input id="id-nickname" type="text" name="nickname" id="nick" autocomplete="off" data-validate="nick" class="rlf-input rlf-input-nick" value="cyh24" placeholder="请输入昵称.">
 										<p class="rlf-tip-wrap"></p>
 									</div>
 								</div>
@@ -46,11 +122,11 @@
 									<label class="my-label">性别</label>
 									<div class="rlf-group rlf-radio-group">
 										<label>
-											<input type="radio" hidefocus="true" value="0" name="sex">保密</label>
+											<input id="sex-none" type="radio" hidefocus="true" value="-1" name="sex">保密</label>
 										<label>
-											<input type="radio" hidefocus="true" value="1" checked="checked" name="sex">男</label>
+											<input id="sex-man" type="radio" hidefocus="true" value="1" name="sex">男</label>
 										<label>
-											<input type="radio" hidefocus="true" value="2" name="sex">女</label>
+											<input id="sex-woman" type="radio" hidefocus="true" value="0" name="sex">女</label>
 									</div>
 									<p class="rlf-tip-wrap"></p>
 								</div>
@@ -58,16 +134,22 @@
 								<div class="wlfg-wrap">
 									<label class="my-label" for="aboutme">个性签名</label>
 									<div class="rlf-group">
-										<textarea name="aboutme" id="aboutme" cols="30" rows="5" class="textarea">这位童鞋很懒，什么也没有留下～～！</textarea>
+										<textarea id="id-info" name="aboutme" id="aboutme" cols="30" rows="5" class="textarea">这位童鞋很懒，什么也没有留下～～！</textarea>
 										<p class="rlf-tip-wrap"></p>
 									</div>
 								</div>
 								<div class="wlfg-wrap">
 									<div class="rlf-group" style="width: 417px; margin-top: 15px;">
-										<span id="profile-submit" hidefocus="true" aria-role="button" class="rlf-btn-green btn-block profile-btn">保存</span>
+										<span id="profile-submit" hidefocus="true" aria-role="button" class="rlf-btn-green btn-block profile-btn" onclick="save_profile()">保存</span>
+									</div>
+								</div>
+								<div class="wlfg-wrap" id = "id-loading" style="display: none;">
+									<div class="rlf-group" style="margin-left: 290px; margin-top: -220px;">
+									<img src="/static/css/confirm/loading2.gif" />
 									</div>
 								</div>
 							</form>
+							
 						</div>
 					</div>
 

@@ -46,6 +46,10 @@ urlpatterns = patterns('',
     url(r'^user/setprofile/$', 'app.views.setprofile'),
     url(r'^user/setavator/$', 'app.views.setavator'),
     url(r'^user/setbindsns/$', 'app.views.setbindsns'),
+    url(r'^user/random-pic/$', 'app.views.random_pic'),
+
+    url(r'^upload-userpic/$', 'app.views.update_pic'),
+    url(r'^user/update-profile/$', 'app.views.update_profile'),
 
     url(r'^voteup/$', 'app.views.voteup'),
     url(r'^collect/$', 'app.views.collect'),

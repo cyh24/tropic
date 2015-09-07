@@ -4,6 +4,22 @@
 	<link href="/static/css/space/setting.css" rel="stylesheet">
 	<!--<link href="/static/css/space/common-less.css" rel="stylesheet">-->
 
+	<script>
+		function random_pic()
+		{
+			$.ajax({
+                url: "/user/random-pic/",
+                type: "GET",
+  				dataType: "json",
+                data: {
+                },
+                success: function(obj){
+                  document.getElementById('id-pic-img').src = obj['logo_pic'];
+                  document.getElementById('id-header-pic').src = obj['logo_pic'];
+                }
+            });
+		}
+	</script>
 	<body style="background-color: #edeff0;">
 		{% include "header.html"%}
 
@@ -33,25 +49,32 @@
 					<div class="setting-right-wrap wrap-boxes settings">
 						<div id="setting-avator" class="setting-wrap setting-avator clearfix">
 							<div class="avator-img l">
-								<div><img src="http://img.mukewang.com//5333a1360001954902000200.jpg" width="220" height="220"></div>
 								<div>
-									<input type="button" hidefocus="true" value="换一换" class="js-avator-try avator-try" style="outline: none; border: none;">
-								</div><div class="avator-btn-group">
-								<div id="avator-btns" class="avator-btn-inner">
-									<div class="avator-btn-wrap">
-										<form target="uploadtarget" action="postpic" method="post" enctype="multipart/form-data">
-											<a href="javascript:void(0)" hidefocus="true" class="avator-btn-fake">上传头像</a>
-											<input type="file" title="上传头像" name="fileField" id="upload" accept="image/*">
-											<input type="hidden" name="type" value="1">
-										</form>
-										<iframe src="about:blank" id="uploadtarget" name="uploadtarget" frameborder="0" style="display:none;"></iframe>
+									<img id="id-pic-img" src={{account.user_pic}} width="220" height="220">
+								</div>
+								<div>
+									<input onclick="random_pic()" type="button" hidefocus="true" value="换一换" class="js-avator-try avator-try" style="outline: none; border: none;">
+								</div>
+
+								<div class="avator-btn-group">
+									<div id="avator-btns" class="avator-btn-inner">
+										<div class="avator-btn-wrap">
+											
+											<form  action="/upload-userpic/" method="POST" enctype="multipart/form-data">
+												<a href="javascript:void(0)" hidefocus="true" class="avator-btn-fake">上传头像</a>
+												{% csrf_token %}
+												<input type="file" title="上传头像" name="pic" id="upload" accept="image/*" onchange="$('#id-submit').click();">
+												<input id="id-submit" type="submit" style="display: none;" />
+											</form>
+											
+											<iframe src="about:blank" id="uploadtarget" name="uploadtarget" frameborder="0" style="display:none;"></iframe>
+										</div>
+									</div>
+									<div class="avator-upload-wrap2" style="display:none;">
+										<span hidefocus="true" id="avator-btn-save" aria-role="button" class="rlf-btn-green btn-block">保存</span>
 									</div>
 								</div>
-								<div class="avator-upload-wrap2" style="display:none;">
-									<span hidefocus="true" id="avator-btn-save" aria-role="button" class="rlf-btn-green btn-block">保存</span>
-								</div>
-							</div>
-							
+
 							</div>
 
 						</div>
