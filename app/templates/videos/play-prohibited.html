@@ -156,7 +156,18 @@
 				},
 				dataType: "json",
 				success: function(data) {
-                   popWin.showWin("492","360","购买课程","http://127.0.0.1:9999/pay");
+					
+					if(data['state'] == 'fail')
+					{
+						alert('生成订单失败，请重试！');
+					}
+					else if(data['state'] == 'ok'){
+                   		popWin.showWin("492","360","购买课程", data['pay_url']);
+					}
+					else if (data['state'] == 'paid')
+					{
+						alert("该订单已经完全付款，请勿重复提交！")
+					}
                 }
           			
 			});

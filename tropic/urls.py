@@ -58,6 +58,7 @@ urlpatterns = patterns('',
 
     url(r'^del-history/$', 'app.views.history_del'),
     url(r'^del-collect/$', 'app.views.collect_del'),
+    url(r'^del-unpay/$', 'app.views.unpay_del'),
 
     url(r'^wechat-login/$', 'app.views.wechat_login'), 
     url(r'^wechat-share/$', 'app.views.wechat_share'), 

@@ -607,21 +607,50 @@ def del_collect(user, video_id):
     return False
 
 
+def get_unpay(user):
+    if user == None:
+        return None, 0
+    try:
+        account = get_account_from_user(user)
+        if account == None:
+            return None, 0
+
+        unpay_order = Order.objects.filter(account=account).all().filter(pay_state=1).all()
+
+        
+        return unpay_order, get_len(unpay_order)
+
+    except Exception, e:
+        printError(e)
+
+    return None, 0
 
 def get_unpay_num(user):
     try:
         account = get_account_from_user(user)
-        unpay_order = Order.objects.filter(account=account).filter(pay_state=False).all()
+        unpay_order = Order.objects.filter(account=account).all().filter(pay_state=1).all()
         return get_len(unpay_order)
     except Exception, e:
         printError(e)
 
     return 0
 
+def del_unpay(user, order_id):
+    try:
+        account = get_account_from_user(user)
+        unpay_order = Order.objects.filter(account=account).all().filter(id=order_id).all().filter(pay_state=1).all()[0]
+        unpay_order.pay_state = -1
+        unpay_order.save()
+
+    except Exception, e:
+        printError(e)
+
+    return False
+
 def get_paid_num(user):
     try:
         account = get_account_from_user(user)
-        paid_order = Order.objects.filter(account=account).filter(pay_state=True).all()
+        paid_order = Order.objects.filter(account=account).filter(pay_state=2).all()
         return get_len(paid_order)
     except Exception, e:
         printError(e)
@@ -642,3 +671,50 @@ def update_account(request):
         printError(e)
 
     return False
+
+def create_unpay_order(user, video_id):
+    try:
+
+        video   = get_video_by_id(video_id)
+        account = get_account_from_user(user)
+
+        try:
+            t_order = Order.objects.filter(account=account).all()
+            for o in t_order:
+                videos = o.videos.all()
+                for v in videos:
+                    if v == video:
+                        if o.pay_state == -1:
+                            o.pay_state = 1
+                            o.save()
+                        return o
+        except Exception, e:
+            printError(e)
+            printError("create unpay order. check order exist.")
+
+
+        unpay_order = Order()
+        unpay_order.account = account
+        unpay_order.name = video.title
+        unpay_order.pic  = video.logo_img
+        
+        unpay_order.price = video.money
+        unpay_order.number = 1
+
+        unpay_order.pay_state = 1
+
+        unpay_order.wxpay_qrcode = "/static/storage/wxpay_qrcode/150831170420-zrOL.png"
+
+        with transaction.atomic():
+            unpay_order.save()
+        
+            unpay_order.videos.add(video)
+            unpay_order.save()
+
+            return unpay_order
+
+    except Exception, e:
+        printError(e)
+
+    return None
+

@@ -412,7 +412,18 @@ def space_collect(request):
 @csrf_exempt
 # watching history list
 def space_shopping_cart(request):
-    msg = get_space_msg(request, get_watch_history)
+    msg = get_space_msg(request, get_unpay)
+    unpay_orders = msg['videos']
+
+    new_orders = []
+    for order in unpay_orders:
+        videos = order.videos.all()
+        order.play_video_id = videos[0].id 
+        new_orders.append(order)
+
+    msg['videos'] = new_orders
+
+
     if request.GET.has_key('show_del'):
         if request.GET['show_del'] == 'True':
             msg['show_del'] = 'True'
@@ -469,6 +480,18 @@ def collect_del(request):
         try:
             video_id = int(request.GET['video_id'])
             del_collect(request.user, video_id)
+        except Exception, e:
+            printError(e)
+
+    return JsonResponse(json)
+
+def unpay_del(request):
+    json = {}
+
+    if request.GET.has_key('order_id'):
+        try:
+            order_id = int(request.GET['order_id'])
+            del_unpay(request.user, order_id)
         except Exception, e:
             printError(e)
 
@@ -534,12 +557,41 @@ def comment_add(request):
 @csrf_protect
 def pay_ui(request):
     msg = init_msg(request)
+    try:
+        kwargs = {}
+        account = get_account_from_user(request.user)
+        if account != None:
+            kwargs['account'] = account
+            kwargs['id'] = request.GET['unpay_order_id']
+
+            unpay_order = Order.objects.filter(**kwargs)
+            msg ['unpay_order'] = unpay_order[0]
+
+    except Exception, e:
+        printError(e)
+    
     return render_to_response('pay/pay.html', msg)
+
 
 @login_required(login_url='/login/')
 @csrf_protect
 def ready_pay(request):
-    json = {}
+    json = {'state': 'fail'}
+    try:
+        if request.GET.has_key('video_id'):
+            video_id = int(request.GET['video_id'])
+            unpay_order = create_unpay_order(request.user, video_id)
+
+            if unpay_order != None:
+                if unpay_order.pay_state == 1:
+                    json['state'] = 'ok'
+                    json['pay_url'] = HOMEPAGE + "/pay?unpay_order_id=" + str(unpay_order.id)
+                elif unpay_order.pay_state == 2:
+                    json['state'] = 'paid'
+
+    except Exception, e:
+        printError(e)
+
     return JsonResponse(json)
 
 
