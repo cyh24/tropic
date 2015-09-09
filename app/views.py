@@ -39,7 +39,7 @@ def paginator_show(request, msg_list, page_size):
         if page < 1:
             page = 1
 
-        total_page = (get_len(msg_list) + page_size)/page_size
+        total_page = (get_len(msg_list) + page_size - 1)/page_size
         if page > total_page:
             page = total_page
     except ValueError:
@@ -504,6 +504,26 @@ def upload_ui(request):
     data['domain']       = DOMAIN
     data['uptoken_url']  = 'uptoken'
     return render_to_response('upload/upload.html', data)
+
+
+@login_required(login_url='/login/')
+@csrf_protect
+def update_video_ui(request):
+    msg = init_msg(request)
+
+    try:
+        if request.GET.has_key('video_id'):
+            video_id = int(request.GET['video_id'])
+            video = get_video_by_id(video_id)
+
+            msg['video'] = video
+
+            return render_to_response('upload/update_video.html', msg)
+    except Exception, e:
+        printError(e)
+   
+    return render_to_response('videos/play-error.html', msg)
+
 
 
 def voteup(request):

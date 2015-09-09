@@ -33,6 +33,9 @@ urlpatterns = patterns('',
     url(r'^upload-post/', 'app.db_pro.upload_post'),
     url(r'^uptoken/', 'app.qiniu_pro.uptoken'),
 
+    url(r'^update-video/', 'app.views.update_video_ui'),
+    url(r'^update-post/', 'app.db_pro.update_post'),
+
     url(r'^videos/$', 'app.views.videos_ui'),
     url(r'^videos/play/$', 'app.views.play_ui'),
     url(r'^videos/manage/$', 'app.views.videos_manage'),

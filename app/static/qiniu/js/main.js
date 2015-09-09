@@ -90,6 +90,7 @@ $(function() {
 				if (up.runtime === 'html5' && chunk_size) {
 					progress.setChunkProgess(chunk_size);
 				}
+				document.getElementById('id_upload_new_video').value = "False";
 			},
 			'UploadProgress': function(up, file) {
 				var progress = new FileProgress(file, 'fsUploadProgress');
@@ -99,6 +100,7 @@ $(function() {
 			},
 			'UploadComplete': function() {
 				$('#success').show();
+				document.getElementById('id_upload_new_video').value = "True";
 			},
 			'FileUploaded': function(up, file, info) {
 				var progress = new FileProgress(file, 'fsUploadProgress');

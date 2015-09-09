@@ -50,6 +50,30 @@ def upload_post(request):
     
     return HttpResponse("OK") 
 
+def update_post(request):
+    if request.method == "POST":
+        for x in request.POST:
+            print x, request.POST[x]
+
+    try: 
+        path_logo = ""
+        if request.FILES.has_key('logo'):
+            if request.FILES['logo'].name != "":
+                path = LOGO_FOLD + getRandomStr() + "-" + request.FILES['logo'].name
+                handle_uploaded_photo(path, request.FILES['logo'])
+                path_logo = path[3:]
+                print "logo: ", path_logo
+
+            update_video(request, path_logo)
+            return HttpResponse("Ok.")
+        else:
+            update_video(request, path_logo)
+            return HttpResponse("Ok.")
+    except Exception, e:
+        print str(e)
+    
+    return HttpResponse("Fail") 
+
 
 def save_tag(tag_name):
     print "save tag: ", tag_name
@@ -137,8 +161,9 @@ def save_video(request, logo_path, need_authority=True):
     if data.has_key('title'):
         video.title = data['title'].encode('utf-8')
     if data.has_key('tag'):
-        tagStr = data['tag']
-        tag_list = tagStr.split()
+        data_tag = data['tag']
+        tagStr = ""
+        tag_list = data_tag.split()
         tag_len = get_len(tag_list)
         for i in range(tag_len):
             if i != 0:
@@ -154,8 +179,58 @@ def save_video(request, logo_path, need_authority=True):
         kind_deal(kind)
     if data.has_key('key'):
         video.key = data['key'].encode('utf-8')
-    if data.has_key('logo'):
-        video.logo_img = data['logo'].encode('utf-8')
+    if data.has_key('desc'):
+        video.info = data['desc'].encode('utf-8')
+    if data.has_key('money'):
+        video.money = float(data['money'].encode('utf-8'))
+    if data.has_key('minute'):
+        video.video_time = int(data['minute'].encode('utf-8'))
+
+    try:
+        video.save()
+        return True
+    except Exception, e:
+        print str(e)
+        return False
+
+def update_video(request, logo_path, need_authority=True):
+    data = request.POST
+
+    video_id = int(data['video_id'])
+    video = Video.objects.filter(id=video_id).all()[0]
+
+    video.bucket = BUCKET_NAME
+    video.domain = DOMAIN
+    #video.need_authority = need_authority
+    if logo_path != "":
+        video.logo_img = logo_path
+
+    #video.teacher = Account.objects.filter(user=request.user).all()[0]
+
+    
+    if data.has_key('title'):
+        video.title = data['title'].encode('utf-8')
+    if data.has_key('tag'):
+        data_tag = data['tag']
+        tagStr = ""
+        tag_list = data_tag.split()
+        tag_len = get_len(tag_list)
+        for i in range(tag_len):
+            if i != 0:
+                tagStr += " " + tag_list[i]
+            else:
+                tagStr += tag_list[i]
+        print tag_len, tagStr
+        video.tags_str = tagStr.encode('utf-8')
+        tag_deal(tag_list)
+        
+    if data.has_key('kind'):
+        kind = data['kind']
+        video.kind_str = kind.encode('utf-8')
+        kind_deal(kind)
+    if data.has_key('key'):
+        if data['upload_new_video'] == "True":
+            video.key = data['key'].encode('utf-8')
     if data.has_key('desc'):
         video.info = data['desc'].encode('utf-8')
     if data.has_key('money'):
@@ -686,11 +761,15 @@ def create_unpay_order(user, video_id):
                     if v == video:
                         if o.pay_state == -1:
                             o.pay_state = 1
+                            o.name = video.title
+                            o.pic  = video.logo_img
+                            o.price = video.money
+                            o.wxpay_qrcode = "/static/storage/wxpay_qrcode/150831170420-zrOL.png"
                             o.save()
                         return o
         except Exception, e:
             printError(e)
-            printError("create unpay order. check order exist.")
+            
 
 
         unpay_order = Order()

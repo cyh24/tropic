@@ -16,7 +16,7 @@
 				<div class="clear"></div>
 				<div class="mod_upload">
 					<div class="mod_upload_filed">
-						<form action="/upload-post/" method="post" id="id-form" enctype="multipart/form-data" target="post-status">
+						<form action="/update-post/" method="post" id="id-form" enctype="multipart/form-data" target="post-status">
 							<button id="id-form-submit" style="display: none;" type="submit"></button>
 							<div class="mod_upload_box_left">
 								<label class="upload_filed_lbl" for="upload_filed_video_title">
@@ -24,7 +24,7 @@
 									<span class="sign_star">*</span>
 								</label>
 								<div class="upload_filed_area">
-									<input class="rlf-input" type="text" name="title" value="">
+									<input class="rlf-input" type="text" name="title" value='{{video.title}}'>
 								</div>
 
 								<div class="clear"></div>
@@ -49,7 +49,7 @@
 									<div class="clear"></div>
 
 									<div class="upload_filed_area" style="width: 100%;">
-										<input style="width: 100%;" class="rlf-input" type="text" name="kind" value="">
+										<input style="width: 100%;" class="rlf-input" type="text" name="kind" value='{{video.kind_str}}'>
 									</div>
 								</div>
 								<div class="select_right">
@@ -61,7 +61,7 @@
 									<div class="clear"></div>
 
 									<div class="upload_filed_area" style="width: 100%;">
-										<input style="width: 100%;" class="rlf-input" type="text" name="tag" value="">
+										<input style="width: 100%;" class="rlf-input" type="text" name="tag" value='{{video.tags_str}}'>
 									</div>
 								</div>
 								<div class="clear"></div>
@@ -70,7 +70,7 @@
 									<span class="sign_star">*</span>
 								</label>
 								<div class="upload_filed_area">
-									<textarea id="desc_0" class="textarea" type="text" name="desc" style="height: 120px;"></textarea>
+									<textarea id="desc_0" class="textarea" type="text" name="desc" style="height: 120px;" >{{video.info}}</textarea>
 								</div>
 
 								<div class="clear"></div>
@@ -88,7 +88,7 @@
 										<span class="sign_star">*</span>
 									</label>
 									<div class="upload_filed_area" style="width: 80px;">
-										<input class="rlf-input" type="text" name="money" value="0">
+										<input class="rlf-input" type="text" name="money" value='{{video.money}}'>
 									</div>
 								</div>
 								<div class="select_right">
@@ -100,7 +100,7 @@
 									<div class="clear"></div>
 
 									<div class="upload_filed_area" style="width: 80px;">
-										<input style="width: 100%;" class="rlf-input" type="text" name="minute" value="0">
+										<input style="width: 100%;" class="rlf-input" type="text" name="minute" value='{{video.video_time}}'>
 									</div>
 								</div>
 
@@ -111,9 +111,9 @@
 									<span>课程封面</span>
 									<span class="sign_star">*</span>
 								</label>
-								<div style="border: dashed; width: 330px; height: 190px;">
+								<div style=" width: 330px; height: 190px;">
 									<div id="localImag">
-										<img id="logo_img" src="/static/images/uppic.png" style="width: 99%; height: 99%; vertical-align: middle;" />
+										<img id="logo_img" src={{video.logo_img}} style="width: 99%; height: 99%; vertical-align: middle;" />
 									</div>
 								</div>
 
@@ -130,7 +130,8 @@
 							<input type="TEXT" id="id_rand_key" name="key" style="display:none;">
 							<input type="TEXT" id="id_link" name="video-link" style="display: none;">
 								
-								<input type="TEXT" id="id_upload_new_video" name="upload_new_video" style="display: none;" value="False">
+							<input type="TEXT" id="id_upload_new_video" name="upload_new_video" style="display: none;" value="False">
+							<input type="TEXT"  name="video_id" style="display: none;" value='{{video.id}}'>
 						</form>
 					</div>
 
@@ -143,7 +144,7 @@
 							<hr>
 							<a class="btn btn-default btn-lg " id="pickfiles">
 								<i class="glyphicon glyphicon-plus"></i>
-								<sapn>选择文件</sapn>
+								<sapn>更换视频</sapn>
 							</a>
 						</div>
 					</div>
