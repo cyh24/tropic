@@ -1,32 +1,11 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
-from django.shortcuts import render
-from django.http import HttpResponse
-
-from django.http import HttpResponse,HttpResponseRedirect, JsonResponse
-from django.shortcuts import render_to_response 
-from django.template import RequestContext 
-from django.views.decorators.csrf import csrf_exempt 
-from django.views.decorators.csrf import csrf_protect 
-from django.template.context_processors import csrf
-from django.template import loader
-
-from django.core.paginator import Paginator, InvalidPage, EmptyPage, PageNotAnInteger
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout
-
-from django.db import transaction
-
+from common import *
+from qiniu_pro import *
 
 from models import *
-import time
-import os
-import sys
-
-from common import *
 from config import *
 
-LOGO_FOLD = "app/static/storage/logo-images/"
 
 def upload_post(request):
     if request.method == "POST":
@@ -41,7 +20,7 @@ def upload_post(request):
     try:
         path_logo = path[3:]
         if save_video(request, path_logo) == True:
-            return HttpResponse("OK.") 
+            return HttpResponse("OK.")
         else:
             return HttpResponse("Fail.") 
     except Exception, e:
@@ -164,7 +143,7 @@ def save_video(request, logo_path, need_authority=True):
         data_tag = data['tag']
         tagStr = ""
         tag_list = data_tag.split()
-        tag_len = get_len(tag_list)
+        tag_len = getLen(tag_list)
         for i in range(tag_len):
             if i != 0:
                 tagStr += " " + tag_list[i]
@@ -214,7 +193,7 @@ def update_video(request, logo_path, need_authority=True):
         data_tag = data['tag']
         tagStr = ""
         tag_list = data_tag.split()
-        tag_len = get_len(tag_list)
+        tag_len = getLen(tag_list)
         for i in range(tag_len):
             if i != 0:
                 tagStr += " " + tag_list[i]
@@ -259,7 +238,7 @@ def add_watch_num(video_id):
 def get_interest_videos():
     try:
         videos = Video.objects.order_by('release_date')
-        if get_len(videos) > 4:
+        if getLen(videos) > 4:
             return videos[:4]
         return videos
     except Exception, e:
@@ -333,7 +312,7 @@ def if_video_collected(user, video):
             return False
         else:
             videos = collect_videos.videos.all()
-            if get_len(videos) < 1:
+            if getLen(videos) < 1:
                 return False
             for v in videos:
                 if v == video:
@@ -353,7 +332,7 @@ def add_collect_video(user, video_id):
         collect_videos = get_collect_from_account(account)
         video = get_video_by_id(video_id)
         videos = collect_videos.videos.all()
-        if get_len(videos) < 1:
+        if getLen(videos) < 1:
             collect_videos.videos.add(video)
         else:
             is_exist = False
@@ -381,7 +360,7 @@ def cancle_collect_video(user, video_id):
         video = get_video_by_id(video_id)
         videos = collect_videos.videos.all()
         
-        if get_len(videos) < 1:
+        if getLen(videos) < 1:
             return True
         else:
             t_videos = []
@@ -477,7 +456,7 @@ def check_wx_openid(wx_user):
         openid = wx_user['openid']
         account = Account.objects.filter(openid=openid).all()
 
-        if get_len(account) < 1:
+        if getLen(account) < 1:
             create_account_given_wx(wx_user)
             return True
         else:
@@ -493,7 +472,7 @@ def exist_user_account(user):
     try:
         account = Account.objects.filter(user=user).all()
 
-        if get_len(account) < 1:
+        if getLen(account) < 1:
             create_account_given_user(user)
             return True
 
@@ -507,13 +486,13 @@ def get_account_from_user(user):
     account = None
     try:
         account = Account.objects.filter(user=user).all()
-        if get_len(account) < 1:
+        print getLen(account)
+        if getLen(account) < 1:
             account = create_account_given_user(user)
         else:
             account = account[0]
     except Exception, e:
         printError(e)
-
     return account
 
 
@@ -536,7 +515,7 @@ def get_collect_from_account(account):
     collect_videos = None
     try:
         collect_videos = CollectVideos.objects.filter(account=account).all()
-        if get_len(collect_videos) < 1:
+        if getLen(collect_videos) < 1:
             collect_videos = create_collect_given_account(account)
         else:
             collect_videos = collect_videos[0]
@@ -556,7 +535,7 @@ def add_watch_history(user, video):
             return False
 
         watch_history = WatchHistory.objects.filter(account=account).all()
-        if get_len(watch_history) < 1:
+        if getLen(watch_history) < 1:
             watch_history = WatchHistory()
             watch_history.account = account
             watch_history.save()
@@ -564,7 +543,7 @@ def add_watch_history(user, video):
             watch_history = watch_history[0]
 
         videos = watch_history.videos.all()
-        if get_len(videos) < 1:
+        if getLen(videos) < 1:
             watch_history.videos.add(video)
         else:
             is_exist = False
@@ -595,7 +574,7 @@ def get_watch_history(user):
             return None, 0
 
         watch_history = WatchHistory.objects.filter(account=account).all()
-        if get_len(watch_history) < 1:
+        if getLen(watch_history) < 1:
             return None, 0
         else:
             watch_history = watch_history[0]
@@ -643,7 +622,7 @@ def get_collect(user):
             return None, 0
 
         collect_videos = CollectVideos.objects.filter(account=account).all()
-        if get_len(collect_videos) < 1:
+        if getLen(collect_videos) < 1:
             return None, 0
         else:
             collect_videos = collect_videos[0]
@@ -693,7 +672,7 @@ def get_unpay(user):
         unpay_order = Order.objects.filter(account=account).all().filter(pay_state=1).all()
 
         
-        return unpay_order, get_len(unpay_order)
+        return unpay_order, getLen(unpay_order)
 
     except Exception, e:
         printError(e)
@@ -704,7 +683,7 @@ def get_unpay_num(user):
     try:
         account = get_account_from_user(user)
         unpay_order = Order.objects.filter(account=account).all().filter(pay_state=1).all()
-        return get_len(unpay_order)
+        return getLen(unpay_order)
     except Exception, e:
         printError(e)
 
@@ -726,7 +705,7 @@ def get_paid_num(user):
     try:
         account = get_account_from_user(user)
         paid_order = Order.objects.filter(account=account).filter(pay_state=2).all()
-        return get_len(paid_order)
+        return getLen(paid_order)
     except Exception, e:
         printError(e)
 

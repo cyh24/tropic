@@ -1,4 +1,7 @@
 
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 import sys
 import random
 import datetime
@@ -9,7 +12,119 @@ import StringIO
 import qrcode
 import base64, zlib
 import Image
+import os
+
+from django.shortcuts import render
+from django.http import HttpResponse
+
+from django.http import HttpResponse,HttpResponseRedirect, JsonResponse
+from django.shortcuts import render_to_response 
+from django.template import RequestContext 
+from django.views.decorators.csrf import csrf_exempt 
+from django.views.decorators.csrf import csrf_protect 
+from django.template.context_processors import csrf
+from django.template import loader
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+
+
+from models import *
+
 from django.core.cache import cache
+from django.core.paginator import Paginator, InvalidPage, EmptyPage, PageNotAnInteger
+
+USER_PIC_FOLD = "app/static/storage/user-pic/"
+LOGO_FOLD = "app/static/storage/logo-images/"
+
+def printError(e):
+    print "Error: ", str(e)
+
+def getLen(List):
+    length = 0
+    try:
+        if List == None:
+            length = 0
+        else:
+            length = len(List)
+
+    except Exception, e:      
+        printError(e)
+
+    return length
+
+def init_msg(request):
+    msg = {}
+    msg['login_state'] = False
+    if request.user.is_authenticated():
+        try:
+            msg['login_state'] = True
+            account = Account.objects.filter(user=request.user).all()[0]
+            msg['account'] = account
+        except Exception, e:
+            printError(e)
+
+    msg['next'] = '/'
+    if request.GET.has_key('next'):
+        msg['next'] = request.GET['next']
+
+    return msg
+
+def paginator_show(request, msg_list, page_size):
+    page = 1
+    try:
+        if request.GET.has_key('page'):
+            page = int(request.GET['page'])
+        if page < 1:
+            page = 1
+
+        total_page = (getLen(msg_list) + page_size - 1)/page_size
+        if page > total_page:
+            page = total_page
+    except ValueError:
+        page = 1
+
+    
+    try:
+        paginator = Paginator(msg_list, page_size)
+        msg_list = paginator.page(page)
+    except(EmptyPage, PageNotAnInteger):
+        msg_list = paginator.page(1)
+
+    return msg_list, page
+
+def paginator_bar(cur_page, total_page):
+    pages_before = []
+    pages_after  = []
+    Num = 5
+
+    try:
+
+        if total_page <= Num:
+            for i in range(cur_page-1):
+                pages_before.append(i+1)
+            for i in range(cur_page+1, total_page+1):
+                pages_after.append(i)
+        elif cur_page <= Num/2:
+            for i in range(cur_page-1):
+                pages_before.append(i+1)
+            for i in range(cur_page, cur_page+Num/2+1):
+                pages_after.append(i+1)
+        elif (total_page - cur_page) <= Num/2:
+            for i in range(total_page - Num, cur_page-1):
+                pages_before.append(i+1)
+            for i in range(cur_page, total_page):
+                pages_after.append(i+1)
+        else:
+            for i in range(cur_page-Num/2-1, cur_page-1):
+                pages_before.append(i+1)
+            for i in range(cur_page, cur_page + Num/2):
+                pages_after.append(i+1)
+    
+    except Exception, e:
+        printError(e)
+
+    return pages_before, pages_after
 
 def getRandomStr(num=4):
 
@@ -24,8 +139,6 @@ def handle_uploaded_photo(path, f):
             info.write(chunk)
     return f
 
-def printError(e):
-    print "Error: ", str(e)
 
 def checkMobile(request):
     try:
@@ -53,20 +166,6 @@ def checkMobile(request):
     print "...User from pc...\n"
 
     return False
-
-
-def get_len(List):
-    length = 0
-    try:
-        if List == None:
-            length = 0
-        else:
-            length = len(List)
-
-    except Exception, e:
-        printError(e)
-
-    return length
 
 def get_qrcode(url):
     try:

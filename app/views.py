@@ -1,84 +1,10 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
-from django.shortcuts import render
-from django.http import HttpResponse
-
-from django.http import HttpResponse,HttpResponseRedirect, JsonResponse
-from django.shortcuts import render_to_response 
-from django.template import RequestContext 
-from django.views.decorators.csrf import csrf_exempt 
-from django.views.decorators.csrf import csrf_protect 
-from django.template.context_processors import csrf
-from django.template import loader
-
-from django.core.paginator import Paginator, InvalidPage, EmptyPage, PageNotAnInteger
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout
-
-import random
-
-from models import *
-import time
-import os
-import sys
-from qiniu_pro import *
+from common import *
 from db_pro import *
-from wechat_pro import *
-USER_PIC_FOLD = "app/static/storage/user-pic/"
+from qiniu_pro import *
+from wx_knife import *
 
-@csrf_exempt 
-
-@csrf_protect 
-def paginator_show(request, msg_list, page_size):
-    #after_range_num  = 5
-    #before_range_num = 6
-    page = 1
-    try:
-        if request.GET.has_key('page'):
-            page = int(request.GET['page'])
-        if page < 1:
-            page = 1
-
-        total_page = (get_len(msg_list) + page_size - 1)/page_size
-        if page > total_page:
-            page = total_page
-    except ValueError:
-        page = 1
-
-    
-    try:
-        paginator = Paginator(msg_list, page_size)
-        msg_list = paginator.page(page)
-    except(EmptyPage, PageNotAnInteger):
-        msg_list = paginator.page(1)
-
-    #if page >= after_range_num:
-    #    page_range = paginator.page_range[page - after_range_num: page + before_range_num]
-    #else:
-    #    page_range = paginator.page_range[0: int(page) + before_range_num]
-
-    #template_var["page_objects"] = msg_list
-    #template_var["page_range"]   = page_range
-    return msg_list, page
-
-
-
-def init_msg(request):
-    msg = {}
-    msg['login_state'] = False
-    if request.user.is_authenticated():
-        try:
-            msg['login_state'] = True
-            account = Account.objects.filter(user=request.user).all()[0]
-            msg['account'] = account
-        except Exception, e:
-            printError(e)
-
-    msg['next'] = '/'
-    if request.GET.has_key('next'):
-        msg['next'] = request.GET['next']
-
-    return msg
 
 def test(request):
     print "TEST"
@@ -88,6 +14,7 @@ def test(request):
 
 
 def index(request):
+    #wx_knife_pay(request)
     try:
         wechat_user = WxAuth.get_user(request)
 
@@ -177,34 +104,6 @@ def log_out(request):
 
     return HttpResponseRedirect(HOMEPAGE)
 
-def paginator_bar(cur_page, total_page):
-    pages_before = []
-    pages_after  = []
-    Num = 5
-
-    if total_page <= Num:
-        for i in range(cur_page-1):
-            pages_before.append(i+1)
-        for i in range(cur_page+1, total_page+1):
-            pages_after.append(i)
-    elif cur_page <= Num/2:
-        for i in range(cur_page-1):
-            pages_before.append(i+1)
-        for i in range(cur_page, cur_page+Num/2+1):
-            pages_after.append(i+1)
-    elif (total_page - cur_page) <= Num/2:
-        for i in range(total_page - Num, cur_page-1):
-            pages_before.append(i+1)
-        for i in range(cur_page, total_page):
-            pages_after.append(i+1)
-    else:
-        for i in range(cur_page-Num/2-1, cur_page-1):
-            pages_before.append(i+1)
-        for i in range(cur_page, cur_page + Num/2):
-            pages_after.append(i+1)
-
-    return pages_before, pages_after
-
 
 def videos_ui(request):
 
@@ -213,7 +112,7 @@ def videos_ui(request):
     videos = Video.objects.all()
     videos, msg = get_order_videos(request, videos, msg)
 
-    total_page = (get_len(videos)+PAGE_SIZE-1)/PAGE_SIZE
+    total_page = (getLen(videos)+PAGE_SIZE-1)/PAGE_SIZE
     subVideos, cur_page = paginator_show(request, videos, PAGE_SIZE)
 
 
@@ -236,14 +135,16 @@ def videos_manage(request):
 
     videos = Video.objects.all()
     #videos, msg = get_order_videos(request, videos, msg)
-    if get_len(videos) > 0:
+
+    if getLen(videos) > 0:
+        print "s"
         new_videos = []
         for v in videos:
             v.release_date = str(v.release_date).split(' ')[0]
             new_videos.append(v)
         videos = new_videos
 
-    total_page = (get_len(videos)+5-1)/5
+    total_page = (getLen(videos)+5-1)/5
     subVideos, cur_page = paginator_show(request, videos, 5)
 
 
@@ -269,7 +170,7 @@ def search_result(request):
     #videos, msg = get_order_videos(request, msg)
     videos = get_search_videos(request)
 
-    total_page = (get_len(videos)+PAGE_SIZE-1)/PAGE_SIZE
+    total_page = (getLen(videos)+PAGE_SIZE-1)/PAGE_SIZE
     subVideos, cur_page = paginator_show(request, videos, PAGE_SIZE)
 
 
@@ -310,13 +211,13 @@ def play_ui(request):
                 # get the video's comments
                 comments = Video.objects.filter(id=video_id)[0].comments.all().order_by('release_date')
                 new_comments = []
-                if get_len(comments) > 0:
+                if getLen(comments) > 0:
                     for cc in comments:
                         cc.release_date = str(cc.release_date).split(' ')[0]
                         new_comments.append(cc)
 
                 msg['comments'] = new_comments
-                msg['comments_num'] = get_len(comments)
+                msg['comments_num'] = getLen(comments)
             except Exception, e:
                 printError(e)
 
@@ -366,7 +267,7 @@ def get_space_msg(request, get_videos_method):
 
         videos, videos_num = get_videos_method(request.user)
 
-        total_page = (get_len(videos)+8-1)/8
+        total_page = (getLen(videos)+8-1)/8
         subVideos, cur_page = paginator_show(request, videos, 8)
 
 
