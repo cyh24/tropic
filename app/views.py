@@ -3,7 +3,6 @@
 from common import *
 from db_pro import *
 from qiniu_pro import *
-from wx_knife import *
 
 
 def test(request):
