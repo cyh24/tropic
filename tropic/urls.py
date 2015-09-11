@@ -69,5 +69,14 @@ urlpatterns = patterns('',
     url(r'^pay/$', 'app.views.pay_ui'), 
     url(r'^ready-pay/$', 'app.views.ready_pay'), 
 
+    url(r'^wechat-pay/$', 'app.wxpay.payback'), 
+    url(r'^WxPay/$', 'app.wxpay.wechat_pay'), 
+    url(r'^ajax_check/$', 'app.wxpay.check_pay'), 
+    url(r'^pay_result/$', 'app.wxpay.pay_result'),
+
+    url(r'^jsapi_pay/$', 'app.wxpay.jsapi_pay'), 
+    url(r'^paydetail/$', 'app.wxpay.paydetail'), 
+
+    
     url(r'^test/', 'app.views.test')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

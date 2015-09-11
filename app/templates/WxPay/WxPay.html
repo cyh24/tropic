@@ -4,6 +4,8 @@
 	
 	<link href="/static/css/july/login.css" rel="stylesheet" type="text/css">
 	<link href="/static/css/july/common.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="/static/js/july/jquery.js"></script>
+	<script type="text/javascript" src="/static/js/ajax_check.js"></script>
 
 	<body>
 		{% include "header.html"%}
@@ -12,14 +14,33 @@
 			<div class="mod-body clearfix" >
 				<div class="content pull-left" style="margin-top:80px;">
 
+				{% if return_code == "SUCCESS" and result_code == "SUCCESS" %}
 				<div style="color:#556B2F;font-size:20px;font-weight: bolder;text-align:center;
 							margin-left:auto; margin-right:auto;">下单成功，请微信扫描二维码支付
 
-							{{result}}
 				</div>
+				<p><img alt="扫码支付" src= "/static/images/{{img_name}}" style="width:150px;height:150px;"/></p>
 				
+				{% else%}
+
+					{%if return_code != "SUCCESS"%}
+					<div style="color:#556B2F;font-size:20px;font-weight: bolder;text-align:center;
+							margin-left:auto; margin-right:auto;">下单失败，
+							{{return_code}}
+
+					</div>
+					{% endif %}
+
+					{%if result_code != "SUCCESS" %}
+					<div style="color:#556B2F;font-size:20px;font-weight: bolder;text-align:center;
+							margin-left:auto; margin-right:auto;">下单失败，
+							{{result_code}}
+
+					</div>
+					{% endif %}
+
+				{% endif %}
 				
-				<p><img alt="模式二之扫码支付" src= "/static/images/{{img_name}}" style="width:150px;height:150px;"/></p>
 
 				</div>
 			</div>
