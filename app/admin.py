@@ -1,3 +1,35 @@
 from django.contrib import admin
+from app import models
 
-# Register your models here.
+class AccountAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(models.Account, AccountAdmin)
+
+class CommentAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.Comment, CommentAdmin)
+
+class TagAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.Tag, TagAdmin)
+
+class KindAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.Kind, KindAdmin)
+
+class VideoAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.Video, VideoAdmin)
+
+class OrderAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.Order, OrderAdmin)
+
+class WatchHistoryAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.WatchHistory, WatchHistoryAdmin)
+
+class CollectVideosAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.CollectVideos, CollectVideosAdmin)
