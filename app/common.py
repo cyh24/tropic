@@ -131,7 +131,7 @@ def getRandomStr(num=4):
     current_time = time.strftime("%y%m%d%H%M%S", time.localtime())
     rand_str = ''.join(random.sample(string.ascii_letters + string.digits, num))
 
-    return current_time + "-" + rand_str
+    return current_time + rand_str
 
 def handle_uploaded_photo(path, f):
     with open( path, 'wb+') as info:
@@ -166,7 +166,7 @@ def checkMobile(request):
     print "...User from pc...\n"
 
     return False
-
+'''
 def get_qrcode(url):
     try:
         img = qrcode.make(url)
@@ -181,4 +181,17 @@ def get_qrcode(url):
         printError(e)
 
     return None
+'''
+def remove_file(filename):
+    try:
+        filename = "/home/www/tropic/app/"+filename
+        if(os.path.exists(filename)):
+            os.remove(filename)
+        else:
+            print filename + "is not exist"
+    except Exception, e:
+        printError(e)
+
+
+
 

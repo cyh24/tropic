@@ -137,7 +137,7 @@ class Order(models.Model):
 
     # -1: invalidate, 1: unpay, 2: paid,
     pay_state = models.IntegerField()
-
+    order_num = models.CharField(max_length=32)
     name = models.CharField(max_length=20)
     wxpay_qrcode = models.CharField(max_length=200)
     pic  = models.CharField(max_length=200)

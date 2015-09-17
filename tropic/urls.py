@@ -70,7 +70,6 @@ urlpatterns = patterns('',
     url(r'^ready-pay/$', 'app.views.ready_pay'), 
 
     url(r'^wechat-pay/$', 'app.wxpay.payback'), 
-    url(r'^WxPay/$', 'app.wxpay.wechat_pay'), 
     url(r'^ajax_check/$', 'app.wxpay.check_pay'), 
     url(r'^pay_result/$', 'app.wxpay.pay_result'),
 

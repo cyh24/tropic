@@ -1,62 +1,85 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 from common import *
-
+from models import *
 #Terry add import
 from wxknife import handler as HD
 from wxknife.backends.dj import Helper, sns_userinfo
 from wxknife import WeixinHelper, JsApi_pub, WxPayConf_pub, UnifiedOrder_pub, OrderQuery_pub, Notify_pub, catch
 
+import qrcode
+import base64
 
-def wechat_pay(request):
+def generate_qrcode(code_url):
+    qr = qrcode.QRCode(version = 2, 
+            error_correction = qrcode.constants.ERROR_CORRECT_L,
+            box_size = 10, border = 1)
+    qr.add_data(code_url)
+    qr.make(fit = True)
+    img = qr.make_image()
+    return img
 
-    msg = init_msg(request)
+def get_wxpay_qrcode(order):
+    
+    outfile = "/static/images/banner.png"
     
     unifiedOrder = UnifiedOrder_pub()
+    unifiedOrder.setParameter("body",order.name.encode("utf-8"))
+    unifiedOrder.setParameter("total_fee","1")#str(int(order.price*100)))
+    unifiedOrder.setParameter("out_trade_no",order.order_num)
+    unifiedOrder.setParameter("notify_url",WxPayConf_pub.NOTIFY_URL)
+    unifiedOrder.setParameter("trade_type","NATIVE")
 
-    unifiedOrder.setParameter("body", "Ipad mini3  128G")
-    unifiedOrder.setParameter("total_fee", "1")
-    unifiedOrder.setParameter("out_trade_no", "1217752501201407033233368066")
-    unifiedOrder.setParameter("notify_url", WxPayConf_pub.NOTIFY_URL) #通知地址 
-    unifiedOrder.setParameter("trade_type", "NATIVE") #交易类型
     result = unifiedOrder.getResult()
-
     if result["return_code"] == "SUCCESS":
-        msg['return_code'] = "SUCCESS"
         if result["result_code"] == "SUCCESS":
-            msg['result_code'] = "SUCCESS"
-            code_url = unifiedOrder.result["code_url"]
 
-            #print code_url #为啥调了3次啊我擦擦。
-            
-            #二维码生成
+            code_url = unifiedOrder.result["code_url"]
             img = generate_qrcode(code_url)
             APP_PATH = os.path.dirname(os.path.dirname(__file__))
-            STATIC_PATH = os.path.join(APP_PATH, 'app/static/images/').replace('\\','/')
-
+            STATIC_PATH = os.path.join(APP_PATH, 'app/static/storage/qrcode/').replace('\\','/')
             img_name = getRandomStr()+".png"
-            msg['img_name'] = img_name
             outfile = os.path.join(STATIC_PATH, img_name) 
             img.save(outfile)
+            outfile = '/static/storage/qrcode/'+img_name
+            #base64_code = base64.encode(img)
         else:
-            msg['result_code'] = result["err_code"]
+            print result["err_code"]
     else:
-        msg['return_code'] = result["return_msg"]
-
-    return render_to_response('WxPay/WxPay.html', msg)
+        print result["return_msg"]
+    return outfile
 
 def check_pay(request):
-    orderQuery = OrderQuery_pub()
-    orderQuery.setParameter("out_trade_no", "1217752501201407033233368066")
+    result = {}
+    try:
+        if request.GET.has_key('out_trade_no'):
+            out_trade_no = request.GET['out_trade_no']
+        
+        orderQuery = OrderQuery_pub()
+        orderQuery.setParameter("out_trade_no", out_trade_no)#"1217752501201407033233368056")
     
-    result = orderQuery.getResult()
-    #print result
+        result = orderQuery.getResult()
+        #print result
+    except Exception, e:
+        printError(e)
+
     return JsonResponse(result)
 
 def pay_result(request):
     msg = init_msg(request)
+    try:
+        if request.GET.has_key('paid_order_id'):
+            paid_order_id = request.GET['paid_order_id']
+            paid_orders = Order.objects.filter(id=paid_order_id)
+            paid_order = paid_orders[0]
+            paid_order.pay_state = 2
+            remove_file(paid_order.wxpay_qrcode)
+            paid_order.save()
+            msg['paid_order'] = paid_order
+    except Exception, e:
+        printError(e)
     ###应添加订单状态处理
-    return render_to_response('WxPay/Notice.html', msg)
+    return render_to_response('pay/notice.html', msg)
 
 def payback(request):
     print "fuck wechat"

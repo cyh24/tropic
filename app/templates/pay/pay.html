@@ -5,6 +5,56 @@
 		<meta charset="utf-8">
 		<title></title>
 		<link rel="stylesheet" href="/static/css/pay/pay.css" />
+        <script type="text/javascript" src="/static/js/july/jquery.js"></script>
+        <script>
+            var trade_state = "NOPAY";
+            var Timer;
+
+            function paycheck()
+            {
+                /*$.ajax({
+                        type:"GET",
+                        url: "/ajax_check/",
+                        data:{
+                            out_trade_no: "",
+                        },
+                        dataType: "json",
+                        success: function(result){
+                            trade_state = result['trade_state'];
+                            alert(trade_state);
+                        }
+                        });
+                        1217752501201407033233368056
+*/
+                $.getJSON('/ajax_check/', {out_trade_no: "{{unpay_order.order_num}}"
+                                                           },//"1217752501201407033233368056"},
+                        function(result){
+                            trade_state = result['trade_state']
+                            //alert(trade_state)
+                            if(trade_state == "SUCCESS")
+                            {
+                                clearInterval(Timer);
+                                location.href = "/pay_result/?paid_order_id="+{{unpay_order.id}};
+                            }
+                            else if(result['return_code'] == "FAIL")
+                            {
+                                clearInterval(Timer);
+                                alert(result['return_msg']);
+                            }
+                            else if(result['result_code'] == "FAIL")
+                            {
+                                clearInterval(Timer);
+                                alert(result['err_code']);
+                            }
+                        });
+            }
+            
+            $(document).ready(function()
+                    {
+                        Timer = setInterval(paycheck, 5000);
+                    });
+        </script>>
+
 	</head>
 
 	<body>

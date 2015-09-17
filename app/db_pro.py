@@ -6,6 +6,9 @@ from qiniu_pro import *
 from models import *
 from config import *
 
+from django.db import transaction
+from wxpay import get_wxpay_qrcode
+import datetime
 
 def upload_post(request):
     if request.method == "POST":
@@ -525,6 +528,31 @@ def get_collect_from_account(account):
 
     return collect_videos
 
+def get_video_state(user, video):
+    if user == None:
+        return False
+    try:
+        account = get_account_from_user(user)
+        if account == None:
+            return False
+
+        user_orders = Order.objects.filter(account=account).all()
+        is_paid = False
+        if getLen(user_orders) < 1:
+            is_paid = False
+        else:
+            for o in user_orders:
+                user_videos = o.videos.all()
+                user_video = user_videos[0]
+                if (user_video.id == video.id) and (o.pay_state == 2):
+                    is_paid = True
+                    break
+
+    except Exception, e:
+       printError(e)
+
+    return is_paid
+
 
 def add_watch_history(user, video):
     if user == None:
@@ -669,10 +697,13 @@ def get_unpay(user):
         if account == None:
             return None, 0
 
-        unpay_order = Order.objects.filter(account=account).all().filter(pay_state=1).all()
-
+        unpay_orders = Order.objects.filter(account=account).all().filter(pay_state=1).all()
+        order_videos = []
+        for o in unpay_orders:
+            videos = o.videos.all()
+            order_videos.append(videos[0])
         
-        return unpay_order, getLen(unpay_order)
+        return order_videos, getLen(unpay_orders)
 
     except Exception, e:
         printError(e)
@@ -700,6 +731,28 @@ def del_unpay(user, order_id):
         printError(e)
 
     return False
+
+def get_paid(user):
+    if user == None:
+        return None, 0
+    try:
+        account = get_account_from_user(user)
+        if account == None:
+            return None, 0
+
+        paid_orders = Order.objects.filter(account=account).all().filter(pay_state=2).all()
+        order_videos = []
+        for o in paid_orders:
+            videos = o.videos.all()
+            order_videos.append(videos[0])
+
+        
+        return order_videos, getLen(paid_orders)
+
+    except Exception, e:
+        printError(e)
+
+    return None, 0
 
 def get_paid_num(user):
     try:
@@ -731,19 +784,34 @@ def create_unpay_order(user, video_id):
 
         video   = get_video_by_id(video_id)
         account = get_account_from_user(user)
-
+        timeStamp = time.time()
+        out_trade_no = "{0}{1}".format(getRandomStr(6),int(timeStamp*100))
+        time_format = '%Y-%m-%d %H:%M:%S'
         try:
             t_order = Order.objects.filter(account=account).all()
             for o in t_order:
                 videos = o.videos.all()
                 for v in videos:
                     if v == video:
-                        if o.pay_state == -1:
+                        if o.pay_state == 1:
+                            current = datetime.datetime.now()
+                            current_str = current.strftime(time_format)
+                            order_time_str = o.release_date.strftime(time_format)
+
+                            current = datetime.datetime.strptime(current_str,time_format)
+                            order_time = datetime.datetime.strptime(order_time_str,time_format)
+
+                            time_space =  (current-order_time).seconds
+                            if time_space > 7200:
+                               #o.order_num = out_trade_no
+                                remove_file(o.wxpay_qrcode)
+                                o.wxpay_qrcode = get_wxpay_qrcode(o)
+                                o.save()
+                        elif o.pay_state == -1:
                             o.pay_state = 1
-                            o.name = video.title
-                            o.pic  = video.logo_img
-                            o.price = video.money
-                            o.wxpay_qrcode = "/static/storage/wxpay_qrcode/150831170420-zrOL.png"
+                            #o.order_num = out_trade_no
+                            remove_file(o.wxpay_qrcode)
+                            o.wxpay_qrcode = get_wxpay_qrcode(o)
                             o.save()
                         return o
         except Exception, e:
@@ -752,6 +820,7 @@ def create_unpay_order(user, video_id):
 
 
         unpay_order = Order()
+        unpay_order.order_num = out_trade_no
         unpay_order.account = account
         unpay_order.name = video.title
         unpay_order.pic  = video.logo_img
@@ -761,7 +830,7 @@ def create_unpay_order(user, video_id):
 
         unpay_order.pay_state = 1
 
-        unpay_order.wxpay_qrcode = "/static/storage/wxpay_qrcode/150831170420-zrOL.png"
+        unpay_order.wxpay_qrcode = get_wxpay_qrcode(unpay_order)#"/static/storage/wxpay_qrcode/150831170420-zrOL.png"
 
         with transaction.atomic():
             unpay_order.save()

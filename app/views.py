@@ -104,7 +104,6 @@ def log_out(request):
 
     return HttpResponseRedirect(HOMEPAGE)
 
-
 def videos_ui(request):
 
     msg = init_msg(request)
@@ -130,6 +129,8 @@ def videos_ui(request):
     return render_to_response('videos/videos.html', msg)
 
 
+@login_required(login_url='/login/')
+@csrf_exempt
 def videos_manage(request):
     msg = init_msg(request)
 
@@ -187,6 +188,8 @@ def search_result(request):
 
     return render_to_response('videos/search_result.html', msg)
 
+@login_required(login_url='/login/')
+@csrf_exempt
 def play_ui(request):
     msg = init_msg(request)
 
@@ -223,7 +226,8 @@ def play_ui(request):
 
 
             # check whether need pay for the play
-            if video.money <= 0:
+            is_paid = get_video_state(request.user, video)
+            if (video.money <= 0) or (is_paid):
                 add_watch_history(request.user, video)
 
                 if if_video_collected(request.user, video):
@@ -314,17 +318,7 @@ def space_collect(request):
 # watching history list
 def space_shopping_cart(request):
     msg = get_space_msg(request, get_unpay)
-    unpay_orders = msg['videos']
-
-    new_orders = []
-    for order in unpay_orders:
-        videos = order.videos.all()
-        order.play_video_id = videos[0].id 
-        new_orders.append(order)
-
-    msg['videos'] = new_orders
-
-
+    
     if request.GET.has_key('show_del'):
         if request.GET['show_del'] == 'True':
             msg['show_del'] = 'True'
@@ -336,7 +330,8 @@ def space_shopping_cart(request):
 @csrf_exempt
 # watching history list
 def space_paid(request):
-    msg = get_space_msg(request, get_watch_history)
+    msg = get_space_msg(request, get_paid)
+    
     if request.GET.has_key('show_del'):
         if request.GET['show_del'] == 'True':
             msg['show_del'] = 'True'
@@ -424,7 +419,6 @@ def update_video_ui(request):
         printError(e)
    
     return render_to_response('videos/play-error.html', msg)
-
 
 
 def voteup(request):
