@@ -49,7 +49,7 @@ def getLen(List):
             length = len(List)
 
     except Exception, e:      
-        printError(e)
+        printError("getLen(): " + str(e))
 
     return length
 

@@ -9,6 +9,7 @@ from config import *
 from django.db import transaction
 from wxpay import get_wxpay_qrcode
 import datetime
+from django.db.models import Q
 
 def upload_post(request):
     if request.method == "POST":
@@ -253,7 +254,7 @@ def get_search_videos(request):
     try:
         if request.GET.has_key('title'):
             q_title = request.GET['title'].encode('utf8')
-            videos = Video.objects.filter( title__icontains=q_title).all()
+            videos = Video.objects.filter(Q(title__icontains=q_title)|Q(kind_str__icontains=q_title)|Q(tags_str__icontains=q_title)).all()
             return videos
 
     except Exception, e:
@@ -706,17 +707,30 @@ def get_unpay(user):
         return order_videos, getLen(unpay_orders)
 
     except Exception, e:
-        printError(e)
+        printError("get_unpay: " + str(e))
 
     return None, 0
+
+def unpay_check_video_alive(unpay_order):
+    try:
+        for order in unpay_order:
+            print order.id
+            
+            if getLen(order.videos.all()) == 0:
+                order.pay_state = -1
+                order.save()
+    except Exception, e:
+        printError("unpay_check_video_alive: " + str(e))
 
 def get_unpay_num(user):
     try:
         account = get_account_from_user(user)
         unpay_order = Order.objects.filter(account=account).all().filter(pay_state=1).all()
+        unpay_check_video_alive(unpay_order)
+        unpay_order = Order.objects.filter(account=account).all().filter(pay_state=1).all()
         return getLen(unpay_order)
     except Exception, e:
-        printError(e)
+        printError( "get_unpay_num: " + str(e))
 
     return 0
 
@@ -844,4 +858,16 @@ def create_unpay_order(user, video_id):
         printError(e)
 
     return None
+
+def db_delete_video(request):
+    try:
+        video_id = int(request.GET['video_id'])
+        video = get_video_by_id(video_id)
+        video.delete()
+        return True
+
+    except Exception, e:
+        printError(e)
+
+    return False
 

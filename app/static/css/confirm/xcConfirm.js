@@ -19,7 +19,7 @@
 			info: {
 				title: "信息",
 				icon: "0 0",//蓝色i
-				btn: btnType.ok
+				//btn: btnType.ok
 			},
 			success: {
 				title: "成功",
@@ -57,7 +57,7 @@
 			//属性
 			title: "", //自定义的标题
 			icon: "", //图标
-			btn: btnType.ok, //按钮,默认单按钮
+			//btn: btnType.ok, //按钮,默认单按钮
 			//事件
 			onOk: $.noop,//点击确定的按钮回调
 			onCancel: $.noop,//点击取消的按钮回调
@@ -121,6 +121,7 @@
 		function bind(){
 			//点击确认按钮
 			$ok.click(doOk);
+
 			
 			//回车键触发确认按钮事件
 			$(window).bind("keydown", function(e){
@@ -148,6 +149,9 @@
 		        config.onOk();
 			$("#" + popId).remove(); 
 			config.onClose(eventType.ok);
+
+            my_ok_func();
+
 		}
 		
 		//取消按钮事件

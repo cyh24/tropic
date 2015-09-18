@@ -121,15 +121,15 @@
 					<div class="clear"></div>
 				
 					<div class="sort-page">
-						<a href="/videos/?page={{pre_page}}" class="page-btn" style="width: 100px;">上一页</a>
+                        <a href="{{get_content}}page={{pre_page}}" class="page-btn" style="width: 100px;">上一页</a>
 						{% for i in pages_before %}
-						<a href="/videos/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a>
+                        <a href="{{get_content}}page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a>
 						{% endfor %}
-						<a href="/videos/?page={{cur_page}}" data-page={{cur_page}} class="page-btn page-btn-cur">{{cur_page}}</a>
+                        <a href="{{get_content}}page={{cur_page}}" data-page={{cur_page}} class="page-btn page-btn-cur">{{cur_page}}</a>
 						{% for i in pages_after %}
-						<a href="/videos/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a>
+                        <a href="{{get_content}}page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a>
 						{% endfor %}
-						<a href="/videos/?page={{after_page}}" data-page="2" class="page-btn" style="width: 100px;">下一页</a>
+                        <a href="{{get_content}}page={{after_page}}" class="page-btn" style="width: 100px;">下一页</a>
 					</div>
 
 				</div>

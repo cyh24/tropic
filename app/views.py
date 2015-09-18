@@ -124,6 +124,13 @@ def videos_ui(request):
     msg['pre_page']   = cur_page - 1
     msg['after_page'] = cur_page + 1
 
+    
+    get_content = "/videos/?"
+    for key in request.GET:
+        if key != "page":
+            get_content += "%s=%s&"%(key, request.GET[key])
+    msg['get_content'] = get_content
+
     msg['interest_videos'] = get_interest_videos()
 
     return render_to_response('videos/videos.html', msg)
@@ -138,7 +145,6 @@ def videos_manage(request):
     #videos, msg = get_order_videos(request, videos, msg)
 
     if getLen(videos) > 0:
-        print "s"
         new_videos = []
         for v in videos:
             v.release_date = str(v.release_date).split(' ')[0]
@@ -162,6 +168,21 @@ def videos_manage(request):
     msg['interest_videos'] = get_interest_videos()
 
     return render_to_response('videos/videos-manage.html', msg)
+
+
+@login_required(login_url='/login/')
+@csrf_exempt
+def delete_video(request):
+    json = {'state': 'fail'}
+    try:
+        if request.GET.has_key('video_id'):
+            if db_delete_video(request) == True:
+                json = {'state': 'success'}
+
+    except Exception, e:
+        printError(e)
+    return JsonResponse(json)
+
 
 
 def search_result(request):

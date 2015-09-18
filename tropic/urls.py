@@ -77,5 +77,7 @@ urlpatterns = patterns('',
     url(r'^paydetail/$', 'app.wxpay.paydetail'), 
 
     
+    url(r'^delete-video/$', 'app.views.delete_video'), 
+    
     url(r'^test/', 'app.views.test')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
