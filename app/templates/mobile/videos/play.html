@@ -1,0 +1,287 @@
+<html>
+
+	<head>
+		{% include "mobile/include.html"%}
+
+		<link rel="stylesheet" href="/static/css/mobile/play.css" />
+
+		<link href="/static/video-js/video-js.css" rel="stylesheet" type="text/css">
+		<script src="/static/video-js/video.js"></script>
+	</head>
+	<script>
+		var VOTE_FLAG = 1;
+
+		function voteUpAction() {
+			if (VOTE_FLAG == 1) {
+				VOTE_FLAG = 0;
+			} else {
+				return 0;
+			}
+			$.ajax({
+				type: "GET",
+				url: "/voteup/",
+				data: {
+					video_id: {{video.id}},
+				},
+				dataType: "json",
+				success: function(data) {
+					var num = Number($("#id-like-num").html());
+					if(!isNaN(num))
+					{
+          				$("#id-like-num").html(num+1);
+          			}
+          			else
+          			{
+          				$("#id-like-num").html(1);
+          			}
+				}
+          			
+			});
+		}
+
+		function collectCancleAction() {
+            collect_state = document.getElementById('btn_collect_cancle').value 
+			$.ajax({
+				type: "GET",
+				url: "/collect/",
+				data: {
+                    collect_state: collect_state,
+					video_id: {{video.id}},
+				},
+				dataType: "json",
+				success: function(data) {
+                    if(data['collect_state'] === '1')
+                    {
+                        document.getElementById('btn_collect_cancle').value = '1';
+                        document.getElementById('icon_collect_cancle').className = 'fa fa-star';
+                    }
+                    else if(data['collect_state'] === '0')
+                    {
+                        document.getElementById('btn_collect_cancle').value = '0';       
+                        document.getElementById('icon_collect_cancle').className = 'fa fa-star-o';
+                    }
+				}
+          			
+			});
+		}
+		
+		
+		function add_comment(){
+		
+            var content = $('#comment_text').val();
+  
+            if( content =='有没有什么问题要问导师的？' || content.length < 3){
+                alert('评论内容不能少于3个字哦~');
+                return false
+            }
+
+            $.ajax({
+                url: "/add-comment/",
+                type: "GET",
+  				dataType: "json",
+                data: {
+                	follow_id: follow_id,
+                	content: content,
+                	video_id: {{video.id}},
+                },
+                success: function(obj){
+                    
+                    window.location.reload();
+                    
+                }
+            });
+		}
+		
+		
+		
+		var follow_id = -1;
+		function replay(self)
+		{
+			data_comment_name = document.getElementById(self.id).getAttribute('data-comment-name')
+			data_comment_id = document.getElementById(self.id).getAttribute('data-comment-id')
+			follow_id = Number(data_comment_id)
+			document.getElementById("comment_text").value = "回复 " + data_comment_name + ": ";
+			document.getElementById("comment_text").focus();
+		}
+		
+		function star()
+		{
+			
+		}
+		
+		function wechat_share() {
+			$.ajax({
+				type: "GET",
+				url: "/wechat-share/",
+				data: {
+					cur_url: window.location.href,
+				},
+				dataType: "json",
+				success: function(data) {
+                    qrcode_url = data['qrcode_url'];
+                    
+                    document.getElementById('qrcodeWrap').style.display = "block";
+                    document.getElementById('id-qrcode').src = qrcode_url;
+                }
+          			
+			});
+		}
+		
+		function qrcode_close()
+		{
+			document.getElementById('qrcodeWrap').style.display = "none";
+		}
+		
+		function addListener(element, e, fn) {
+			if (element.addEventListener) {
+				element.addEventListener(e, fn, false);
+			} else {
+				element.attachEvent("on" + e, fn);
+			}
+		}
+		addListener(document, "click",
+			function(evt) {
+				var evt = window.event ? window.event : evt,
+					target = evt.srcElement || evt.target;
+				if (target.id == "qrcodeContainer") {
+				} else {
+					document.getElementById('qrcodeWrap').style.display = "none";
+				}
+			})
+	</script>
+
+	<body>
+
+		{% include "mobile/header.html"%}
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span12">
+
+					<div class="fuck">
+
+						<ul class="breadcrumb">
+							<li>
+								<a href="/">首页</a> <span class="divider">/</span>
+							</li>
+							<li>
+								<a href="/videos/">全部视频</a> <span class="divider">/</span>
+							</li>
+							<li class="active">
+								{{video.title}}
+							</li>
+						</ul>
+
+						<!--
+                    	时间：2015-09-13
+                    	描述：video player
+                    -->
+						<div class="video_player">
+							<div>
+								<video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="100%" height="100%" poster="http://video-js.zencoder.com/oceans-clip.png" data-setup="{}">
+									<source src="{{video_url}}" type='video/mp4'></source>
+
+									<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+								</video>
+							</div>
+						</div>
+
+						<div class="share-btn" style="margin-top: 5px;">
+							<div class="Clearfix">
+								<div class="btn-group pull-right">
+
+									<button title="浏览量" type="button" class="disabled btn btn-default" style="color:#548cff;">
+										<span class="fa fa-file-video-o" style="padding-right: 5px;"></span><span class="badge">{{video.watch_num}}</span>
+									</button>
+
+									<button type="button" id="vote_up" class="btn btn-default" style="color:#548cff;" onclick="voteUpAction()">
+										<span class="fa fa-thumbs-o-up"></span>
+										<span id="id-like-num" class="votes_up_num">{{video.like_num}}</span>
+									</button>
+
+									{% if collect_state == '1'%}
+									<button type="button" id="btn_collect_cancle" class="btn btn-default" style="color:#548cff;" value={{collect_state}} onclick="collectCancleAction()">
+										<span id="icon_collect_cancle" class="fa fa-star"></span>
+										<span class="votes_up_num">收藏</span>
+									</button>
+									{% else %}
+									<button type="button" id="btn_collect_cancle" class="btn btn-default" style="color:#548cff;" value={{collect_state}} onclick="collectCancleAction()">
+										<span id="icon_collect_cancle" class="fa fa-star-o"></span>
+										<span class="votes_up_num">收藏</span>
+									</button>
+									{% endif %}
+
+									<button type="button" class="btn btn-default" id="shareout_button">
+										<a class="text-color-999 dropdown-toggle" data-toggle="dropdown" id="shareout_a">
+											<span class="fa fa-share-square-o"></span> 分享</a>
+
+										<ul class="dropdown-menu share_menu dropdown-menu-list shareout" role="menu">
+											<li class="share_btn">
+												<a onclick="wechat_share()">
+													<i class=" icon icon-wechat"></i> &nbsp;微信分享</a>
+											</li>
+										</ul>
+									</button>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<div class="clear" style="margin-top: 50px;"></div>
+						<h4>评论</h4>
+						<hr>
+						<textarea class="form-control" rows="3" id="comment_text" placeholder="" onfocus="if(value=='有没有什么问题要问导师的？'){value='';this.style.color='black';follow_id=-1;}" onblur="if (value ==''){value='有没有什么问题要问导师的？';this.style.color='gray';follow_id=-1;}">有没有什么问题要问导师的？</textarea>
+						<input type="hidden" id="comment_reply" value="0">
+						<br>
+						<div style="height:35px;text-align:right">
+							<button type="button" class="btn btn-primary" id="addcomment" onclick="add_comment()">提交</button>
+						</div>
+						<div id="comments" class="comment">
+							<h4>全部评论&nbsp;&nbsp;<span class="small"> 共<span id="comments_sumer"> {{comments_num}} </span>条</span></h4>
+							<div class="comment_many">
+								<div class="comment-lists">
+
+									{% for comment in comments %}
+									<div class="comment-item" style="padding-bottom:5px;">
+										<div class="mod-head">
+											<a class="anchor"></a>
+											<!-- 用户头像 -->
+											<div class="aw-user-img aw-border-radius-5">
+												<a href="">
+													<img style="width: 100%; height: 100%;" src={{comment.user_pic}} alt=""></a>
+											</div>
+											<!-- end 用户头像 -->
+											<div class="title">
+												<a class="aw-user-name" href="">{{comment.user_name}}</a> •
+												<span style="margin-top:5px;">{{comment.release_date}}</span>
+
+												<a id="id-comment-{{comment.id}}" data-comment-id={{comment.id}} data-comment-name={{comment.user_name}} class="comment_btn" href="javascript:void(0)" onclick="replay(this)">
+													<span class="fa fa-comments-o" style="color:#00458a;"></span> 回复
+												</a>
+											</div>
+										</div>
+
+										<div class="mod-body clearfix">
+											<!-- 评论内容 -->
+											{{comment.comment}}
+											<!-- end 评论内容 -->
+											<div class="meta clearfix">
+											</div>
+										</div>
+									</div>
+									{% endfor %}
+
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</body>
+
+</html>

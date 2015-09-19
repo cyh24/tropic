@@ -141,6 +141,8 @@ def handle_uploaded_photo(path, f):
 
 
 def checkMobile(request):
+    return True
+
     try:
         userAgent = request.META['HTTP_USER_AGENT']
         print ""

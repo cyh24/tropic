@@ -1,0 +1,131 @@
+<html>
+
+	<head>
+		{% include "mobile/include.html"%}
+		<link rel="stylesheet" href="/static/css/mobile/space.css" />
+
+	</head>
+	
+	<script>
+		function delete_record(self){
+			var video_id = document.getElementById(self.id).getAttribute('data-video-id')
+
+			$.ajax({
+				url: "/del-history/",
+				type: "GET",
+				dataType: "json",
+				data: {
+					video_id: video_id,
+				},
+				success: function(obj) {
+					document.getElementById('id-show-' + video_id.toString()).style.display="none";
+				}
+			});
+		}
+	</script>
+
+	<body>
+		{% include "mobile/header.html"%}
+
+		<div style="">
+			<nav class="banner">
+				<div class="banner-div">
+					<div class="banner__info">
+						<div class="banner__img"><img src='{{account.user_pic}}' id="userPic"></div>
+						<p class="banner__name">{{account.nickname}}</p>
+					</div>
+
+					<ul class="banner__nav">
+						<li class="banner__item banner__item--management" >
+							<a class="banner__link" href="/space/" data-jump="management">
+								<p id="js-management-total" class="banner__count">{{history_num}}</p>
+								<p class="banner__word">历史记录</p>
+							</a>
+						</li>
+						<li class="banner__item banner__item--fav">
+							<a class="banner__link" href="/space/collect/" data-jump="fav">
+								<p id="js-fav-total" class="banner__count">{{collect_num}}</p>
+								<p class="banner__word">收藏</p>
+							</a>
+						</li>
+						<li class="banner__item banner__item--record">
+							<a class="banner__link" href="/space/paid/" data-jump="record">
+								<p id="js-record-total" class="banner__count">{{paid_num}}</p>
+								<p class="banner__word">已购买</p>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+
+			<ul class="section-list">
+
+				<li style="display: list-item;" id="js-section-record-list" class="section">
+					<div class="list-wrapper">
+						<ul id="js-record-list" class="course-list list-view">
+
+							{% if v_num > 0%} 
+								{% for v in videos%}
+								<li class="course border-top border-bottom" id="id-show-{{v.id}}" >
+									<!--<p class="course__status-bar border-bottom ">已看至第1节，共10节</p>-->
+									<a href="/videos/play/?video-id={{v.id}}">
+									<div class="course__cnt border-bottom">
+										<div class="course__cover i-play" style="background-image:url({{v.logo_img}})" > </div>
+										<div class="course__info">
+											<h3 class="course__title">{{v.title}}</h3>
+											<p>
+												{% if v.money <= 0 %} 
+													<span class="course__price course__price--free"> 免费 </span>
+												{% else %}
+													<span class="course__price course__price">  ¥{{v.money}}  </span> 
+												{% endif %}
+													<span class="course__sep">|</span><span class="course__agency">{{v.teacher_name}}</span>
+											</p>
+										</div>
+									</div>
+									</a>
+									{% if v.money <= 0.0 %}
+									<div class="course__btn-group">
+										<button class="course__btn " data-video-id='{{v.id}}' id="btn_delete_record_{{v.id}}" onclick="delete_record(this)">删除记录</button>		
+									</div>
+									{% else %}
+									<div class="course__btn-group" >
+										<a href="/videos/play/?video-id={{v.id}}">
+										<button class="course__btn orange" data-operation="pay">去付款</button>
+										</a>
+										<button class="course__btn " data-video-id='{{v.id}}' id="btn_delete_record_{{v.id}}" onclick="delete_record(this)">删除记录</button>
+									</div>
+									{% endif %}
+								</li>
+								
+								{% endfor%} 
+							{% else %} 
+							<li class="course border-top border-bottom">
+								<div class="uncourse">
+									<p>暂无任何收藏</p>
+								</div>
+							</li>
+							{% endif %}
+							
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="pagination" >
+			<ul>
+				<li >
+					<a href="/space/collect/?page={{pre_page}}" style="width: 75px;">上一页</a>
+				</li>
+				<li>
+					<a href="/space/collect/?page={{cur_page}}" style="width: 60px;">第 {{cur_page}} 页</a>
+				</li>
+				<li>
+					<a href="/space/collect/?page={{after_page}}" style="width: 75px">下一页</a>
+				</li>
+			</ul>
+		</div>
+	</body>
+
+</html>

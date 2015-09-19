@@ -1,0 +1,138 @@
+<html>
+
+	<head>
+		{% include "mobile/include.html"%}
+		
+		<link rel="stylesheet" type="text/css" href="/static/css/mobile/videos.css">
+			<link rel="stylesheet" type="text/css" href="/static/css/txkt/common.css">
+	</head>
+
+	<body>
+		
+		{% include "mobile/header.html"%}
+		<div class="media" style="margin-top: 42px;">
+			<div class="sort-nav sort-nav-sml clearfix">
+						<dl class="sort-nav-order sort-nav-order-my">
+                            {% if cur == None %}
+                            <dd id="auto-test-2"><a href="/videos/" class="cur" >综合</a>
+							</dd>
+                            {% else %}
+							<dd id="auto-test-2"><a href="/videos/" class="" >综合</a>
+							</dd>
+                            {% endif %}
+
+                            {% if cur == 'new' %}
+							<dd id="auto-test-4"><a href="/videos/?order_by=new" class="cur" >最新</a>
+							</dd>
+                            {% else %}
+							<dd id="auto-test-4"><a href="/videos/?order_by=new" class="" >最新</a>
+							</dd>
+                            {% endif %}
+
+                            <!--{% if cur == 'like' %}
+							<dd id="auto-test-5"><a href="/videos/?order_by=like" class="cur" >评分</a>
+							</dd>
+                            {% else %}
+							<dd id="auto-test-5"><a href="/videos/?order_by=like" class="" >评分</a>
+							</dd>
+                            {% endif %}-->
+
+                            {% if cur == 'popular' %}
+							<dd id="auto-test-6"><a href="/videos/?order_by=popular" class="cur">人气</a>
+							</dd>
+                            {% else %}
+							<dd id="auto-test-6"><a href="/videos/?order_by=popular" class="" >人气</a>
+							</dd>
+                            {% endif %}
+
+                            {% if cur == 'price' %}
+	                            {% if up_down == 'up'%}
+								<dd id="auto-test-17"><a href="/videos/?order_by=price&flag={{up_down}}"
+	                                class="cur" >价格<i class="iconfont i-arrow-top"></i></a>
+								</dd>
+	                            {% else %}
+								<dd id="auto-test-17"><a href="/videos/?order_by=price&flag={{up_down}}"
+	                                class="cur" >价格<i class="iconfont i-arrow-bottom"></i></a>
+								</dd>
+	                            {% endif %}
+                            {% else %}
+								<dd id="auto-test-17"><a href="/videos/?order_by=price&flag={{up_down}}" class="price-item-my " >价格<b class="icon icon-price-unselect pngFix"></b></a>
+								</dd>
+                            {% endif %}
+
+						</dl>
+
+						<dl class="sort-nav-order sort-nav-right">
+							<dd class="video-type"><a class="video-type-item " data-video="zhibo" data-action="look_zhibo" href="/upload/" data-video-val="1">上传视频</a>
+								<!--<a class="video-type-item curr_video" data-video="lubo" data-action="look_lubo" href="/cgi-bin/courseList?mt=1001&amp;show_video=0"
+							data-video-val="0">只看录播</a>-->
+							</dd>
+							<!--<dd id="auto-test-7">
+							<ul class="date-ctrl">
+								<li class="field-start">
+									<input placeholder="开课日期" id="js_start" data-tdw="action=date-click&amp;ver3=1" readonly="1" class="ipt" type="text">
+									<a href="javascript:void(0)" id="js_start_clear" class="clear-btn" title="清空"></a><i class="calendar icon" data-for="js_start"></i>
+								</li>
+							</ul>
+						</dd>-->
+						</dl>
+
+					</div>
+		</div>
+			<ul class="media-body">
+				{% for v in videos%}
+				<a href="/videos/play/?video-id={{v.id}}">
+				<div class="course__cover i-play" style="background-image:url({{v.logo_img}});">
+					<!--<span class="course__cover-audition">免费试听</span>-->
+					<!--<i class="icon-lu"></i>-->
+				</div>
+				</a>
+				<li class="course">
+
+					<h3 class="course__name">{{v.title}}</h3>
+					<h4 class="course__agency">{{v.info}}</h4>
+					<h5 class="course__agency">{{v.teacher_name}}</h5>
+					<p class="course__addition">
+						{% if v.money <= 0.0 %}
+						<span class="course__price free">免费</span>{{v.watch_num}} 观看
+						{% else %}
+						<span class="course__price ">¥{{v.money}}</span>{{v.watch_num}} 观看
+						{% endif %}
+					</p>
+				</li>
+				{% endfor %}
+				<!--<div class="course__cover i-play" style="background-image:url(http://10.url.cn/qqcourse_logo_rn/ajNVdqHZLLAaGXuzyPQpWmwkAUkdAtQeEznPSzDfU4B8S4U5jIaAyIUhmvibP1EvIaX4F5VFrM7s/222);">
+					<i class="icon-lu"></i>
+				</div>
+				<li class="course">
+
+					<h3 class="course__name">室内设计师培训-CAD篇&nbsp;&nbsp;第一章</h3>
+					<h4 class="course__agency">成都艺阁文化</h4>
+					<p class="course__addition">
+						<span class="course__price free">免费</span>5224人观看
+					</p>
+				</li>-->
+
+			</ul>
+
+		</div>
+
+		<div class="pagination" >
+			<ul>
+				<li >
+					<a href="{{get_content}}page={{pre_page}}" style="width: 75px;">上一页</a>
+				</li>
+				<li>
+					<a href="{{get_content}}page={{cur_page}}" style="width: 60px;">第 {{cur_page}} 页</a>
+				</li>
+				<li>
+					<a href="{{get_content}}page={{after_page}}" style="width: 75px">下一页</a>
+				</li>
+			</ul>
+		</div>
+		
+		
+		
+	</body>
+
+</html>

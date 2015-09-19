@@ -32,7 +32,10 @@ def index(request):
     msg = init_msg(request)
 
 
-    return render_to_response('index.html', msg)
+    if checkMobile(request):
+        return render_to_response('mobile/index.html', msg)
+    else:
+        return render_to_response('index.html', msg)
 
 
 
@@ -133,7 +136,10 @@ def videos_ui(request):
 
     msg['interest_videos'] = get_interest_videos()
 
-    return render_to_response('videos/videos.html', msg)
+    if checkMobile(request):
+        return render_to_response('mobile/videos/videos.html', msg)
+    else:
+        return render_to_response('videos/videos.html', msg)
 
 
 @login_required(login_url='/login/')
@@ -248,17 +254,24 @@ def play_ui(request):
 
             # check whether need pay for the play
             is_paid = get_video_state(request.user, video)
-            if (video.money <= 0) or (is_paid):
-                add_watch_history(request.user, video)
 
-                if if_video_collected(request.user, video):
-                    msg['collect_state'] = '1'
-                else:
-                    msg['collect_state'] = '0'
+            add_watch_history(request.user, video)
 
-                return render_to_response('videos/play.html', msg)
+            if if_video_collected(request.user, video):
+                msg['collect_state'] = '1'
             else:
-                return render_to_response('videos/play-prohibited.html', msg)
+                msg['collect_state'] = '0'
+
+            if (video.money <= 0) or (is_paid):
+                if checkMobile(request):
+                    return render_to_response('mobile/videos/play.html', msg)
+                else:
+                    return render_to_response('videos/play.html', msg)
+            else:
+                if checkMobile(request):
+                    return render_to_response('mobile/videos/play-prohibited.html', msg)
+                else:
+                    return render_to_response('videos/play-prohibited.html', msg)
 
         except Exception, e:
             print "error: ", str(e)
@@ -320,7 +333,11 @@ def space_index(request):
         if request.GET['show_del'] == 'True':
             msg['show_del'] = 'True'
 
-    return render_to_response('space/history.html', msg)
+
+    if checkMobile(request):
+        return render_to_response('mobile/space/history.html', msg)
+    else:
+        return render_to_response('space/history.html', msg)
 
 
 @login_required(login_url='/login/')
@@ -332,7 +349,11 @@ def space_collect(request):
         if request.GET['show_del'] == 'True':
             msg['show_del'] = 'True'
 
-    return render_to_response('space/collect.html', msg)
+    if checkMobile(request):
+        return render_to_response('mobile/space/collect.html', msg)
+    else:
+        return render_to_response('space/collect.html', msg)
+
 
 @login_required(login_url='/login/')
 @csrf_exempt
@@ -357,7 +378,10 @@ def space_paid(request):
         if request.GET['show_del'] == 'True':
             msg['show_del'] = 'True'
 
-    return render_to_response('space/paid.html', msg)
+    if checkMobile(request):
+        return render_to_response('mobile/space/paid.html', msg)
+    else:
+        return render_to_response('space/paid.html', msg)
 
 
 def setprofile(request):

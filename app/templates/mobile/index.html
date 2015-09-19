@@ -1,0 +1,50 @@
+<html lang="zh-CN">
+
+	{% include "mobile/include.html"%}
+
+	<body>
+		{% include "mobile/header.html"%}
+		<style>
+			.search-logo {
+				position: absolute;
+				left: 50%;
+				margin-left: -145px;
+				margin-top: -110px;
+			}
+		</style>
+
+		<div class="wrap" style="margin-left: 10%; margin-right: 10%;">
+			<div class="search-logo">
+				<img src="/static/images/title.jpg" />
+			</div>
+		
+			<div class="post-topheader" style="margin-top: 260px;">
+				<div class="container">
+					<ul class="search-category nav nav-pills">
+						<li class="active"><a href="/search?q=">关键词</a>
+						</li>
+                        <!--
+						<li><a href="">类别</a>
+						</li>
+						<li><a href="">标签</a>
+						</li>
+						<li><a href="">简介</a>
+						</li>
+                        -->
+					</ul>
+					<form action="/search/" class="row" style="width: ; margin-top: 10px;">
+						<div class="col-md-9">
+							<input class="input-lg form-control" type="text" name="title" value="" placeholder="输入关键字 (名称、类别、关键词) 搜索">
+						</div>
+						<div class="col-md-2">
+							<button type="submit" class="btn btn-primary btn-lg btn-block">搜索</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+		</div>
+
+	</body>
+
+</html>
