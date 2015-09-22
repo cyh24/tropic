@@ -47,14 +47,14 @@
 		}
 
 		function delete_unpay(self) {
-			order_id = document.getElementById(self.id).getAttribute('data-order-id')
+			var video_id = document.getElementById(self.id).getAttribute('data-video-id')
 
 			$.ajax({
                 url: "/del-unpay/",
                 type: "GET",
   				dataType: "json",
                 data: {
-                	order_id: order_id,
+                	video_id: video_id,
                 },
                 success: function(obj){
                     window.location.href="/space/shopping-cart/?show_del=True";
@@ -229,7 +229,7 @@
 										<span class="course-num">  &nbsp;,&nbsp;{{v.like_num}} 赞  </span>
 									</div>
 									</div>
-									<a href="javascript:void(0)" id="id-show-delete-{{v.id}}" class="delete_video" onclick="delete_unpay(this)" data-order-id={{v.id}} style="display: none;"></a>
+									<a href="javascript:void(0)" id="id-show-delete-{{v.id}}" class="delete_video" onclick="delete_unpay(this)" data-video-id={{v.id}} style="display: none;"></a>
 								</li>
 								{% endfor %}
 

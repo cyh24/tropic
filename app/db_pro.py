@@ -256,6 +256,8 @@ def get_search_videos(request):
             q_title = request.GET['title'].encode('utf8')
             videos = Video.objects.filter(Q(title__icontains=q_title)|Q(kind_str__icontains=q_title)|Q(tags_str__icontains=q_title)).all()
             return videos
+        else:
+            return Video.objects.all()
 
     except Exception, e:
         printError(e)
@@ -490,7 +492,6 @@ def get_account_from_user(user):
     account = None
     try:
         account = Account.objects.filter(user=user).all()
-        print getLen(account)
         if getLen(account) < 1:
             account = create_account_given_user(user)
         else:
@@ -714,8 +715,6 @@ def get_unpay(user):
 def unpay_check_video_alive(unpay_order):
     try:
         for order in unpay_order:
-            print order.id
-            
             if getLen(order.videos.all()) == 0:
                 order.pay_state = -1
                 order.save()
@@ -734,15 +733,19 @@ def get_unpay_num(user):
 
     return 0
 
-def del_unpay(user, order_id):
+def del_unpay(user, video_id):
     try:
         account = get_account_from_user(user)
-        unpay_order = Order.objects.filter(account=account).all().filter(id=order_id).all().filter(pay_state=1).all()[0]
+        unpay_order = Order.objects.filter(account=account).all().filter(pay_state=1).all()
+        for order in unpay_order:
+            if video_id == order.videos.all()[0].id:
+                unpay_order = order
+                break
         unpay_order.pay_state = -1
         unpay_order.save()
 
     except Exception, e:
-        printError(e)
+        printError("del_unpay: " + str(e))
 
     return False
 

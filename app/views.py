@@ -197,6 +197,7 @@ def search_result(request):
 
     #videos, msg = get_order_videos(request, msg)
     videos = get_search_videos(request)
+    videos, msg = get_order_videos(request, videos, msg)
 
     total_page = (getLen(videos)+PAGE_SIZE-1)/PAGE_SIZE
     subVideos, cur_page = paginator_show(request, videos, PAGE_SIZE)
@@ -210,6 +211,12 @@ def search_result(request):
     msg['pages_after']  = pages_after
     msg['pre_page']   = cur_page - 1
     msg['after_page'] = cur_page + 1
+
+    get_content = "/search/?"
+    for key in request.GET:
+        if key != "page":
+            get_content += "%s=%s&"%(key, request.GET[key])
+    msg['get_content'] = get_content
 
     msg['interest_videos'] = get_interest_videos()
 
@@ -429,10 +436,10 @@ def collect_del(request):
 def unpay_del(request):
     json = {}
 
-    if request.GET.has_key('order_id'):
+    if request.GET.has_key('video_id'):
         try:
-            order_id = int(request.GET['order_id'])
-            del_unpay(request.user, order_id)
+            video_id = int(request.GET['video_id'])
+            del_unpay(request.user, video_id)
         except Exception, e:
             printError(e)
 

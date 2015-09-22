@@ -141,8 +141,6 @@ def handle_uploaded_photo(path, f):
 
 
 def checkMobile(request):
-    return True
-
     try:
         userAgent = request.META['HTTP_USER_AGENT']
         print ""
@@ -168,7 +166,7 @@ def checkMobile(request):
     print "...User from pc...\n"
 
     return False
-'''
+
 def get_qrcode(url):
     try:
         img = qrcode.make(url)
@@ -183,7 +181,7 @@ def get_qrcode(url):
         printError(e)
 
     return None
-'''
+
 def remove_file(filename):
     try:
         filename = "/home/www/tropic/app/"+filename

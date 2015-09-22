@@ -9,18 +9,23 @@
 								<a data-target=".navbar-responsive-collapse" data-toggle="collapse" class="btn btn-navbar"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
 								<a href="/videos/" class="brand">回归线</a>
 								<div class="nav-collapse collapse navbar-responsive-collapse">
+                                    <a href="/index/" class="brand">
+									<i class="fa fa-search" style="margin-top:2px;margin-left:30px;font-size:16px">搜索视频</i>
+                                    </a>
 
+                                    <!--
 									<form class="aw-search-box navbar-form navbar-left" role="search" action="/search/" style="float: left;">
 										<div class="form-group" style="position:relative">
-											<!--<input type="text" class="form-control " placeholder="搜索" name="title" style="width:50px;">
-											<input type="hidden" value="1" name="category">-->
+											<input type="text" class="form-control " placeholder="搜索" name="title" style="width:50px;">
+											<input type="hidden" value="1" name="category">
 											<span title="搜索" id="global_search_btns" onclick="">
-												<i class="fa fa-search" style="margin-top: 12px; margin-left: 10px;"></i>
+												<i class="fa fa-search" style="margin-top: 12px; "></i>
 											</span>
 											<input type="text" class="form-control " placeholder="搜索" name="title" style="background-color: #f8f8f8; margin-top: -2px; width:70px;">
 											
 										</div>
 									</form>
+                                    -->
 									
 									<ul class="nav pull-right">
 										<li class="divider-vertical">
@@ -30,11 +35,11 @@
 											<ul class="dropdown-menu">
 
 												{% if login_state == False %}
-												<li id="unlogin" data-toggle="modal" data-target="/login/">
+												<li class="ng_btn" id="unlogin" data-toggle="modal" data-target="/login/">
 													<a href="/login/">登陆</a>
 												</li>
 
-												<li id="unregeister" data-toggle="modal" data-target="#register">
+												<li class="ng_btn" id="unregeister" data-toggle="modal" data-target="#register">
 													<a href="/register/">注册</a>
 												</li>
 
@@ -44,17 +49,17 @@
 										</li>-->
 												<!--<li><a href="/space/shopping-cart"><i class="icon icon-cart"></i> &nbsp;&nbsp;购 物 车</a>
 												</li>-->
-												<li><a href="/space/"><i class="icon icon-draft"></i> &nbsp;&nbsp;历史记录</a>
+												<li class="ng_btn"><a href="/space/"><i class="icon icon-draft"></i> &nbsp;&nbsp;历史记录</a>
 												</li>
-												<li><a href="/space/collect"><i class="icon icon-draft"></i> &nbsp;&nbsp;收藏课程</a>
+												<li class="ng_btn"><a href="/space/collect"><i class="icon icon-draft"></i> &nbsp;&nbsp;收藏课程</a>
 												</li>
-												<li><a href="/space/paid"><i class="icon icon-attach"></i> &nbsp;&nbsp;已买课程</a>
+												<li class="ng_btn"><a href="/space/paid"><i class="icon icon-attach"></i> &nbsp;&nbsp;已买课程</a>
 												</li>
 
 												<!--<li><a href="/user/setprofile/"><i class="icon icon-setting"></i> &nbsp;&nbsp;个人设置</a>
 												</li>-->
 
-												<li id="logout"><a href="/logout/"><i class="icon icon-logout"></i> &nbsp;&nbsp;退 出</a>
+												<li class="ng_btn" id="logout"><a href="/logout/"><i class="icon icon-logout"></i> &nbsp;&nbsp;退 出</a>
 												</li>
 
 												{% endif %}
@@ -73,3 +78,10 @@
 		</div>
 	</div>
 </div>
+
+<style>
+.ng_btn{
+    height:35px;
+    text-align:center;
+}
+</style>
