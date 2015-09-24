@@ -7,7 +7,7 @@ from models import *
 from config import *
 
 from django.db import transaction
-from wxpay import get_wxpay_qrcode
+from wxpay import *
 import datetime
 from django.db.models import Q
 
@@ -312,6 +312,7 @@ def if_video_collected(user, video):
     try:
         if user == None:
             return False
+
         account = get_account_from_user(user)
         collect_videos = get_collect_from_account(account)
         if collect_videos == None:
@@ -325,7 +326,7 @@ def if_video_collected(user, video):
                     return True
 
     except Exception, e:
-        printError(e)
+        printError("if_video_collected: " + e)
 
     return False
 
@@ -500,6 +501,45 @@ def get_account_from_user(user):
         printError(e)
     return account
 
+def get_openid_from_user(user):
+    open_id = ""
+    try:
+        account = get_account_from_user(user)
+        open_id = account.openid
+        
+    except Exception, e:
+        printError("get_openid_from_user: " + str(e))
+
+    return open_id
+
+def paydetail(request):
+    """获取支付信息"""
+    openid = get_openid_from_user(request.user)
+    print openid
+
+    money = 1
+
+    jsApi = JsApi_pub()
+    unifiedOrder = UnifiedOrder_pub()
+    unifiedOrder.setParameter("openid",openid) #商品描述########################
+
+    unifiedOrder.setParameter("body","Ipad mini3  128G") #商品描述
+    timeStamp = time.time()
+    out_trade_no = "{0}{1}".format(getRandomStr(), int(timeStamp*100))
+    unifiedOrder.setParameter("out_trade_no", out_trade_no) #商户订单号
+    unifiedOrder.setParameter("total_fee", str(money)) #总金额
+    unifiedOrder.setParameter("notify_url", WxPayConf_pub.NOTIFY_URL) #通知地址 
+    unifiedOrder.setParameter("trade_type", "JSAPI") #交易类型
+    unifiedOrder.setParameter("attach", "6666") #附件数据，可分辨不同商家(string(127))
+    try:
+        prepay_id = unifiedOrder.getPrepayId()
+        jsApi.setPrepayId(prepay_id)
+        jsApiParameters = jsApi.getParameters()
+    except Exception as e:
+        print("paydetail: " + str(e))
+    else:
+        print jsApiParameters
+        return HttpResponse(jsApiParameters)
 
 def create_collect_given_account(account):
     if account == None:
@@ -526,7 +566,7 @@ def get_collect_from_account(account):
             collect_videos = collect_videos[0]
 
     except Exception, e:
-        printError(e)
+        printError("get_collect_from_account: " + str(e))
 
     return collect_videos
 
@@ -545,13 +585,15 @@ def get_video_state(user, video):
         else:
             for o in user_orders:
                 user_videos = o.videos.all()
+                if getLen(user_videos) == 0:
+                    break
                 user_video = user_videos[0]
                 if (user_video.id == video.id) and (o.pay_state == 2):
                     is_paid = True
                     break
 
     except Exception, e:
-       printError(e)
+        printError("get_video_state: " + str(e))
 
     return is_paid
 
@@ -589,7 +631,7 @@ def add_watch_history(user, video):
         return True
 
     except Exception, e:
-        printError(e)
+        printError("add_watch_history: " + str(e))
 
     return False
 

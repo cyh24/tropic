@@ -84,18 +84,6 @@
 										</div>
 									</div>
 									</a>
-									{% if v.money <= 0.0 %}
-									<div class="course__btn-group">
-										<button class="course__btn " data-video-id='{{v.id}}' id="btn_delete_record_{{v.id}}" onclick="delete_record(this)">删除记录</button>		
-									</div>
-									{% else %}
-									<div class="course__btn-group" >
-										<a href="/videos/play/?video-id={{v.id}}">
-										<button class="course__btn orange" data-operation="pay">去付款</button>
-										</a>
-										<button class="course__btn " data-video-id='{{v.id}}' id="btn_delete_record_{{v.id}}" onclick="delete_record(this)">删除记录</button>
-									</div>
-									{% endif %}
 								</li>
 								
 								{% endfor%} 

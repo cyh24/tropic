@@ -6,6 +6,7 @@ from qiniu_pro import *
 from wechat_pro import *
 
 
+from wxpay import *
 def test(request):
     print "TEST"
     msg = init_msg(request)
@@ -14,7 +15,6 @@ def test(request):
 
 
 def index(request):
-    #wx_knife_pay(request)
     try:
         wechat_user = WxAuth.get_user(request)
 
@@ -220,13 +220,17 @@ def search_result(request):
 
     msg['interest_videos'] = get_interest_videos()
 
-    return render_to_response('videos/search_result.html', msg)
+    
+    if checkMobile(request):
+        return render_to_response('mobile/videos/search_result.html', msg)
+    else:
+        return render_to_response('videos/search_result.html', msg)
 
 @login_required(login_url='/login/')
 @csrf_exempt
 def play_ui(request):
     msg = init_msg(request)
-
+    msg['interest_videos'] = get_interest_videos()
     if request.GET.has_key('video-id'):
         try:
             video_id = int(request.GET['video-id'])
@@ -256,7 +260,7 @@ def play_ui(request):
                 msg['comments'] = new_comments
                 msg['comments_num'] = getLen(comments)
             except Exception, e:
-                printError(e)
+                printError("play_ui: " + str(e))
 
 
             # check whether need pay for the play
@@ -281,7 +285,7 @@ def play_ui(request):
                     return render_to_response('videos/play-prohibited.html', msg)
 
         except Exception, e:
-            print "error: ", str(e)
+            print "play_ui: ", str(e)
     
     
     return render_to_response('videos/play-error.html', msg)
@@ -628,12 +632,11 @@ def update_profile(request):
 def update_pic(request):
     try: 
         path = None
+        path_pic = "/static/storage/logo-images/150827142149-KPg1-tt.png"
         if request.FILES.has_key('pic'):
             path = USER_PIC_FOLD + getRandomStr() + "-" + request.FILES['pic'].name
             handle_uploaded_photo(path, request.FILES['pic'])
-        
-
-        path_pic = path[3:]
+            path_pic = path[3:]
 
         account = get_account_from_user(request.user)
         account.user_pic = path_pic

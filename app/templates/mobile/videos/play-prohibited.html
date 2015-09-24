@@ -155,6 +155,36 @@
 					document.getElementById('qrcodeWrap').style.display = "none";
 				}
 			})
+
+
+
+        function pay(){
+            $momey = 0.01;
+            $.post("/paydetail/",
+                {
+                    money: $momey
+                },
+                function(data){
+                if(data){
+                    var jsonobj = eval('('+data+')');
+                    WeixinJSBridge.invoke('getBrandWCPayRequest', {
+                        "appId" : jsonobj.appId, //
+                        "timeStamp" : jsonobj.timeStamp, //
+                        "nonceStr" : jsonobj.nonceStr, //
+                        "package" : jsonobj.package,//
+                        "signType" : "MD5", //
+                        "paySign" : jsonobj.paySign //
+                    },
+                    function(res){ 
+                        if(res.err_msg == "get_brand_wcpay_request: ok"){}
+
+                    });
+                }
+                }
+            );
+        }
+
+        
 	</script>
 
 	<body>
@@ -197,7 +227,7 @@
 				</div>
 				<div class="tips-tool">
 
-					<a onclick="goto_pay()"  href="#" title="去付款" class="btn-7 modal-accept">去付款</a>
+					<a onclick="pay()"  href="#" title="去付款" class="btn-7 modal-accept">去付款</a>
 					<a  href="#" title="取消" onclick="hide_pay()" class="btn-8 modal-cancel">取消</a>
 				</div>
 				<a  href="#" onclick="hide_pay()" class="modal-close btn-close" title="关闭">×</a>
@@ -281,6 +311,7 @@
 									</button>
 									{% endif %}
 
+                                    <!--
 									<button type="button" class="btn btn-default" id="shareout_button">
 										<a class="text-color-999 dropdown-toggle" data-toggle="dropdown" id="shareout_a">
 											<span class="fa fa-share-square-o"></span> 分享</a>
@@ -292,6 +323,7 @@
 											</li>
 										</ul>
 									</button>
+                                    -->
 
 								</div>
 

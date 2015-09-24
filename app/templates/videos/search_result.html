@@ -14,11 +14,11 @@
 				<div class="main-left">
 					<div class="sort-nav sort-nav-sml clearfix">
 						<dl class="sort-nav-order sort-nav-order-my">
-                            {% if cur == None %}
-                            <dd id="auto-test-2"><a href="{{get_content}}page={{cur_page}}" class="cur" >综合排序</a>
+                            {% if cur == None or cur == 'customer'%}
+                            <dd id="auto-test-2"><a href="{{get_content}}page={{cur_page}}&order_by=customer" class="cur" >综合排序</a>
 							</dd>
                             {% else %}
-                            <dd id="auto-test-2"><a href="{{get_content}}page={{cur_page}}" class="" >综合排序</a>
+                            <dd id="auto-test-2"><a href="{{get_content}}page={{cur_page}}&order_by=customer" class="" >综合排序</a>
 							</dd>
                             {% endif %}
 

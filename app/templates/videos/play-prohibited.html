@@ -444,28 +444,30 @@
 					<br>
 					<h4 style="margin-top:-1%;">相关视频</h4>
 					<div>
+                        {% for v in interest_videos%}
 						<div class="relate-item">
 							<a href="">
-								<img class="video-img" alt="" src="/static/storage/logo-images/150826142843-m8Hu-sdf.png">
+                                <img class="video-img" alt="" src={{v.logo_img}}>
 								<div class="mask" style="display: none;"></div>
 								<i class="icon_playvideo" style="display: none;"></i>
 
-								<div style="margin-top: 10px;text-align:center;">阿里巴巴面试题精讲</div>
+                                <div style="margin-top: 10px;text-align:center;">{{v.title}}</div>
 
 							</a>
 
 							<!--<div class="row clearfix" style="margin-top:5px; font-size:12px;height:10px;">-->
 							<div class="col-md-6 col-xs-6" style="text-align:left;">
-								<i class="fa fa-clock-o"></i>&nbsp;39分钟 </div>
+                                <i class="fa fa-clock-o"></i>&nbsp;{{v.video_time}}分钟 </div>
 							<div class="col-md-6 col-xs-6" style="text-align:right;">
-								<i class="fa fa-play-circle-o"></i>&nbsp;16544 </div>
+                                <i class="fa fa-play-circle-o"></i>&nbsp;{{v.watch_num}} </div>
 							<!--</div>-->
-
 						</div>
+                        {% endfor %}
 					</div>
 				</div>
 			</div>
 		</div>
+
 
 	</body>
 

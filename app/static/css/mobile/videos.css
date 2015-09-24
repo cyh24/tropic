@@ -239,3 +239,10 @@ html,body{
 	position: relative;
 	top: -1px
 }
+
+.uncourse {
+  font-size: 18px;
+  color: #c6c7c9;
+  text-align: center;
+}
+

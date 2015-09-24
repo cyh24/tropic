@@ -1,6 +1,9 @@
 <html lang="zh-CN">
 
+	<head>
 	{% include "mobile/include.html"%}
+	<link rel="stylesheet" type="text/css" href="/static/css/mobile/videos.css">
+	</head>
 
 	<body>
 		{% include "mobile/header.html"%}
@@ -13,31 +16,25 @@
 			}
 		</style>
 
-		<div class="wrap" style="margin-left: 10%; margin-right: 10%;">
+		<div class="wrap" style="margin-left: 5%; margin-right: 5%;">
+            <!--
 			<div class="search-logo">
 				<img src="/static/images/title.jpg" />
 			</div>
+            -->
 		
-			<div class="post-topheader" style="margin-top: 260px;">
+			<div class="post-topheader" style="margin-top: 60px;">
 				<div class="container">
-					<ul class="search-category nav nav-pills">
-						<li class="active"><a href="/search?q=">关键词</a>
+					<ul class="search-category nav nav-pills" style="">
+						<li class="active"><a href="javascript:void(0)">关键词</a>
 						</li>
-                        <!--
-						<li><a href="">类别</a>
-						</li>
-						<li><a href="">标签</a>
-						</li>
-						<li><a href="">简介</a>
-						</li>
-                        -->
 					</ul>
-					<form action="/search/" class="row" style="width: ; margin-top: 10px;">
+					<form action="/search/" class="row" style="width: ; margin-top: -10px;">
 						<div class="col-md-9">
-							<input class="input-lg form-control" type="text" name="title" value="" placeholder="输入关键字 (名称、类别、关键词) 搜索">
+							<input style="height:40px; width:100%;" class="input-lg form-control" type="text" name="title" value="" placeholder="输入关键字 (名称、类别、关键词) 搜索">
 						</div>
 						<div class="col-md-2">
-							<button type="submit" class="btn btn-primary btn-lg btn-block">搜索</button>
+							<button style="height:40px" type="submit" class="btn btn-primary btn-lg btn-block">搜索</button>
 						</div>
 					</form>
 				</div>

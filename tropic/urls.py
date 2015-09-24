@@ -29,6 +29,8 @@ urlpatterns = patterns('',
     url(r'^login-do/', 'app.views.login_do'),
     url(r'^logout/', 'app.views.log_out'),
 
+    url(r'^register/', 'app.views.wechat_login'),
+
     url(r'^upload/', 'app.views.upload_ui'),
     url(r'^upload-post/', 'app.db_pro.upload_post'),
     url(r'^uptoken/', 'app.qiniu_pro.uptoken'),
@@ -74,7 +76,7 @@ urlpatterns = patterns('',
     url(r'^pay_result/$', 'app.wxpay.pay_result'),
 
     url(r'^jsapi_pay/$', 'app.wxpay.jsapi_pay'), 
-    url(r'^paydetail/$', 'app.wxpay.paydetail'), 
+    url(r'^paydetail/$', 'app.db_pro.paydetail'), 
 
     
     url(r'^delete-video/$', 'app.views.delete_video'), 
