@@ -75,7 +75,7 @@ urlpatterns = patterns('',
     url(r'^ajax_check/$', 'app.wxpay.check_pay'), 
     url(r'^pay_result/$', 'app.wxpay.pay_result'),
 
-    url(r'^jsapi_pay/$', 'app.wxpay.jsapi_pay'), 
+    url(r'^jsapi_pay/$', 'app.views.play_ui'), 
     url(r'^paydetail/$', 'app.db_pro.paydetail'), 
 
     

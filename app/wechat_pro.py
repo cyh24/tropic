@@ -4,18 +4,16 @@ from common import *
 
 class WechatAuth():
     def __init__(self):
-        scope = ("snsapi_login",)
-
-        self.PC_api = WeixinAPI(appid = APP_ID, 
-                                app_secret   = APP_SECRET,
+        self.PC_api = WeixinAPI(appid = PC_APP_ID, 
+                                app_secret   = PC_APP_SECRET,
                                 redirect_uri = REDIRECT_URL)
 
-        self.Mobile_api = WeixinMpAPI(appid = APP_ID, 
-                                    app_secret   = APP_SECRET,
+        self.Mobile_api = WeixinMpAPI(appid = WX_APP_ID, 
+                                    app_secret   = WX_APP_SECRET,
                                     redirect_uri = REDIRECT_URL)
 
-        self.pc_auth_url     = self.PC_api.get_authorize_url(scope=scope)
-        self.mobile_auth_url = self.Mobile_api.get_authorize_url(scope=scope)
+        self.pc_auth_url     = self.PC_api.get_authorize_url(scope=(PC_SCOPE,))
+        self.mobile_auth_url = self.Mobile_api.get_authorize_url(scope=(WX_SCOPE,))
 
 
     def get_authorize_url(self, request):
@@ -37,6 +35,7 @@ class WechatAuth():
                 auth_info = self.Mobile_api.exchange_code_for_access_token(code=code)
                 userApi = WeixinMpAPI(access_token=auth_info['access_token'])
                 user_info = userApi.user(openid=auth_info['openid'])
+                print auth_info, user_info
                 return user_info
             else:
                 auth_info = self.PC_api.exchange_code_for_access_token(code=code)

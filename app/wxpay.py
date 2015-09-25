@@ -115,9 +115,9 @@ def payback(request):
 
     return  HttpResponse(notify.returnXml())
 
-@sns_userinfo
+#@sns_userinfo
 def jsapi_pay(request):
     response = render_to_response("WxPay/JsPay.html")
-    response.set_cookie("openid", Helper.sign_cookie(request.openid))
+    #response.set_cookie("openid", Helper.sign_cookie(request.openid))
     return response
 

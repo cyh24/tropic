@@ -515,7 +515,7 @@ def get_openid_from_user(user):
 def paydetail(request):
     """获取支付信息"""
     openid = get_openid_from_user(request.user)
-    print openid
+    #openid = request.openid
 
     money = 1
 
@@ -523,7 +523,7 @@ def paydetail(request):
     unifiedOrder = UnifiedOrder_pub()
     unifiedOrder.setParameter("openid",openid) #商品描述########################
 
-    unifiedOrder.setParameter("body","Ipad mini3  128G") #商品描述
+    unifiedOrder.setParameter("body","Ipad mini3 128G") #商品描述
     timeStamp = time.time()
     out_trade_no = "{0}{1}".format(getRandomStr(), int(timeStamp*100))
     unifiedOrder.setParameter("out_trade_no", out_trade_no) #商户订单号
@@ -532,11 +532,14 @@ def paydetail(request):
     unifiedOrder.setParameter("trade_type", "JSAPI") #交易类型
     unifiedOrder.setParameter("attach", "6666") #附件数据，可分辨不同商家(string(127))
     try:
+       # result = unifiedOrder.getResult()
+       # print result
+        
         prepay_id = unifiedOrder.getPrepayId()
         jsApi.setPrepayId(prepay_id)
         jsApiParameters = jsApi.getParameters()
     except Exception as e:
-        print("paydetail: " + str(e))
+        printError("paydetail: " + str(e))
     else:
         print jsApiParameters
         return HttpResponse(jsApiParameters)

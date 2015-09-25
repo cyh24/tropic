@@ -159,10 +159,10 @@
 
 
         function pay(){
-            $momey = 0.01;
+            $money = 0.01;
             $.post("/paydetail/",
                 {
-                    money: $momey
+                    money: $money
                 },
                 function(data){
                 if(data){
@@ -176,8 +176,10 @@
                         "paySign" : jsonobj.paySign //
                     },
                     function(res){ 
-                        if(res.err_msg == "get_brand_wcpay_request: ok"){}
-
+                        alert(res.err_msg)
+                        if(res.err_msg == "get_brand_wcpay_request: ok"){
+                        
+                        }
                     });
                 }
                 }

@@ -52,14 +52,13 @@ def sns_userinfo_callback(callback=None):
                     current = "http://"+ request.get_host() + request.get_full_path()
                     return redirect(WeixinHelper.oauth2(current))
                 else:
-                    #data = json.loads(WeixinHelper.getAccessTokenByCode(code))
-                    #print data
                     data = json.loads(WeixinHelper.getAccessTokenByCode(code))
                     #print data
                     try:
                         access_token, openid, refresh_token = data["access_token"], data["openid"], data["refresh_token"]
                         #WeixinHelper.refreshAccessToken(refresh_token)
                         userinfo = json.loads(WeixinHelper.getSnsapiUserInfo(access_token, openid))
+                        print userinfo
                     except Exception, e:
                         print (e)
                     else:
