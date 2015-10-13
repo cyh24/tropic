@@ -12,26 +12,25 @@ import datetime
 from django.db.models import Q
 
 def upload_post(request):
-    if request.method == "POST":
-        for x in request.POST:
-            print x, request.POST[x]
-
-    if request.FILES.has_key('logo'):
-        path = LOGO_FOLD + getRandomStr() + "-" + request.FILES['logo'].name
-        handle_uploaded_photo(path, request.FILES['logo'])
-        print "logo: ", path
-
+    msg = {'state': 'fail'}
     try:
+        if request.method == "POST":
+            for x in request.POST:
+                print x, request.POST[x]
+
+        if request.FILES.has_key('logo'):
+            path = LOGO_FOLD + getRandomStr() + "-" + request.FILES['logo'].name
+            handle_uploaded_photo(path, request.FILES['logo'])
+            print "logo: ", path
+
         path_logo = path[3:]
         if save_video(request, path_logo) == True:
-            return HttpResponse("OK.")
-        else:
-            return HttpResponse("Fail.") 
+            msg['state'] = 'ok'
     except Exception, e:
         print str(e)
-        return HttpResponse("Fail.") 
+        #return HttpResponse("Fail.") 
     
-    return HttpResponse("OK") 
+    return render_to_response('info.html', msg)
 
 def update_post(request):
     if request.method == "POST":
@@ -410,18 +409,25 @@ def add_comment(request):
     except Exception, e:
         printError(e)
 
-def create_account_given_wx(wx_user):
+def create_account_given_wx(request, wx_user):
     try:
-        open_id = wx_user['openid']
+        wx_unionid = wx_user['unionid']
         with transaction.atomic():
             user = User()
-            user.username = open_id
-            user.set_password("Z!"+open_id+"1!")
+            user.username = wx_unionid
+            user.set_password("Z!"+wx_unionid+"1!")
             user.save()
         
             account = Account()
             account.user = user
-            account.openid = open_id
+            account.wx_unionid = wx_unionid
+            if checkMobile(request) == True:
+                account.wx_wx_openid = wx_user['openid']
+            else:
+                account.wx_pc_openid = wx_user['openid']
+
+            account.nickname = wx_user['nickname']
+
             account.user_pic = wx_user['headimgurl']
             sex = wx_user['sex']
             try:
@@ -458,13 +464,13 @@ def create_account_given_user(user):
     return None
 
 
-def check_wx_openid(wx_user):
+def check_wx_unionid(request, wx_user):
     try:
-        openid = wx_user['openid']
-        account = Account.objects.filter(openid=openid).all()
+        wx_unionid = wx_user['unionid']
+        account = Account.objects.filter(wx_unionid=wx_unionid).all()
 
         if getLen(account) < 1:
-            create_account_given_wx(wx_user)
+            create_account_given_wx(request, wx_user)
             return True
         else:
             account = account[0]
@@ -501,11 +507,14 @@ def get_account_from_user(user):
         printError(e)
     return account
 
-def get_openid_from_user(user):
+def get_openid_from_user(request):
     open_id = ""
     try:
-        account = get_account_from_user(user)
-        open_id = account.openid
+        account = get_account_from_user(request.user)
+        if checkMobile(request) == True:
+            open_id = account.wx_wx_openid
+        else:
+            open_id = account.wx_pc_openid
         
     except Exception, e:
         printError("get_openid_from_user: " + str(e))
@@ -514,9 +523,9 @@ def get_openid_from_user(user):
 
 def paydetail(request):
     """获取支付信息"""
-    openid = get_openid_from_user(request.user)
+    openid = get_openid_from_user(request)
     #openid = request.openid
-
+    print "openid: ", openid
     money = 1
 
     jsApi = JsApi_pub()
@@ -589,7 +598,7 @@ def get_video_state(user, video):
             for o in user_orders:
                 user_videos = o.videos.all()
                 if getLen(user_videos) == 0:
-                    break
+                    continue
                 user_video = user_videos[0]
                 if (user_video.id == video.id) and (o.pay_state == 2):
                     is_paid = True
@@ -786,8 +795,9 @@ def del_unpay(user, video_id):
             if video_id == order.videos.all()[0].id:
                 unpay_order = order
                 break
-        unpay_order.pay_state = -1
-        unpay_order.save()
+        #unpay_order.pay_state = -1
+        #unpay_order.save()
+        unpay_order.delete()
 
     except Exception, e:
         printError("del_unpay: " + str(e))

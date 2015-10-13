@@ -233,7 +233,7 @@ class UnifiedOrder_pub(Wxpay_client_pub):
 
         self.parameters["appid"] = WxPayConf_pub.APPID  #公众账号ID
         self.parameters["mch_id"] = WxPayConf_pub.MCHID  #商户号
-        self.parameters["spbill_create_ip"] = "127.0.0.1"  #终端ip      
+        self.parameters["spbill_create_ip"] = "101.200.185.180"  #终端ip      
         self.parameters["nonce_str"] = self.createNoncestr()  #随机字符串
         self.parameters["sign"] = self.getSign(self.parameters)  #签名
         return  self.arrayToXml(self.parameters)

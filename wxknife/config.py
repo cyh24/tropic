@@ -23,7 +23,7 @@ class WxPayConf_pub(object):
 
     #=======【异步通知url设置】===================================
     #异步通知url，商户根据实际开发过程设定
-    NOTIFY_URL = "http://terry.tunnel.mobi/wechat-pay"
+    NOTIFY_URL = "http://www.facebuaa.cn/wechat-pay"
 
     #=======【证书路径设置】=====================================
     #证书路径,注意应该填写绝对路径

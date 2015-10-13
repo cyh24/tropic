@@ -21,7 +21,7 @@ def index(request):
         if wechat_user != None:
             print "Wechat-User: ", wechat_user
 
-            if check_wx_openid(wechat_user) == True:
+            if check_wx_unionid(request, wechat_user) == True:
                 wx_login_do(request, wechat_user)
         else:
             print "Wechat-User: None."
@@ -73,10 +73,20 @@ def excute_login(request, username, password):
 
 
 def wx_login_do(request, user):
-    username = user['openid']
+    username = user['unionid']
     password = "Z!"+username+"1!"
 
     excute_login(request, username, password)
+
+    account = get_account_from_user(request.user)
+    if checkMobile(request) == True:
+        if account.wx_wx_openid == None or account.wx_wx_openid == "":
+            account.wx_wx_openid = user['openid']
+    else:
+        if account.wx_pc_openid == None or account.wx_pc_openid == "":
+            account.wx_pc_openid = user['openid']
+    account.save()
+
 
 def login_do(request):
     msg = init_msg(request)

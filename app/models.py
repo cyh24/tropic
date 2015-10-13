@@ -6,8 +6,9 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 class Account(models.Model):
     user = models.OneToOneField(User, unique=True, verbose_name='user_account')
 
-    openid   = models.CharField(max_length=100)
-
+    wx_unionid = models.CharField(max_length=100)
+    wx_pc_openid = models.CharField(max_length=100)
+    wx_wx_openid = models.CharField(max_length=100)
 
     user_pic = models.CharField(max_length=200)
     nickname = models.CharField(max_length=20)
@@ -97,8 +98,17 @@ class Video(QiniuFile):
 
         return None
 
+    def __get_teacher_info(self):
+        try:
+            if self.teacher != None:
+                return self.teacher.info
+        except Exception, e:
+            print str(e)
+
+        return None
     teacher_name = property(__get_teacher_name)
     teacher_pic  = property(__get_teacher_pic)
+    teacher_info  = property(__get_teacher_info)
 
 
     title    = models.CharField(max_length=50)

@@ -54,10 +54,10 @@ $(function() {
 		browse_button: 'pickfiles',
 		container: 'container',
 		drop_element: 'container',
-		max_file_size: '100mb',
+		max_file_size: '3000mb',
 		flash_swf_url: 'js/plupload/Moxie.swf',
 		dragdrop: true,
-		chunk_size: '4mb',
+		chunk_size: '50mb',
 		//		uptoken_url: '/uptoken/?key=',
 		domain: 'http://7xklh2.media1.z0.glb.clouddn.com',
 
