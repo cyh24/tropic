@@ -11,7 +11,6 @@ import re
 import StringIO
 import qrcode
 import base64, zlib
-import Image
 import os
 
 from django.shortcuts import render
