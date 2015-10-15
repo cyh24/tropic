@@ -192,5 +192,22 @@ def remove_file(filename):
         printError(e)
 
 
+boy_imgs = []
+with open('app/static/samples/boy.txt') as f:
+    boy_imgs = f.readlines()
+girl_imgs = []
+with open('app/static/samples/girl.txt') as f:
+    girl_imgs = f.readlines()
+    
+def get_random(imgs):
+    try:
+        if imgs == None:
+            return None
 
+        r_int = random.randint(0, len(imgs)-1)
+        return imgs[r_int]
 
+    except Exception, e:
+        printError(e)
+
+    return None

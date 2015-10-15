@@ -201,7 +201,9 @@
 												<i class="icon-card-lu"></i>
 											</a>
 										</div>
-										<div class="course-title"> <a href="/videos/play/?video-id={{v.id}}" class="item-tt-link">{{v.title}}</a> </div>
+										<div class="course-title"> 
+											<div href="/videos/play/?video-id={{v.id}}" class="item-tt-link">{{v.title}}</div> 
+										</div>
 										<div class="course-emphasis">
 											{% if v.money == 0 %}
 											<span class="course-price course-price-free item-price-free" style="float: left;"> 免费 </span> {% else %}
@@ -237,7 +239,7 @@
 				</div>
 			</div>
 		</div>
-
+		{% include "footer.html" %}
 	</body>
 
 </html>

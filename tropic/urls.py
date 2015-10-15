@@ -22,64 +22,69 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^index/', 'app.views.index'),
-    url(r'^$', 'app.views.index'),
+    url(r'^index/',     'app.show.index'),
+    url(r'^$',          'app.show.index'),
 
-    url(r'^login/', 'app.views.login_ui'),
-    url(r'^login-do/', 'app.views.login_do'),
-    url(r'^logout/', 'app.views.log_out'),
+    url(r'^videos/$',   'app.show.videos_ui'),
+    url(r'^search/$',   'app.show.search_result'),
 
-    url(r'^register/', 'app.views.wechat_login'),
+    url(r'^login/',     'app.views.login_ui'),
+    url(r'^login-do/',  'app.views.login_do'),
+    url(r'^logout/',    'app.views.log_out'),
 
-    url(r'^upload/', 'app.views.upload_ui'),
-    url(r'^upload-post/', 'app.db_pro.upload_post'),
-    url(r'^uptoken/', 'app.qiniu_pro.uptoken'),
+    url(r'^register/',  'app.views.wechat_login'),
 
-    url(r'^update-video/', 'app.views.update_video_ui'),
-    url(r'^update-post/', 'app.db_pro.update_post'),
 
-    url(r'^videos/$', 'app.views.videos_ui'),
-    url(r'^videos/play/$', 'app.views.play_ui'),
-    url(r'^videos/manage/$', 'app.views.videos_manage'),
+    url(r'^upload-course-post/', 'app.db_pro.upload_course_post'),
+    url(r'^update-course-post/', 'app.db_pro.update_course_post'),
+    url(r'^uptoken/',       'app.qiniu_pro.uptoken'),
 
-    url(r'^space/$', 'app.views.space_index'),
-    url(r'^space/index/$', 'app.views.space_index'),
-    url(r'^space/collect/$', 'app.views.space_collect'),
-    url(r'^space/paid/$', 'app.views.space_paid'),
-    url(r'^space/shopping-cart/$', 'app.views.space_shopping_cart'),
+    url(r'^update-course/$',        'app.videomanage.update_course_ui'),
+    url(r'^videos/manage/$',        'app.videomanage.videos_manage'),
+    url(r'^delete-video/$',         'app.videomanage.delete_video'), 
+    url(r'^delete-intrestvideo/$',  'app.videomanage.delete_intrestvideo'),
+    url(r'^add-intrestvideo/$',     'app.videomanage.add_intrestvideo'),
+    url(r'^upload/course/$',        'app.videomanage.upload_course_ui'),
 
-    url(r'^user/setprofile/$', 'app.views.setprofile'),
-    url(r'^user/setavator/$', 'app.views.setavator'),
-    url(r'^user/setbindsns/$', 'app.views.setbindsns'),
-    url(r'^user/random-pic/$', 'app.views.random_pic'),
 
-    url(r'^upload-userpic/$', 'app.views.update_pic'),
-    url(r'^user/update-profile/$', 'app.views.update_profile'),
+    url(r'^pay/$',          'app.playui.pay_ui'), 
+    url(r'^ready-pay/$',    'app.playui.ready_pay'), 
+    url(r'^videos/play/$',  'app.playui.play_ui'),
+    url(r'^voteup/$',       'app.playui.voteup'),
+    url(r'^collect/$',      'app.playui.collect'),
+    url(r'^add-comment/$',  'app.playui.comment_add'),
 
-    url(r'^voteup/$', 'app.views.voteup'),
-    url(r'^collect/$', 'app.views.collect'),
-    url(r'^search/$', 'app.views.search_result'),
-    url(r'^add-comment/$', 'app.views.comment_add'),
 
-    url(r'^del-history/$', 'app.views.history_del'),
-    url(r'^del-collect/$', 'app.views.collect_del'),
-    url(r'^del-unpay/$', 'app.views.unpay_del'),
+    url(r'^space/$',                'app.space.space_index'),
+    url(r'^space/index/$',          'app.space.space_index'),
+    url(r'^space/collect/$',        'app.space.space_collect'),
+    url(r'^space/paid/$',           'app.space.space_paid'),
+    url(r'^space/shopping-cart/$',  'app.space.space_shopping_cart'),
+
+    url(r'^user/setprofile/$',      'app.space.setprofile'),
+    url(r'^user/setavator/$',       'app.space.setavator'),
+    url(r'^user/setbindsns/$',      'app.space.setbindsns'),
+    url(r'^user/random-pic/$',      'app.space.random_pic'),
+
+    url(r'^del-history/$',          'app.space.history_del'),
+    url(r'^del-collect/$',          'app.space.collect_del'),
+    url(r'^del-unpay/$',            'app.space.unpay_del'),
+
+    url(r'^upload-userpic/$',       'app.space.update_pic'),
+    url(r'^user/update-profile/$',  'app.space.update_profile'),
+
 
     url(r'^wechat-login/$', 'app.views.wechat_login'), 
     url(r'^wechat-share/$', 'app.views.wechat_share'), 
 
-    url(r'^pay/$', 'app.views.pay_ui'), 
-    url(r'^ready-pay/$', 'app.views.ready_pay'), 
 
     url(r'^wechat-pay/$', 'app.wxpay.payback'), 
     url(r'^ajax_check/$', 'app.wxpay.check_pay'), 
     url(r'^pay_result/$', 'app.wxpay.pay_result'),
 
-    url(r'^jsapi_pay/$', 'app.views.play_ui'), 
     url(r'^paydetail/$', 'app.db_pro.paydetail'), 
 
-    
-    url(r'^delete-video/$', 'app.views.delete_video'), 
+
     
     url(r'^test/', 'app.views.test')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

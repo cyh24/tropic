@@ -64,7 +64,8 @@
 						</dl>
 
 						<dl class="sort-nav-order sort-nav-right">
-							<dd class="video-type"><a class="video-type-item " data-video="zhibo" data-action="look_zhibo" href="/upload/" data-video-val="1">上传视频</a>
+							<dd class="video-type">
+								<!--<a class="video-type-item "  href="/upload/course/">上传视频</a>-->
 								<!--<a class="video-type-item curr_video" data-video="lubo" data-action="look_lubo" href="/cgi-bin/courseList?mt=1001&amp;show_video=0"
 							data-video-val="0">只看录播</a>-->
 							</dd>
@@ -92,7 +93,9 @@
 											<i class="icon-card-lu"></i>
 										</a>
 									</div>
-									<div class="course-title"> <a href="/videos/play/?video-id={{v.id}}" class="item-tt-link">{{v.title}}</a> </div>
+									<div class="course-title"> 
+										<div href="/videos/play/?video-id={{v.id}}" class="item-tt-link">{{v.title}}</div> 
+									</div>
 									<div class="course-emphasis">
 										{% if v.money == 0 %}
 										<span class="course-price course-price-free item-price-free" style="float: left;"> 免费 </span>
@@ -102,7 +105,7 @@
 										
 										<span class="icon-sep"></span>
 										<a class="course-agency nor-link" href="" title="">
-											<span class="course-agency-name">{{v.teacher_name}}</span>
+											<span class="course-agency-name">{{v.tags_str}}</span>
 										</a>
 									</div>
 									<div class="course-emphasis course-relations" style="float: left;">
@@ -135,7 +138,7 @@
 
 				</div>
 				<div class="main-right">
-					<div class="main-right-top">热门推荐</div>{% for v in interest_videos %}
+					<div class="main-right-top">热门推荐</div>{% for v in intrest_videos %}
 					<div class="main-right-list">
 
 						
@@ -148,7 +151,7 @@
 									</a>
 								</div>
 								<div class="course-title">
-									<a href="/videos/play/?video-id={{v.id}}" class="item-tt-link">{{v.title}}</a>
+									<div href="/videos/play/?video-id={{v.id}}" class="item-tt-link">{{v.title}}</div>
 									<div class="item-line">
 										{% if v.money == 0%}
 										<span class="line-cell item-price-free" style="float: left;"> 免费 </span>
@@ -159,7 +162,7 @@
 										<span class="icon-sep"></span>
 										
 										<span class="item-source">
-											<a href="" class="item-source-link" >{{v.teacher_name}}</a>
+											<a href="" class="item-source-link" >{{v.tags_str}}</a>
 										</span> 
 									</div>
 								</div>
@@ -172,7 +175,7 @@
 
 			</div>
 		</div>
-
+		{% include "footer.html" %}
 	</body>
 
 </html>

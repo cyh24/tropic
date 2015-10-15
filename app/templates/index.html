@@ -2,7 +2,9 @@
 
 	{% include "include.html"%}
 
-	<body>
+	<link href="/static/css/index/index.css" rel="stylesheet">
+
+	<body style="background-image: url(/static/images/index.jpg);">
 		{% include "header.html"%}
 		<style>
 			.search-logo {
@@ -13,9 +15,9 @@
 			}
 		</style>
 
-		<div class="wrap" style="margin-left: 10%; margin-right: 10%;">
+		<!--<div class="wrap" style="margin-left: 10%; margin-right: 10%;">
 			<div class="search-logo">
-				<img src="/static/images/title.jpg" />
+				<img s rc="/static/images/title.jpg" />
 			</div>
 		
 			<div class="post-topheader" style="margin-top: 260px;">
@@ -23,14 +25,7 @@
 					<ul class="search-category nav nav-pills">
 						<li class="active"><a href="/search?q=">关键词</a>
 						</li>
-                        <!--
-						<li><a href="">类别</a>
-						</li>
-						<li><a href="">标签</a>
-						</li>
-						<li><a href="">简介</a>
-						</li>
-                        -->
+              
 					</ul>
 					<form action="/search/" class="row" style="width: ; margin-top: 10px;">
 						<div class="col-md-9">
@@ -43,6 +38,24 @@
 				</div>
 			</div>
 
+		</div>-->
+
+		<div id="sbox" class="sw_sform" role="search" data-bm="20">
+			<div class="hp_sw_logo hpcLogoWhite" data-bm="23">回归线</div>
+			<div class="search_controls ">
+				<a href="javascript:void(0)" id="hpinsthk" h="ID=SERP,5109.1"><span></span></a>
+				<form form action="/search/" >
+					<div class="b_searchboxForm" data-bm="24">
+						<input class="b_searchbox" id="sb_form_q" name="title" title="输入搜索词" type="search" value="" maxlength="100" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="输入(名称、类别、关键词) 搜索">
+						<input type="submit" class="b_searchboxSubmit" id="sb_form_go" title="搜索" >
+						
+					</div>
+				</form>
+			</div>
+		</div>
+		<div style="width: 100%; position: absolute; bottom: 0px;">
+			
+			{% include "footer.html"%}
 		</div>
 
 	</body>

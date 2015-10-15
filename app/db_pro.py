@@ -11,50 +11,58 @@ from wxpay import *
 import datetime
 from django.db.models import Q
 
-def upload_post(request):
+
+def upload_course_post(request):
     msg = {'state': 'fail'}
     try:
         if request.method == "POST":
             for x in request.POST:
                 print x, request.POST[x]
+        
 
         if request.FILES.has_key('logo'):
+
             path = LOGO_FOLD + getRandomStr() + "-" + request.FILES['logo'].name
             handle_uploaded_photo(path, request.FILES['logo'])
             print "logo: ", path
 
-        path_logo = path[3:]
-        if save_video(request, path_logo) == True:
-            msg['state'] = 'ok'
+            path_logo = path[3:]
+            if save_video(request, path_logo) == True:
+                msg['state'] = 'ok'
+
     except Exception, e:
-        print str(e)
+        print "upload_course_post: ", str(e)
         #return HttpResponse("Fail.") 
     
     return render_to_response('info.html', msg)
 
-def update_post(request):
-    if request.method == "POST":
-        for x in request.POST:
-            print x, request.POST[x]
+def update_course_post(request):
+    msg = {'state': 'fail'}
+    try:
+        if request.method == "POST":
+            for x in request.POST:
+                print x, request.POST[x]
+        
 
-    try: 
-        path_logo = ""
         if request.FILES.has_key('logo'):
-            if request.FILES['logo'].name != "":
+            if request.FILES['logo'] != None:
                 path = LOGO_FOLD + getRandomStr() + "-" + request.FILES['logo'].name
                 handle_uploaded_photo(path, request.FILES['logo'])
-                path_logo = path[3:]
-                print "logo: ", path_logo
+                print "logo: ", path
 
-            update_video(request, path_logo)
-            return HttpResponse("Ok.")
+                path_logo = path[3:]
+            
+                if update_video(request, path_logo) == True:
+                    msg['state'] = 'ok'
         else:
-            update_video(request, path_logo)
-            return HttpResponse("Ok.")
+            if update_video(request) == True:
+                msg['state'] = 'ok'
+
     except Exception, e:
-        print str(e)
+        print "upload_course_post: ", str(e)
+        #return HttpResponse("Fail.") 
     
-    return HttpResponse("Fail") 
+    return render_to_response('info.html', msg)
 
 
 def save_tag(tag_name):
@@ -130,102 +138,176 @@ def get_video_by_id(video_id):
 
     return None
 
+def get_intrestvideo_by_id(video_id):
+    try:
+        video_id = int(video_id)
+        video = IntrestVideos.objects.filter(id=video_id).all()
+        if video != None:
+            video = video[0]
+            return video
+    except Exception, e:
+        printError(e)
+
+    return None
+
 def save_video(request, logo_path, need_authority=True):
-    video = Video()
-    video.bucket = BUCKET_NAME
-    video.domain = DOMAIN
-    video.need_authority = need_authority
-    video.logo_img = logo_path
-
-    video.teacher = Account.objects.filter(user=request.user).all()[0]
-
-    data = request.POST
-    if data.has_key('title'):
-        video.title = data['title'].encode('utf-8')
-    if data.has_key('tag'):
-        data_tag = data['tag']
-        tagStr = ""
-        tag_list = data_tag.split()
-        tag_len = getLen(tag_list)
-        for i in range(tag_len):
-            if i != 0:
-                tagStr += " " + tag_list[i]
-            else:
-                tagStr += tag_list[i]
-        video.tags_str = tagStr.encode('utf-8')
-        tag_deal(tag_list)
-        
-    if data.has_key('kind'):
-        kind = data['kind']
-        video.kind_str = kind.encode('utf-8')
-        kind_deal(kind)
-    if data.has_key('key'):
-        video.key = data['key'].encode('utf-8')
-    if data.has_key('desc'):
-        video.info = data['desc'].encode('utf-8')
-    if data.has_key('money'):
-        video.money = float(data['money'].encode('utf-8'))
-    if data.has_key('minute'):
-        video.video_time = int(data['minute'].encode('utf-8'))
 
     try:
-        video.save()
-        return True
-    except Exception, e:
-        print str(e)
-        return False
+        print "save_video"
+        video = Video()
 
-def update_video(request, logo_path, need_authority=True):
-    data = request.POST
-
-    video_id = int(data['video_id'])
-    video = Video.objects.filter(id=video_id).all()[0]
-
-    video.bucket = BUCKET_NAME
-    video.domain = DOMAIN
-    #video.need_authority = need_authority
-    if logo_path != "":
         video.logo_img = logo_path
 
-    #video.teacher = Account.objects.filter(user=request.user).all()[0]
+        video.teacher = Account.objects.filter(user=request.user).all()[0]
 
-    
-    if data.has_key('title'):
-        video.title = data['title'].encode('utf-8')
-    if data.has_key('tag'):
-        data_tag = data['tag']
-        tagStr = ""
-        tag_list = data_tag.split()
-        tag_len = getLen(tag_list)
-        for i in range(tag_len):
-            if i != 0:
-                tagStr += " " + tag_list[i]
-            else:
-                tagStr += tag_list[i]
-        print tag_len, tagStr
-        video.tags_str = tagStr.encode('utf-8')
-        tag_deal(tag_list)
-        
-    if data.has_key('kind'):
-        kind = data['kind']
-        video.kind_str = kind.encode('utf-8')
-        kind_deal(kind)
-    if data.has_key('key'):
-        if data['upload_new_video'] == "True":
-            video.key = data['key'].encode('utf-8')
-    if data.has_key('desc'):
-        video.info = data['desc'].encode('utf-8')
-    if data.has_key('money'):
-        video.money = float(data['money'].encode('utf-8'))
-    if data.has_key('minute'):
-        video.video_time = int(data['minute'].encode('utf-8'))
+        data = request.POST
+        if data.has_key('title'):
+            video.title = data['title'].encode('utf-8')
+            if video.title.strip() == "":
+                return False
+        if data.has_key('tag'):
+            data_tag = data['tag']
+            tagStr = ""
+            tag_list = data_tag.split()
+            tag_len = getLen(tag_list)
+            for i in range(tag_len):
+                if i != 0:
+                    tagStr += " " + tag_list[i]
+                else:
+                    tagStr += tag_list[i]
+            video.tags_str = tagStr.encode('utf-8')
+            tag_deal(tag_list)
+            
+        if data.has_key('kind'):
+            kind = data['kind']
+            video.kind_str = kind.encode('utf-8')
+            kind_deal(kind)
 
-    try:
-        video.save()
-        return True
+        if data.has_key('valid_day'):
+            video.valid_day = int(data['valid_day'].strip())
+            
+        if data.has_key('desc'):
+            video.info = data['desc'].encode('utf-8')
+        if data.has_key('money'):
+            video.money = float(data['money'].encode('utf-8'))
+
+        with transaction.atomic():
+            qfiles = []
+            if data.has_key('table_json'):
+                qfiles = get_qiniu_files(data)
+
+                if len(qfiles) == 0:
+                    print "qiniu file: none."
+                    return False
+
+                video.save()
+                for i in range(len(qfiles)):
+                    qfiles[i].save()
+
+                    video.files.add(qfiles[i])
+            
+            video.save()
+            return True
     except Exception, e:
         print str(e)
         return False
+
+
+def get_qiniu_files(data):
+    qfiles = []
+    count = 0
+    table = json.loads(data['table_json'].encode('utf-8'))
+    
+    for row in table:
+        qiniu_file = QiniuFile()
+        video_key  = row['video_key'].encode('utf-8').strip()
+        video_time = int(row['video_time'].encode('utf-8').strip())
+        title      = row['video_name'].encode('utf-8').strip()
+
+        if video_key == "" or title == "":
+            break
+
+        qiniu_file.key        = video_key
+        qiniu_file.video_time = video_time
+        qiniu_file.title      = title
+
+        qiniu_file.bucket = BUCKET_NAME
+        qiniu_file.domain = DOMAIN
+        qiniu_file.need_authority = True
+
+        qfiles.append(qiniu_file)
+
+    return qfiles
+
+
+def update_video(request, logo_path="", need_authority=True):
+    print "update_video"
+    try:
+        data = request.POST
+
+        video_id = int(data['video_id'])
+        video = Video.objects.filter(id=video_id).all()[0]
+
+        if logo_path != "":
+            video.logo_img = logo_path
+        
+        data = request.POST
+        if data.has_key('title'):
+            video.title = data['title'].encode('utf-8')
+            if video.title.strip() == "":
+                print "Error: title none."
+                return False
+        if data.has_key('tag'):
+            data_tag = data['tag']
+            tagStr = ""
+            tag_list = data_tag.split()
+            tag_len = getLen(tag_list)
+            for i in range(tag_len):
+                if i != 0:
+                    tagStr += " " + tag_list[i]
+                else:
+                    tagStr += tag_list[i]
+            video.tags_str = tagStr.encode('utf-8')
+            tag_deal(tag_list)
+            
+        if data.has_key('kind'):
+            kind = data['kind']
+            video.kind_str = kind.encode('utf-8')
+            kind_deal(kind)
+
+        if data.has_key('valid_day'):
+            video.valid_day = int(data['valid_day'].strip())
+            
+        if data.has_key('desc'):
+            video.info = data['desc'].encode('utf-8')
+        if data.has_key('money'):
+            video.money = float(data['money'].encode('utf-8'))
+
+        with transaction.atomic():
+            qfiles = []
+            if data.has_key('table_json'):
+                qfiles = get_qiniu_files(data)
+
+                if getLen(qfiles) == 0:
+                    print "qiniu file: none."
+                    return False
+
+                video.files.clear()
+                video.save()
+                for i in range(getLen(qfiles)):
+                    qfiles[i].save()
+
+                    video.files.add(qfiles[i])
+                    pass
+            
+            video.save()
+            return True
+    except Exception, e:
+        print str(e)
+    
+    return False
+ 
+    
 
 def add_watch_num(video_id):
     try:
@@ -238,14 +320,34 @@ def add_watch_num(video_id):
         print "Error: add_watch_num.\nError: " + str(e)
 
 
-def get_interest_videos():
+def get_intrest_videos():
     try:
-        videos = Video.objects.order_by('release_date')
-        if getLen(videos) > 4:
-            return videos[:4]
+        intrest_videos = IntrestVideos.objects.all()
+        videos = []
+        for iv in intrest_videos:
+            videos.append(iv.video)
+
+        v_num = getLen(videos)
+        if v_num > 4:
+            return videos
+
+        vs = Video.objects.order_by('watch_num')
+        if getLen(vs) >= 5:
+            vs = vs[:5]
+
+        count = 0
+        for v in vs:
+            if v not in videos:
+                videos.append(v)
+                count += 1
+            if count > 4:
+                break
+
         return videos
+
     except Exception, e:
-        print str(e)
+        print "get_intrest_videos: ", str(e)
+
     return None
 
 
@@ -861,9 +963,10 @@ def create_unpay_order(user, video_id):
         time_format = '%Y-%m-%d %H:%M:%S'
         try:
             t_order = Order.objects.filter(account=account).all()
-            for o in t_order:
-                videos = o.videos.all()
-                for v in videos:
+
+            if t_order != None:
+                for o in t_order:
+                    v = o.video
                     if v == video:
                         if o.pay_state == 1:
                             current = datetime.datetime.now()
@@ -907,7 +1010,7 @@ def create_unpay_order(user, video_id):
         with transaction.atomic():
             unpay_order.save()
         
-            unpay_order.videos.add(video)
+            unpay_order.video = video
             unpay_order.save()
 
             return unpay_order
@@ -929,3 +1032,28 @@ def db_delete_video(request):
 
     return False
 
+def db_delete_intrestvideo(request):
+    try:
+        video_id = int(request.GET['video_id'])
+        intrest_video = IntrestVideos.objects.filter(video=get_video_by_id(video_id))
+        intrest_video.delete()
+        return True
+
+    except Exception, e:
+        printError(e)
+
+    return False
+
+def db_add_intrestvideo(request):
+    try:
+        video_id = int(request.GET['video_id'])
+        video = get_video_by_id(video_id)
+        intrest_video = IntrestVideos()
+        intrest_video.video = video
+        intrest_video.save()
+        return True
+
+    except Exception, e:
+        printError(e)
+
+    return False

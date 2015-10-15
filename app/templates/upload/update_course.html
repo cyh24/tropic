@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en">
+
+	{% include "include.html"%}
+
+	<link rel="stylesheet" href="/static/qiniu/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="/static/qiniu/main.css">
+	<style type="text/css">
+			body,div,p,ul,li,font,span,td,th{font-size:12pt;line-height:30px;}
+			table{border-top-width:1px;border-right-width:1px;border-bottom-width:0px;border-left-width:1px;border-top-style:solid;border-right-style:solid;border-bottom-style:none;border-left-style:solid;border-top-color:#CCCCCC;border-right-color:#CCCCCC;border-bottom-color:#CCCCCC;border-left-color:#CCCCCC;}
+			td{border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#CCCCCC;}
+			.EditCell_TextBox{width:100%;border:1px solid #0099CC;}
+			.EditCell_DropDownList{width:100%;}
+			
+			.table_input{
+				width: 100%;
+			}
+		</style>
+	<body style="">
+		{% include "header.html" %}
+
+		<div style="margin-left:60px; width: 1300px; ">
+			<div class="container">
+
+				<div class="clear"></div>
+				<div class="mod_upload">
+					<div class="mod_upload_filed">
+						<form action="/update-course-post/" method="post" id="id-form" enctype="multipart/form-data" target="post-status">
+							{% csrf_token %}
+							<button id="id-form-submit" style="display: none;" type="submit"></button>
+							
+							<input type="TEXT"  name="video_id" style="display: none;" value='{{video.id}}'>
+								
+							<div class="mod_upload_box_left">
+								<label class="upload_filed_lbl" for="upload_filed_video_title">
+									<span>标题</span>
+									<span class="sign_star">*</span>
+								</label>
+								<div class="upload_filed_area">
+									<input class="rlf-input" type="text" name="title" value="{{video.title}}">
+								</div>
+
+								<div class="clear"></div>
+
+								<div class="select_left">
+						
+									<label class="upload_filed_lbl" for="upload_filed_video_title">
+										<span>类别</span><span style="font-"></span>
+										<span class="sign_star">*</span>
+									</label>
+
+									<div class="clear"></div>
+
+									<div class="upload_filed_area" style="width: 100%;">
+										<input style="width: 100%;" class="rlf-input" type="text" name="kind" value="{{video.kind_str}}">
+									</div>
+								</div>
+								<div class="select_right">
+									<label class="upload_filed_lbl" for="upload_filed_video_title">
+										<span>标签</span><span style="font-"> (标签之间使用空格分开)</span>
+										<span class="sign_star">*</span>
+									</label>
+
+									<div class="clear"></div>
+
+									<div class="upload_filed_area" style="width: 100%;">
+										<input style="width: 100%;" class="rlf-input" type="text" name="tag" value="{{video.tags_str}}">
+									</div>
+								</div>
+								<div class="clear"></div>
+								<label class="upload_filed_lbl" for="upload_filed_video_title" style="margin-top: 10px;">
+									<span>简介</span>
+									<span class="sign_star">*</span>
+								</label>
+								<div class="upload_filed_area">
+									<textarea id="desc_0" class="textarea" type="text" name="desc" style="height: 120px;" >{{video.info}}</textarea>
+								</div>
+
+								<div class="clear"></div>
+
+								<div class="select_left">
+									<label class="upload_filed_lbl" for="upload_filed_video_title">
+										<span>价格 (RMB)</span>
+										<span class="sign_star">*</span>
+									</label>
+									<div class="upload_filed_area" style="width: 80px;">
+										<input class="rlf-input" type="text" name="money" value="{{video.money}}">
+									</div>
+								</div>
+								<div class="select_right">
+									<label class="upload_filed_lbl" for="upload_filed_video_title">
+										<span>有效期限</span><span style="font-"> (天)</span>
+										<span class="sign_star">*</span>
+									</label>
+
+									<div class="clear"></div>
+
+									<div class="upload_filed_area" style="width: 80px;">
+										<input style="width: 100%;" class="rlf-input" type="text" name="valid_day" value="{{video.valid_day}}">
+									</div>
+								</div>
+
+							</div>
+
+							<div class="mod_upload_box_right">
+								<label class="upload_filed_lbl" for="upload_filed_video_title">
+									<span>课程封面</span>
+									<span class="sign_star">*</span>
+								</label>
+								<div style="border: dashed; width: 330px; height: 190px;">
+									<div id="localImag">
+										<img id="logo_img" src="{{video.logo_img}}" style="width: 99%; height: 99%; vertical-align: middle;" />
+									</div>
+								</div>
+
+								<div style="margin-top: 15px; margin-left: 82px;">
+									<a class="btn_addPic" href="">
+										<span><em>+</em>更换封面</span>
+										<input id="LogoUpload" class="filePrew" type="file" name="logo" onchange="return setImagePreview()">
+									</a>
+								</div>
+							</div>
+
+							
+
+							<!--<input type="TEXT" id="id_rand_key" name="key" style="display:none;">
+							<input type="TEXT" id="id_link" name="video-link" style="display: none;">
+
+							<input type="TEXT" id="id_upload_new_video" name="upload_new_video" style="display: none;" value="False">-->
+
+							<div class="clear"></div>
+							<div style="width: 100%;">
+
+								<h3></h3>
+								 
+								<table width="100%" border="1" cellpadding="1" cellspacing="1" id="tabProduct">
+									<tr>
+										<td width="8%" align="center" bgcolor="#EFEFEF" name="check"><input type="checkbox" name="checkbox" value="checkbox" /></td>
+										<td width="8%" align="center" bgcolor="#EFEFEF" name="video_num" EditType="">序号</td>
+										
+										<td width="30%" align="center" bgcolor="#EFEFEF" name="video_name" EditType="TextBox">视频名称</td>
+										<td width="30%" align="center" bgcolor="#EFEFEF" name="video_key" EditType="TextBox">视频地址</td>
+										<td width="26%" align="center" bgcolor="#EFEFEF" name="video_time" EditType="TextBox">视频时间</td>
+								
+									</tr>
+									{% for v in play_list%}
+									<tr>
+										<td width="8%" align="center"><input type="checkbox" name="checkbox2" value="checkbox" /></td>
+										<td width="8%" align="center">{{v.num}}</td>
+										<td width="30%">{{v.title}}</td>
+										<td width="30%">{{v.key}}</td>
+										<td width="26%">{{v.video_time}}</td>
+									</tr>
+									{% endfor %}
+						
+								</table>
+								<br />
+								<input type="button" name="Submit" value="新增视频" onclick="AddRow(document.getElementById('tabProduct'),1)" />
+								<input type="button" name="Submit2" value="删除视频" onclick="DeleteRow(document.getElementById('tabProduct'),1)" />
+								<!--<input type="button" name="Submit22" value="重置" onclick="window.location.reload()" />-->
+								<!--<input type="submit" name="Submit3" value="提交" onclick="GetTableData(document.getElementById('tabProduct'));return false;" />-->
+							
+							</div>
+							
+							<input id="id_table_json" name="table_json" type="text" style="display: none;" value="" />
+
+						</form>
+					</div>
+
+				</div>
+
+
+			</div>
+
+		</div>
+
+		<div class="row_center">
+			<span id="fileinfo_saving_0" class="btns_txt" style="display:none"></span>
+			<button class="btn_submit" type="button" id="fileinfo_save_0" _hot="uc.upload.saveinfo" onclick="btn_click()">保存</button>
+		</div>
+
+		<div class="container">
+			<div class="clear"></div>
+			<div class="mod_upload">
+				<div class="mod_upload_filed">
+					<iframe id="post-status" name="post-status" style="display:; width:100%" frameborder="no"></iframe>
+				</div>
+			</div>
+		</div>
+
+	</body>
+
+	<script>
+		function btn_click() {
+			var table_json = GetTableData(document.getElementById('tabProduct'));
+			table_json = JSON.stringify(table_json);
+			document.getElementById('id_table_json').value = table_json;
+			document.getElementById('id-form-submit').click();
+		}
+
+		function setImagePreview() {
+			var docObj = document.getElementById("LogoUpload");
+			var imgObjPreview = document.getElementById("logo_img");
+			if (docObj.files && docObj.files[0]) {
+				//火狐下，直接设img属性
+				imgObjPreview.style.display = 'block';
+				imgObjPreview.style.width = '316px';
+				imgObjPreview.style.height = '178px';
+				//imgObjPreview.src = docObj.files[0].getAsDataURL();
+				//火狐7以上版本不能用上面的getAsDataURL()方式获取，需要一下方式  
+				imgObjPreview.src = window.URL.createObjectURL(docObj.files[0]);
+			} else {
+				//IE下，使用滤镜
+				docObj.select();
+				var imgSrc = document.selection.createRange().text;
+				var localImagId = document.getElementById("localImag");
+				//必须设置初始大小
+				localImagId.style.width = "316px";
+				localImagId.style.height = "178px";
+				//图片异常的捕捉，防止用户修改后缀来伪造图片
+				try {
+					localImagId.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
+					localImagId.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = imgSrc;
+				} catch (e) {
+					alert("您上传的图片格式不正确，请重新选择!");
+					return false;
+				}
+				imgObjPreview.style.display = 'none';
+				document.selection.empty();
+			}
+			var f = get_element('LogoUpload').files[0];
+			var msg = ""
+			for (var x in f)
+				msg += x.toString() + ",";
+			//alert(msg);
+			get_element('save_logo_filename').value = f.name;
+			document.getElementById('logo_submit').click();
+			return true;
+		}
+	</script>
+	<script language="javascript">
+		 //设置多个表格可编辑
+		function EditTables() {
+				for (var i = 0; i < arguments.length; i++) {
+					SetTableCanEdit(arguments[i]);
+				}
+			}
+			//设置表格是可编辑的
+
+		function SetTableCanEdit(table) {
+			for (var i = 1; i < table.rows.length; i++) {
+				SetRowCanEdit(table.rows[i]);
+			}
+		}
+
+		function SetRowCanEdit(row) {
+				for (var j = 0; j < row.cells.length; j++) {
+					//如果当前单元格指定了编辑类型，则表示允许编辑
+					var editType = row.cells[j].getAttribute("EditType");
+					if (!editType) {
+						//如果当前单元格没有指定，则查看当前列是否指定
+						editType = row.parentNode.rows[0].cells[j].getAttribute("EditType");
+					}
+					if (editType) {
+						row.cells[j].onclick = function() {
+							EditCell(this);
+						}
+					}
+				}
+			}
+			//设置指定单元格可编辑
+
+		function EditCell(element, editType) {
+				var editType = element.getAttribute("EditType");
+				if (!editType) {
+					//如果当前单元格没有指定，则查看当前列是否指定
+					editType = element.parentNode.parentNode.rows[0].cells[element.cellIndex].getAttribute("EditType");
+				}
+				switch (editType) {
+					case "TextBox":
+						CreateTextBox(element, element.innerHTML);
+						break;
+					case "DropDownList":
+						CreateDropDownList(element);
+						break;
+					default:
+						break;
+				}
+			}
+			//为单元格创建可编辑输入框
+
+		function CreateTextBox(element, value) {
+				//检查编辑状态，如果已经是编辑状态，跳过
+				var editState = element.getAttribute("EditState");
+				if (editState != "true") {
+					//创建文本框
+					var textBox = document.createElement("INPUT");
+					textBox.type = "text";
+					textBox.className = "EditCell_TextBox";
+					//设置文本框当前值
+					if (!value) {
+						value = element.getAttribute("Value");
+					}
+					textBox.value = value;
+					//设置文本框的失去焦点事件
+					textBox.onblur = function() {
+							CancelEditCell(this.parentNode, this.value);
+						}
+						//向当前单元格添加文本框
+					ClearChild(element);
+					element.appendChild(textBox);
+					textBox.focus();
+					textBox.select();
+					//改变状态变量
+					element.setAttribute("EditState", "true");
+					element.parentNode.parentNode.setAttribute("CurrentRow", element.parentNode.rowIndex);
+				}
+			}
+			//为单元格创建选择框
+
+		function CreateDropDownList(element, value) {
+				//检查编辑状态，如果已经是编辑状态，跳过
+				var editState = element.getAttribute("EditState");
+				if (editState != "true") {
+					//创建下接框
+					var downList = document.createElement("Select");
+					downList.className = "EditCell_DropDownList";
+					//添加列表项
+					var items = element.getAttribute("DataItems");
+					if (!items) {
+						items = element.parentNode.parentNode.rows[0].cells[element.cellIndex].getAttribute("DataItems");
+					}
+					if (items) {
+						items = eval("[" + items + "]");
+						for (var i = 0; i < items.length; i++) {
+							var oOption = document.createElement("OPTION");
+							oOption.text = items[i].text;
+							oOption.value = items[i].value;
+							downList.options.add(oOption);
+						}
+					}
+					//设置列表当前值
+					if (!value) {
+						value = element.getAttribute("Value");
+					}
+					downList.value = value;
+					//设置创建下接框的失去焦点事件
+					downList.onblur = function() {
+							CancelEditCell(this.parentNode, this.value, this.options[this.selectedIndex].text);
+						}
+						//向当前单元格添加创建下接框
+					ClearChild(element);
+					element.appendChild(downList);
+					downList.focus();
+					//记录状态的改变
+					element.setAttribute("EditState", "true");
+					element.parentNode.parentNode.setAttribute("LastEditRow", element.parentNode.rowIndex);
+				}
+			}
+			//取消单元格编辑状态
+
+		function CancelEditCell(element, value, text) {
+				element.setAttribute("Value", value);
+				if (text) {
+					element.innerHTML = text;
+				} else {
+					element.innerHTML = value;
+				}
+				element.setAttribute("EditState", "false");
+				//检查是否有公式计算
+				CheckExpression(element.parentNode);
+			}
+			//清空指定对象的所有字节点
+
+		function ClearChild(element) {
+				element.innerHTML = "";
+			}
+			//添加行
+
+		function AddRow(table, index) {
+				var lastRow = table.rows[table.rows.length - 1];
+			
+				//alert(JSON.stringify(GetTableData(table))); 
+				var newRow = lastRow.cloneNode(true);
+				
+				newRow.cells[1].innerText = (table.rows.length).toString();
+				newRow.cells[2].innerHTML = "";
+				newRow.cells[3].innerHTML = "";
+				newRow.cells[4].innerHTML = "";
+//				newRow.cells[2].innerHTML = '<input class="table_input" name="vname_' + (table.rows.length).toString()+ '" value="" />';
+//				newRow.cells[3].innerHTML = '<input class="table_input" name="vkey_' + (table.rows.length).toString()+ '" value="" />';
+//				newRow.cells[4].innerHTML = '<input class="table_input" name="vtime_' + (table.rows.length).toString()+ '" value="" />';
+//				
+				table.tBodies[0].appendChild(newRow);
+				SetRowCanEdit(newRow);
+				return newRow;
+			}
+			//删除行
+
+		function DeleteRow(table, index) {
+			
+				for (var i = table.rows.length - 1; i > 0; i--) {
+					var chkOrder = table.rows[i].cells[0].firstChild;
+					if (chkOrder) {
+						if (chkOrder.type = "CHECKBOX") {
+							if (chkOrder.checked) {
+					
+								//执行删除
+								table.deleteRow(i);
+							}
+						}
+					}
+				}
+			}
+			//提取表格的值,JSON格式
+
+		function GetTableData(table) {
+				var tableData = new Array();
+				//alert("行数：" + table.rows.length);
+				for (var i = 1; i < table.rows.length; i++) {
+					tableData.push(GetRowData(tabProduct.rows[i]));
+				}
+				return tableData;
+			}
+			//提取指定行的数据，JSON格式
+
+		function GetRowData(row) {
+				var rowData = {};
+				for (var j = 0; j < row.cells.length; j++) {
+					name = row.parentNode.rows[0].cells[j].getAttribute("Name");
+					if (name) {
+						var value = row.cells[j].getAttribute("Value");
+						if (!value) {
+							value = row.cells[j].innerHTML;
+						}
+						rowData[name] = value;
+					}
+				}
+				//alert("ProductName:" + rowData.ProductName);
+				//或者这样：alert("ProductName:" + rowData["ProductName"]);
+				return rowData;
+			}
+			//检查当前数据行中需要运行的字段
+
+		function CheckExpression(row) {
+				for (var j = 0; j < row.cells.length; j++) {
+					expn = row.parentNode.rows[0].cells[j].getAttribute("Expression");
+					//如指定了公式则要求计算
+					if (expn) {
+						var result = Expression(row, expn);
+						var format = row.parentNode.rows[0].cells[j].getAttribute("Format");
+						if (format) {
+							//如指定了格式，进行字值格式化
+							row.cells[j].innerHTML = formatNumber(Expression(row, expn), format);
+						} else {
+							row.cells[j].innerHTML = Expression(row, expn);
+						}
+					}
+				}
+			}
+			//计算需要运算的字段
+
+		function Expression(row, expn) {
+				var rowData = GetRowData(row);
+				//循环代值计算
+				for (var j = 0; j < row.cells.length; j++) {
+					name = row.parentNode.rows[0].cells[j].getAttribute("Name");
+					if (name) {
+						var reg = new RegExp(name, "i");
+						expn = expn.replace(reg, rowData[name].replace(/\,/g, ""));
+					}
+				}
+				return eval(expn);
+			}
+			///////////////////////////////////////////////////////////////////////////////////
+			/** 
+			 * 格式化数字显示方式
+			 * 用法
+			 * formatNumber(12345.999,'#,##0.00');
+			 * formatNumber(12345.999,'#,##0.##');
+			 * formatNumber(123,'000000');
+			 * @param num
+			 * @param pattern
+			 */
+			/* 以下是范例
+			formatNumber('','')=0
+			formatNumber(123456789012.129,null)=123456789012
+			formatNumber(null,null)=0
+			formatNumber(123456789012.129,'#,##0.00')=123,456,789,012.12
+			formatNumber(123456789012.129,'#,##0.##')=123,456,789,012.12
+			formatNumber(123456789012.129,'#0.00')=123,456,789,012.12
+			formatNumber(123456789012.129,'#0.##')=123,456,789,012.12
+			formatNumber(12.129,'0.00')=12.12
+			formatNumber(12.129,'0.##')=12.12
+			formatNumber(12,'00000')=00012
+			formatNumber(12,'#.##')=12
+			formatNumber(12,'#.00')=12.00
+			formatNumber(0,'#.##')=0
+			*/
+
+		function formatNumber(num, pattern) {
+			var strarr = num ? num.toString().split('.') : ['0'];
+			var fmtarr = pattern ? pattern.split('.') : [''];
+			var retstr = '';
+			// 整数部分   
+			var str = strarr[0];
+			var fmt = fmtarr[0];
+			var i = str.length - 1;
+			var comma = false;
+			for (var f = fmt.length - 1; f >= 0; f--) {
+				switch (fmt.substr(f, 1)) {
+					case '#':
+						if (i >= 0) retstr = str.substr(i--, 1) + retstr;
+						break;
+					case '0':
+						if (i >= 0) retstr = str.substr(i--, 1) + retstr;
+						else retstr = '0' + retstr;
+						break;
+					case ',':
+						comma = true;
+						retstr = ',' + retstr;
+						break;
+				}
+			}
+			if (i >= 0) {
+				if (comma) {
+					var l = str.length;
+					for (; i >= 0; i--) {
+						retstr = str.substr(i, 1) + retstr;
+						if (i > 0 && ((l - i) % 3) == 0) retstr = ',' + retstr;
+					}
+				} else retstr = str.substr(0, i + 1) + retstr;
+			}
+			retstr = retstr + '.';
+			// 处理小数部分   
+			str = strarr.length > 1 ? strarr[1] : '';
+			fmt = fmtarr.length > 1 ? fmtarr[1] : '';
+			i = 0;
+			for (var f = 0; f < fmt.length; f++) {
+				switch (fmt.substr(f, 1)) {
+					case '#':
+						if (i < str.length) retstr += str.substr(i++, 1);
+						break;
+					case '0':
+						if (i < str.length) retstr += str.substr(i++, 1);
+						else retstr += '0';
+						break;
+				}
+			}
+			return retstr.replace(/^,+/, '').replace(/\.$/, '');
+		}
+	</script>
+
+	<script type="text/javascript">
+		var tabProduct = document.getElementById("tabProduct");
+		 // 设置表格可编辑
+		 // 可一次设置多个，例如：EditTables(tb1,tb2,tb2,......)
+		EditTables(tabProduct);
+	</script>
+
+</html>

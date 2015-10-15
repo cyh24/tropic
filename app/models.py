@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
-
 class Account(models.Model):
     user = models.OneToOneField(User, unique=True, verbose_name='user_account')
 
@@ -21,6 +20,7 @@ class Account(models.Model):
         db_table = u'account'
 
 class QiniuFile(models.Model):
+    title  = models.CharField(max_length=100)
     key    = models.CharField(max_length=200)
     bucket = models.CharField(max_length=50)
     domain = models.CharField(max_length=100)
@@ -30,10 +30,12 @@ class QiniuFile(models.Model):
     size_int = models.IntegerField(default=0)
     size_str = models.CharField(max_length=50, default="0")
 
+    video_time = models.IntegerField(default=0)
+
     release_date = models.DateTimeField(auto_now=True)
 
     class Meta:
-        abstract = True
+        db_table = u'qiniufile'
 
 class Comment(models.Model):
     user = models.ForeignKey(Account, unique=False)
@@ -61,7 +63,7 @@ class Comment(models.Model):
 
     follow_id    = models.IntegerField()
 
-    comment      = models.CharField(max_length=2048)
+    comment      = models.CharField(max_length=1024)
     release_date = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -78,7 +80,7 @@ class Kind(models.Model):
     class Meta:
         db_table = u'kind'
 
-class Video(QiniuFile):
+class Video(models.Model):
     teacher = models.ForeignKey(Account, unique=False)
     def __get_teacher_name(self):
         try:
@@ -108,7 +110,7 @@ class Video(QiniuFile):
         return None
     teacher_name = property(__get_teacher_name)
     teacher_pic  = property(__get_teacher_pic)
-    teacher_info  = property(__get_teacher_info)
+    teacher_info = property(__get_teacher_info)
 
 
     title    = models.CharField(max_length=50)
@@ -117,9 +119,20 @@ class Video(QiniuFile):
     kind_str = models.CharField(max_length=50)
     tags_str = models.CharField(max_length=100)
         
+    money = models.FloatField(default=0.0)
 
-    video_time = models.IntegerField(default=0)
-    money      = models.FloatField(default=0.0)
+    files = models.ManyToManyField(QiniuFile)
+    def __get_files_num(self):
+        try:
+            if self.files != None:
+                return self.files.count()
+        except Exception, e:
+            print str(e)
+
+        return 0
+
+    files_num = property(__get_files_num)
+
 
     watch_num    = models.IntegerField(default=0)
     like_num     = models.IntegerField(default=0)
@@ -138,15 +151,18 @@ class Video(QiniuFile):
     comments_num = property(__get_comments_num)
 
     info = models.CharField(max_length=400, default="")
+    valid_day = models.IntegerField(default=-1)
 
+    release_date = models.DateTimeField(auto_now=True)
     class Meta:
         db_table = u'video'
 
 
-class Order(models.Model):
 
+class Order(models.Model):
     # -1: invalidate, 1: unpay, 2: paid,
     pay_state = models.IntegerField()
+
     order_num = models.CharField(max_length=32)
     name = models.CharField(max_length=20)
     wxpay_qrcode = models.CharField(max_length=200)
@@ -154,11 +170,11 @@ class Order(models.Model):
 
     account = models.ForeignKey(Account)
 
-    videos  = models.ManyToManyField(Video)
+    video  = models.ForeignKey(Video)
     def __get_list_num(self):
         try:
-            if self.videos != None:
-                return self.videos.count()
+            if self.video != None:
+                return self.video.files_num
         except Exception, e:
             print str(e)
 
@@ -203,3 +219,11 @@ class CollectVideos(models.Model):
     videos_num = property(__get_list_num)
     class Meta:
         db_table = u'star_videos'
+
+
+class IntrestVideos(models.Model):
+    video = models.ForeignKey(Video)
+    release_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = u'intrest_videos'

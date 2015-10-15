@@ -14,6 +14,62 @@
             document.getElementById('temp-delete-id').value = document.getElementById(self.id).getAttribute('data-video-id');
 			window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.warning);
         }
+        
+        function click_delete_intrestvideo(self)
+        {
+            var video_id = document.getElementById(self.id).getAttribute('data-video-id');
+			
+            $.ajax({
+                url: "/delete-intrestvideo/",
+                type: "GET", 
+                dataType: "json",
+                data:{
+                    video_id: video_id,
+                },
+                success:function(obj){
+                    if( obj['state'] == 'success' ){
+                        var data = '删除推荐视频成功！';
+			            window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.info);
+			            
+			            document.getElementById('id-delete-intrest').style.display = "none";
+			            document.getElementById('id-add-intrest').style.display = "block";
+                    }
+                    else{
+                        var data = '删除推荐视频失败！';
+			            window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.info);
+                    }
+                }
+            }); 
+        }
+        
+        function click_add_intrestvideo(self)
+        {
+       
+            var video_id = document.getElementById(self.id).getAttribute('data-video-id');
+			
+            $.ajax({
+                url: "/add-intrestvideo/",
+                type: "GET", 
+                dataType: "json",
+                data:{
+                    video_id: video_id,
+                },
+                success:function(obj){
+                    if( obj['state'] == 'success' ){
+                        var data = '添加推荐视频成功！';
+			            window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.info);
+			            
+			            document.getElementById('id-delete-intrest').style.display = "block";
+			            document.getElementById('id-add-intrest').style.display = "none";
+                    }
+                    else{
+                        var data = '添加推荐视频失败！';
+			            window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.info);
+                    }
+                }
+            }); 
+        }
+
 
         function my_ok_func()
         {
@@ -77,7 +133,7 @@
 					<ul class="navigate_list">
 
 						<li class="item ">
-							<a href="/upload/" class="navi_inner _upload" _hot="uc.side._upload"><i class="icon2_upload"></i><span class="text">上传视频</span></a>
+							<a href="/upload/course/" class="navi_inner _upload" _hot="uc.side._upload"><i class="icon2_upload"></i><span class="text">上传视频</span></a>
 						</li>
 
 						<li class="item ">
@@ -158,7 +214,17 @@
 								<a href="/videos/play/?video-id={{v.id}}" target="_blank" class="img"> <img onerror="picerr(this)" src={{v.logo_img}} alt="testd" width="175px" height="100px"> </a>
 								<div class="video_detail" style="margin-top: 10px;">
 									<h3 class="title"> <a title="testd">{{v.title}}</a> </h3>
-									<h6 class="desc"> 创建于：{{v.release_date}} <span class="album_info _covers" title="">  </span> </h6> </div>
+									<h6 class="desc"> 创建于：{{v.release_date}} <span class="album_info _covers" title="">  </span> 
+									</h6> 
+									<h4 class="desc"> ¥ {{v.money}} 
+										<span class="album_info _covers" title=""> 
+										{% if v.intrest_flag == 1%}
+										推荐视频
+										{% endif %}
+										</span> 
+									</h4> 
+								</div>
+								
 							</div>
 							<div class="item_c">
 								<ol class="trend_list">
@@ -166,10 +232,11 @@
 									<li class="item"><i class="icon2_star"></i><span class="nums">{{v.like_num}}</span></li>
 								</ol>
 							</div>
+							
 							<div class="item_d">
 								<ol class="option_list">
 									<li class="item">
-										<a href="/update-video/?video_id={{v.id}}" class="btn_normal _edit_video" data-vid={{v.id}}>
+										<a href="/update-course/?video_id={{v.id}}" class="btn_normal _edit_video" data-vid={{v.id}}>
 											<i class="icon_edited"></i>
 											<span class="inner">编辑</span>
 										</a>
@@ -178,7 +245,34 @@
 											<span class="inner">删除</span>
 										</a>
 									</li>
-									<!--<li class="item"><a href="javascript:" class="btn_normal _move_cover" data-vid="o0163afhpan" _hot="uc.manage.li.cover"><i class="icon_add"></i><span class="inner">添加到专辑</span></a></li>-->
+									{% if v.intrest_flag == 1 %}
+									<li id="id-delete-intrest" class="item" style="display: block;">
+										<a href="javascript:void(0)" id="id-delete-intrest-{{v.id}}" onclick="click_delete_intrestvideo(this)" data-video-id={{v.id}} class="btn_normal _move_cover">
+											<i class="icon_add"></i>
+											<span class="inner">取消推荐</span>
+										</a>
+									</li>
+									<li id='id-add-intrest' class="item" style="display: none;">
+										<a href="javascript:void(0)" id="id-add-intrest-{{v.id}}" onclick="click_add_intrestvideo(this)" data-video-id={{v.id}} class="btn_normal _move_cover">
+											<i class="icon_add"></i>
+											<span class="inner">设置为推荐</span>
+										</a>
+									</li>
+									{% else %}
+									<li id="id-delete-intrest" class="item" style="display: none;">
+										<a href="javascript:void(0)" id="id-delete-intrest-{{v.id}}" onclick="click_delete_intrestvideo(this)" data-video-id={{v.id}} class="btn_normal _move_cover">
+											<i class="icon_add"></i>
+											<span class="inner">取消推荐</span>
+										</a>
+									</li>
+									<li id='id-add-intrest' class="item" style="display: block;">
+										<a href="javascript:void(0)" id="id-add-intrest-{{v.id}}" onclick="click_add_intrestvideo(this)" data-video-id={{v.id}} class="btn_normal _move_cover">
+											<i class="icon_add"></i>
+											<span class="inner">设置为推荐</span>
+										</a>
+									</li>
+									{% endif %}
+									
 								</ol>
 							</div>
 						</li>
@@ -258,6 +352,8 @@
 			</div>
 
 		</div>
+		
+		{% include "footer.html" %}
 	</body>
 
 </html>

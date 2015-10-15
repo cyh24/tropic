@@ -2,11 +2,19 @@
 <html>
 
 	{% include "include.html"%}
+	
+	
 	<link rel="stylesheet" href="/static/css/july/video.css">
+	<link rel="stylesheet" href="/static/css/july/newplayer.css">
+	<link rel="stylesheet" href="/static/css/july/schollbar.css">
 	<link rel="stylesheet" href="/static/css/txkt/play.css" />
 
 	<link href="/static/video-js/video-js.css" rel="stylesheet" type="text/css">
 	<script src="/static/video-js/video.js"></script>
+	
+	<script src="/static/js/july/jquery.js"></script>
+	<script src="/static/js/july/schollbar.js"></script>
+	
 
 	<script>
 		var VOTE_FLAG = 1;
@@ -26,89 +34,69 @@
 				dataType: "json",
 				success: function(data) {
 					var num = Number($("#id-like-num").html());
-					if(!isNaN(num))
-					{
-          				$("#id-like-num").html(num+1);
-          			}
-          			else
-          			{
-          				$("#id-like-num").html(1);
-          			}
+					if (!isNaN(num)) {
+						$("#id-like-num").html(num + 1);
+					} else {
+						$("#id-like-num").html(1);
+					}
 				}
-          			
 			});
 		}
 
 		function collectCancleAction() {
-            collect_state = document.getElementById('btn_collect_cancle').value 
+			collect_state = document.getElementById('btn_collect_cancle').value
 			$.ajax({
 				type: "GET",
 				url: "/collect/",
 				data: {
-                    collect_state: collect_state,
+					collect_state: collect_state,
 					video_id: {{video.id}},
 				},
 				dataType: "json",
 				success: function(data) {
-                    if(data['collect_state'] === '1')
-                    {
-                        document.getElementById('btn_collect_cancle').value = '1';
-                        document.getElementById('icon_collect_cancle').className = 'fa fa-star';
-                    }
-                    else if(data['collect_state'] === '0')
-                    {
-                        document.getElementById('btn_collect_cancle').value = '0';       
-                        document.getElementById('icon_collect_cancle').className = 'fa fa-star-o';
-                    }
+					if (data['collect_state'] === '1') {
+						document.getElementById('btn_collect_cancle').value = '1';
+						document.getElementById('icon_collect_cancle').className = 'fa fa-star';
+					} else if (data['collect_state'] === '0') {
+						document.getElementById('btn_collect_cancle').value = '0';
+						document.getElementById('icon_collect_cancle').className = 'fa fa-star-o';
+					}
 				}
-          			
 			});
 		}
-		
-		
-		function add_comment(){
-		
-            var content = $('#comment_text').val();
-  
-            if( content =='有没有什么问题要问导师的？' || content.length < 3){
-                alert('评论内容不能少于3个字哦~');
-                return false
-            }
 
-            $.ajax({
-                url: "/add-comment/",
-                type: "GET",
-  				dataType: "json",
-                data: {
-                	follow_id: follow_id,
-                	content: content,
-                	video_id: {{video.id}},
-                },
-                success: function(obj){
-                    
-                    window.location.reload();
-                    
-                }
-            });
+		function add_comment() {
+			var content = $('#comment_text').val();
+			if (content == '有没有什么问题要问导师的？' || content.length < 3) {
+				alert('评论内容不能少于3个字哦~');
+				return false
+			}
+			$.ajax({
+				url: "/add-comment/",
+				type: "GET",
+				dataType: "json",
+				data: {
+					follow_id: follow_id,
+					content: content,
+					video_id: {{video.id}},
+				},
+				success: function(obj) {
+					window.location.reload();
+				}
+			});
 		}
-		
-		
-		
 		var follow_id = -1;
-		function replay(self)
-		{
+
+		function replay(self) {
 			data_comment_name = document.getElementById(self.id).getAttribute('data-comment-name')
 			data_comment_id = document.getElementById(self.id).getAttribute('data-comment-id')
 			follow_id = Number(data_comment_id)
 			document.getElementById("comment_text").value = "回复 " + data_comment_name + ": ";
 			document.getElementById("comment_text").focus();
 		}
-		
-		function star()
-		{
-			
-		}
-		
+
+		function star() {}
+
 		function wechat_share() {
 			$.ajax({
 				type: "GET",
@@ -118,20 +106,17 @@
 				},
 				dataType: "json",
 				success: function(data) {
-                    qrcode_url = data['qrcode_url'];
-                    
-                    document.getElementById('qrcodeWrap').style.display = "block";
-                    document.getElementById('id-qrcode').src = qrcode_url;
-                }
-          			
+					qrcode_url = data['qrcode_url'];
+					document.getElementById('qrcodeWrap').style.display = "block";
+					document.getElementById('id-qrcode').src = qrcode_url;
+				}
 			});
 		}
-		
-		function qrcode_close()
-		{
+
+		function qrcode_close() {
 			document.getElementById('qrcodeWrap').style.display = "none";
 		}
-		
+
 		function addListener(element, e, fn) {
 			if (element.addEventListener) {
 				element.addEventListener(e, fn, false);
@@ -143,24 +128,23 @@
 			function(evt) {
 				var evt = window.event ? window.event : evt,
 					target = evt.srcElement || evt.target;
-				if (target.id == "qrcodeContainer") {
-				} else {
+				if (target.id == "qrcodeContainer") {} else {
 					document.getElementById('qrcodeWrap').style.display = "none";
 				}
 			})
-		
 	</script>
 
 	<body>
 		{% include "header.html" %}
 		
-		<div id="qrcodeWrap" style="display:none;" >
+
+		<div id="qrcodeWrap" style="display:none;">
 			<div class="mask"></div>
-			<div id="qrcodeContainer" class="qrcode-container" >
+			<div id="qrcodeContainer" class="qrcode-container">
 				<div class="qrcode-top"></div>
 				<div class="qrcode-center">
 					<div class="qc-center">
-						<div id="rqcode" >
+						<div id="rqcode">
 							<!--<canvas width="190" height="190" style="display: none;"></canvas>-->
 							<img id="id-qrcode" alt="Scan me!" style="width:200px; height:200px;">
 						</div>
@@ -183,8 +167,8 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-sm-9">
-					<div style="margin-right: 30px;">
+				<div class="col-sm-12">
+					<div style="">
 						<div class="video_player">
 							<div style="width: 100%; height: 100%;">
 								<!--<video src="http://7xlcrn.com1.z0.glb.clouddn.com/testd.mp4" controls="controls" style="width: 100%; height: 100%;">
@@ -205,6 +189,30 @@
 							</div>
 						</div>
 
+						<div class="video_nav content mCustomScrollbar _mCS_1 mCS-autoHide" id="content" style="overflow: visible;">
+							<div id="mCSB_1" class="mCustomScrollBox mCS-minimal mCSB_vertical mCSB_outside" tabindex="0">
+								<div id="mCSB_1_container" class="mCSB_container" style="position: relative; top: 0px; left: 0px; " dir="ltr">
+									<h3>课程目录</h3>
+									{% for p in play_list %}
+										{% if p.cur_flag == 1%}
+										<a class="course_list" href="/videos/play/?video-id={{video.id}}&current={{p.num}}" style="color: rgb(118, 234, 156);">{{p.title}}</a>
+										{% else %}
+										<a class="course_list" href="/videos/play/?video-id={{video.id}}&current={{p.num}}">{{p.title}}</a>
+										{% endif %}
+										<br>
+									{% endfor %}
+								</div>
+							</div>
+							<div id="mCSB_1_scrollbar_vertical" class="mCSB_scrollTools mCSB_1_scrollbar mCS-minimal mCSB_scrollTools_vertical" style="display: block;">
+								<div class="mCSB_draggerContainer">
+									<div id="mCSB_1_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 50px; display: block; height: 371px; max-height: 426px;" oncontextmenu="return false;">
+										<div class="mCSB_dragger_bar" style="line-height: 50px;"></div>
+									</div>
+									<div class="mCSB_draggerRail"></div>
+								</div>
+							</div>
+						</div>
+
 						<div class="share-btn" style="margin-top: 10px;">
 							<div class="Clearfix">
 								<div class="btn-group pull-right">
@@ -218,17 +226,17 @@
 										<span id="id-like-num" class="votes_up_num">{{video.like_num}}</span>
 									</button>
 
-                                    {% if collect_state == '1'%}
+									{% if collect_state == '1'%}
 									<button type="button" id="btn_collect_cancle" class="btn btn-default" style="color:#548cff;" value={{collect_state}} onclick="collectCancleAction()">
 										<span id="icon_collect_cancle" class="fa fa-star"></span>
-								        <span class="votes_up_num">收藏</span>
+										<span class="votes_up_num">收藏</span>
 									</button>
-                                    {% else %}
+									{% else %}
 									<button type="button" id="btn_collect_cancle" class="btn btn-default" style="color:#548cff;" value={{collect_state}} onclick="collectCancleAction()">
 										<span id="icon_collect_cancle" class="fa fa-star-o"></span>
-								        <span class="votes_up_num">收藏</span>
+										<span class="votes_up_num">收藏</span>
 									</button>
-                                    {% endif %}
+									{% endif %}
 
 									<!-- JiaThis Button BEGIN -->
 									<button type="button" class="btn btn-default" id="shareout_button">
@@ -238,7 +246,7 @@
 
 										<ul class=" aw-dropdown dropdown-menu-list dropdown-menu  shareout" role="menu">
 
-                                            <!--
+											<!--
 											<li><a onclick=""><i class="icon icon-weibo "></i> 微博</a></li>
 											<li><a onclick=""><i class="icon icon-qzone "></i> QZONE</a></li>
                                             -->
@@ -262,119 +270,132 @@
 
 						</div>
 
-						<div class="clear" style="margin-top: 50px;"></div>
-						<h4>评论</h4>
-						<hr>
-						<textarea class="form-control" rows="3" id="comment_text" placeholder="" onfocus="if(value=='有没有什么问题要问导师的？'){value='';this.style.color='black';follow_id=-1;}" onblur="if (value ==''){value='有没有什么问题要问导师的？';this.style.color='gray';follow_id=-1;}">有没有什么问题要问导师的？</textarea>
-						<input type="hidden" id="comment_reply" value="0">
-						<br>
-						<div style="height:35px;text-align:right">
-							<button type="button" class="btn btn-primary" id="addcomment" onclick="add_comment()">提交</button>
-						</div>
-						<div id="comments" class="comment">
-							<h4>全部评论&nbsp;&nbsp;<span class="small">共<span id="comments_sumer"> {{comments_num}} </span>条</span></h4>
-							<div class="comment_many">
-								<div class="comment-lists">
+					</div>
+				</div>
+				<div class="col-sm-9" >
+					<div class="clear" style="margin-top: 50px;"></div>
+					
+					<div class="title_h2">评论</div>
+				
+					<textarea class="form-control" rows="3" id="comment_text" placeholder="" onfocus="if(value=='有没有什么问题要问导师的？'){value='';this.style.color='black';follow_id=-1;}" onblur="if (value ==''){value='有没有什么问题要问导师的？';this.style.color='gray';follow_id=-1;}">有没有什么问题要问导师的？</textarea>
+					<input type="hidden" id="comment_reply" value="0">
+					<br>
+					<div style="height:35px;text-align:right">
+						<button type="button" class="btn btn-primary" id="addcomment" onclick="add_comment()">提交</button>
+					</div>
+					<div class="share-btn">
+					<div id="comments" class="comment">
+						<h2 class="title_h2">
+                        	全部评论&nbsp;&nbsp;
+                        	<span class="small">共<span id="comments_sumer">24</span>条</span>
+                   		</h2>
+						
+						<div class="comment_many">
+							<div class="comment-lists">
 
-									{% for comment in comments %}
-									<div class="comment-item" style="padding-bottom:5px;">
-										<div class="mod-head">
-											<a class="anchor"></a>
-											<!-- 用户头像 -->
-											<a class="aw-user-img aw-border-radius-5" href="">
-												<img style="width: 100%; height: 100%;" src={{comment.user_pic}} alt=""></a>
-											<!-- end 用户头像 -->
-											<div class="title">
-												<a class="aw-user-name" href="">{{comment.user_name}}</a> •
-												<span style="margin-top:5px;">{{comment.release_date}}</span>
+								{% for comment in comments %}
+								<div class="comment-item" style="padding-bottom:5px;">
+									<div class="mod-head">
+										<a class="anchor"></a>
+										<!-- 用户头像 -->
+										<a class="aw-user-img aw-border-radius-5" href="">
+											<img style="width: 100%; height: 100%;" src={{comment.user_pic}} alt=""></a>
+										<!-- end 用户头像 -->
+										<div class="title">
+											<a class="aw-user-name" href="">{{comment.user_name}}</a> •
+											<span style="margin-top:5px;">{{comment.release_date}}</span>
 
-												<a id="id-comment-{{comment.id}}" data-comment-id={{comment.id}} data-comment-name={{comment.user_name}} class="comment_btn pull-right" href="javascript:void(0)" onclick="replay(this)">
-													<span class="fa fa-comments-o" style="color:#00458a;"></span> 回复
-												</a>
-											</div>
-										</div>
-
-										<div class="mod-body clearfix">
-											<!-- 评论内容 -->
-											{{comment.comment}}
-											<!-- end 评论内容 -->
-											<div class="meta clearfix">
-											</div>
+											<a id="id-comment-{{comment.id}}" data-comment-id={{comment.id}} data-comment-name={{comment.user_name}} class="comment_btn pull-right" href="javascript:void(0)" onclick="replay(this)">
+												<span class="fa fa-comments-o" style="color:#00458a;"></span> 回复
+											</a>
 										</div>
 									</div>
-									{% endfor %}
 
-								</div>
-
-								<div class="hide" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false">
-									<div class="modal-header">
-										<h5>加载中...</h5>
-									</div>
-									<div class="modal-body">
-										<div class="progress progress-striped active col-md-offset-0" style="padding:0;">
-											<div class="progress-bar" style="width: 100%;"></div>
+									<div class="mod-body clearfix">
+										<!-- 评论内容 -->
+										{{comment.comment}}
+										<!-- end 评论内容 -->
+										<div class="meta clearfix">
 										</div>
 									</div>
 								</div>
-
-								<div class="clearfix">
-								</div>
+								{% endfor %}
 
 							</div>
+
+							<div class="hide" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false">
+								<div class="modal-header">
+									<h5>加载中...</h5>
+								</div>
+								<div class="modal-body">
+									<div class="progress progress-striped active col-md-offset-0" style="padding:0;">
+										<div class="progress-bar" style="width: 100%;"></div>
+									</div>
+								</div>
+							</div>
+
+							<div class="clearfix">
+							</div>
+
 						</div>
 					</div>
-
-				</div>
-				<div class="col-sm-3">
+					</div>
+					</div>
+				<div style="margin-bottom: 80px;">&nbsp;</div>
+				<div class="col-sm-3 relative_video">
 					<!--导师简介-->
-					<h4>导师简介</h4>
-					<div class="teacher">
+					<div class="title_h2">导师简介</div>
+					<div class="teacher_intro">
 						<div class="base">
 
-                            <img src={{video.teacher_pic}} width="60px" height="60px" class="pull-left">
-                            <p class="name">{{video.teacher_name}}</p>
+							<img src={{video.teacher_pic}} width="60px" height="60px" class="pull-left">
+							<div class="name_detail">
+								<h3>{{video.teacher_name}}</h3>
+								<p class="info">{{video.teacher_info}}</p>
+							</div>
 						</div>
-                        <p class="info">{{video.teacher_info}}</p>
+
 					</div>
 					<!--END导师简介-->
 					<!--视频简介-->
-					<h4>视频简介</h4>
+					<div class="title_h2">视频简介</div>
 					<div>
-                        <p>{{video.info}}</p>
+						<p>{{video.info}}</p>
 					</div>
 
 					<br>
 					<br>
 					<br>
 
-					<h4 style="margin-top:-1%;">相关视频</h4>
-
+					<div class="title_h2">相关视频</div>
+			
 					<div>
-                        {% for v in interest_videos%}
+						{% for v in intrest_videos%}
 						<div class="relate-item">
 							<a href="">
-                                <img class="video-img" alt="" src={{v.logo_img}}>
+								<img class="video-img" alt="" src={{v.logo_img}}>
 								<div class="mask" style="display: none;"></div>
 								<i class="icon_playvideo" style="display: none;"></i>
 
-                                <div style="margin-top: 10px;text-align:center;">{{v.title}}</div>
+								<div style="white-space: nowrap;overflow: hidden; text-overflow: ellipsis; margin-top: 10px;text-align:center;">{{v.title}}</div>
 
 							</a>
 
 							<!--<div class="row clearfix" style="margin-top:5px; font-size:12px;height:10px;">-->
-							<div class="col-md-6 col-xs-6" style="text-align:left;">
-                                <i class="fa fa-clock-o"></i>&nbsp;{{v.video_time}}分钟 </div>
-							<div class="col-md-6 col-xs-6" style="text-align:right;">
-                                <i class="fa fa-play-circle-o"></i>&nbsp;{{v.watch_num}} </div>
+							<div class="col-md-6 col-xs-6" style="text-align:left;margin-top:5px;">
+								<i class="fa fa-clock-o"></i>&nbsp;{{v.files_num}}个视频 </div>
+							<div class="col-md-6 col-xs-6" style="text-align:right;margin-top:5px;">
+								<i class="fa fa-play-circle-o"></i>&nbsp;{{v.watch_num}} </div>
 							<!--</div>-->
 						</div>
-                        {% endfor %}
+						{% endfor %}
 					</div>
 
 				</div>
 			</div>
 		</div>
 
+		{% include "footer.html"%}
 	</body>
 
 </html>
