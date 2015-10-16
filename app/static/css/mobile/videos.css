@@ -246,3 +246,9 @@ html,body{
   text-align: center;
 }
 
+.one_row{
+    white-space:nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+

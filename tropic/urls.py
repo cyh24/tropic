@@ -49,6 +49,7 @@ urlpatterns = patterns('',
 
     url(r'^pay/$',          'app.playui.pay_ui'), 
     url(r'^ready-pay/$',    'app.playui.ready_pay'), 
+    url(r'^ready-pay-mobile/$',    'app.playui.mobile_ready_pay'), 
     url(r'^videos/play/$',  'app.playui.play_ui'),
     url(r'^voteup/$',       'app.playui.voteup'),
     url(r'^collect/$',      'app.playui.collect'),

@@ -634,18 +634,18 @@ def paydetail(request):
     unifiedOrder = UnifiedOrder_pub()
     unifiedOrder.setParameter("openid",openid) #商品描述########################
 
-    unifiedOrder.setParameter("body","Ipad mini3 128G") #商品描述
-    timeStamp = time.time()
-    out_trade_no = "{0}{1}".format(getRandomStr(), int(timeStamp*100))
+
+    order = create_unpay_order_mobile(request.user, int(request.POST['video_id']) )
+
+    unifiedOrder.setParameter("body", order.name.encode('utf-8')) #商品描述
+    #out_trade_no = "{0}{1}".format(getRandomStr(), int(timeStamp*100))
+    out_trade_no = order.order_num
     unifiedOrder.setParameter("out_trade_no", out_trade_no) #商户订单号
     unifiedOrder.setParameter("total_fee", str(money)) #总金额
     unifiedOrder.setParameter("notify_url", WxPayConf_pub.NOTIFY_URL) #通知地址 
     unifiedOrder.setParameter("trade_type", "JSAPI") #交易类型
     unifiedOrder.setParameter("attach", "6666") #附件数据，可分辨不同商家(string(127))
     try:
-       # result = unifiedOrder.getResult()
-       # print result
-        
         prepay_id = unifiedOrder.getPrepayId()
         jsApi.setPrepayId(prepay_id)
         jsApiParameters = jsApi.getParameters()
@@ -698,13 +698,14 @@ def get_video_state(user, video):
             is_paid = False
         else:
             for o in user_orders:
-                user_videos = o.videos.all()
-                if getLen(user_videos) == 0:
-                    continue
-                user_video = user_videos[0]
-                if (user_video.id == video.id) and (o.pay_state == 2):
-                    is_paid = True
-                    break
+                if o.video == video:
+                    if o.pay_state == 2:
+                        return True
+                    elif o.pay_state == 1:
+                        if check_pay_by_order_num(o.order_num) == True:
+                            o.pay_state = 2
+                            o.save()
+                            return True
 
     except Exception, e:
         printError("get_video_state: " + str(e))
@@ -858,8 +859,7 @@ def get_unpay(user):
         unpay_orders = Order.objects.filter(account=account).all().filter(pay_state=1).all()
         order_videos = []
         for o in unpay_orders:
-            videos = o.videos.all()
-            order_videos.append(videos[0])
+            order_videos.append(o.video)
         
         return order_videos, getLen(unpay_orders)
 
@@ -871,7 +871,7 @@ def get_unpay(user):
 def unpay_check_video_alive(unpay_order):
     try:
         for order in unpay_order:
-            if getLen(order.videos.all()) == 0:
+            if order.video == None:
                 order.pay_state = -1
                 order.save()
     except Exception, e:
@@ -894,7 +894,7 @@ def del_unpay(user, video_id):
         account = get_account_from_user(user)
         unpay_order = Order.objects.filter(account=account).all().filter(pay_state=1).all()
         for order in unpay_order:
-            if video_id == order.videos.all()[0].id:
+            if video_id == order.video.id:
                 unpay_order = order
                 break
         #unpay_order.pay_state = -1
@@ -917,8 +917,7 @@ def get_paid(user):
         paid_orders = Order.objects.filter(account=account).all().filter(pay_state=2).all()
         order_videos = []
         for o in paid_orders:
-            videos = o.videos.all()
-            order_videos.append(videos[0])
+            order_videos.append(o.video)
 
         
         return order_videos, getLen(paid_orders)
@@ -955,7 +954,6 @@ def update_account(request):
 
 def create_unpay_order(user, video_id):
     try:
-
         video   = get_video_by_id(video_id)
         account = get_account_from_user(user)
         timeStamp = time.time()
@@ -977,31 +975,37 @@ def create_unpay_order(user, video_id):
                             order_time = datetime.datetime.strptime(order_time_str,time_format)
 
                             time_space =  (current-order_time).seconds
-                            if time_space > 7200:
+                            if time_space > 5000:
                                #o.order_num = out_trade_no
-                                remove_file(o.wxpay_qrcode)
-                                o.wxpay_qrcode = get_wxpay_qrcode(o)
-                                o.save()
-                        elif o.pay_state == -1:
-                            o.pay_state = 1
+                                if check_pay_by_order_num(o.order_num) == True:
+                                    o.pay_state = 2
+                                    o.save()
+                                else:
+                                    remove_file(o.wxpay_qrcode)
+                                    o.wxpay_qrcode = get_wxpay_qrcode(o)
+                                    o.save()
+
+                        #elif o.pay_state == -1:
+                        #    o.pay_state = 1
                             #o.order_num = out_trade_no
-                            remove_file(o.wxpay_qrcode)
-                            o.wxpay_qrcode = get_wxpay_qrcode(o)
-                            o.save()
-                        return o
+                        #    remove_file(o.wxpay_qrcode)
+                        #    o.wxpay_qrcode = get_wxpay_qrcode(o)
+                        #    o.save()
+                            return o
         except Exception, e:
-            printError(e)
+            printError("create_unpay_order-1: " + str(e))
             
 
+        print "no exist unpay_order"
 
         unpay_order = Order()
         unpay_order.order_num = out_trade_no
         unpay_order.account = account
+        unpay_order.video = video
         unpay_order.name = video.title
         unpay_order.pic  = video.logo_img
         
         unpay_order.price = video.money
-        unpay_order.number = 1
 
         unpay_order.pay_state = 1
 
@@ -1016,7 +1020,58 @@ def create_unpay_order(user, video_id):
             return unpay_order
 
     except Exception, e:
-        printError(e)
+        printError("create_unpay_order: " + str(e))
+
+    return None
+
+def create_unpay_order_mobile(user, video_id):
+    try:
+        timeStamp = time.time()
+        out_trade_no = "{0}{1}".format(getRandomStr(6),int(timeStamp*100))
+
+        video   = get_video_by_id(video_id)
+        account = get_account_from_user(user)
+        try:
+            t_order = Order.objects.filter(account=account).all()
+
+            if t_order != None:
+                for o in t_order:
+                    v = o.video
+                    if v == video:
+                        if o.pay_state != -1:
+                            if check_pay_by_order_num(o.order_num) == True:
+                                o.pay_state = 2
+                                o.save()
+                            return o
+        except Exception, e:
+            printError("create_unpay_order_mobile-1: " + str(e))
+            
+
+        print "no exist unpay_order_mobile"
+
+        unpay_order = Order()
+        unpay_order.order_num = out_trade_no
+        unpay_order.account = account
+        unpay_order.video = video
+        unpay_order.name = video.title
+        unpay_order.pic  = video.logo_img
+        
+        unpay_order.price = video.money
+
+        unpay_order.pay_state = 1
+
+        #unpay_order.wxpay_qrcode = get_wxpay_qrcode(unpay_order)#"/static/storage/wxpay_qrcode/150831170420-zrOL.png"
+
+        with transaction.atomic():
+            unpay_order.save()
+        
+            unpay_order.video = video
+            unpay_order.save()
+
+            return unpay_order
+
+    except Exception, e:
+        printError("create_unpay_order_mobile: " + str(e))
 
     return None
 

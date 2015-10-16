@@ -182,7 +182,6 @@ class Order(models.Model):
     videos_num = property(__get_list_num)
     
     price   = models.FloatField()
-    number  = models.IntegerField(default=1)
 
     release_date = models.DateTimeField(auto_now=True)
 

@@ -162,7 +162,8 @@
             $money = 0.01;
             $.post("/paydetail/",
                 {
-                    money: $money
+                    money: $money,
+                    video_id:{{video.id}}
                 },
                 function(data){
                 if(data){
@@ -177,7 +178,7 @@
                     },
                     function(res){ 
                         if(res.err_msg == "get_brand_wcpay_request: ok"){
-                        ;
+                            window.reload();
                         }
                     });
                 }

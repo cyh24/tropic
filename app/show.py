@@ -4,6 +4,7 @@ from common import *
 from db_pro import *
 from qiniu_pro import *
 from wechat_pro import *
+from views import wx_login_do
 
 def index(request):
     try:

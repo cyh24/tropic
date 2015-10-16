@@ -65,6 +65,20 @@ def check_pay(request):
 
     return JsonResponse(result)
 
+def check_pay_by_order_num(order_num):
+    try:
+        orderQuery = OrderQuery_pub()
+        orderQuery.setParameter("out_trade_no", order_num)#"1217752501201407033233368056")
+        result = orderQuery.getResult()
+        print result
+        if result['trade_state'] == "SUCCESS":
+            return True
+
+    except Exception, e:
+        print "check_pay_by_trade_no: ", str(e) 
+    
+    return False
+
 def pay_result(request):
     msg = init_msg(request)
     try:

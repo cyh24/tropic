@@ -142,7 +142,7 @@ def pay_ui(request):
         kwargs = {}
         account = get_account_from_user(request.user)
         if account != None:
-            kwargs['account'] = account
+            #kwargs['account'] = account
             kwargs['id'] = request.GET['unpay_order_id']
 
             unpay_order = Order.objects.filter(**kwargs)
@@ -171,6 +171,8 @@ def ready_pay(request):
                     json['state'] = 'paid'
 
     except Exception, e:
-        printError(e)
+        printError("ready_pay: " + str(e))
 
     return JsonResponse(json)
+
+
