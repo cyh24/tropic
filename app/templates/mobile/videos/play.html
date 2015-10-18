@@ -4,6 +4,7 @@
 		{% include "mobile/include.html"%}
 
 		<link rel="stylesheet" href="/static/css/mobile/play.css" />
+		<link rel="stylesheet" href="/static/css/mobile/newplayer.css" />
 
 		<link href="/static/video-js/video-js.css" rel="stylesheet" type="text/css">
 		<script src="/static/video-js/video.js"></script>
@@ -184,6 +185,30 @@
 								</video>
 							</div>
 						</div>
+						
+						<div style="height: 250px;" class="video_nav content mCustomScrollbar _mCS_1 mCS-autoHide" id="content" style="overflow: visible;">
+							<div id="mCSB_1" class="mCustomScrollBox mCS-minimal mCSB_vertical mCSB_outside" tabindex="0">
+								<div id="mCSB_1_container" class="mCSB_container" style="position: relative; top: 0px; left: 0px; " dir="ltr">
+									<h3>课程目录</h3>
+									{% for p in play_list %}
+										{% if p.cur_flag == 1%}
+										<a class="course_list" href="/videos/play/?video-id={{video.id}}&current={{p.num}}" style="color: rgb(118, 234, 156);">{{p.title}}</a>
+										{% else %}
+										<a class="course_list" href="/videos/play/?video-id={{video.id}}&current={{p.num}}">{{p.title}}</a>
+										{% endif %}
+										<br>
+									{% endfor %}
+								</div>
+							</div>
+							<div id="mCSB_1_scrollbar_vertical" class="mCSB_scrollTools mCSB_1_scrollbar mCS-minimal mCSB_scrollTools_vertical" style="display: block;">
+								<div class="mCSB_draggerContainer">
+									<div id="mCSB_1_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 50px; display: block; height: 371px; max-height: 426px;" oncontextmenu="return false;">
+										<div class="mCSB_dragger_bar" style="line-height: 50px;"></div>
+									</div>
+									<div class="mCSB_draggerRail"></div>
+								</div>
+							</div>
+						</div>
 
 						<div class="share-btn" style="margin-top: 5px;">
 							<div class="Clearfix">
@@ -280,10 +305,62 @@
 						</div>
 
 					</div>
+					
+					<div class="col-sm-3 relative_video">
+					<!--导师简介-->
+					<div class="title_h2" style="margin-top: 20px;">导师简介</div>
+					<div class="teacher_intro">
+						<div class="base">
+
+							<img src={{video.teacher_pic}} width="60px" height="60px" class="pull-left">
+							<div class="name_detail">
+								<h3>{{video.teacher_name}}</h3>
+								<p class="info">{{video.teacher_info}}</p>
+							</div>
+						</div>
+
+					</div>
+					<!--END导师简介-->
+					<!--视频简介-->
+					<div class="title_h2">视频简介</div>
+					<div>
+						<p>{{video.info}}</p>
+					</div>
+
+					<br>
+					<br>
+					<br>
+
+					<div class="title_h2">相关视频</div>
+			
+					<div>
+						{% for v in intrest_videos%}
+						<div class="relate-item">
+							<a href="">
+								<img class="video-img" alt="" src={{v.logo_img}}>
+								<div class="mask" style="display: none;"></div>
+								<i class="icon_playvideo" style="display: none;"></i>
+
+								<div style="white-space: nowrap;overflow: hidden; text-overflow: ellipsis; margin-top: 10px;text-align:center;">{{v.title}}</div>
+
+							</a>
+
+							<!--<div class="row clearfix" style="margin-top:5px; font-size:12px;height:10px;">-->
+							<div class="col-md-6 col-xs-6" style="text-align:left;margin-top:5px;">
+								<i class="fa fa-clock-o"></i>&nbsp;{{v.files_num}}个视频 </div>
+							<div class="col-md-6 col-xs-6" style="text-align:right;margin-top:5px;">
+								<i class="fa fa-play-circle-o"></i>&nbsp;{{v.watch_num}} </div>
+							<!--</div>-->
+						</div>
+						{% endfor %}
+					</div>
+
+				</div>
 
 				</div>
 			</div>
 		</div>
+	
 	</body>
 
 </html>
