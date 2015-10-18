@@ -649,10 +649,14 @@ def paydetail(request):
         prepay_id = unifiedOrder.getPrepayId()
         jsApi.setPrepayId(prepay_id)
         jsApiParameters = jsApi.getParameters()
+
+        jsApiParameters = eval(jsApiParameters)
+        jsApiParameters['order_num'] = out_trade_no
     except Exception as e:
         printError("paydetail: " + str(e))
     else:
-        print jsApiParameters
+        jsApiParameters = str(jsApiParameters)
+        print jsApiParameters, type(jsApiParameters)
         return HttpResponse(jsApiParameters)
 
 def create_collect_given_account(account):
@@ -954,6 +958,8 @@ def update_account(request):
 
 def create_unpay_order(user, video_id):
     try:
+        unpay_order = Order()
+
         video   = get_video_by_id(video_id)
         account = get_account_from_user(user)
         timeStamp = time.time()
@@ -967,23 +973,25 @@ def create_unpay_order(user, video_id):
                     v = o.video
                     if v == video:
                         if o.pay_state == 1:
-                            current = datetime.datetime.now()
-                            current_str = current.strftime(time_format)
-                            order_time_str = o.release_date.strftime(time_format)
+                            #current = datetime.datetime.now()
+                            #current_str = current.strftime(time_format)
+                            #order_time_str = o.release_date.strftime(time_format)
 
-                            current = datetime.datetime.strptime(current_str,time_format)
-                            order_time = datetime.datetime.strptime(order_time_str,time_format)
+                            #current = datetime.datetime.strptime(current_str,time_format)
+                            #order_time = datetime.datetime.strptime(order_time_str,time_format)
 
-                            time_space =  (current-order_time).seconds
-                            if time_space > 5000:
-                               #o.order_num = out_trade_no
+                            #time_space =  (current-order_time).seconds
+                            #if time_space > 5000:
+                            if True:
                                 if check_pay_by_order_num(o.order_num) == True:
                                     o.pay_state = 2
                                     o.save()
-                                else:
-                                    remove_file(o.wxpay_qrcode)
-                                    o.wxpay_qrcode = get_wxpay_qrcode(o)
-                                    o.save()
+                                    return o
+                        elif o.pay_state == 2:
+                            return o
+
+                        unpay_order = o
+                        break
 
                         #elif o.pay_state == -1:
                         #    o.pay_state = 1
@@ -991,14 +999,12 @@ def create_unpay_order(user, video_id):
                         #    remove_file(o.wxpay_qrcode)
                         #    o.wxpay_qrcode = get_wxpay_qrcode(o)
                         #    o.save()
-                            return o
         except Exception, e:
             printError("create_unpay_order-1: " + str(e))
             
 
-        print "no exist unpay_order"
 
-        unpay_order = Order()
+        #unpay_order = Order()
         unpay_order.order_num = out_trade_no
         unpay_order.account = account
         unpay_order.video = video
@@ -1026,6 +1032,8 @@ def create_unpay_order(user, video_id):
 
 def create_unpay_order_mobile(user, video_id):
     try:
+        unpay_order = Order()
+        
         timeStamp = time.time()
         out_trade_no = "{0}{1}".format(getRandomStr(6),int(timeStamp*100))
 
@@ -1038,18 +1046,23 @@ def create_unpay_order_mobile(user, video_id):
                 for o in t_order:
                     v = o.video
                     if v == video:
-                        if o.pay_state != -1:
+                        if o.pay_state == 2:
+                            return o
+                        elif o.pay_state == 1:
                             if check_pay_by_order_num(o.order_num) == True:
                                 o.pay_state = 2
                                 o.save()
-                            return o
+                                return o
+                        unpay_order = o
+                        break
+                        
         except Exception, e:
             printError("create_unpay_order_mobile-1: " + str(e))
             
 
         print "no exist unpay_order_mobile"
 
-        unpay_order = Order()
+        #unpay_order = Order()
         unpay_order.order_num = out_trade_no
         unpay_order.account = account
         unpay_order.video = video
