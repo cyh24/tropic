@@ -5,11 +5,13 @@ from db_pro import *
 from qiniu_pro import *
 from wechat_pro import *
 
+from save_excel import *
 
 from wxpay import *
 def test(request):
     print "TEST"
     msg = init_msg(request)
+    save_history()
 
     return render_to_response('test.html', msg)
 

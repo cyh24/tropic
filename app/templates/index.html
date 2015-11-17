@@ -4,7 +4,7 @@
 
 	<link href="/static/css/index/index.css" rel="stylesheet">
 
-	<body style="background-image: url(/static/images/index.jpg);">
+    <body style="background-image: url(/static/images/index.jpg);">
 		{% include "header.html"%}
 		<style>
 			.search-logo {
@@ -38,23 +38,80 @@
 				</div>
 			</div>
 
-		</div>-->
+		</div>
 
 		<div id="sbox" class="sw_sform" role="search" data-bm="20">
-			<div class="hp_sw_logo hpcLogoWhite" data-bm="23">回归线</div>
-			<div class="search_controls ">
+			<div class="search_controls " style="text-align:center;">
 				<a href="javascript:void(0)" id="hpinsthk" h="ID=SERP,5109.1"><span></span></a>
 				<form form action="/search/" >
 					<div class="b_searchboxForm" data-bm="24">
 						<input class="b_searchbox" id="sb_form_q" name="title" title="输入搜索词" type="search" value="" maxlength="100" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="输入(名称、类别、关键词) 搜索">
 						<input type="submit" class="b_searchboxSubmit" id="sb_form_go" title="搜索" >
-						
 					</div>
 				</form>
 			</div>
 		</div>
+        -->
+
+
+		<div class="container-fluid" style="width:700px;">
+			<div class="row-fluid">
+				<div class="span12">
+
+		<div id="sbox" class="sw_sform" role="search" data-bm="20" style="margin-top:100px;">
+			<div class="search_controls " style="text-align:center;">
+				<a href="javascript:void(0)" id="hpinsthk" h="ID=SERP,5109.1"><span></span></a>
+				<form form action="/search/" >
+					<div class="b_searchboxForm" data-bm="24">
+						<input class="b_searchbox" id="sb_form_q" name="title" title="输入搜索词" type="search" value="" maxlength="100" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="输入(名称、类别、关键词) 搜索">
+						<input type="submit" class="b_searchboxSubmit" id="sb_form_go" title="搜索" >
+					</div>
+				</form>
+			</div>
+		</div>
+					<div class="carousel slide" id="carousel-734444" >
+						<ol class="carousel-indicators">
+							<li data-slide-to="0" data-target="#carousel-734444">
+							</li>
+							<li data-slide-to="1" data-target="#carousel-734444" class="active">
+							</li>
+							<li data-slide-to="2" data-target="#carousel-734444">
+							</li>
+						</ol>
+						<div class="carousel-inner" style="margin-top:50px; height:300px;">
+							<div class="item" >
+                                <a href="http://www.facebuaa.cn/videos">
+								<img alt="" src="/static/images/homepage/1.jpg" />
+                                </a>
+                                <!--
+								<div class="carousel-caption2">
+									<h4>
+										棒球
+									</h4>
+									<p>
+										棒球运动是一种以棒打球为主要特点，集体性、对抗性很强的球类运动项目，在美国、日本尤为盛行。
+									</p>
+								</div>
+                                -->
+							</div>
+							<div class="item active">
+                                <a href="http://www.facebuaa.cn/videos">
+								<img alt="" src="/static/images/homepage/2.jpg" />
+                                </a>
+							</div>
+							<div class="item">
+                                <a href="http://www.facebuaa.cn/videos">
+								<img alt="" src="/static/images/homepage/3.jpg" />
+                                </a>
+							</div>
+						</div> <a data-slide="prev" href="#carousel-734444" class="left carousel-control">‹</a> 
+                        <a data-slide="next" href="#carousel-734444" class="right carousel-control">›</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div style="width: 100%; position: absolute; bottom: 0px;">
-			
 			{% include "footer.html"%}
 		</div>
 

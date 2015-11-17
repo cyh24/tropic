@@ -5,6 +5,11 @@ from db_pro import *
 from qiniu_pro import *
 from wechat_pro import *
 
+@login_required(login_url='/login/')
+@csrf_exempt
+def videos_data(request):
+    msg = init_msg(request)
+    return render_to_response('videos/videos-data.html', msg)
 
 @login_required(login_url='/login/')
 @csrf_exempt
