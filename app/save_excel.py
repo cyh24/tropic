@@ -24,7 +24,5 @@ def excel_videos():
         row.append(v.comment_num)
 
 
-
-
 if __name__ == "__main__":
     get_history()

@@ -8,6 +8,31 @@ from wechat_pro import *
 from save_excel import *
 
 from wxpay import *
+from django.http import StreamingHttpResponse
+ 
+
+def download(request):
+    # do something...
+    def file_iterator(file_name, chunk_size=1024):
+        with open(file_name) as f:
+            while True:
+                c = f.read(chunk_size)
+                if c:
+                    yield c
+                else:
+                    break
+
+    filename = "none"
+    if request.GET.has_key("filename"):
+        filename = request.GET['filename']
+ 
+    the_file_name = DOWNLOAD_FOLD + filename
+    response = StreamingHttpResponse(file_iterator(the_file_name))
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="{0}"'.format(filename)
+ 
+    return response
+
 def test(request):
     print "TEST"
     msg = init_msg(request)

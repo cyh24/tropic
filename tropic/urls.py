@@ -86,7 +86,7 @@ urlpatterns = patterns('',
 
     url(r'^paydetail/$', 'app.db_pro.paydetail'), 
 
+    url(r'^download/$', 'app.views.download'), 
 
-    
     url(r'^test/', 'app.views.test')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
