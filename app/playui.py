@@ -7,7 +7,7 @@ from wechat_pro import *
 
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/wechat-login/')
 @csrf_exempt
 def play_ui(request):
     msg = init_msg(request)
@@ -121,7 +121,7 @@ def collect(request):
 
     return JsonResponse(json)
 
-@login_required(login_url='/login/')
+@login_required(login_url='/wechat-login/')
 @csrf_protect
 def comment_add(request):
     json = {}
@@ -134,7 +134,7 @@ def comment_add(request):
     return JsonResponse(json)
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/wechat-login/')
 @csrf_protect
 def pay_ui(request):
     msg = init_msg(request)
@@ -154,7 +154,7 @@ def pay_ui(request):
     return render_to_response('pay/pay.html', msg)
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/wechat-login/')
 @csrf_protect
 def ready_pay(request):
     json = {'state': 'fail'}

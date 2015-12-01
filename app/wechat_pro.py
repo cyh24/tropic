@@ -18,8 +18,10 @@ class WechatAuth():
 
     def get_authorize_url(self, request):
         if checkMobile(request) == True:
+            print self.mobile_auth_url
             return self.mobile_auth_url
         else:
+            print self.pc_auth_url
             return self.pc_auth_url
         
 

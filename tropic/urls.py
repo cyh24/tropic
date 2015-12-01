@@ -41,6 +41,7 @@ urlpatterns = patterns('',
 
     url(r'^update-course/$',        'app.videomanage.update_course_ui'),
     url(r'^videos/manage/$',        'app.videomanage.videos_manage'),
+    url(r'^manage/$',               'app.videomanage.videos_manage'),
     url(r'^delete-video/$',         'app.videomanage.delete_video'), 
     url(r'^delete-intrestvideo/$',  'app.videomanage.delete_intrestvideo'),
     url(r'^add-intrestvideo/$',     'app.videomanage.add_intrestvideo'),

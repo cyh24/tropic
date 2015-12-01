@@ -36,6 +36,18 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage, PageNotAnIn
 USER_PIC_FOLD = "app/static/storage/user-pic/"
 LOGO_FOLD = "app/static/storage/logo-images/"
 
+
+from functools import wraps
+def super_user(fn):
+    @wraps(fn)
+    def wrapper(*args):
+        if args[0].user.is_superuser == False:
+            return HttpResponseRedirect("/login/")
+        result = fn(*args)
+        return result
+ 
+    return wrapper
+
 def printError(e):
     print "Error: ", str(e)
 

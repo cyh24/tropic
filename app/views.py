@@ -23,23 +23,28 @@ def download(request):
                     break
 
     filename = "none"
+    the_file_name = ""
     if request.GET.has_key("filename"):
         filename = request.GET['filename']
+        if filename == "users.xls":
+            the_file_name = users_info()
+        elif filename == "videos.xls":
+            the_file_name = videos_info()
  
-    the_file_name = DOWNLOAD_FOLD + filename
     response = StreamingHttpResponse(file_iterator(the_file_name))
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="{0}"'.format(filename)
  
     return response
 
+@super_user
 def test(request):
     print "TEST"
     msg = init_msg(request)
-    save_history()
+    videos_info()
+    users_info()
 
-    return render_to_response('test.html', msg)
-
+    return render_to_response('test.html', msg) 
 
 def login_ui(request):
     msg = init_msg(request)
@@ -47,13 +52,12 @@ def login_ui(request):
     return render_to_response('login/login.html', msg)
 
 def wechat_login(request):
-    #login_url = "https://open.weixin.qq.com/connect/qrconnect?appid=%s&redirect_uri=%s&response_type=%s&scope=%s&state=%s#wechat_redirect"%(APP_ID, REDIRECT_URL, RESPONSE_TYPE, SCOPE, STATE)
     login_url = WxAuth.get_authorize_url(request)
 
     return HttpResponseRedirect(login_url)
 
 def wechat_share(request):
-    url = "http://facebuaa.cn"
+    url = "http://el.tropic.com.cn"
     if request.GET.has_key('cur_url'):
         url = request.GET['cur_url']
 
@@ -75,19 +79,21 @@ def excute_login(request, username, password):
 
 
 def wx_login_do(request, user):
+    print "wx_login_do..."
     username = user['unionid']
     password = "Z!"+username+"1!"
 
     excute_login(request, username, password)
 
-    account = get_account_from_user(request.user)
-    if checkMobile(request) == True:
-        if account.wx_wx_openid == None or account.wx_wx_openid == "":
-            account.wx_wx_openid = user['openid']
-    else:
-        if account.wx_pc_openid == None or account.wx_pc_openid == "":
-            account.wx_pc_openid = user['openid']
-    account.save()
+    exist_user_account(user)
+    #account = get_account_from_user(request.user)
+    #if checkMobile(request) == True:
+    #    if account.wx_wx_openid == None or account.wx_wx_openid == "":
+    #        account.wx_wx_openid = user['openid']
+    #else:
+    #    if account.wx_pc_openid == None or account.wx_pc_openid == "":
+    #        account.wx_pc_openid = user['openid']
+    #account.save()
 
 
 def login_do(request):
@@ -106,10 +112,13 @@ def login_do(request):
             # judge whether db exist accout related to the user.
             exist_user_account(user)
 
+            if user.is_superuser == True:
+                return HttpResponseRedirect("/manage/")
+
             if msg.has_key('next'):
                 return HttpResponseRedirect( HOMEPAGE+ msg['next'])
             else:
-                return HttpResponseRedirect( HOMEPAGE)
+                return HttpResponseRedirect(HOMEPAGE)
 
 
     return render_to_response('login/login.html', msg)

@@ -33,3 +33,7 @@ admin.site.register(models.WatchHistory, WatchHistoryAdmin)
 class CollectVideosAdmin(admin.ModelAdmin):
     pass
 admin.site.register(models.CollectVideos, CollectVideosAdmin)
+
+class DataInfoAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.DataInfo, DataInfoAdmin)

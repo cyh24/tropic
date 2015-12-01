@@ -49,10 +49,12 @@
 						<ul class="nav navbar-nav  navbar-nav-font-size">
 							<li id="indexpage"><a href="/index/">首页</a>
 							</li>
-							<li id="algorithm" class=""><a href="/videos/">视频</a>
+							<li id="algorithm" class=""><a href="/videos/">课程</a>
 							</li>
+                            <!--
 							<li id="algorithm"><a href="/videos/manage/">管理</a>
 							</li>
+                            -->
 						</ul>
 
 						<form class="aw-search-box navbar-form navbar-left" role="search" action="/search/">
@@ -66,7 +68,7 @@
 
 							{% if login_state == False %}
 							<li id="unlogin" data-toggle="modal" data-target="/login/">
-								<a href="/login/">登陆</a>
+								<a href="/wechat-login/">登陆</a>
 							</li>
 
 							<li id="unregeister" data-toggle="modal" data-target="#register">

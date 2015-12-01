@@ -73,77 +73,32 @@
                             -->
 						</li>
 
-						{% for v in videos %}
+
 						<li class="list_item">
-							<div class="item_a">
-								<input type="checkbox" class="_check_video" data-vid="o0163afhpan"> </div>
-							<div class="item_b">
-								<a href="/videos/play/?video-id={{v.id}}" target="_blank" class="img"> <img onerror="picerr(this)" src={{v.logo_img}} alt="testd" width="175px" height="100px"> </a>
-								<div class="video_detail" style="margin-top: 10px;">
-									<h3 class="title"> <a title="testd">{{v.title}}</a> </h3>
-									<h6 class="desc"> 创建于：{{v.release_date}} <span class="album_info _covers" title="">  </span> 
-									</h6> 
-									<h4 class="desc"> ¥ {{v.money}} 
-										<span class="album_info _covers" title=""> 
-										{% if v.intrest_flag == 1%}
-										推荐视频
-										{% endif %}
-										</span> 
-									</h4> 
-								</div>
-								
-							</div>
-							<div class="item_c">
-								<ol class="trend_list">
-									<li class="item"><i class="icon2_play"></i><span class="nums">{{v.watch_num}}</span></li>
-									<li class="item"><i class="icon2_star"></i><span class="nums">{{v.like_num}}</span></li>
-								</ol>
-							</div>
-							
-							<div class="item_d">
+							<div class="excel_item">
 								<ol class="option_list">
 									<li class="item">
-										<a href="/update-course/?video_id={{v.id}}" class="btn_normal _edit_video" data-vid={{v.id}}>
+										<a href="/download/?filename=users.xls" class="btn_normal _edit_video  excel_title">
 											<i class="icon_edited"></i>
-											<span class="inner">编辑</span>
-										</a>
-                                        <a href="javascript:void(0)" id="id-delete-{{v.id}}" onclick="click_delete_video(this)" class="btn_normal _del_video" data-video-id={{v.id}} >
-											<i class="icon_delete"></i>
-											<span class="inner">删除</span>
+                                            用户统计信息
 										</a>
 									</li>
-									{% if v.intrest_flag == 1 %}
-									<li id="id-delete-intrest" class="item" style="display: block;">
-										<a href="javascript:void(0)" id="id-delete-intrest-{{v.id}}" onclick="click_delete_intrestvideo(this)" data-video-id={{v.id}} class="btn_normal _move_cover">
-											<i class="icon_add"></i>
-											<span class="inner">取消推荐</span>
-										</a>
-									</li>
-									<li id='id-add-intrest' class="item" style="display: none;">
-										<a href="javascript:void(0)" id="id-add-intrest-{{v.id}}" onclick="click_add_intrestvideo(this)" data-video-id={{v.id}} class="btn_normal _move_cover">
-											<i class="icon_add"></i>
-											<span class="inner">设置为推荐</span>
-										</a>
-									</li>
-									{% else %}
-									<li id="id-delete-intrest" class="item" style="display: none;">
-										<a href="javascript:void(0)" id="id-delete-intrest-{{v.id}}" onclick="click_delete_intrestvideo(this)" data-video-id={{v.id}} class="btn_normal _move_cover">
-											<i class="icon_add"></i>
-											<span class="inner">取消推荐</span>
-										</a>
-									</li>
-									<li id='id-add-intrest' class="item" style="display: block;">
-										<a href="javascript:void(0)" id="id-add-intrest-{{v.id}}" onclick="click_add_intrestvideo(this)" data-video-id={{v.id}} class="btn_normal _move_cover">
-											<i class="icon_add"></i>
-											<span class="inner">设置为推荐</span>
-										</a>
-									</li>
-									{% endif %}
-									
 								</ol>
 							</div>
 						</li>
-						{% endfor %}
+
+						<li class="list_item">
+							<div class="excel_item">
+								<ol class="option_list">
+									<li class="item">
+										<a href="/download/?filename=videos.xls" class="btn_normal _edit_video  excel_title">
+											<i class="icon_edited"></i>
+                                            课程统计信息
+										</a>
+									</li>
+								</ol>
+							</div>
+						</li>
 
 					</ul>
 

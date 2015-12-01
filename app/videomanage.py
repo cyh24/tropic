@@ -5,14 +5,16 @@ from db_pro import *
 from qiniu_pro import *
 from wechat_pro import *
 
-@login_required(login_url='/login/')
-@csrf_exempt
+##@login_required(login_url='/login/')
+@super_user
 def videos_data(request):
     msg = init_msg(request)
+    data_info = DataInfo.objects.all()
+    msg['data_info'] = data_info
     return render_to_response('videos/videos-data.html', msg)
 
-@login_required(login_url='/login/')
-@csrf_exempt
+#@login_required(login_url='/login/')
+@super_user
 def videos_manage(request):
     msg = init_msg(request)
 
@@ -56,8 +58,8 @@ def videos_manage(request):
     return render_to_response('videos/videos-manage.html', msg)
 
 
-@login_required(login_url='/login/')
-@csrf_exempt
+#@login_required(login_url='/login/')
+@super_user
 def delete_video(request):
     json = {'state': 'fail'}
     try:
@@ -70,8 +72,8 @@ def delete_video(request):
     return JsonResponse(json)
 
 
-@login_required(login_url='/login/')
-@csrf_exempt
+#@login_required(login_url='/login/')
+@super_user
 def delete_intrestvideo(request):
     json = {'state': 'fail'}
     try:
@@ -83,8 +85,8 @@ def delete_intrestvideo(request):
         printError(e)
     return JsonResponse(json)
 
-@login_required(login_url='/login/')
-@csrf_exempt
+#@login_required(login_url='/login/')
+@super_user
 def add_intrestvideo(request):
     json = {'state': 'fail'}
     try:
@@ -96,8 +98,8 @@ def add_intrestvideo(request):
         printError(e)
     return JsonResponse(json)
 
-@login_required(login_url='/login/')
-@csrf_protect
+#@login_required(login_url='/login/')
+@super_user
 def upload_course_ui(request):
     data = init_msg(request)
 
@@ -106,7 +108,8 @@ def upload_course_ui(request):
 
 
 
-@login_required(login_url='/login/')
+#@login_required(login_url='/login/')
+@super_user
 @csrf_protect
 def update_course_ui(request):
     msg = init_msg(request)

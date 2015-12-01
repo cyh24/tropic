@@ -116,14 +116,17 @@ a[href='/register/'] {
 /* Declare heights because of positioning of img element */
 
 .carousel .item {
-	height: 450px;
+	/*height: 450px;
 	background-color: #555;
+    */
 }
 .carousel img {
+    /*
 	position: absolute;
 	top: 0;
 	left: 0;
 	min-height: 360px;
+    */
 }
 /*ç®—æ³•é¡µé¢çš„æ˜¾ç¤ºè·ç¦»*/
 
@@ -569,7 +572,9 @@ span#global_search_btns {
 		width: 100%;
 	}
 	.carousel .item {
+        /*
 		height: 350px;
+        */
 	}
 	.navbar-inverse .navbar-collapse {
 		background-color: #333;

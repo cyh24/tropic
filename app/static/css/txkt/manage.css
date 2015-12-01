@@ -833,11 +833,19 @@ ol {
 	border: 0 none;
 	padding: 0 2px;
 	margin-right: 10px;
-	color: #999
+	color: #999;
 }
 .option_list .btn_normal i {
 	display: none
 }
 .option_list .btn_normal:hover {
 	color: #ff7e0c
+}
+
+.excel_title {
+    color: #000;
+    font-size: 20px;
+}
+.excel_item {
+    margin-left: 40px;
 }

@@ -7,9 +7,11 @@ from models import *
 from config import *
 
 from django.db import transaction
-from wxpay import *
+from wxpay import get_wxpay_qrcode, check_pay_by_order_num
+from wxknife import JsApi_pub, UnifiedOrder_pub, WxPayConf_pub
 import datetime
-from django.db.models import Q
+from django.db.models import *
+from qiniu_pro import upload_free_file
 
 
 def upload_course_post(request):
@@ -26,13 +28,14 @@ def upload_course_post(request):
             handle_uploaded_photo(path, request.FILES['logo'])
             print "logo: ", path
 
-            path_logo = path[3:]
-            if save_video(request, path_logo) == True:
+            #path_logo = path[3:]
+            new_path = upload_free_file(path)
+
+            if save_video(request, new_path) == True:
                 msg['state'] = 'ok'
 
     except Exception, e:
         print "upload_course_post: ", str(e)
-        #return HttpResponse("Fail.") 
     
     return render_to_response('info.html', msg)
 
@@ -48,11 +51,11 @@ def update_course_post(request):
             if request.FILES['logo'] != None:
                 path = LOGO_FOLD + getRandomStr() + "-" + request.FILES['logo'].name
                 handle_uploaded_photo(path, request.FILES['logo'])
-                print "logo: ", path
 
-                path_logo = path[3:]
+                #path_logo = path[3:]
+                new_path = upload_free_file(path)
             
-                if update_video(request, path_logo) == True:
+                if update_video(request, new_path) == True:
                     msg['state'] = 'ok'
         else:
             if update_video(request) == True:
@@ -60,7 +63,6 @@ def update_course_post(request):
 
     except Exception, e:
         print "upload_course_post: ", str(e)
-        #return HttpResponse("Fail.") 
     
     return render_to_response('info.html', msg)
 
@@ -630,22 +632,23 @@ def paydetail(request):
     print "openid: ", openid
     money = 1
 
-    jsApi = JsApi_pub()
-    unifiedOrder = UnifiedOrder_pub()
-    unifiedOrder.setParameter("openid",openid) #商品描述########################
-
-
-    order = create_unpay_order_mobile(request.user, int(request.POST['video_id']) )
-
-    unifiedOrder.setParameter("body", order.name.encode('utf-8')) #商品描述
-    #out_trade_no = "{0}{1}".format(getRandomStr(), int(timeStamp*100))
-    out_trade_no = order.order_num
-    unifiedOrder.setParameter("out_trade_no", out_trade_no) #商户订单号
-    unifiedOrder.setParameter("total_fee", str(money)) #总金额
-    unifiedOrder.setParameter("notify_url", WxPayConf_pub.NOTIFY_URL) #通知地址 
-    unifiedOrder.setParameter("trade_type", "JSAPI") #交易类型
-    unifiedOrder.setParameter("attach", "6666") #附件数据，可分辨不同商家(string(127))
     try:
+        jsApi = JsApi_pub()
+        unifiedOrder = UnifiedOrder_pub()
+        unifiedOrder.setParameter("openid",openid) #商品描述########################
+
+
+        order = create_unpay_order_mobile(request.user, int(request.POST['video_id']) )
+
+        unifiedOrder.setParameter("body", order.name.encode('utf-8')) #商品描述
+        #out_trade_no = "{0}{1}".format(getRandomStr(), int(timeStamp*100))
+        out_trade_no = order.order_num
+        unifiedOrder.setParameter("out_trade_no", out_trade_no) #商户订单号
+        unifiedOrder.setParameter("total_fee", str(money)) #总金额
+        unifiedOrder.setParameter("notify_url", WxPayConf_pub.NOTIFY_URL) #通知地址 
+        unifiedOrder.setParameter("trade_type", "JSAPI") #交易类型
+        unifiedOrder.setParameter("attach", "6666") #附件数据，可分辨不同商家(string(127))
+
         prepay_id = unifiedOrder.getPrepayId()
         jsApi.setPrepayId(prepay_id)
         jsApiParameters = jsApi.getParameters()
@@ -656,7 +659,7 @@ def paydetail(request):
         printError("paydetail: " + str(e))
     else:
         jsApiParameters = str(jsApiParameters)
-        print jsApiParameters, type(jsApiParameters)
+        #print jsApiParameters, type(jsApiParameters)
         return HttpResponse(jsApiParameters)
 
 def create_collect_given_account(account):
@@ -698,12 +701,15 @@ def get_video_state(user, video):
 
         user_orders = Order.objects.filter(account=account).all()
         is_paid = False
-        if getLen(user_orders) < 1:
+        if user.is_superuser == True:
+            is_paid = True
+        elif getLen(user_orders) < 1:
             is_paid = False
         else:
             for o in user_orders:
                 if o.video == video:
                     if o.pay_state == 2:
+                        print check_chaoshi(o.release_date, video.valid_day)
                         return True
                     elif o.pay_state == 1:
                         if check_pay_by_order_num(o.order_num) == True:
@@ -716,6 +722,24 @@ def get_video_state(user, video):
 
     return is_paid
 
+def check_chaoshi(release_date, threshold):
+    if threshold == -1:
+        return False
+    year  = release_date.year
+    month = release_date.month
+    day   = release_date.day
+    d1 = datetime.date(year, month, day)
+
+    now = datetime.datetime.now()
+    cur_year  = now.year
+    cur_month = now.month
+    cur_day   = now.day
+    d2 = datetime.date(cur_year, cur_month, cur_day)
+
+    if (d2-d1).days > threshold:
+        return False
+
+    return True
 
 def add_watch_history(user, video):
     if user == None:
@@ -1002,8 +1026,6 @@ def create_unpay_order(user, video_id):
         except Exception, e:
             printError("create_unpay_order-1: " + str(e))
             
-
-
         #unpay_order = Order()
         unpay_order.order_num = out_trade_no
         unpay_order.account = account
@@ -1059,8 +1081,6 @@ def create_unpay_order_mobile(user, video_id):
         except Exception, e:
             printError("create_unpay_order_mobile-1: " + str(e))
             
-
-        print "no exist unpay_order_mobile"
 
         #unpay_order = Order()
         unpay_order.order_num = out_trade_no

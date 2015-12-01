@@ -226,3 +226,11 @@ class IntrestVideos(models.Model):
 
     class Meta:
         db_table = u'intrest_videos'
+
+class DataInfo(models.Model):
+    title     = models.CharField(max_length=100, unique=True)
+    filename  = models.CharField(max_length=100)
+    modify_datetime = models.CharField(max_length=100)
+
+    class Meta:
+        db_table = u'data_info'

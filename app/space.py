@@ -50,7 +50,7 @@ def get_space_msg(request, get_videos_method):
 
     return msg
 
-@login_required(login_url='/login/')
+@login_required(login_url='/wechat-login/')
 @csrf_exempt
 # watching history list
 def space_index(request):
@@ -66,7 +66,7 @@ def space_index(request):
         return render_to_response('space/history.html', msg)
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/wechat-login/')
 @csrf_exempt
 # watching history list
 def space_collect(request):
@@ -81,7 +81,7 @@ def space_collect(request):
         return render_to_response('space/collect.html', msg)
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/wechat-login/')
 @csrf_exempt
 # watching history list
 def space_shopping_cart(request):
@@ -94,7 +94,7 @@ def space_shopping_cart(request):
     return render_to_response('space/unpay.html', msg)
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/wechat-login/')
 @csrf_exempt
 # watching history list
 def space_paid(request):
@@ -115,7 +115,7 @@ def setprofile(request):
 
     return render_to_response('space/setprofile.html', msg)
 
-@login_required(login_url='/login/')
+@login_required(login_url='/wechat-login/')
 @csrf_exempt
 def setavator(request):
     msg = init_msg(request)
@@ -166,7 +166,7 @@ def unpay_del(request):
 
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/wechat-login/')
 @csrf_protect
 def random_pic(request):
     json = {}
@@ -190,7 +190,7 @@ def random_pic(request):
     return JsonResponse(json)
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/wechat-login/')
 @csrf_protect
 def update_profile(request):
     json = {}
@@ -205,7 +205,7 @@ def update_profile(request):
     return JsonResponse(json)
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/wechat-login/')
 @csrf_protect
 @csrf_exempt
 def update_pic(request):
