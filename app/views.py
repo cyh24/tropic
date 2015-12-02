@@ -9,7 +9,6 @@ from save_excel import *
 
 from wxpay import *
 from django.http import StreamingHttpResponse
- 
 
 def download(request):
     # do something...
@@ -30,21 +29,19 @@ def download(request):
             the_file_name = users_info()
         elif filename == "videos.xls":
             the_file_name = videos_info()
- 
+
     response = StreamingHttpResponse(file_iterator(the_file_name))
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="{0}"'.format(filename)
- 
+
     return response
+
 
 @super_user
 def test(request):
     print "TEST"
-    msg = init_msg(request)
-    videos_info()
-    users_info()
-
-    return render_to_response('test.html', msg) 
+    msg = {}
+    return render_to_response('plans.html', msg)
 
 def login_ui(request):
     msg = init_msg(request)
@@ -101,7 +98,7 @@ def login_do(request):
 
     username = request.POST['username']
     password = request.POST['password']
-    
+
 
     user = authenticate(username=username, password=password)
     if user is not None:

@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>HTML5 MediaElement</title>	
+	
+	<script src="/static/js/vplayer/jquery.js"></script>	
+	<script src="/static/js/vplayer/mediaelement-and-player.min.js"></script>
+	<link rel="stylesheet" href="/static/js/vplayer/mediaelementplayer.min.css" />
+</head>
+<body>
+
+<!-- simple single file method -->
+<video width="640" height="360" src="http://7xlcrn.com1.z0.glb.clouddn.com/oceans-clip.swf"  id="player1"  controls="controls" preload="none"></video>
+	
+<span id="player1-mode"></span>
+
+
+<script>
+$('audio,video').mediaelementplayer({
+	//mode: 'shim',
+	success: function(player, node) {
+		$('#' + node.id + '-mode').html('mode: ' + player.pluginType);
+	}
+});
+
+</script>
+
+<input type="button" id="stopall" value="Stop all">
+
+<script>
+$('#stopall').click(function() {
+    $('video, audio').each(function() {
+          $(this)[0].player.pause();		  
+    });
+});
+</script>
+
+
+</body>
+</html>

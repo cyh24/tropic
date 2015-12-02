@@ -4,11 +4,11 @@ from common import *
 
 class WechatAuth():
     def __init__(self):
-        self.PC_api = WeixinAPI(appid = PC_APP_ID, 
+        self.PC_api = WeixinAPI(appid = PC_APP_ID,
                                 app_secret   = PC_APP_SECRET,
                                 redirect_uri = REDIRECT_URL)
 
-        self.Mobile_api = WeixinMpAPI(appid = WX_APP_ID, 
+        self.Mobile_api = WeixinMpAPI(appid = WX_APP_ID,
                                     app_secret   = WX_APP_SECRET,
                                     redirect_uri = REDIRECT_URL)
 
@@ -23,7 +23,6 @@ class WechatAuth():
         else:
             print self.pc_auth_url
             return self.pc_auth_url
-        
 
     def get_user(self, request):
         try:

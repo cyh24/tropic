@@ -14,12 +14,12 @@ class settings:
     ALIPAY_SIGN_TYPE = 'MD5'
 
     # 付完款后跳转的页面（同步通知） 要用 http://格式的完整路径，不允许加?id=123这类自定义参数
-    ALIPAY_RETURN_URL='http://el.tropic.com.cn/alipay_return'
+    ALIPAY_RETURN_URL='http://el.tropic.com.cn/alipay_return/'
 
     # 交易过程中服务器异步通知的页面 要用 http://格式的完整路径，不允许加?id=123这类自定义参数
-    ALIPAY_NOTIFY_URL='http://el.tropic.com.cn/alipay_notify'
+    ALIPAY_NOTIFY_URL='http://el.tropic.com.cn/alipay_notify/'
 
-    ALIPAY_SHOW_URL='http://el.tropic.com.cn/alipay_show'
+    ALIPAY_SHOW_URL='http://el.tropic.com.cn/alipay_show/'
 
     # 访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
     ALIPAY_TRANSPORT='https'

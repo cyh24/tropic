@@ -118,7 +118,7 @@ class Video(models.Model):
 
     kind_str = models.CharField(max_length=50)
     tags_str = models.CharField(max_length=100)
-        
+
     money = models.FloatField(default=0.0)
 
     files = models.ManyToManyField(QiniuFile)
@@ -180,7 +180,6 @@ class Order(models.Model):
 
         return 0
     videos_num = property(__get_list_num)
-    
     price   = models.FloatField()
 
     release_date = models.DateTimeField(auto_now=True)

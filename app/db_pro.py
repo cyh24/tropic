@@ -20,7 +20,6 @@ def upload_course_post(request):
         if request.method == "POST":
             for x in request.POST:
                 print x, request.POST[x]
-        
 
         if request.FILES.has_key('logo'):
 
@@ -36,7 +35,7 @@ def upload_course_post(request):
 
     except Exception, e:
         print "upload_course_post: ", str(e)
-    
+
     return render_to_response('info.html', msg)
 
 def update_course_post(request):
@@ -45,7 +44,7 @@ def update_course_post(request):
         if request.method == "POST":
             for x in request.POST:
                 print x, request.POST[x]
-        
+
 
         if request.FILES.has_key('logo'):
             if request.FILES['logo'] != None:
@@ -54,7 +53,7 @@ def update_course_post(request):
 
                 #path_logo = path[3:]
                 new_path = upload_free_file(path)
-            
+
                 if update_video(request, new_path) == True:
                     msg['state'] = 'ok'
         else:
@@ -63,7 +62,7 @@ def update_course_post(request):
 
     except Exception, e:
         print "upload_course_post: ", str(e)
-    
+
     return render_to_response('info.html', msg)
 
 
@@ -74,7 +73,7 @@ def save_tag(tag_name):
     if db_tags != None:
         for db_tag in db_tags:
             db_tlist.append(db_tag.name)
-    
+
     if db_tlist == None:
         pass
     elif tag_name in db_tlist:
@@ -85,7 +84,7 @@ def save_tag(tag_name):
     tag.save()
 
     return True
-    
+
 def save_kind(kind_name):
     print "save kind; ", kind_name
     db_kinds = Tag.objects.all()
@@ -118,7 +117,7 @@ def tag_deal(tag_list):
     for tag in tag_list:
         if tag not in db_tlist:
             save_tag(tag)
-            
+
 def kind_deal(kind):
     db_kinds = Kind.objects.all()
     db_klist = []
@@ -137,6 +136,16 @@ def get_video_by_id(video_id):
             return video
     except Exception, e:
         printError(e)
+
+    return None
+
+def get_video_by_ordernum(order_num):
+    try:
+        order = get_order_given_ordernum(order_num)
+        video = order.video
+        return video
+    except Exception, e:
+        printError("get_video_by_ordernum: "+str(e))
 
     return None
 
@@ -179,7 +188,7 @@ def save_video(request, logo_path, need_authority=True):
                     tagStr += tag_list[i]
             video.tags_str = tagStr.encode('utf-8')
             tag_deal(tag_list)
-            
+
         if data.has_key('kind'):
             kind = data['kind']
             video.kind_str = kind.encode('utf-8')
@@ -187,7 +196,7 @@ def save_video(request, logo_path, need_authority=True):
 
         if data.has_key('valid_day'):
             video.valid_day = int(data['valid_day'].strip())
-            
+
         if data.has_key('desc'):
             video.info = data['desc'].encode('utf-8')
         if data.has_key('money'):
@@ -207,7 +216,7 @@ def save_video(request, logo_path, need_authority=True):
                     qfiles[i].save()
 
                     video.files.add(qfiles[i])
-            
+
             video.save()
             return True
     except Exception, e:
@@ -219,7 +228,7 @@ def get_qiniu_files(data):
     qfiles = []
     count = 0
     table = json.loads(data['table_json'].encode('utf-8'))
-    
+
     for row in table:
         qiniu_file = QiniuFile()
         video_key  = row['video_key'].encode('utf-8').strip()
@@ -252,7 +261,7 @@ def update_video(request, logo_path="", need_authority=True):
 
         if logo_path != "":
             video.logo_img = logo_path
-        
+
         data = request.POST
         if data.has_key('title'):
             video.title = data['title'].encode('utf-8')
@@ -271,7 +280,7 @@ def update_video(request, logo_path="", need_authority=True):
                     tagStr += tag_list[i]
             video.tags_str = tagStr.encode('utf-8')
             tag_deal(tag_list)
-            
+
         if data.has_key('kind'):
             kind = data['kind']
             video.kind_str = kind.encode('utf-8')
@@ -279,7 +288,7 @@ def update_video(request, logo_path="", need_authority=True):
 
         if data.has_key('valid_day'):
             video.valid_day = int(data['valid_day'].strip())
-            
+
         if data.has_key('desc'):
             video.info = data['desc'].encode('utf-8')
         if data.has_key('money'):
@@ -301,15 +310,15 @@ def update_video(request, logo_path="", need_authority=True):
 
                     video.files.add(qfiles[i])
                     pass
-            
+
             video.save()
             return True
     except Exception, e:
         print str(e)
-    
+
     return False
- 
-    
+
+
 
 def add_watch_num(video_id):
     try:
@@ -451,13 +460,13 @@ def add_collect_video(user, video_id):
                     is_exist = True
             if is_exist == False:
                 collect_videos.videos.add(video)
-            
+
         collect_videos.save()
         return True
 
     except Exception, e:
         printError("Error: add_watch_num.\nError: " + str(e))
-    
+
     return False
 
 def cancle_collect_video(user, video_id):
@@ -469,7 +478,7 @@ def cancle_collect_video(user, video_id):
         collect_videos = get_collect_from_account(account)
         video = get_video_by_id(video_id)
         videos = collect_videos.videos.all()
-        
+
         if getLen(videos) < 1:
             return True
         else:
@@ -478,13 +487,13 @@ def cancle_collect_video(user, video_id):
                 if v != video:
                     t_videos.append(v)
             collect_videos.videos = t_videos
-            
+
         collect_videos.save()
         return True
 
     except Exception, e:
         printError("Error: cancle_collect_video.\nError: " + str(e))
-    
+
     return False
 
 
@@ -521,7 +530,7 @@ def create_account_given_wx(request, wx_user):
             user.username = wx_unionid
             user.set_password("Z!"+wx_unionid+"1!")
             user.save()
-        
+
             account = Account()
             account.user = user
             account.wx_unionid = wx_unionid
@@ -619,7 +628,7 @@ def get_openid_from_user(request):
             open_id = account.wx_wx_openid
         else:
             open_id = account.wx_pc_openid
-        
+
     except Exception, e:
         printError("get_openid_from_user: " + str(e))
 
@@ -630,8 +639,6 @@ def paydetail(request):
     openid = get_openid_from_user(request)
     #openid = request.openid
     print "openid: ", openid
-    money = 1
-
     try:
         jsApi = JsApi_pub()
         unifiedOrder = UnifiedOrder_pub()
@@ -639,13 +646,14 @@ def paydetail(request):
 
 
         order = create_unpay_order_mobile(request.user, int(request.POST['video_id']) )
+        money = int(order.price*100)
 
         unifiedOrder.setParameter("body", order.name.encode('utf-8')) #商品描述
         #out_trade_no = "{0}{1}".format(getRandomStr(), int(timeStamp*100))
         out_trade_no = order.order_num
         unifiedOrder.setParameter("out_trade_no", out_trade_no) #商户订单号
         unifiedOrder.setParameter("total_fee", str(money)) #总金额
-        unifiedOrder.setParameter("notify_url", WxPayConf_pub.NOTIFY_URL) #通知地址 
+        unifiedOrder.setParameter("notify_url", WxPayConf_pub.NOTIFY_URL) #通知地址
         unifiedOrder.setParameter("trade_type", "JSAPI") #交易类型
         unifiedOrder.setParameter("attach", "6666") #附件数据，可分辨不同商家(string(127))
 
@@ -659,7 +667,7 @@ def paydetail(request):
         printError("paydetail: " + str(e))
     else:
         jsApiParameters = str(jsApiParameters)
-        #print jsApiParameters, type(jsApiParameters)
+        print jsApiParameters, type(jsApiParameters)
         return HttpResponse(jsApiParameters)
 
 def create_collect_given_account(account):
@@ -795,7 +803,7 @@ def get_watch_history(user):
             watch_history = watch_history[0]
 
         videos = watch_history.videos.all()
-        
+
         return videos, watch_history.videos_num
 
     except Exception, e:
@@ -843,7 +851,7 @@ def get_collect(user):
             collect_videos = collect_videos[0]
 
         videos = collect_videos.videos.all()
-        
+
         return videos, collect_videos.videos_num
 
     except Exception, e:
@@ -855,7 +863,7 @@ def get_collect_num(user):
     try:
         account = get_account_from_user(user)
         collect_videos = CollectVideos.objects.filter(account=account).all()[0]
-        
+
         return collect_videos.videos_num
 
     except Exception, e:
@@ -888,13 +896,20 @@ def get_unpay(user):
         order_videos = []
         for o in unpay_orders:
             order_videos.append(o.video)
-        
+
         return order_videos, getLen(unpay_orders)
 
     except Exception, e:
         printError("get_unpay: " + str(e))
 
     return None, 0
+
+def get_order_given_ordernum(order_num):
+    order = Order.objects.all().filter(order_num=order_num)
+    if getLen(order) == 0:
+        return None
+    else:
+        return order[0]
 
 def unpay_check_video_alive(unpay_order):
     try:
@@ -947,7 +962,7 @@ def get_paid(user):
         for o in paid_orders:
             order_videos.append(o.video)
 
-        
+
         return order_videos, getLen(paid_orders)
 
     except Exception, e:
@@ -1025,14 +1040,14 @@ def create_unpay_order(user, video_id):
                         #    o.save()
         except Exception, e:
             printError("create_unpay_order-1: " + str(e))
-            
+
         #unpay_order = Order()
         unpay_order.order_num = out_trade_no
         unpay_order.account = account
         unpay_order.video = video
         unpay_order.name = video.title
         unpay_order.pic  = video.logo_img
-        
+
         unpay_order.price = video.money
 
         unpay_order.pay_state = 1
@@ -1041,7 +1056,7 @@ def create_unpay_order(user, video_id):
 
         with transaction.atomic():
             unpay_order.save()
-        
+
             unpay_order.video = video
             unpay_order.save()
 
@@ -1055,7 +1070,7 @@ def create_unpay_order(user, video_id):
 def create_unpay_order_mobile(user, video_id):
     try:
         unpay_order = Order()
-        
+
         timeStamp = time.time()
         out_trade_no = "{0}{1}".format(getRandomStr(6),int(timeStamp*100))
 
@@ -1077,10 +1092,10 @@ def create_unpay_order_mobile(user, video_id):
                                 return o
                         unpay_order = o
                         break
-                        
+
         except Exception, e:
             printError("create_unpay_order_mobile-1: " + str(e))
-            
+
 
         #unpay_order = Order()
         unpay_order.order_num = out_trade_no
@@ -1088,7 +1103,7 @@ def create_unpay_order_mobile(user, video_id):
         unpay_order.video = video
         unpay_order.name = video.title
         unpay_order.pic  = video.logo_img
-        
+
         unpay_order.price = video.money
 
         unpay_order.pay_state = 1
@@ -1097,7 +1112,7 @@ def create_unpay_order_mobile(user, video_id):
 
         with transaction.atomic():
             unpay_order.save()
-        
+
             unpay_order.video = video
             unpay_order.save()
 

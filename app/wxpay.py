@@ -11,7 +11,7 @@ import qrcode
 import base64
 
 def generate_qrcode(code_url):
-    qr = qrcode.QRCode(version = 2, 
+    qr = qrcode.QRCode(version = 2,
             error_correction = qrcode.constants.ERROR_CORRECT_L,
             box_size = 10, border = 1)
     qr.add_data(code_url)
@@ -20,12 +20,10 @@ def generate_qrcode(code_url):
     return img
 
 def get_wxpay_qrcode(order):
-    
     outfile = "/static/images/banner.png"
-    
     unifiedOrder = UnifiedOrder_pub()
     unifiedOrder.setParameter("body",order.name.encode("utf-8"))
-    unifiedOrder.setParameter("total_fee","1")#str(int(order.price*100)))
+    unifiedOrder.setParameter("total_fee",str(int(order.price*100)))#str(int(order.price*100)))
     unifiedOrder.setParameter("out_trade_no",order.order_num)
     unifiedOrder.setParameter("notify_url",WxPayConf_pub.NOTIFY_URL)
     unifiedOrder.setParameter("trade_type","NATIVE")
@@ -39,7 +37,7 @@ def get_wxpay_qrcode(order):
             APP_PATH = os.path.dirname(os.path.dirname(__file__))
             STATIC_PATH = os.path.join(APP_PATH, 'app/static/storage/qrcode/').replace('\\','/')
             img_name = getRandomStr()+".png"
-            outfile = os.path.join(STATIC_PATH, img_name) 
+            outfile = os.path.join(STATIC_PATH, img_name)
             img.save(outfile)
             outfile = '/static/storage/qrcode/'+img_name
             #base64_code = base64.encode(img)
@@ -54,10 +52,10 @@ def check_pay(request):
     try:
         if request.GET.has_key('out_trade_no'):
             out_trade_no = request.GET['out_trade_no']
-        
+
         orderQuery = OrderQuery_pub()
         orderQuery.setParameter("out_trade_no", out_trade_no)#"1217752501201407033233368056")
-    
+
         result = orderQuery.getResult()
         #print result
     except Exception, e:
@@ -75,8 +73,8 @@ def check_pay_by_order_num(order_num):
             return True
 
     except Exception, e:
-        print "check_pay_by_trade_no: ", str(e) 
-    
+        print "check_pay_by_trade_no: ", str(e)
+
     return False
 
 def pay_result(request):

@@ -42,7 +42,7 @@ urlpatterns = patterns('',
     url(r'^update-course/$',        'app.videomanage.update_course_ui'),
     url(r'^videos/manage/$',        'app.videomanage.videos_manage'),
     url(r'^manage/$',               'app.videomanage.videos_manage'),
-    url(r'^delete-video/$',         'app.videomanage.delete_video'), 
+    url(r'^delete-video/$',         'app.videomanage.delete_video'),
     url(r'^delete-intrestvideo/$',  'app.videomanage.delete_intrestvideo'),
     url(r'^add-intrestvideo/$',     'app.videomanage.add_intrestvideo'),
     url(r'^upload/course/$',        'app.videomanage.upload_course_ui'),
@@ -50,8 +50,8 @@ urlpatterns = patterns('',
     url(r'^videos/data-manage/$',        'app.videomanage.videos_data'),
 
 
-    url(r'^pay/$',          'app.playui.pay_ui'), 
-    url(r'^ready-pay/$',    'app.playui.ready_pay'), 
+    url(r'^pay/$',          'app.playui.pay_ui'),
+    url(r'^ready-pay/$',    'app.playui.ready_pay'),
     url(r'^videos/play/$',  'app.playui.play_ui'),
     url(r'^voteup/$',       'app.playui.voteup'),
     url(r'^collect/$',      'app.playui.collect'),
@@ -77,17 +77,20 @@ urlpatterns = patterns('',
     url(r'^user/update-profile/$',  'app.space.update_profile'),
 
 
-    url(r'^wechat-login/$', 'app.views.wechat_login'), 
-    url(r'^wechat-share/$', 'app.views.wechat_share'), 
+    url(r'^wechat-login/$', 'app.views.wechat_login'),
+    url(r'^wechat-share/$', 'app.views.wechat_share'),
 
 
-    url(r'^wechat-pay/$', 'app.wxpay.payback'), 
-    url(r'^ajax_check/$', 'app.wxpay.check_pay'), 
+    url(r'^wechat-pay/$', 'app.wxpay.payback'),
+    url(r'^ajax_check/$', 'app.wxpay.check_pay'),
     url(r'^pay_result/$', 'app.wxpay.pay_result'),
 
-    url(r'^paydetail/$', 'app.db_pro.paydetail'), 
+    url(r'^paydetail/$', 'app.db_pro.paydetail'),
 
-    url(r'^download/$', 'app.views.download'), 
+    url(r'^download/$', 'app.views.download'),
 
+    url(r'^alipay/$', 'app.ali_pay.alipay'),
+    url(r'^alipay_notify/$', 'app.ali_pay.alipay_notify'),
+    url(r'^alipay_return/$', 'app.ali_pay.alipay_return'),
     url(r'^test/', 'app.views.test')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
