@@ -13,7 +13,6 @@ import datetime
 from django.db.models import *
 from qiniu_pro import upload_free_file
 
-
 def upload_course_post(request):
     msg = {'state': 'fail'}
     try:
@@ -717,12 +716,16 @@ def get_video_state(user, video):
             for o in user_orders:
                 if o.video == video:
                     if o.pay_state == 2:
-                        print check_chaoshi(o.release_date, video.valid_day)
-                        return True
+                        if check_chaoshi(o.release_date, video.valid_day) == True:
+                            return False
+                        else:
+                            return True
                     elif o.pay_state == 1:
                         if check_pay_by_order_num(o.order_num) == True:
                             o.pay_state = 2
                             o.save()
+                            # add user order info
+                            add_user_order_info(account, o, pc_flag=1)
                             return True
 
     except Exception, e:
@@ -731,20 +734,24 @@ def get_video_state(user, video):
     return is_paid
 
 def check_chaoshi(release_date, threshold):
-    if threshold == -1:
-        return False
-    year  = release_date.year
-    month = release_date.month
-    day   = release_date.day
-    d1 = datetime.date(year, month, day)
+    try:
+        if threshold == -1:
+            return False
+        year  = release_date.year
+        month = release_date.month
+        day   = release_date.day
+        d1 = datetime.date(year, month, day)
 
-    now = datetime.datetime.now()
-    cur_year  = now.year
-    cur_month = now.month
-    cur_day   = now.day
-    d2 = datetime.date(cur_year, cur_month, cur_day)
+        now = datetime.datetime.now()
+        cur_year  = now.year
+        cur_month = now.month
+        cur_day   = now.day
+        d2 = datetime.date(cur_year, cur_month, cur_day)
 
-    if (d2-d1).days > threshold:
+        if (d2-d1).days <= threshold:
+            return False
+    except Exception, e:
+        print "Error, check_chaoshi, ", str(e)
         return False
 
     return True
@@ -911,6 +918,16 @@ def get_order_given_ordernum(order_num):
     else:
         return order[0]
 
+def get_orderid_given_user_video(user, video):
+    try:
+        account = get_account_from_user(user)
+        order = Order.objects.all().filter(account=account).all().filter(video=video).all()
+        return order[0].id
+    except Exception, e:
+        print "get_orderid_given_user_video: ", str(e)
+
+    return None
+
 def unpay_check_video_alive(unpay_order):
     try:
         for order in unpay_order:
@@ -997,6 +1014,7 @@ def update_account(request):
 
 def create_unpay_order(user, video_id):
     try:
+        created_flag = False
         unpay_order = Order()
 
         video   = get_video_by_id(video_id)
@@ -1029,6 +1047,7 @@ def create_unpay_order(user, video_id):
                         elif o.pay_state == 2:
                             return o
 
+                        created_flag = True
                         unpay_order = o
                         break
 
@@ -1048,7 +1067,8 @@ def create_unpay_order(user, video_id):
         unpay_order.name = video.title
         unpay_order.pic  = video.logo_img
 
-        unpay_order.price = video.money
+        if created_flag == False:
+            unpay_order.price = video.money
 
         unpay_order.pay_state = 1
 
@@ -1060,6 +1080,9 @@ def create_unpay_order(user, video_id):
             unpay_order.video = video
             unpay_order.save()
 
+            if created_flag == False:
+                add_user_order_info(account, unpay_order, pc_flag=True)
+
             return unpay_order
 
     except Exception, e:
@@ -1069,6 +1092,7 @@ def create_unpay_order(user, video_id):
 
 def create_unpay_order_mobile(user, video_id):
     try:
+        created_flag = False
         unpay_order = Order()
 
         timeStamp = time.time()
@@ -1090,6 +1114,7 @@ def create_unpay_order_mobile(user, video_id):
                                 o.pay_state = 2
                                 o.save()
                                 return o
+                        created_flag = True
                         unpay_order = o
                         break
 
@@ -1104,7 +1129,8 @@ def create_unpay_order_mobile(user, video_id):
         unpay_order.name = video.title
         unpay_order.pic  = video.logo_img
 
-        unpay_order.price = video.money
+        if created_flag == False:
+            unpay_order.price = video.money
 
         unpay_order.pay_state = 1
 
@@ -1115,6 +1141,9 @@ def create_unpay_order_mobile(user, video_id):
 
             unpay_order.video = video
             unpay_order.save()
+
+            if created_flag == False:
+                add_user_order_info(account, unpay_order, pc_flag=False)
 
             return unpay_order
 
@@ -1160,3 +1189,62 @@ def db_add_intrestvideo(request):
         printError(e)
 
     return False
+
+
+def add_user_watch_info(request, video):
+    try:
+        user_watch = UserWatchInfo()
+        user_watch.account = get_account_from_user(request.user)
+        user_watch.video = video
+        if checkMobile(request) == True:
+            user_watch.pc_flag = False
+        else:
+            user_watch.pc_flag = True
+
+        user_watch.save()
+    except Exception, e:
+        print "Error: add_user_watch_info: ", str(e)
+
+def add_user_order_info(account, order, pc_flag):
+    try:
+        user_order = UserOrderInfo()
+        user_order.account   = account
+        user_order.order     = order
+        user_order.price     = order.price
+        user_order.pay_state = order.pay_state
+        user_order.pc_flag   = pc_flag
+
+        user_order.save()
+    except Exception, e:
+        print "Error: add_user_order_info: ", str(e)
+
+
+def add_user_order_info_by_request(request, order_num):
+    order = get_order_given_ordernum(order_num)
+    if checkMobile(request) == True:
+        pc_flag = False
+    else:
+        pc_flag = True
+    account = get_account_from_user(request.user)
+    add_user_order_info(account, order, pc_flag)
+
+def pay_result(request):
+    msg = init_msg(request)
+    try:
+        if request.GET.has_key('paid_order_id'):
+            paid_order_id = request.GET['paid_order_id']
+            paid_orders = Order.objects.filter(id=paid_order_id)
+            paid_order = paid_orders[0]
+            paid_order.pay_state = 2
+            remove_file(paid_order.wxpay_qrcode)
+            paid_order.save()
+
+            # add user order info
+            add_user_order_info_by_request(request, paid_order.order_num)
+
+            msg['paid_order'] = paid_order
+    except Exception, e:
+        printError(e)
+    ###应添加订单状态处理
+    return render_to_response('pay/notice.html', msg)
+

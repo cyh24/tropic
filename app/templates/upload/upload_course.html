@@ -11,7 +11,6 @@
 			td{border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#CCCCCC;}
 			.EditCell_TextBox{width:100%;border:1px solid #0099CC;}
 			.EditCell_DropDownList{width:100%;}
-			
 			.table_input{
 				width: 100%;
 			}
@@ -128,7 +127,6 @@
 								</div>
 							</div>
 
-							
 
 							<!--<input type="TEXT" id="id_rand_key" name="key" style="display:none;">
 							<input type="TEXT" id="id_link" name="video-link" style="display: none;">
@@ -139,34 +137,28 @@
 							<div style="width: 100%;">
 
 								<h3></h3>
-								 
 								<table width="100%" border="1" cellpadding="1" cellspacing="1" id="tabProduct">
 									<tr>
 										<td width="8%" align="center" bgcolor="#EFEFEF" name="check"><input type="checkbox" name="checkbox" value="checkbox" /></td>
 										<td width="8%" align="center" bgcolor="#EFEFEF" name="video_num" EditType="">序号</td>
-										
 										<td width="30%" align="center" bgcolor="#EFEFEF" name="video_name" EditType="TextBox">视频名称</td>
 										<td width="30%" align="center" bgcolor="#EFEFEF" name="video_key" EditType="TextBox">视频地址</td>
-										<td width="26%" align="center" bgcolor="#EFEFEF" name="video_time" EditType="TextBox">视频时间</td>
-								
+										<td width="26%" align="center" bgcolor="#EFEFEF" name="video_time" EditType="TextBox" >视频时间</td>
 									</tr>
 									<tr>
 										<td width="8%" align="center"><input type="checkbox" name="checkbox2" value="checkbox" /></td>
 										<td width="8%" align="center">1</td>
 										<td width="30%"></td>
 										<td width="30%"></td>
-										<td width="26%"></td>
+										<td width="26%">0</td>
 									</tr>
-						
 								</table>
 								<br />
 								<input type="button" name="Submit" value="新增视频" onclick="AddRow(document.getElementById('tabProduct'),1)" />
 								<input type="button" name="Submit2" value="删除视频" onclick="DeleteRow(document.getElementById('tabProduct'),1)" />
 								<!--<input type="button" name="Submit22" value="重置" onclick="window.location.reload()" />-->
 								<!--<input type="submit" name="Submit3" value="提交" onclick="GetTableData(document.getElementById('tabProduct'));return false;" />-->
-							
 							</div>
-							
 							<input id="id_table_json" name="table_json" type="text" style="display: none;" value="" />
 
 						</form>
@@ -384,18 +376,15 @@
 
 		function AddRow(table, index) {
 				var lastRow = table.rows[table.rows.length - 1];
-			
 				//alert(JSON.stringify(GetTableData(table))); 
 				var newRow = lastRow.cloneNode(true);
-				
 				newRow.cells[1].innerText = (table.rows.length).toString();
 				newRow.cells[2].innerHTML = "";
 				newRow.cells[3].innerHTML = "";
-				newRow.cells[4].innerHTML = "";
+				newRow.cells[4].innerHTML = "0";
 //				newRow.cells[2].innerHTML = '<input class="table_input" name="vname_' + (table.rows.length).toString()+ '" value="" />';
 //				newRow.cells[3].innerHTML = '<input class="table_input" name="vkey_' + (table.rows.length).toString()+ '" value="" />';
 //				newRow.cells[4].innerHTML = '<input class="table_input" name="vtime_' + (table.rows.length).toString()+ '" value="" />';
-//				
 				table.tBodies[0].appendChild(newRow);
 				SetRowCanEdit(newRow);
 				return newRow;
@@ -403,13 +392,11 @@
 			//删除行
 
 		function DeleteRow(table, index) {
-			
 				for (var i = table.rows.length - 1; i > 0; i--) {
 					var chkOrder = table.rows[i].cells[0].firstChild;
 					if (chkOrder) {
 						if (chkOrder.type = "CHECKBOX") {
 							if (chkOrder.checked) {
-					
 								//执行删除
 								table.deleteRow(i);
 							}

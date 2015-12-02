@@ -16,7 +16,6 @@
    	 	}
 
 		function show_delete() {
-			
 			var list = document.getElementById("course_list"); //获取检索范围
 			var str = list.getElementsByTagName("a"); //获取检索内容块
 			for (var i = 0; i < str.length; i++) //遍历内容块
@@ -207,7 +206,7 @@
 											</a>
 										</div>
 										<div class="course-title"> 
-											<div href="/videos/play/?video-id={{v.id}}" class="item-tt-link">{{v.title}}</div> 
+                                            <div href="/videos/play/?video-id={{v.id}}" class="item-tt-link">订单ID:{{v.order_id}}-{{v.title}}</div> 
 										</div>
 										<div class="course-emphasis">
 											{% if v.money == 0 %}

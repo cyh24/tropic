@@ -36,7 +36,6 @@
           				$("#id-like-num").html(1);
           			}
 				}
-          			
 			});
 		}
 
@@ -62,22 +61,17 @@
                         document.getElementById('icon_collect_cancle').className = 'fa fa-star-o';
                     }
 				}
-          			
 			});
 		}
 		function show_pay() {
 			document.getElementById('id-go-pay').style.display = "block";
 		}
-		
 		function hide_pay() {
 			document.getElementById('id-go-pay').style.display = "none";
 		}
-		
-		
+
 		function add_comment(){
-		
             var content = $('#comment_text').val();
-  
             if( content =='有没有什么问题要问导师的？' || content.length < 3){
                 alert('评论内容不能少于3个字哦~');
                 return false
@@ -93,15 +87,12 @@
                 	video_id: {{video.id}},
                 },
                 success: function(obj){
-                    
+
                     window.location.reload();
-                    
                 }
             });
 		}
-		
-		
-		
+
 		var follow_id = -1;
 		function replay(self)
 		{
@@ -111,7 +102,6 @@
 			document.getElementById("comment_text").value = "回复 " + data_comment_name + ": ";
 			document.getElementById("comment_text").focus();
 		}
-		
 		function star()
 		{
 			
@@ -186,15 +176,12 @@
 
 
         function pay(){
-            $money = 0.01;
             $.post("/paydetail/",
                 {
-                    money: $money,
                     video_id:{{video.id}}
                 },
                 function(data){
                 if(data){
-                    
                     var jsonobj = eval('('+data+')');
 
                     // set interval to check the order
@@ -209,7 +196,7 @@
                         "signType" : "MD5", //
                         "paySign" : jsonobj.paySign //
                     },
-                    function(res){ 
+                    function(res){
                         if(res.err_msg == "get_brand_wcpay_request: ok"){
                             window.reload();
                         }

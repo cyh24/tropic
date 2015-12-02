@@ -13,6 +13,7 @@ from django.http import StreamingHttpResponse
 def download(request):
     # do something...
     def file_iterator(file_name, chunk_size=1024):
+        print file_name
         with open(file_name) as f:
             while True:
                 c = f.read(chunk_size)
@@ -25,14 +26,18 @@ def download(request):
     the_file_name = ""
     if request.GET.has_key("filename"):
         filename = request.GET['filename']
-        if filename == "users.xls":
+        if filename == "users.csv":
             the_file_name = users_info()
-        elif filename == "videos.xls":
+        elif filename == "videos.csv":
             the_file_name = videos_info()
+        elif filename == "user_watch_info.csv":
+            the_file_name = user_watch_info()
+        elif filename == "user_order_info.csv":
+            the_file_name = user_order_info()
 
     response = StreamingHttpResponse(file_iterator(the_file_name))
     response['Content-Type'] = 'application/octet-stream'
-    response['Content-Disposition'] = 'attachment;filename="{0}"'.format(filename)
+    response['Content-Disposition'] = 'attachment;filename="{0}"'.format(str(filename))
 
     return response
 

@@ -68,7 +68,6 @@ def create_direct_pay_by_user(tn, subject, body, total_fee):
     params = {}
     params['service']       = 'create_direct_pay_by_user'
     params['payment_type']  = '1'
-    
     # 获取配置文件
     params['partner']           = settings.ALIPAY_PARTNER
     params['seller_email']      = settings.ALIPAY_SELLER_EMAIL
@@ -76,34 +75,29 @@ def create_direct_pay_by_user(tn, subject, body, total_fee):
     params['notify_url']        = settings.ALIPAY_NOTIFY_URL
     params['_input_charset']    = settings.ALIPAY_INPUT_CHARSET
     params['show_url']          = settings.ALIPAY_SHOW_URL
-    
     # 从订单数据中动态获取到的必填参数
     params['out_trade_no']  = tn        # 请与贵网站订单系统中的唯一订单号匹配
     params['subject']       = subject   # 订单名称，显示在支付宝收银台里的“商品名称”里，显示在支付宝的交易管理的“商品名称”的列表里。
     params['body']          = body      # 订单描述、订单详细、订单备注，显示在支付宝收银台里的“商品描述”里
     params['total_fee']     = total_fee # 订单总金额，显示在支付宝收银台里的“应付总额”里
-    
     # 扩展功能参数——网银提前
     params['paymethod'] = 'directPay'   # 默认支付方式，四个值可选：bankPay(网银); cartoon(卡通); directPay(余额); CASH(网点支付)
     params['defaultbank'] = ''          # 默认网银代号，代号列表见http://club.alipay.com/read.php?tid=8681379
-    
     # 扩展功能参数——防钓鱼
     params['anti_phishing_key'] = ''
     params['exter_invoke_ip'] = ''
-    
     # 扩展功能参数——自定义参数
     params['buyer_email'] = ''
     params['extra_common_param'] = ''
-    
     # 扩展功能参数——分润
     params['royalty_type'] = ''
     params['royalty_parameters'] = ''
-    
+
     params,prestr = params_filter(params)
-    
+
     params['sign'] = build_mysign(prestr, settings.ALIPAY_KEY, settings.ALIPAY_SIGN_TYPE)
     params['sign_type'] = settings.ALIPAY_SIGN_TYPE
-    
+
     return _GATEWAY + urlencode(params)
 
 
@@ -129,12 +123,12 @@ def create_partner_trade_by_buyer (tn, subject, body, price):
     params['seller_email']      = settings.ALIPAY_SELLER_EMAIL
     params['body']          = body      # 订单描述、订单详细、订单备注，显示在支付宝收银台里的“商品描述”里
     params['show_url'] = settings.ALIPAY_SHOW_URL
-    
+
     params,prestr = params_filter(params)
-    
+
     params['sign'] = build_mysign(prestr, settings.ALIPAY_KEY, settings.ALIPAY_SIGN_TYPE)
     params['sign_type'] = settings.ALIPAY_SIGN_TYPE
-    
+
     return _GATEWAY + urlencode(params)
 
 # 确认发货接口
@@ -150,12 +144,12 @@ def send_goods_confirm_by_platform (tn):
     params['trade_no']  = tn
     params['logistics_name'] = u'银河列车'   # 物流公司名称
     params['transport_type'] = u'POST'
-    
+
     params,prestr = params_filter(params)
-    
+
     params['sign'] = build_mysign(prestr, settings.ALIPAY_KEY, settings.ALIPAY_SIGN_TYPE)
     params['sign_type'] = settings.ALIPAY_SIGN_TYPE
-    
+
     return _GATEWAY + urlencode(params)
 
 def notify_verify(post):
@@ -164,7 +158,7 @@ def notify_verify(post):
     mysign = build_mysign(prestr, settings.ALIPAY_KEY, settings.ALIPAY_SIGN_TYPE)
     if mysign != post.get('sign'):
         return False
-    
+
     # 二级验证--查询支付宝服务器此条信息是否有效
     params = {}
     params['partner'] = settings.ALIPAY_PARTNER

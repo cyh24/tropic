@@ -70,6 +70,9 @@ def play_ui(request):
                 msg['collect_state'] = '0'
 
             if (video.money <= 0) or (is_paid):
+                # add user watch log
+                add_user_watch_info(request, video)
+
                 if checkMobile(request):
                     return render_to_response('mobile/videos/play.html', msg)
                 else:
@@ -82,8 +85,7 @@ def play_ui(request):
 
         except Exception, e:
             print "play_ui: ", str(e)
-    
-    
+
     return render_to_response('videos/play-error.html', msg)
 
 
@@ -150,7 +152,7 @@ def pay_ui(request):
 
     except Exception, e:
         printError(e)
-    
+
     return render_to_response('pay/pay.html', msg)
 
 

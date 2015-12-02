@@ -37,3 +37,11 @@ admin.site.register(models.CollectVideos, CollectVideosAdmin)
 class DataInfoAdmin(admin.ModelAdmin):
     pass
 admin.site.register(models.DataInfo, DataInfoAdmin)
+
+class UserWatchInfoAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.UserWatchInfo, UserWatchInfoAdmin)
+
+class UserOrderInfoAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.UserOrderInfo, UserOrderInfoAdmin)

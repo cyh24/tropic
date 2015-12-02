@@ -34,6 +34,9 @@ def get_space_msg(request, get_videos_method):
         total_page = (getLen(videos)+8-1)/8
         subVideos, cur_page = paginator_show(request, videos, 8)
 
+        if getLen(subVideos) > 0:
+            for v in subVideos:
+                v.order_id = get_orderid_given_user_video(request.user, v)
 
         msg['videos']     = subVideos
         msg['v_num']  = videos_num
@@ -43,8 +46,8 @@ def get_space_msg(request, get_videos_method):
 
         msg['pre_page']   = cur_page - 1
         msg['after_page'] = cur_page + 1
-        
-    
+
+
     except Exception, e:
         printError(e)
 
@@ -86,7 +89,6 @@ def space_collect(request):
 # watching history list
 def space_shopping_cart(request):
     msg = get_space_msg(request, get_unpay)
-    
     if request.GET.has_key('show_del'):
         if request.GET['show_del'] == 'True':
             msg['show_del'] = 'True'
@@ -99,7 +101,6 @@ def space_shopping_cart(request):
 # watching history list
 def space_paid(request):
     msg = get_space_msg(request, get_paid)
-    
     if request.GET.has_key('show_del'):
         if request.GET['show_del'] == 'True':
             msg['show_del'] = 'True'
@@ -209,7 +210,7 @@ def update_profile(request):
 @csrf_protect
 @csrf_exempt
 def update_pic(request):
-    try: 
+    try:
         path = None
         path_pic = "/static/storage/logo-images/150827142149-KPg1-tt.png"
         if request.FILES.has_key('pic'):
@@ -223,9 +224,9 @@ def update_pic(request):
 
     except Exception, e:
         print str(e)
-    
+
     msg = init_msg(request)
 
     return render_to_response('space/setavator.html', msg)
-    
+
 

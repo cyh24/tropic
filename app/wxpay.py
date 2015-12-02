@@ -77,21 +77,6 @@ def check_pay_by_order_num(order_num):
 
     return False
 
-def pay_result(request):
-    msg = init_msg(request)
-    try:
-        if request.GET.has_key('paid_order_id'):
-            paid_order_id = request.GET['paid_order_id']
-            paid_orders = Order.objects.filter(id=paid_order_id)
-            paid_order = paid_orders[0]
-            paid_order.pay_state = 2
-            remove_file(paid_order.wxpay_qrcode)
-            paid_order.save()
-            msg['paid_order'] = paid_order
-    except Exception, e:
-        printError(e)
-    ###应添加订单状态处理
-    return render_to_response('pay/notice.html', msg)
 
 def payback(request):
     print "fuck wechat"

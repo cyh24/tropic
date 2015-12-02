@@ -205,7 +205,6 @@ class WatchHistory(models.Model):
 class CollectVideos(models.Model):
     account = models.ForeignKey(Account)
     videos = models.ManyToManyField(Video)
-    videos  = models.ManyToManyField(Video)
     def __get_list_num(self):
         try:
             if self.videos != None:
@@ -233,3 +232,27 @@ class DataInfo(models.Model):
 
     class Meta:
         db_table = u'data_info'
+
+class UserWatchInfo(models.Model):
+    account = models.ForeignKey(Account)
+    video   = models.ForeignKey(Video)
+
+    # if pc login, flag=1, else 0
+    pc_flag   = models.IntegerField()
+
+    release_date = models.DateTimeField(auto_now=True)
+    class Meta:
+        db_table = u'user_watch_info'
+
+class UserOrderInfo(models.Model):
+    account = models.ForeignKey(Account)
+    order   = models.ForeignKey(Order)
+    price   = models.FloatField()
+    pay_state = models.IntegerField()
+
+    # if pc login, flag=1, else 0
+    pc_flag   = models.IntegerField()
+
+    release_date = models.DateTimeField(auto_now=True)
+    class Meta:
+        db_table = u'user_order_info'
