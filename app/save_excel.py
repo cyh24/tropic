@@ -168,10 +168,12 @@ def write_csv(filename, data):
             for j in range(len(data[i])):
                 if type(data[i][j]) == type(u''):
                     data[i][j] = data[i][j].encode('utf-8')
-                st += "%s,"%str(data[i][j]).replace(',',' ')
+                print data[i][j], type(data[i][j])
+                st += "%s,"%str(data[i][j]).replace(',','，')
             st += "\n"
 
     path =  DOWNLOAD_FOLD+filename
+    print st
     data_to_txt(path, st)
     return path
 

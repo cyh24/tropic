@@ -503,7 +503,8 @@
 	padding-right: 10px;
 	padding-bottom: 60px;
 	overflow: auto;
-	zoom: 1
+	zoom: 1;
+    height:100%;
 }
 .main-left {
 	/*width: 70%;*/

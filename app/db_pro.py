@@ -13,6 +13,11 @@ import datetime
 from django.db.models import *
 from qiniu_pro import upload_free_file
 
+import time
+def info_wait(request):
+    msg = {'state': 'wait'}
+    return render_to_response('info.html', msg)
+
 def upload_course_post(request):
     msg = {'state': 'fail'}
     try:
@@ -21,8 +26,8 @@ def upload_course_post(request):
                 print x, request.POST[x]
 
         if request.FILES.has_key('logo'):
-
-            path = LOGO_FOLD + getRandomStr() + "-" + request.FILES['logo'].name
+            postfix = (request.FILES['logo'].name).split('.')[-1]
+            path = LOGO_FOLD + getRandomStr() + "-" + postfix
             handle_uploaded_photo(path, request.FILES['logo'])
             print "logo: ", path
 
@@ -47,7 +52,8 @@ def update_course_post(request):
 
         if request.FILES.has_key('logo'):
             if request.FILES['logo'] != None:
-                path = LOGO_FOLD + getRandomStr() + "-" + request.FILES['logo'].name
+                postfix = (request.FILES['logo'].name).split('.')[-1]
+                path = LOGO_FOLD + getRandomStr() + "-" + postfix
                 handle_uploaded_photo(path, request.FILES['logo'])
 
                 #path_logo = path[3:]

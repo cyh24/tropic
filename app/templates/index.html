@@ -18,6 +18,15 @@
                 height: 100%;
             }
 		</style>
+        <script>
+        window.onload=function()
+        {
+            var web_height = document.body.clientHeight;
+            var top_height = web_height*1.0/670*40;
+            document.getElementById('id-slider-imgs').style.marginTop= top_height.toString() + "px";
+            return;
+        }
+        </script>
 
 		<!--<div class="wrap" style="margin-left: 10%; margin-right: 10%;">
 			<div class="search-logo">
@@ -71,7 +80,7 @@
 				</form>
 			</div>
 		</div>
-					<div class="carousel slide" id="carousel-734444" >
+					<div class="carousel slide" id="carousel-734444" style="">
 						<ol class="carousel-indicators">
 							<li data-slide-to="0" data-target="#carousel-734444">
 							</li>
@@ -80,7 +89,7 @@
 							<li data-slide-to="2" data-target="#carousel-734444">
 							</li>
 						</ol>
-						<div class="carousel-inner" style="margin-top:40px; height:310px;">
+						<div class="carousel-inner" id="id-slider-imgs" style="margin-top:40px; margin-bottom:40px; height:310px;">
 							<div class="item active" >
                                 <a href="http://el.tropic.com.cn/videos">
 								<img alt="" src="/static/images/homepage/1.png" class="ad_img"/>

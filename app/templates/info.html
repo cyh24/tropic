@@ -15,17 +15,22 @@
 	    <div class="row-fluid">
 		<div class="span12">
 			<span class="label"></span>
-            {% if state == 'ok' %}
+            {% if state == 'wait' %}
+			<div class="alert">
+			    <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong>数据上传中!</strong> 您的数据正在上传，请稍后...
+			</div>
+            {% elif state == 'ok' %}
 			<div class="alert alert-success">
 			    <button type="button" class="close" data-dismiss="alert">×</button>
-				<h4>提示信息!</h4> 
+				<h4>提示信息!</h4>
                 <br>
                 <strong>恭喜!</strong> 您的视频已经上传成功.
 			</div>
             {% else %}
 			<div class="alert">
 			    <button type="button" class="close" data-dismiss="alert">×</button>
-				<h4>提示信息!</h4> 
+				<h4>提示信息!</h4>
                 <br>
                 <strong>抱歉!</strong> 上传失败，请检查信息是否填写完整.
 			</div>

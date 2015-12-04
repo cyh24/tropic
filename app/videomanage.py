@@ -128,6 +128,5 @@ def update_course_ui(request):
             return render_to_response('upload/update_course.html', msg)
     except Exception, e:
         printError("update_course_ui: " + str(e))
-   
     return render_to_response('videos/play-error.html', msg)
 

@@ -92,5 +92,6 @@ urlpatterns = patterns('',
     url(r'^alipay/$', 'app.ali_pay.alipay'),
     url(r'^alipay_notify/$', 'app.ali_pay.alipay_notify'),
     url(r'^alipay_return/$', 'app.ali_pay.alipay_return'),
+    url(r'^info_wait/', 'app.db_pro.info_wait'),
     url(r'^test/', 'app.views.test')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -28,7 +28,6 @@
 				document.getElementById('sex-none').checked = "checked";
 			}
    	 	}
-	
 
 		function show_msg(data, type)
 		{
@@ -39,7 +38,7 @@
 			else
 				window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.error);
 		}
-		
+
 		function save_profile()
 		{
 			document.getElementById('id-loading').style.display="block";
@@ -53,7 +52,6 @@
 				sex = 0;
 			}
 
-			
 			$.ajax({
                 url: "/user/update-profile/",
                 type: "GET",
@@ -75,12 +73,10 @@
                 	}
                 }
             });
-            
-			
+
 		}
-		
 	</script>
-	
+
 	<input type="text" id="id-sex-state" value={{account.sex}} style="display: none;"/>
 	<body style="background-color: #edeff0;">
 		{% include "header.html"%}
