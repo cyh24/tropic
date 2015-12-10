@@ -27,7 +27,7 @@ def upload_course_post(request):
 
         if request.FILES.has_key('logo'):
             postfix = (request.FILES['logo'].name).split('.')[-1]
-            path = LOGO_FOLD + getRandomStr() + "-" + postfix
+            path = LOGO_FOLD + getRandomStr() + "." + postfix
             handle_uploaded_photo(path, request.FILES['logo'])
             print "logo: ", path
 
@@ -53,7 +53,8 @@ def update_course_post(request):
         if request.FILES.has_key('logo'):
             if request.FILES['logo'] != None:
                 postfix = (request.FILES['logo'].name).split('.')[-1]
-                path = LOGO_FOLD + getRandomStr() + "-" + postfix
+                path = LOGO_FOLD + getRandomStr() + "." + postfix
+                print path
                 handle_uploaded_photo(path, request.FILES['logo'])
 
                 #path_logo = path[3:]
@@ -70,6 +71,74 @@ def update_course_post(request):
 
     return render_to_response('info.html', msg)
 
+def index_info_post(request):
+    msg = {'state': 'fail'}
+    try:
+        if request.method == "POST":
+            for x in request.POST:
+                print x, request.POST[x]
+
+            save_index_info(request.POST)
+            msg ={'state': 'ok'}
+            try:
+                if request.POST.has_key("poster_img"):
+                    poster_img = request.POST['poster_img'].strip()
+                    if poster_img != "":
+                        sys_cmd = "wget %s -O /home/www/tropic/app/static/images/poster.jpg"%(poster_img.encode("utf-8"))
+                        os.system(sys_cmd)
+                if request.POST.has_key("background_img"):
+                    background_img = request.POST['background_img'].strip()
+                    if background_img != "":
+                        sys_cmd = "wget %s -O /home/www/tropic/app/static/images/backgound.jpg "%(background_img.encode("utf-8"))
+                        os.system(sys_cmd)
+            except Exception, e:
+                print "poster_background", str(e)
+
+    except Exception, e:
+        print "index_info_post: ", str(e)
+
+    return render_to_response('info.html', msg)
+
+def save_index_info(data):
+    table = json.loads(data['table_json'].encode('utf-8'))
+
+    table_data = []
+    for row in table:
+        try:
+            new_row = []
+            img_num  = int(row['img_num'].encode('utf-8').strip())
+            img_path = row['img_path'].encode('utf-8').strip()
+            jump_url = row['jump_url'].encode('utf-8').strip()
+
+            if img_path == "" or jump_url == "":
+                break
+            new_row.append(img_num)
+            new_row.append(img_path)
+            new_row.append(jump_url)
+            table_data.append(new_row)
+        except Exception, e:
+            print "save_index_info", str(e)
+            break
+
+    if getLen(table_data) <= 0:
+        print "index_info: none data"
+        return -1
+    #else
+
+    with transaction.atomic():
+        # first delete the old data
+        old_data = IndexInfo.objects.all()
+        if getLen(old_data) > 0:
+            for od in old_data:
+                od.delete()
+
+        # add new data
+        for row in table_data:
+            index_info = IndexInfo()
+            index_info.img_num  = row[0]
+            index_info.img_path = row[1]
+            index_info.jump_url = row[2]
+            index_info.save()
 
 def save_tag(tag_name):
     print "save tag: ", tag_name
@@ -169,7 +238,6 @@ def get_intrestvideo_by_id(video_id):
 def save_video(request, logo_path, need_authority=True):
 
     try:
-        print "save_video"
         video = Video()
 
         video.logo_img = logo_path
@@ -216,6 +284,7 @@ def save_video(request, logo_path, need_authority=True):
                     print "qiniu file: none."
                     return False
 
+                video.release_date = datetime.datetime.now()
                 video.save()
                 for i in range(len(qfiles)):
                     qfiles[i].save()
@@ -309,6 +378,7 @@ def update_video(request, logo_path="", need_authority=True):
                     return False
 
                 video.files.clear()
+                video.release_date = datetime.datetime.now()
                 video.save()
                 for i in range(getLen(qfiles)):
                     qfiles[i].save()
@@ -388,7 +458,7 @@ def get_order_videos(request, videos, msg):
             order_by = request.GET['order_by']
             msg['cur'] = order_by
             if order_by == "new":
-                order_key = 'release_date'
+                order_key = '-release_date'
             elif order_by == "like":
                 order_key = '-like_num'
             elif order_by == "popular":
@@ -402,7 +472,7 @@ def get_order_videos(request, videos, msg):
                     msg['up_down'] = "up"
                     order_key = 'money'
             else:
-                order_key = 'release_date'
+                order_key = '-release_date'
             m_videos = videos.order_by(order_key)
 
             return m_videos, msg
@@ -608,7 +678,7 @@ def exist_user_account(user):
             return True
 
     except Exception, e:
-        printError(e)
+        printError("exist_user_account: " + str(e))
 
     return False
 
@@ -622,7 +692,7 @@ def get_account_from_user(user):
         else:
             account = account[0]
     except Exception, e:
-        printError(e)
+        printError("get_account_from_user: "+str(e))
     return account
 
 def get_openid_from_user(request):
@@ -875,9 +945,9 @@ def get_collect(user):
 def get_collect_num(user):
     try:
         account = get_account_from_user(user)
-        collect_videos = CollectVideos.objects.filter(account=account).all()[0]
-
-        return collect_videos.videos_num
+        collect_videos = CollectVideos.objects.filter(account=account).all()
+        if getLen(collect_videos) > 0:
+            return collect_videos[0].videos_num
 
     except Exception, e:
         printError(e)
@@ -1199,6 +1269,8 @@ def db_add_intrestvideo(request):
 
 def add_user_watch_info(request, video):
     try:
+        if request.user.is_superuser == True:
+            return 0
         user_watch = UserWatchInfo()
         user_watch.account = get_account_from_user(request.user)
         user_watch.video = video

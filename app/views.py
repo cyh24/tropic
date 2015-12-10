@@ -11,6 +11,7 @@ from wxpay import *
 from django.http import StreamingHttpResponse
 
 def download(request):
+    print "downloading..."
     # do something...
     def file_iterator(file_name, chunk_size=1024):
         print file_name
@@ -46,7 +47,7 @@ def download(request):
 def test(request):
     print "TEST"
     msg = {}
-    return render_to_response('plans.html', msg)
+    return render_to_response('test.html', msg)
 
 def login_ui(request):
     msg = init_msg(request)
@@ -75,9 +76,9 @@ def excute_login(request, username, password):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                print "user pass."
+                print "excute_login, user pass."
     except Exception, e:
-        printError(e)
+        printError("excute_login: " + str(e))
 
 
 def wx_login_do(request, user):
@@ -87,7 +88,7 @@ def wx_login_do(request, user):
 
     excute_login(request, username, password)
 
-    exist_user_account(user)
+    exist_user_account(request.user)
     #account = get_account_from_user(request.user)
     #if checkMobile(request) == True:
     #    if account.wx_wx_openid == None or account.wx_wx_openid == "":
@@ -109,7 +110,7 @@ def login_do(request):
     if user is not None:
         if user.is_active:
             login(request, user)
-            print "user pass."
+            print "login_do: user pass."
 
             # judge whether db exist accout related to the user.
             exist_user_account(user)

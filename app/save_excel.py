@@ -117,17 +117,25 @@ def users_info():
         data.append(row_title)
         if getLen(accounts) > 0:
             for acc in accounts:
-                row = []
-                row.append(acc.id)
-                row.append(acc.nickname)
-                row.append(acc.sex)
-                row.append(acc.info)
-                row.append(get_paid_num(acc.user))
-                row.append(get_collect_num(acc.user))
-                row.append(get_unpay_num(acc.user))
-                row.append(str(acc.user.last_login).split('+')[0])
+                try:
+                    row = []
+                    row.append(acc.id)
+                    row.append(acc.nickname)
+                    row.append(acc.sex)
+                    row.append(acc.info)
+                    row.append(get_paid_num(acc.user))
+                    row.append(get_collect_num(acc.user))
+                    row.append(get_unpay_num(acc.user))
 
-                data.append(row)
+                    last_login = str(acc.user.last_login).split('+')
+                    if last_login == []:
+                        row.append("")
+                    else:
+                        row.append(last_login[0])
+
+                    data.append(row)
+                except Exception, e:
+                    print "userinfo: ", str(e)
 
         filepath =  write_csv(title_name_, data)
         return filepath
@@ -168,13 +176,11 @@ def write_csv(filename, data):
             for j in range(len(data[i])):
                 if type(data[i][j]) == type(u''):
                     data[i][j] = data[i][j].encode('utf-8')
-                print data[i][j], type(data[i][j])
                 st += "%s,"%str(data[i][j]).replace(',','，')
             st += "\n"
 
     path =  DOWNLOAD_FOLD+filename
-    print st
-    data_to_txt(path, st)
+    data_to_txt(path, '\xEF\xBB\xBF'+st)
     return path
 
 

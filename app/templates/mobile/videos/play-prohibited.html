@@ -461,7 +461,7 @@
 					<div>
 						{% for v in intrest_videos%}
 						<div class="relate-item">
-							<a href="">
+                            <a href="/videos/play/?video-id={{v.id}}">
 								<img class="video-img" alt="" src={{v.logo_img}}>
 								<div class="mask" style="display: none;"></div>
 								<i class="icon_playvideo" style="display: none;"></i>
@@ -471,11 +471,12 @@
 							</a>
 
 							<!--<div class="row clearfix" style="margin-top:5px; font-size:12px;height:10px;">-->
-							<div class="col-md-6 col-xs-6" style="text-align:left;margin-top:5px;">
+							<div class="col-md-6 col-xs-6" style="text-align:left;margin-top:0px;float:left;">
 								<i class="fa fa-clock-o"></i>&nbsp;{{v.files_num}}个视频 </div>
-							<div class="col-md-6 col-xs-6" style="text-align:right;margin-top:5px;">
+							<div class="col-md-6 col-xs-6" style="text-align:right;margin-top:0px;float:right;">
 								<i class="fa fa-play-circle-o"></i>&nbsp;{{v.watch_num}} </div>
 							<!--</div>-->
+                            <hr>
 						</div>
 						{% endfor %}
 					</div>

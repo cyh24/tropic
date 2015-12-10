@@ -18,6 +18,31 @@ def index(request):
         else:
             print "Wechat-User: None."
 
+        index_info = IndexInfo.objects.all()
+        msg = init_msg(request)
+        msg['index_info'] = index_info
+
+    except Exception, e:
+        printError(e)
+
+    if checkMobile(request):
+        return videos_ui(request)
+        #return render_to_response('mobile/index.html', msg)
+    else:
+        return render_to_response('index.html', msg)
+
+def mobile_index(request):
+    try:
+        wechat_user = WxAuth.get_user(request)
+
+        if wechat_user != None:
+            print "Wechat-User: ", wechat_user
+
+            if check_wx_unionid(request, wechat_user) == True:
+                wx_login_do(request, wechat_user)
+        else:
+            print "Wechat-User: None."
+
     except Exception, e:
         printError(e)
 
@@ -28,7 +53,6 @@ def index(request):
         return render_to_response('mobile/index.html', msg)
     else:
         return render_to_response('index.html', msg)
-
 
 def videos_ui(request):
 
@@ -49,8 +73,9 @@ def videos_ui(request):
     msg['pages_after']  = pages_after
     msg['pre_page']   = cur_page - 1
     msg['after_page'] = cur_page + 1
+    msg['total_page'] = total_page
 
-    
+
     get_content = "/videos/?"
     for key in request.GET:
         if key != "page":
@@ -95,7 +120,7 @@ def search_result(request):
 
     msg['intrest_videos'] = get_intrest_videos()
 
-    
+
     if checkMobile(request):
         return render_to_response('mobile/videos/search_result.html', msg)
     else:

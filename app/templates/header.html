@@ -1,3 +1,4 @@
+{% include "shares.html" %}
 {% block extrastyle %}
 <link href="/static/css/july/bootstrap.min.css" rel="stylesheet">
 <!--<link href="data:text/css;charset=utf-8," data-href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap-theme.min.css" rel="stylesheet" id="bs-theme-stylesheet">-->
@@ -11,6 +12,7 @@
         -->
 <link href="/static/css/july/styles.css" rel="stylesheet"> 
 {% endblock %}
+<link href="/static/images/favicon.ico" rel="shortcut icon"  type="image/x-icon">
 
 <div class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container">
@@ -235,13 +237,13 @@
     <div class="floatShadow">
         <ul class="floatDqq">
             <li style="padding-left:0px;"><a target="_blank" href="tencent://message/?uin=1021812512&Site=sc.chinaz.com&Menu=yes">
-                <img src="/static/css/contact/qq.png" align="absmiddle">&nbsp;&nbsp;在线客服1号</a></li>
+                <img src="/static/css/contact/qq.png" align="absmiddle" style="width:20px; height:22px;">&nbsp;&nbsp;在线客服1号</a></li>
             <li style="padding-left:0px;"><a target="_blank" href="tencent://message/?uin=2085579655&Site=sc.chinaz.com&Menu=yes">
-                <img src="/static/css/contact/qq.png" align="absmiddle">&nbsp;&nbsp;在线客服2号</a></li>
+                <img src="/static/css/contact/qq.png" align="absmiddle" style="width:20px; height:22px;">&nbsp;&nbsp;在线客服2号</a></li>
         </ul>
         <div class="floatDtxt">热线电话</div>
         <div class="floatDtel">
-            <p style="margin-left: 20px">010-82356312</p>
+            <p style="margin-left: 20px; font-size:12px;">010-82356312</p>
         </div>
     </div>
 </div>
@@ -252,12 +254,12 @@ $('#rightArrow_contact').click(function(){
     if(flag==1){
         $("#floatDivBoxs_contact").animate({right: '-175px'},300);
         $(this).animate({right: '-5px'},300);
-        $(this).css('background-position','-50px 0');
+        $(this).css('background-position','-50px -3px');
         flag=0;
     }else{
         $("#floatDivBoxs_contact").animate({right: '0'},300);
-        $(this).animate({right: '170px'},300);
-        $(this).css('background-position','0px 0');
+        $(this).animate({right: '140px'},300);
+        $(this).css('background-position','0px -3px');
         flag=1;
     }
 });

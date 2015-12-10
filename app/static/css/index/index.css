@@ -3,7 +3,7 @@
 }
 a,
 body {
-	font-family: "Segoe UI", Segoe, Tahoma, Arial, Verdana, sans-serif;
+    font-family: 'Helvetica Neue', 'STHeiti', 'Microsoft YaHei', Helvetica, Arial, sans-serif;
 	font-size: small;
 	text-decoration: none
 }
@@ -526,8 +526,10 @@ body .b_searchboxForm .b_searchboxSubmit {
 }
 body .b_searchbox {
 	border-right: 0;
+    /*
 	margin-left: 6px;
 	padding-right: 4px;
+    */
 	*top: 3px;
 	*left: 5px;
 	_height: 20px

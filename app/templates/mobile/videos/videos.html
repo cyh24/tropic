@@ -122,13 +122,26 @@
 					<a href="{{get_content}}page={{cur_page}}" style="width: 60px;">第 {{cur_page}} 页</a>
 				</li>
 				<li>
+                <!--
 					<a href="{{get_content}}page={{after_page}}" style="width: 75px">下一页</a>
+                    -->
+                    <a href="javascript:void(0)" onclick="next_page();">下一页</a>
 				</li>
 			</ul>
 		</div>
-		
-		
-		
+
 	</body>
+    <script>
+        function next_page(){
+            var cur_p = {{cur_page}};
+            var total_p = {{total_page}};
+            if(cur_p == total_p){
+                alert("亲，没有更多内容了哦~ 后期我们会更新更多的精品课程，敬请期待！");
+            }
+            else{
+                window.location.href='{{get_content}}page={{after_page}}';
+            }
+        }
+    </script>
 
 </html>

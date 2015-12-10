@@ -18,11 +18,14 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.conf import settings
+from django.views.generic.base import RedirectView
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^index/',     'app.show.index'),
+    url(r'^mobile-index/',     'app.show.mobile_index'),
     url(r'^$',          'app.show.index'),
 
     url(r'^videos/$',   'app.show.videos_ui'),
@@ -37,10 +40,12 @@ urlpatterns = patterns('',
 
     url(r'^upload-course-post/', 'app.db_pro.upload_course_post'),
     url(r'^update-course-post/', 'app.db_pro.update_course_post'),
+    url(r'^index-info-post/',    'app.db_pro.index_info_post'),
     url(r'^uptoken/',       'app.qiniu_pro.uptoken'),
 
     url(r'^update-course/$',        'app.videomanage.update_course_ui'),
     url(r'^videos/manage/$',        'app.videomanage.videos_manage'),
+    url(r'^manage/index-info/$',    'app.videomanage.index_info'),
     url(r'^manage/$',               'app.videomanage.videos_manage'),
     url(r'^delete-video/$',         'app.videomanage.delete_video'),
     url(r'^delete-intrestvideo/$',  'app.videomanage.delete_intrestvideo'),

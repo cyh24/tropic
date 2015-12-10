@@ -88,13 +88,13 @@
 							<li class="mlm-item">
 								<div class="course-card course-card1  course-card-nobtn mod-course-card_lu">
 									<div class="course-face">
-										<a href="/videos/play/?video-id={{v.id}}">
+										<a href="/videos/play/?video-id={{v.id}}" target="_blank">
 											<img class="item-img" src="{{v.logo_img}}" onerror="this.src='http://9.url.cn/edu/img/img-err.png';this.onerror=null;">
 											<i class="icon-card-lu"></i>
 										</a>
 									</div>
 									<div class="course-title"> 
-										<div href="/videos/play/?video-id={{v.id}}" class="item-tt-link">{{v.title}}</div> 
+										<div href="/videos/play/?video-id={{v.id}}" target="_blank" class="item-tt-link">{{v.title}}</div> 
 									</div>
 									<div class="course-emphasis">
 										{% if v.money == 0 %}
@@ -102,7 +102,6 @@
 										{% else %}
 										<span class="course-price course-price-free item-price" style="float: left;">¥{{v.money}}</span>
 										{% endif %}
-										
 										<span class="icon-sep"></span>
 										<a class="course-agency nor-link" href="" title="">
 											<span class="course-agency-name">{{v.tags_str}}</span>
@@ -145,13 +144,13 @@
 						<div class="mlm-item">
 							<div class="course-card course-card2 ">
 								<div class="course-face">
-									<a href="/videos/play/?video-id={{v.id}}">
+									<a href="/videos/play/?video-id={{v.id}}" target="_blank">
 										<img alt="" width="220" height="124" src={{v.logo_img}} onerror="this.src='http://9.url.cn/edu/img/img-err.png';this.onerror=null;">
 										<span class=""></span>
 									</a>
 								</div>
 								<div class="course-title">
-									<div href="/videos/play/?video-id={{v.id}}" class="item-tt-link">{{v.title}}</div>
+									<div href="/videos/play/?video-id={{v.id}}" class="item-tt-link" target="_blank">{{v.title}}</div>
 									<div class="item-line">
 										{% if v.money == 0%}
 										<span class="line-cell item-price-free" style="float: left;"> 免费 </span>

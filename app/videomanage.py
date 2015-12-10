@@ -13,6 +13,13 @@ def videos_data(request):
     msg['data_info'] = data_info
     return render_to_response('videos/videos-data.html', msg)
 
+@super_user
+def index_info(request):
+    msg = init_msg(request)
+    index_info = IndexInfo.objects.all()
+    msg['index_info'] = index_info
+    return render_to_response('videos/index-info.html', msg)
+
 #@login_required(login_url='/login/')
 @super_user
 def videos_manage(request):
@@ -29,8 +36,8 @@ def videos_manage(request):
             new_videos.append(v)
         videos = new_videos
 
-    total_page = (getLen(videos)+5-1)/5
-    subVideos, cur_page = paginator_show(request, videos, 5)
+    total_page = (getLen(videos)+10-1)/10
+    subVideos, cur_page = paginator_show(request, videos, 10)
 
 
     pages_before, pages_after = paginator_bar(cur_page, total_page)

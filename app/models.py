@@ -153,7 +153,7 @@ class Video(models.Model):
     info = models.CharField(max_length=400, default="")
     valid_day = models.IntegerField(default=-1)
 
-    release_date = models.DateTimeField(auto_now=True)
+    release_date = models.DateTimeField(auto_now=False)
     class Meta:
         db_table = u'video'
 
@@ -256,3 +256,12 @@ class UserOrderInfo(models.Model):
     release_date = models.DateTimeField(auto_now=True)
     class Meta:
         db_table = u'user_order_info'
+
+class IndexInfo(models.Model):
+    img_num = models.IntegerField()
+    img_path = models.CharField(max_length=200)
+    jump_url = models.CharField(max_length=200)
+
+    release_date = models.DateTimeField(auto_now=True)
+    class Meta:
+        db_table = u'index_info'
