@@ -36,7 +36,6 @@
           				$("#id-like-num").html(1);
           			}
 				}
-          			
 			});
 		}
 
@@ -178,7 +177,7 @@
                     -->
 						<div class="video_player">
 							<div>
-								<video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="100%" height="100%" poster="http://video-js.zencoder.com/oceans-clip.png" data-setup="{}">
+								<video id="id_video_player" class="video-js vjs-default-skin" controls preload="meta" width="100%" height="100%" poster="http://video-js.zencoder.com/oceans-clip.png" data-setup="{}">
 									<source src="{{video_url}}" type='video/mp4'></source>
 
 									<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
@@ -361,7 +360,42 @@
 				</div>
 			</div>
 		</div>
-	
 	</body>
+
+    <script>
+    var player = videojs('id_video_player');
+    var first_play_flag = 1;
+    /*
+    // 检测播放时间
+    player.on('timeupdate', function () {
+        console.log('当前播放时间：' = player.currentTime());
+    });
+    */
+    // 开始或恢复播放
+    player.on('play', function() {
+        //console.log('开始/恢复播放');
+        if(first_play_flag == 1){
+            first_play_flag = 0;
+            //add watch_history
+            $.ajax({
+                type: "GET",
+                url: "/add-watch-history/",
+                data: {
+                    video_id: {{video.id}},
+                },
+                dataType: "json",
+                success: function(data) {
+                }
+            });
+        }
+        first_play_flag = 0;
+    });
+    /*
+    // 暂停播放
+    player.on('pause', function() {
+        console.log('暂停播放');
+    });
+    */
+    </script>
 
 </html>

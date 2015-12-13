@@ -6,6 +6,26 @@ from qiniu_pro import *
 from wechat_pro import *
 
 
+@login_required(login_url='/wechat-login/')
+@csrf_protect
+def watch_history_add(request):
+    json = {'state': 'fail'}
+    if request.GET.has_key('video_id'):
+        try:
+            video_id = int(request.GET['video_id'])
+            # add the watch number
+            video = Video.objects.filter(id=video_id).all()
+            if video != None:
+                video = video[0]
+                if add_user_watch_info(request, video) == True:
+                    add_watch_num(video_id)
+                    add_watch_history(request.user, video)
+                    json['state'] = 'ok'
+
+        except Exception, e:
+            pass
+
+    return JsonResponse(json)
 
 @login_required(login_url='/wechat-login/')
 @csrf_exempt
@@ -42,7 +62,7 @@ def play_ui(request):
             msg['play_list'] = play_list
 
             # add the watch number
-            add_watch_num(video_id)
+            #add_watch_num(video_id)
 
             try:
                 # get the video's comments
@@ -62,7 +82,7 @@ def play_ui(request):
             # check whether need pay for the play
             is_paid = get_video_state(request.user, video)
 
-            add_watch_history(request.user, video)
+            #add_watch_history(request.user, video)
 
             if if_video_collected(request.user, video):
                 msg['collect_state'] = '1'
@@ -71,7 +91,7 @@ def play_ui(request):
 
             if (video.money <= 0) or (is_paid):
                 # add user watch log
-                add_user_watch_info(request, video)
+                #add_user_watch_info(request, video)
 
                 if checkMobile(request):
                     return render_to_response('mobile/videos/play.html', msg)

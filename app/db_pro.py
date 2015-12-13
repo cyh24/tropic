@@ -472,7 +472,7 @@ def get_order_videos(request, videos, msg):
                     msg['up_down'] = "up"
                     order_key = 'money'
             else:
-                order_key = '-release_date'
+                order_key = '-watch_num'
             m_videos = videos.order_by(order_key)
 
             return m_videos, msg
@@ -480,7 +480,7 @@ def get_order_videos(request, videos, msg):
     except Exception, e:
         printError(e)
 
-    m_videos = videos.order_by('release_date')
+    m_videos = videos.order_by('-release_date')
     return m_videos, msg
 
 
@@ -1270,7 +1270,7 @@ def db_add_intrestvideo(request):
 def add_user_watch_info(request, video):
     try:
         if request.user.is_superuser == True:
-            return 0
+            return False
         user_watch = UserWatchInfo()
         user_watch.account = get_account_from_user(request.user)
         user_watch.video = video
@@ -1280,8 +1280,12 @@ def add_user_watch_info(request, video):
             user_watch.pc_flag = True
 
         user_watch.save()
+        return True
     except Exception, e:
         print "Error: add_user_watch_info: ", str(e)
+
+    return False
+
 
 def add_user_order_info(account, order, pc_flag):
     try:

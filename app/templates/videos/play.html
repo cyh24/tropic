@@ -132,6 +132,14 @@
 					document.getElementById('qrcodeWrap').style.display = "none";
 				}
 			})
+
+
+        var player = videojs('id_video_player');
+        // 开始或恢复播放
+        player.on('play', function() {
+            alert("");
+        });
+
 	</script>
 
 	<body>
@@ -173,7 +181,7 @@
 								<!--<video src="http://7xlcrn.com1.z0.glb.clouddn.com/testd.mp4" controls="controls" style="width: 100%; height: 100%;">
 									your browser does not support the video tag
 								</video>-->
-								<video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="100%" height="100%" poster="/static/images/poster.jpg" data-setup="{}">
+								<video id="id_video_player" class="video-js vjs-default-skin" controls="controls" preload="meta" width="100%" height="100%" poster="/static/images/poster.jpg" data-setup="{}">
 									<source src="{{video_url}}" ></source>
                                     <!--
 									<source src="{{video_url}}" type='video/wmv'></source>
@@ -278,9 +286,7 @@
 				</div>
 				<div class="col-sm-9" >
 					<div class="clear" style="margin-top: 50px;"></div>
-					
 					<div class="title_h2">评论</div>
-				
 					<textarea class="form-control" rows="3" id="comment_text" placeholder="" onfocus="if(value=='有没有什么问题要问导师的？'){value='';this.style.color='black';follow_id=-1;}" onblur="if (value ==''){value='有没有什么问题要问导师的？';this.style.color='gray';follow_id=-1;}">有没有什么问题要问导师的？</textarea>
 					<input type="hidden" id="comment_reply" value="0">
 					<br>
@@ -293,7 +299,7 @@
                         	全部评论&nbsp;&nbsp;
                             <span class="small">共<span id="comments_sumer">{{video.comments_num}}</span>条</span>
                    		</h2>
-						
+
 						<div class="comment_many">
 							<div class="comment-lists">
 
@@ -372,7 +378,6 @@
 					<br>
 
 					<div class="title_h2">相关视频</div>
-			
 					<div>
 						{% for v in intrest_videos%}
 						<div class="relate-item">
@@ -401,5 +406,40 @@
 
 		{% include "footer.html"%}
 	</body>
+    <script>
+    var player = videojs('id_video_player');
+    var first_play_flag = 1;
+    /*
+    // 检测播放时间
+    player.on('timeupdate', function () {
+        console.log('当前播放时间：' = player.currentTime());
+    });
+    */
+    // 开始或恢复播放
+    player.on('play', function() {
+        //console.log('开始/恢复播放');
+        if(first_play_flag == 1){
+            first_play_flag = 0;
+            //add watch_history
+			$.ajax({
+				type: "GET",
+				url: "/add-watch-history/",
+				data: {
+					video_id: {{video.id}},
+				},
+				dataType: "json",
+				success: function(data) {
+				}
+			});
+        }
+        first_play_flag = 0;
+    });
+    /*
+    // 暂停播放
+    player.on('pause', function() {
+        console.log('暂停播放');
+    });
+    */
+    </script>
 
 </html>

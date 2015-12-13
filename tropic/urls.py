@@ -62,6 +62,8 @@ urlpatterns = patterns('',
     url(r'^collect/$',      'app.playui.collect'),
     url(r'^add-comment/$',  'app.playui.comment_add'),
 
+    url(r'^add-watch-history/$',  'app.playui.watch_history_add'),
+
 
     url(r'^space/$',                'app.space.space_index'),
     url(r'^space/index/$',          'app.space.space_index'),
