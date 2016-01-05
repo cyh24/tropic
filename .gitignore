@@ -1,3 +1,5 @@
 *.pyc
 app/static/storage/*
 app/config.py
+db_excel/*
+.csv

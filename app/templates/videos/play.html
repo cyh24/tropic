@@ -85,6 +85,22 @@
 				}
 			});
 		}
+
+        function delete_comment(comment_id){
+			$.ajax({
+				url: "/del-comment/",
+				type: "GET",
+				dataType: "json",
+				data: {
+                    comment_id:comment_id,
+                    video_id:{{video.id}},
+				},
+				success: function(obj) {
+					window.location.reload();
+				}
+			});
+        }
+
 		var follow_id = -1;
 
 		function replay(self) {
@@ -315,9 +331,15 @@
 											<a class="aw-user-name" href="">{{comment.user_name}}</a> •
 											<span style="margin-top:5px;">{{comment.release_date}}</span>
 
+                                            {% if comment.user_name == nickname %}
+                                            <a id="id-comment-{{comment.id}}" data-comment-id={{comment.id}} data-comment-name={{comment.user_name}} class="comment_btn pull-right" href="javascript:void(0)" onclick="delete_comment({{comment.id}})">
+												<span class="fa" style="color:#00458a;"></span> 删除
+											</a>
+                                            {% else %}
 											<a id="id-comment-{{comment.id}}" data-comment-id={{comment.id}} data-comment-name={{comment.user_name}} class="comment_btn pull-right" href="javascript:void(0)" onclick="replay(this)">
 												<span class="fa fa-comments-o" style="color:#00458a;"></span> 回复
 											</a>
+                                            {% endif %}
 										</div>
 									</div>
 
@@ -381,7 +403,7 @@
 					<div>
 						{% for v in intrest_videos%}
 						<div class="relate-item">
-							<a href="">
+                            <a href="/videos/play/?video-id={{v.id}}">
 								<img class="video-img" alt="" src={{v.logo_img}}>
 								<div class="mask" style="display: none;"></div>
 								<i class="icon_playvideo" style="display: none;"></i>

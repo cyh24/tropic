@@ -64,6 +64,9 @@ def play_ui(request):
             # add the watch number
             #add_watch_num(video_id)
 
+            account = get_account_from_user(request.user)
+            msg['nickname'] = account.nickname
+
             try:
                 # get the video's comments
                 comments = Video.objects.filter(id=video_id)[0].comments.all().order_by('release_date')
@@ -155,6 +158,17 @@ def comment_add(request):
 
     return JsonResponse(json)
 
+@login_required(login_url='/wechat-login/')
+@csrf_protect
+def comment_delete(request):
+    json = {}
+    try:
+        del_comment(request)
+
+    except Exception, e:
+        printError(e)
+
+    return JsonResponse(json)
 
 @login_required(login_url='/wechat-login/')
 @csrf_protect

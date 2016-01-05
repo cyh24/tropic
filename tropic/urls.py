@@ -61,6 +61,7 @@ urlpatterns = patterns('',
     url(r'^voteup/$',       'app.playui.voteup'),
     url(r'^collect/$',      'app.playui.collect'),
     url(r'^add-comment/$',  'app.playui.comment_add'),
+    url(r'^del-comment/$',  'app.playui.comment_delete'),
 
     url(r'^add-watch-history/$',  'app.playui.watch_history_add'),
 

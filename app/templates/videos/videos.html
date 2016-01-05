@@ -137,7 +137,8 @@
 				</div>
 				
 				<div class="main-right">
-					<div class="main-right-top">热门推荐</div>{% for v in intrest_videos %}
+					<div class="main-right-top">热门推荐</div>
+                    {% for v in intrest_videos %}
 					<div class="main-right-list">
 
 						
@@ -151,7 +152,7 @@
 								</div>
 								<div class="course-title">
 									<div href="/videos/play/?video-id={{v.id}}" class="item-tt-link" target="_blank">{{v.title}}</div>
-									<div class="item-line">
+									<div class="item-line" style="width:220px; white-space:nowrap;overflow:hidden; text-overflow:ellipsis;" >
 										{% if v.money == 0%}
 										<span class="line-cell item-price-free" style="float: left;"> 免费 </span>
 										{% else %}
@@ -161,7 +162,7 @@
 										<span class="icon-sep"></span>
 										
 										<span class="item-source">
-											<a href="" class="item-source-link" >{{v.tags_str}}</a>
+											<a href="" class="item-source-link"  >{{v.tags_str}}</a>
 										</span> 
 									</div>
 								</div>

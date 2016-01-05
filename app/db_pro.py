@@ -480,7 +480,7 @@ def get_order_videos(request, videos, msg):
     except Exception, e:
         printError(e)
 
-    m_videos = videos.order_by('-release_date')
+    m_videos = videos.order_by('-watch_num')
     return m_videos, msg
 
 
@@ -573,7 +573,6 @@ def cancle_collect_video(user, video_id):
 
 
 def add_comment(request):
-    json = {}
     try:
         if request.GET.has_key('video_id'):
             video_id = int(request.GET['video_id'])
@@ -593,6 +592,33 @@ def add_comment(request):
         video = get_video_by_id(video_id)
         video.comments.add(comment)
         video.save()
+
+    except Exception, e:
+        printError(e)
+
+def del_comment(request):
+    try:
+        if request.GET.has_key('comment_id'):
+            comment_id = int(request.GET['comment_id'])
+
+        if request.GET.has_key('video_id'):
+            video_id = int(request.GET['video_id'])
+
+        comment = Comment.objects.all().filter(id=comment_id)
+        if getLen(comment) > 0:
+            comment = comment[0]
+        else:
+            return
+        video   = Video.objects.all().filter(id=video_id)
+        if getLen(video) > 0:
+            video = video[0]
+        else:
+            return
+
+        video.comments.remove(comment)
+        comment.delete()
+
+        print "delete comment: ", comment_id
 
     except Exception, e:
         printError(e)

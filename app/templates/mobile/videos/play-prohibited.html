@@ -63,7 +63,10 @@
 				}
 			});
 		}
+
+        var click_pay_flag = 0;
 		function show_pay() {
+            click_pay_flag = 0;
 			document.getElementById('id-go-pay').style.display = "block";
 		}
 		function hide_pay() {
@@ -87,11 +90,25 @@
                 	video_id: {{video.id}},
                 },
                 success: function(obj){
-
                     window.location.reload();
                 }
             });
 		}
+
+        function delete_comment(comment_id){
+			$.ajax({
+				url: "/del-comment/",
+				type: "GET",
+				dataType: "json",
+				data: {
+                    comment_id:comment_id,
+                    video_id:{{video.id}},
+				},
+				success: function(obj) {
+					window.location.reload();
+				}
+			});
+        }
 
 		var follow_id = -1;
 		function replay(self)
@@ -150,8 +167,12 @@
             var trade_state = "NOPAY";
             var Timer;
             var order_num = "";
+            var PAYCHECK_TIME = 0;
             function paycheck()
             {
+                if(PAYCHECK_TIME>=200){
+                    return 0;
+                }
                 $.getJSON('/ajax_check/', 
                         {out_trade_no: order_num},
                         function(result){
@@ -176,6 +197,11 @@
 
 
         function pay(){
+            if(click_pay_flag == 1){
+                return 0;
+            }
+            click_pay_flag = 1;
+            PAYCHECK_TIME = 0;
             $.post("/paydetail/",
                 {
                     video_id:{{video.id}}
@@ -386,9 +412,11 @@
 						<textarea class="form-control" rows="3" id="comment_text" placeholder="" onfocus="if(value=='有没有什么问题要问导师的？'){value='';this.style.color='black';follow_id=-1;}" onblur="if (value ==''){value='有没有什么问题要问导师的？';this.style.color='gray';follow_id=-1;}">有没有什么问题要问导师的？</textarea>
 						<input type="hidden" id="comment_reply" value="0">
 						<br>
+
 						<div style="height:35px;text-align:right">
-							<button type="button" class="btn btn-primary" id="addcomment" onclick="add_comment()">提交</button>
+							<button type="button" class="btn btn-primary" id="id_addcomment" onclick="add_comment()">提交</button>
 						</div>
+
 						<div id="comments" class="comment">
 							<h4>全部评论&nbsp;&nbsp;<span class="small"> 共<span id="comments_sumer"> {{comments_num}} </span>条</span></h4>
 							<div class="comment_many">
@@ -408,9 +436,15 @@
 												<a class="aw-user-name" href="">{{comment.user_name}}</a> •
 												<span style="margin-top:5px;">{{comment.release_date}}</span>
 
-												<a id="id-comment-{{comment.id}}" data-comment-id={{comment.id}} data-comment-name={{comment.user_name}} class="comment_btn" href="javascript:void(0)" onclick="replay(this)">
-													<span class="fa fa-comments-o" style="color:#00458a;"></span> 回复
-												</a>
+                                                {% if comment.user_name == nickname %}
+                                                <a id="id-comment-{{comment.id}}" data-comment-id={{comment.id}} data-comment-name={{comment.user_name}} class="comment_btn pull-right" href="javascript:void(0)" onclick="delete_comment({{comment.id}})">
+                                                    <span class="fa" style="color:#00458a;"></span> 删除
+                                                </a>
+                                                {% else %}
+                                                <a id="id-comment-{{comment.id}}" data-comment-id={{comment.id}} data-comment-name={{comment.user_name}} class="comment_btn pull-right" href="javascript:void(0)" onclick="replay(this)">
+                                                    <span class="fa fa-comments-o" style="color:#00458a;"></span> 回复
+                                                </a>
+                                                {% endif %}
 											</div>
 										</div>
 
@@ -430,7 +464,7 @@
 						</div>
 
 					</div>
-					
+
 					<div class="col-sm-3 relative_video">
 					<!--导师简介-->
 					<div class="title_h2" style="margin-top: 20px;">导师简介</div>
