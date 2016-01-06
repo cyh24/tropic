@@ -12,6 +12,7 @@ from wxknife import JsApi_pub, UnifiedOrder_pub, WxPayConf_pub
 import datetime
 from django.db.models import *
 from qiniu_pro import upload_free_file
+import jieba
 
 import time
 def info_wait(request):
@@ -437,11 +438,38 @@ def get_intrest_videos():
     return None
 
 
+stop_list = []
+with open("/home/www/tropic/app/stopword.txt", "r") as f:
+    stop_list = f.readlines()
+    stop_list = [line[:-1] for line in stop_list]
+
 def get_search_videos(request):
     try:
         if request.GET.has_key('title'):
-            q_title = request.GET['title'].encode('utf8')
+            q_titles = request.GET['title'].encode('utf8')
+            seg_list = jieba.cut_for_search(q_titles)
+            seg_list = list(seg_list)
+            if "" in seg_list:
+                seg_list.remove("")
+            if " " in seg_list:
+                seg_list.remove(" ")
+
+            if getLen(seg_list) == 0:
+                return Video.objects.all()
+
+            for i in range(len(seg_list)):
+                if seg_list[i] in stop_list:
+                    seg_list.remove(seg_list[i])
+
+            if getLen(seg_list) == 0:
+                return Video.objects.all()
+
+            q_title = seg_list[0]
             videos = Video.objects.filter(Q(title__icontains=q_title)|Q(kind_str__icontains=q_title)|Q(tags_str__icontains=q_title)).all()
+            for i in range(1, len(seg_list)):
+                q_title = seg_list[i]
+                print q_title
+                videos = videos | Video.objects.filter(Q(title__icontains=q_title)|Q(kind_str__icontains=q_title)|Q(tags_str__icontains=q_title)).all()
             return videos
         else:
             return Video.objects.all()
