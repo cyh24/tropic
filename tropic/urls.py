@@ -52,7 +52,9 @@ urlpatterns = patterns('',
     url(r'^add-intrestvideo/$',     'app.videomanage.add_intrestvideo'),
     url(r'^upload/course/$',        'app.videomanage.upload_course_ui'),
 
-    url(r'^videos/data-manage/$',        'app.videomanage.videos_data'),
+    url(r'^videos/data-manage/$',   'app.videomanage.videos_data'),
+    url(r'^manage/order-manage/$',  'app.videomanage.order_manage'),
+    url(r'^modify-order-post/',     'app.db_pro.modify_order_post'),
 
 
     url(r'^pay/$',          'app.playui.pay_ui'),

@@ -169,6 +169,7 @@ class Order(models.Model):
     pic  = models.CharField(max_length=200)
 
     account = models.ForeignKey(Account)
+    order_valid_day = models.IntegerField(default=-1)
 
     video  = models.ForeignKey(Video)
     def __get_list_num(self):

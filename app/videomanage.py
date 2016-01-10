@@ -137,3 +137,41 @@ def update_course_ui(request):
         printError("update_course_ui: " + str(e))
     return render_to_response('videos/play-error.html', msg)
 
+@super_user
+def order_manage(request):
+    each_page_num = 20
+    msg = init_msg(request)
+
+    try:
+        if request.GET.has_key("order_id"):
+            order_id = int(request.GET['order_id'])
+            orders = Order.objects.filter(id=order_id).all()
+        else:
+            orders = Order.objects.all()
+    except Exception, e:
+        orders = Order.objects.all()
+
+    if getLen(orders) >= 1:
+        orders = orders.order_by('-release_date')
+
+    total_page = (getLen(orders)+each_page_num-1)/each_page_num
+    subOrders, cur_page = paginator_show(request, orders, each_page_num)
+
+
+    pages_before, pages_after = paginator_bar(cur_page, total_page)
+
+    for i in range(getLen(subOrders)):
+        subOrders[i].user_nickname = subOrders[i].account.nickname
+        subOrders[i].release_date = str(subOrders[i].release_date).split(' ')[0]
+
+    msg['orders']     = subOrders
+    msg['orders_len'] = len(orders)
+    msg['cur_page']   = cur_page
+    msg['pages_before'] = pages_before
+    msg['pages_after']  = pages_after
+    msg['pre_page']   = cur_page - 1
+    msg['after_page'] = cur_page + 1
+
+
+    return render_to_response('videos/order-manage.html', msg)
+

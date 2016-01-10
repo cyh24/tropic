@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+	{% include "include.html"%}
+	<link rel="stylesheet" href="/static/css/txkt/manage.css" />
+
+	<link rel="stylesheet" type="text/css" href="/static/css/confirm/xcConfirm.css"/>
+	<script src="/static/css/confirm/jquery-1.9.1.min.js" type="text/javascript"></script>
+	<script src="/static/css/confirm/xcConfirm.js" type="text/javascript"></script>
+
+    <script>
+		 //设置多个表格可编辑
+		function EditTables() {
+				for (var i = 0; i < arguments.length; i++) {
+					SetTableCanEdit(arguments[i]);
+				}
+			}
+			//设置表格是可编辑的
+
+		function SetTableCanEdit(table) {
+			for (var i = 1; i < table.rows.length; i++) {
+				SetRowCanEdit(table.rows[i]);
+			}
+		}
+
+		function SetRowCanEdit(row) {
+				for (var j = 0; j < row.cells.length; j++) {
+					//如果当前单元格指定了编辑类型，则表示允许编辑
+					var editType = row.cells[j].getAttribute("EditType");
+					if (!editType) {
+						//如果当前单元格没有指定，则查看当前列是否指定
+						editType = row.parentNode.rows[0].cells[j].getAttribute("EditType");
+					}
+					if (editType) {
+						row.cells[j].onclick = function() {
+							EditCell(this);
+						}
+					}
+				}
+			}
+			//设置指定单元格可编辑
+
+		function EditCell(element, editType) {
+				var editType = element.getAttribute("EditType");
+				if (!editType) {
+					//如果当前单元格没有指定，则查看当前列是否指定
+					editType = element.parentNode.parentNode.rows[0].cells[element.cellIndex].getAttribute("EditType");
+				}
+				switch (editType) {
+					case "TextBox":
+						CreateTextBox(element, element.innerHTML);
+						break;
+					default:
+						break;
+				}
+			}
+			//为单元格创建可编辑输入框
+
+		function CreateTextBox(element, value) {
+				//检查编辑状态，如果已经是编辑状态，跳过
+				var editState = element.getAttribute("EditState");
+				if (editState != "true") {
+					//创建文本框
+					var textBox = document.createElement("INPUT");
+					textBox.type = "text";
+					textBox.className = "EditCell_TextBox";
+					//设置文本框当前值
+					if (!value) {
+						value = element.getAttribute("Value");
+					}
+					textBox.value = value;
+                    textBox.name  = element.getAttribute("name");
+					//设置文本框的失去焦点事件
+					textBox.onblur = function() {
+							CancelEditCell(this.parentNode, this.value);
+						}
+
+                    var order_id = element.getAttribute("order_id");
+					textBox.onchange = function() {
+							ModifyCell(this.parentNode, this.value, this.name, order_id);
+						}
+						//向当前单元格添加文本框
+					ClearChild(element);
+					element.appendChild(textBox);
+					textBox.focus();
+					textBox.select();
+					//改变状态变量
+					element.setAttribute("EditState", "true");
+					element.parentNode.parentNode.setAttribute("CurrentRow", element.parentNode.rowIndex);
+				}
+			}
+
+			//为单元格创建选择框
+		function CreateDropDownList(element, value) {
+				//检查编辑状态，如果已经是编辑状态，跳过
+				var editState = element.getAttribute("EditState");
+				if (editState != "true") {
+					//创建下接框
+					var downList = document.createElement("Select");
+					downList.className = "EditCell_DropDownList";
+					//添加列表项
+					var items = element.getAttribute("DataItems");
+					if (!items) {
+						items = element.parentNode.parentNode.rows[0].cells[element.cellIndex].getAttribute("DataItems");
+					}
+					if (items) {
+						items = eval("[" + items + "]");
+						for (var i = 0; i < items.length; i++) {
+							var oOption = document.createElement("OPTION");
+							oOption.text = items[i].text;
+							oOption.value = items[i].value;
+							downList.options.add(oOption);
+						}
+					}
+					//设置列表当前值
+					if (!value) {
+						value = element.getAttribute("Value");
+					}
+					downList.value = value;
+					//设置创建下接框的失去焦点事件
+					downList.onblur = function() {
+							CancelEditCell(this.parentNode, this.value, this.options[this.selectedIndex].text);
+						}
+						//向当前单元格添加创建下接框
+					ClearChild(element);
+					element.appendChild(downList);
+					downList.focus();
+					//记录状态的改变
+					element.setAttribute("EditState", "true");
+					element.parentNode.parentNode.setAttribute("LastEditRow", element.parentNode.rowIndex);
+				}
+			}
+
+		function CancelEditCell(element, value, text) {
+				element.setAttribute("Value", value);
+				if (text) {
+					element.innerHTML = text;
+				} else {
+					element.innerHTML = value;
+				}
+				element.setAttribute("EditState", "false");
+				//检查是否有公式计算
+				//CheckExpression(element.parentNode);
+			}
+
+		function ModifyCell(element, value, name, order_id) {
+			$.ajax({
+				type: "GET",
+				url: "/modify-order-post/",
+				data: {
+					order_id: order_id,
+                    name:     name,
+                    value:    value,
+				},
+				dataType: "json",
+				success: function(data) {
+					if (data['state'] === 'ok') {
+                        alert("修改成功!");
+                    }
+                    else{
+                        alert("修改失败!");
+                    }
+				},
+                error: function(){
+                    alert("修改失败!");
+                }
+			});
+		}
+
+		function ClearChild(element) {
+				element.innerHTML = "";
+			}
+    </script>
+
+    <style>
+        .order_table{
+            margin:0 28px 10px 30px;
+        }
+    </style>
+
+	<body>
+		{% include "header.html" %}
+        <input type="text" id="temp-delete-id" value="" style="display:none;"  >
+
+		<div class="site_container">
+			<div class="container_inner contain_guide">
+				<!-- 导航栏 开始 -->
+				<div class="user_navigate" id="side_nav">
+					<div class="user_info">
+						<div class="navi_avater">
+							<a href="/user/setprofile/">
+								<img src={{account.user_pic}} class="__avatar" width="120" height="120" style="visibility: visible;">
+								<span class="mask"></span>
+							</a>
+						</div>
+						<h4 class="user_title __nickname">{{account.nickname}}</h4>
+						<div class="level_option">
+							<a href="/u/hlw/hlw_index.html" class="_icon_vip" style="visibility: hidden; display: none;" _hot="uc.side.hlwicon"><i class="ico_vip"></i></a>
+							<a target="_blank" href="javascript:" class="_icon_vplus" style="visibility: hidden; display: none;" _hot="uc.side.vplusicon"><i class="icon_vplus"></i></a>
+						</div>
+					</div>
+
+					<ul class="navigate_list">
+
+						<li class="item ">
+							<a href="/upload/course/" class="navi_inner _upload" _hot="uc.side._upload" target="_blank"><i class="icon2_upload"></i><span class="text">上传视频</span></a>
+						</li>
+
+						<li class="item ">
+							<a href="/videos/manage/" class="navi_inner _vmanage" _hot="uc.side._vmanage"><i class="icon2_vmanage"></i><span class="text">视频管理</span></a>
+						</li>
+
+						<li class="item ">
+							<a href="/videos/data-manage/" class="navi_inner _data"><i class="icon2_data"></i><span class="text">数据统计</span></a>
+                        </li>
+
+						<li class="item ">
+							<a href="/manage/index-info" class="navi_inner _data" target="_blank"><i class="icon2_data"></i><span class="text">首页广告</span></a>
+                        </li>
+
+                        <li class="item ">
+							<a href="/manage/order-manage" class="navi_inner _data current" target=""><i class="icon2_vmanage"></i><span class="text">订单管理</span></a>
+                        </li>
+					</ul>
+				</div>
+				<!-- 导航栏 结束 -->
+
+				<div class="main_content" id="video_view">
+
+                    <div style="line-height:28px;text-align:center;">
+                        <form action="/manage/order-manage/" class="form-search form-inline">
+                            <input name="order_id" style="width:200px;" class="input-medium search-query" placeholder="输入订单ID进行搜索" type="text" />
+                            <button type="submit" class="btn">查找</button>
+                        </form>
+                    </div>
+
+					<ul class="mod_tab_list">
+						<li class="item current _videoBtn">
+							<a class="txt">订单 {{orders_len}} </a>
+						</li>
+					</ul>
+
+
+					<ul class="video_list" id="video_list">
+						<li class="item_title">
+							<div class="item_a">
+								<input type="checkbox" class="_check_all">
+							</div>
+							<div class="item_b"><span class="text">订单信息</span></div>
+						</li>
+
+					</ul>
+
+                    <table id="id_tabProduct" cellpadding="1" cellspacing="1" style="width:92%;" class="order_table table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th style="line-height:20px">订单ID</th>
+                                <th>课程名称</th>
+                                <th>用户昵称</th>
+                                <th>价格(元)</th>
+                                <th>有效期(天)</th>
+                                <th>创建时间</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders%}
+                            <tr>
+                                <th style="line-height:20px">{{order.id}}</th>
+                                <th>{{order.name}}</th>
+                                <th>{{order.user_nickname}}</th>
+                                <th order_id={{order.id}} name="price" EditType="TextBox">{{order.price}}</th>
+                                <th order_id={{order.id}} name="order_valid_day" EditType="TextBox">{{order.order_valid_day}}</th>
+                                <th>{{order.release_date}}</th>
+
+                                    {% if order.pay_state == 1%}
+                                    <th>未付款</th>
+                                    {% elif order.pay_state == 2%}
+                                    <th>已付款</th>
+                                    {% else%}
+                                    <th>无效</th>
+                                    {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+					<div class="mod_pages">
+						<a href="/manage/order-manage/?page={{pre_page}}" class="page-btn" style="width: 100px;">上一页</a> {% for i in pages_before %}
+						<a href="/manage/order-manage/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a> {% endfor %}
+						<a href="/manage/order-manage/?page={{cur_page}}" data-page={{cur_page}} class="current">{{cur_page}}</a> {% for i in pages_after %}
+						<a href="/manage/order-manage/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a> {% endfor %}
+						<a href="/manage/order-manage/?page={{after_page}}" data-page="2" class="page-btn" style="width: 100px;">下一页</a>
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+		{% include "footer.html" %}
+	</body>
+
+	<script type="text/javascript">
+		var tabProduct = document.getElementById("id_tabProduct");
+		 // 设置表格可编辑
+		 // 可一次设置多个，例如：EditTables(tb1,tb2,tb2,......)
+		EditTables(tabProduct);
+	</script>
+</html>

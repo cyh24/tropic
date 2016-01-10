@@ -43,6 +43,33 @@ def upload_course_post(request):
 
     return render_to_response('info.html', msg)
 
+def modify_order_post(request):
+    json = {'state': 'fail'}
+    try:
+        order_id, name, value = None, None, None
+        if request.GET.has_key("order_id"):
+            order_id = int(request.GET['order_id'])
+
+        if request.GET.has_key("name"):
+            name = request.GET['name']
+
+        if request.GET.has_key("value"):
+            value = request.GET['value']
+
+        order = get_order_given_orderid(order_id)
+        if name == "price":
+            order.price = float(value)
+        elif name == "order_valid_day":
+            order.order_valid_day = int(value)
+        order.save()
+
+        json['state'] = 'ok';
+
+    except Exception, e:
+        print "modify_order_post: ", str(e)
+
+    return JsonResponse(json)
+
 def update_course_post(request):
     msg = {'state': 'fail'}
     try:
@@ -1048,6 +1075,13 @@ def get_order_given_ordernum(order_num):
     else:
         return order[0]
 
+def get_order_given_orderid(order_id):
+    order = Order.objects.all().filter(id=order_id)
+    if getLen(order) == 0:
+        return None
+    else:
+        return order[0]
+
 def get_orderid_given_user_video(user, video):
     try:
         account = get_account_from_user(user)
@@ -1199,6 +1233,7 @@ def create_unpay_order(user, video_id):
 
         if created_flag == False:
             unpay_order.price = video.money
+            unpay_order.order_valid_day = video.valid_day
 
         unpay_order.pay_state = 1
 
@@ -1261,6 +1296,7 @@ def create_unpay_order_mobile(user, video_id):
 
         if created_flag == False:
             unpay_order.price = video.money
+            unpay_order.order_valid_day = video.valid_day
 
         unpay_order.pay_state = 1
 
