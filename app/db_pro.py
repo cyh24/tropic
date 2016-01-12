@@ -873,7 +873,7 @@ def get_video_state(user, video):
             for o in user_orders:
                 if o.video == video:
                     if o.pay_state == 2:
-                        if check_chaoshi(o.release_date, video.valid_day) == True:
+                        if check_chaoshi(o.release_date, o.order_valid_day) == True:
                             return False
                         else:
                             return True
@@ -884,6 +884,14 @@ def get_video_state(user, video):
                             # add user order info
                             add_user_order_info(account, o, pc_flag=1)
                             return True
+                        else:
+                            if o.price == 0:
+                                if check_chaoshi(o.release_date, o.order_valid_day) == True:
+                                    if o.pay_state == 1:
+                                        o.delete()
+                                    return False
+                                else:
+                                    return True
 
     except Exception, e:
         printError("get_video_state: " + str(e))

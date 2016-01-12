@@ -67,7 +67,30 @@
         var click_pay_flag = 0;
 		function show_pay() {
             click_pay_flag = 0;
-			document.getElementById('id-go-pay').style.display = "block";
+
+			$.ajax({
+				type: "GET",
+				url: "/ready-pay/",
+				data: {
+					video_id: {{video.id}},
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data['state'] == 'fail')
+					{
+						show_msg('生成订单失败，请重试！');
+					}
+					else if(data['state'] == 'ok'){
+                    document.getElementById('id_order_title').innerHTML = "(订单ID:" + data['order_id'] + ")" + "{{video.title}}";
+			            document.getElementById('id_order_price').innerHTML = data['order_price']
+			            document.getElementById('id-go-pay').style.display = "block";
+					}
+					else if (data['state'] == 'paid')
+					{
+						show_msg("该订单已经完全付款，请勿重复提交！")
+					}
+                }
+            });
 		}
 		function hide_pay() {
 			document.getElementById('id-go-pay').style.display = "none";
@@ -232,13 +255,11 @@
             );
         }
 
-        
 	</script>
 
 	<body>
 
 		{% include "mobile/header.html"%}
-		
 		<div id="id-go-pay" style="display: none;">
 			<div class="mask" style="display: block;"></div>
 			<div class="tips tips-buy-course alert-tips" style="margin-top: -146.5px;">
@@ -247,7 +268,7 @@
 					<div class="mod-course-banner">
                         <img src={{video.logo_img}} class="mod-course-banner__img">
 						<div class="mod-course-banner__content">
-                            <h3 class="mod-course-banner__title" title="">{{video.title}}</h3>
+                            <h3 class="mod-course-banner__title" title="" id="id_order_title">{{video.title}}</h3>
 							<div class="mod-course-banner__content-line">
 								<span class="mod-course-banner__c-light">共1课时</span>
 								<span class="mod-course-banner__sep">|</span>
@@ -258,7 +279,7 @@
 					<div class="mod-course-banner_row clearfix">
 						<div class="mod-course-banner_col1">价格</div>
 						<div class="mod-course-banner_col2">
-                            <span class="mod-course-banner__price "> ¥<span class="fontsize-22">{{video.money}}</span>
+                            <span class="mod-course-banner__price "> ¥<span class="fontsize-22" id="id_order_price">{{video.money}}</span>
 							</span>
 							<span class="mod-course-banner__c-light">支持微信、支付宝支付</span>
 						</div>

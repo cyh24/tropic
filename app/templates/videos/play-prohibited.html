@@ -15,10 +15,9 @@
 	<link rel="stylesheet" type="text/css" href="/static/css/confirm/xcConfirm.css"/>
 	<script src="/static/css/confirm/jquery-1.9.1.min.js" type="text/javascript"></script>
 	<script src="/static/css/confirm/xcConfirm.js" type="text/javascript"></script>
-	
+
 	<script src="/static/js/july/jquery.js"></script>
 	<script src="/static/js/july/schollbar.js"></script>
-	
 
 	<script>
 	    var VOTE_FLAG = 1;
@@ -47,7 +46,6 @@
           				$("#id-like-num").html(1);
           			}
 				}
-          			
 			});
 		}
 
@@ -69,18 +67,14 @@
                     }
                     else if(data['collect_state'] === '0')
                     {
-                        document.getElementById('btn_collect_cancle').value = '0';       
+                        document.getElementById('btn_collect_cancle').value = '0';
                         document.getElementById('icon_collect_cancle').className = 'fa fa-star-o';
                     }
 				}
-          			
 			});
 		}
-		
 		function add_comment(){
-		
             var content = $('#comment_text').val();
-  
             if( content =='有没有什么问题要问导师的？' || content.length < 3){
                 alert('评论内容不能少于3个字哦~');
                 return false
@@ -96,14 +90,11 @@
                 	video_id: {{video.id}},
                 },
                 success: function(obj){
-                    
                     window.location.reload();
-                    
                 }
             });
 		}
-		
-		
+
         function delete_comment(comment_id){
 			$.ajax({
 				url: "/del-comment/",
@@ -118,7 +109,7 @@
 				}
 			});
         }
-		
+
 		var follow_id = -1;
 		function replay(self)
 		{
@@ -128,12 +119,9 @@
 			document.getElementById("comment_text").value = "回复 " + data_comment_name + ": ";
 			document.getElementById("comment_text").focus();
 		}
-		
 		function star()
 		{
-			
 		}
-		
 		function wechat_share() {
 			$.ajax({
 				type: "GET",
@@ -144,19 +132,17 @@
 				dataType: "json",
 				success: function(data) {
                     qrcode_url = data['qrcode_url'];
-                    
                     document.getElementById('qrcodeWrap').style.display = "block";
                     document.getElementById('id-qrcode').src = qrcode_url;
                 }
-          			
 			});
 		}
-		
+
 		function qrcode_close()
 		{
 			document.getElementById('qrcodeWrap').style.display = "none";
 		}
-		
+
 		function addListener(element, e, fn) {
 			if (element.addEventListener) {
 				element.addEventListener(e, fn, false);
@@ -177,21 +163,20 @@
 		function show_pay() {
 			document.getElementById('id-go-pay').style.display = "block";
 		}
-		
+
 		function hide_pay() {
 			document.getElementById('id-go-pay').style.display = "none";
 		}
-		
+
 		function show_msg(data)
         {
             data = data.toString();
             window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.error);
         }
-        
-        
+
 		function goto_pay(){
 			hide_pay();
-			
+
 			$.ajax({
 				type: "GET",
 				url: "/ready-pay/",
@@ -200,7 +185,6 @@
 				},
 				dataType: "json",
 				success: function(data) {
-					
 					if(data['state'] == 'fail')
 					{
 						show_msg('生成订单失败，请重试！');
@@ -213,12 +197,8 @@
 						show_msg("该订单已经完全付款，请勿重复提交！")
 					}
                 }
-          			
 			});
-			
-			
 		}
-		
 	</script>
 
 	<body>
@@ -528,8 +508,6 @@
 					</div>
 
 				</div>
-			
-			
 			</div>
 		</div>
 

@@ -202,6 +202,8 @@ def ready_pay(request):
             if unpay_order != None:
                 if unpay_order.pay_state == 1:
                     json['state'] = 'ok'
+                    json['order_id'] = unpay_order.id
+                    json['order_price'] = unpay_order.price
                     json['pay_url'] = HOMEPAGE + "/pay?unpay_order_id=" + str(unpay_order.id)
                 elif unpay_order.pay_state == 2:
                     json['state'] = 'paid'
