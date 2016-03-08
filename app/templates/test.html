@@ -1,136 +1,125 @@
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html>
 
 	{% include "include.html"%}
 
-	<link href="/static/css/index/index.css" rel="stylesheet">
+	<link rel="stylesheet" href="/static/css/july/lectures.css">
 
-    <body style="background-image: url(/static/images/index.jpg); background-repeat:no-repeat; background-size: 100% 100%;">
-		{% include "header.html"%}
-		<style>
-			.search-logo {
-				position: absolute;
-				left: 50%;
-				margin-left: -145px;
-				margin-top: -110px;
-			}
-            .ad_img {
-                width: 100%;
-                height: 100%;
-            }
-		</style>
-        <script>
-        window.onload=function()
-        {
-            var web_height = document.body.clientHeight;
-            var top_height = (web_height - 700)*0.9;
-            if(top_height < 40){
-                top_height = 40;
-            }
-            document.getElementById('id-slider-imgs').style.marginTop= top_height.toString() + "px";
-            return;
-        }
-        </script>
 
-		<!--<div class="wrap" style="margin-left: 10%; margin-right: 10%;">
-			<div class="search-logo">
-				<img s rc="/static/images/title.jpg" />
-			</div>
-			<div class="post-topheader" style="margin-top: 260px;">
-				<div class="container">
-					<ul class="search-category nav nav-pills">
-						<li class="active"><a href="/search?q=">关键词</a>
-						</li>
-					</ul>
-					<form action="/search/" class="row" style="width: ; margin-top: 10px;">
-						<div class="col-md-9">
-							<input class="input-lg form-control" type="text" name="title" value="" placeholder="输入关键字 (名称、类别、关键词) 搜索">
-						</div>
-						<div class="col-md-2">
-							<button type="submit" class="btn btn-primary btn-lg btn-block">搜索</button>
-						</div>
-					</form>
+	<body>
+		{% include "header.html" %}
+
+		<div class="container lectures" id="lectures" style="min-height:750px;">
+            <div style="height:15px;"></div>
+			<div class="row" style="margin-left:15px; margin-right:15px;">
+				 <div class="col-md-6" style="width:46%;">
+					<div class="course_img">
+						<img src="http://julyedu.com/Public/Image/56a594f5c9caf.png">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="coures_detail" style="margin-left:25px;">
+						<h3>5 月深度学习班</h3>
+						<p>
+							本5月深度学习班为xxxx16年重磅推出，涵盖CV和NLP两个典型的应用领域，以及深度学习中最关键两项技术CNN和RNN。总计10次课，5月7日开始上课，从基础到深入、从理论原理到实践应用，带你一举入门深度学习，hold住其中关键知识点。[ 课程咨询QQ群：xxxx。课程咨询电话：xxxxxx。另，可内推BAT、可开发票 ] 
+                        </p>
+						<ul>
+							<li><strong>开班时间：</strong>
+                                <span>5 月7日开课[每周六、周日上午10~12点]</span></li>
+							<li><strong> 课程时长：</strong>
+                                <span>10次课 [每次课至少2小时，每天集中答疑]</span></li>
+							<li><strong>价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格：</strong>
+                                <span>原价1000 [16年3月份内报名直接8折800]</span></li>
+						</ul>
+
+                        <!--
+						<a title="我要报名" href="/baoming/index/37">我要报名</a>
+                        -->
+
+					</div>
 				</div>
 			</div>
-
-		</div>
-
-		<div id="sbox" class="sw_sform" role="search" data-bm="20">
-			<div class="search_controls " style="text-align:center;">
-				<a href="javascript:void(0)" id="hpinsthk" h="ID=SERP,5109.1"><span></span></a>
-				<form form action="/search/" >
-					<div class="b_searchboxForm" data-bm="24">
-						<input class="b_searchbox" id="sb_form_q" name="title" title="输入搜索词" type="search" value="" maxlength="100" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="输入(名称、类别、关键词) 搜索">
-						<input type="submit" class="b_searchboxSubmit" id="sb_form_go" title="搜索" >
-					</div>
-				</form>
-			</div>
-		</div>
-        -->
-
-
-		<div class="container-fluid" style="width:735px;">
-			<div class="row-fluid">
-				<div class="span12">
-
-		<div id="sbox" class="sw_sform" role="search" data-bm="20" style="margin-top:130px;">
-			<div class="search_controls " style="text-align:center;">
-				<a href="javascript:void(0)" id="hpinsthk" h="ID=SERP,5109.1"><span></span></a>
-				<form form action="/search/" >
-				<img src="/static/images/homepage/logo5.png" style="float:left;height:40px;width:;margin-top:2px;margin-right:5px;"/>
-					<div class="b_searchboxForm" data-bm="24" style="float:">
-						<input class="b_searchbox" id="sb_form_q" name="title" title="输入搜索词" type="search" value="" maxlength="100" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="输入(名称、类别、关键词) 搜索">
-						<input type="submit" class="b_searchboxSubmit" id="sb_form_go" title="搜索" >
-					</div>
-				</form>
-			</div>
-		</div>
-					<div class="carousel slide" id="carousel-734444" style="">
-						<ol class="carousel-indicators">
-							<li data-slide-to="0" data-target="#carousel-734444">
-							</li>
-							<li data-slide-to="1" data-target="#carousel-734444" class="active">
-							</li>
-							<li data-slide-to="2" data-target="#carousel-734444">
-							</li>
-						</ol>
-						<div class="carousel-inner" id="id-slider-imgs" style="margin-top:40px; margin-bottom:40px; height:310px;">
-							<div class="item active" >
-                                <a href="http://el.tropic.com.cn/videos">
-								<img alt="" src="/static/images/homepage/1.png" class="ad_img"/>
-                                </a>
+			<div class="row" style="margin-left:0px; margin-right:30px;">
+				<div class="col-md-12 tabs-container">
+					<ul class="nav nav-tabs tab-lists">
+						<li role="presentation" class="active"><a href="#introduction"> 课程介绍 </a></li>
+						<li role="presentation" class=""><a href="#dir"> 课程大纲 </a></li>
+						<li role="presentation" class=""><a href="#discard"> 优惠报名 </a></li>
+						<li role="presentation" class=""><a href="#resource"> 预习资料 </a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="introduction">
+							<div class="item">涵盖CV和NLP两个典型的领域，以及深度学习中最关键两项技术CNN和RNN
+								<br> 16年3月份内报名直接8折800
+								<br>
+								<br> 上课时间：5月7日开始上课，每周六、周日上午10~12点直播上课、每天集中答疑、且课后有视频可以反复在线观看、复习
+								<br> 上课方式：在线QQ群视频直播上课，天南地北，只要想听，谁都有机会报名参加。
+								<br>
+								<br>
+								<strong>主讲老师</strong>
+								<br>
+								<ul>
+									<li>
+										<span style="line-height:1.5;">xx，机器学习技术专家，熟练机器学习主流算法和深度学习框架Torch，专注计算机视觉、网络多媒体，开发多款计算机视觉产品。</span>
+									</li>
+									<li>
+										<span style="line-height:1.5;">xx，计算机博士毕业，超过10年的软件开发经验，讲课清晰易懂，累计数千人好评，推导机器学习细致透彻。</span>
+									</li>
+								</ul>
+								更多嘉宾讲师具体上课时揭晓。
+								<br>
+								<p>
+									<br>
+								</p>
+							</div>
+						</div>
+						<div class="tab-pane" id="dir">
+							<div class="item">
+								<p>
+									深度学习课程大纲草案
+									<br>
+									<strong>第一节：深度学习基础知识、上</strong>
+									<br> 1. 必要的线性代数以及微积分基础
+									<br> 2. 机器学习基础、线性模型
+									<br> 4. 逻辑回归、Softmax
+									<br>
+									<br>
+								</p>
+								<p>
+									<br>
+								</p>
                                 <!--
-								<div class="carousel-caption2">
-									<h4>
-										棒球
-									</h4>
-									<p>
-										棒球运动是一种以棒打球为主要特点，集体性、对抗性很强的球类运动项目，在美国、日本尤为盛行。
-									</p>
-								</div>
+								<p>
+									课程大纲讨论、反馈地址：<a href="http://ask.julyedu.com/question/6861" target="_blank">http://ask.julyedu.com/question/6861</a>
+								</p>
                                 -->
 							</div>
-							<div class="item">
-                                <a href="http://el.tropic.com.cn/videos">
-								<img alt="" src="/static/images/homepage/2.png" class="ad_img" />
-                                </a>
-							</div>
-							<div class="item">
-                                <a href="http://el.tropic.com.cn/videos">
-								<img alt="" src="/static/images/homepage/3.png" class="ad_img"/>
-                                </a>
-							</div>
-						</div> <a data-slide="prev" href="#carousel-734444" class="left carousel-control">‹</a> 
-                        <a data-slide="next" href="#carousel-734444" class="right carousel-control">›</a>
+						</div>
+						<div class="tab-pane" id="discard">
+							<div class="item"> <span>优惠理由写：16年3月份内报名直接8折800。另，求职班或算法班或机器学习班老学员报名深度学习班 7折700。</span><span></span></div>
+						</div>
+						<div class="tab-pane" id="resource">
+							<div class="item"></div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
-
-		<div class="clearfix" style="width: 100%; position: absolute; bottom: 0px;">
-			{% include "footer.html"%}
-		</div>
-
+		{% include "footer.html" %}
 	</body>
 
+<script type="text/javascript">
+    $('.nav-tabs li').on("mouseover", function(e){
+        $(this).addClass("active").siblings().removeClass("active");
+        var id = $(this).find('a').attr('href');
+        $(id).addClass('active').siblings().removeClass('active');
+    });
+
+    /*
+    var category = 'machinelearning';
+    $('#common-header').find('li').removeClass('active');
+    $('#' + category).addClass('active');
+    */
+
+</script>
 </html>

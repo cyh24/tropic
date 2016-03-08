@@ -48,6 +48,63 @@ def super_user(fn):
 
     return wrapper
 
+
+IP_REQUEST_MAP = {}
+def ip_request_push(request):
+    try:
+        ip = get_request_ip(request)
+        if ip == None or ip == "127.0.0.1":
+            return False
+        if request.GET.has_key('video-id'):
+            IP_REQUEST_MAP[ip] = request.GET['video-id']
+            return True
+    except Exception, e:
+        return False
+
+    return False
+
+def request_get_vid(request):
+    try:
+        ip = get_request_ip(request)
+        if ip == None:
+            return None
+        if IP_REQUEST_MAP.has_key(ip):
+            vid = IP_REQUEST_MAP[ip]
+            del IP_REQUEST_MAP[ip]
+            return vid
+    except Exception, e:
+        return None
+
+    return None
+
+
+def unlogin_user(fn):
+    @wraps(fn)
+    def wrapper(*args):
+        from django.contrib.auth.models import AnonymousUser
+        if args[0].user == AnonymousUser():
+            ip_request_push(args[0])
+            return HttpResponseRedirect("/wechat-login/")
+        if args[0].user.is_authenticated == False:
+            ip_request_push(args[0])
+            return HttpResponseRedirect("/wechat-login/")
+        result = fn(*args)
+        return result
+
+    return wrapper
+
+def get_request_ip(request):
+    ip = None
+    try:
+        if request.META.has_key('HTTP_X_FORWARDED_FOR'):
+            ip =  request.META['HTTP_X_FORWARDED_FOR']
+        else:
+            ip = request.META['REMOTE_ADDR']
+    except Exception, e:
+        return None
+
+    return ip
+
 def printError(e):
     print "Error: ", str(e)
 

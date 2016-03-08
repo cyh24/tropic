@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+	{% include "mobile/include.html"%}
+
+    <link rel="stylesheet" type="text/css" href="/static/css/mobile/videos.css">
+
+    <link rel="stylesheet" href="/static/css/txkt/courseList.css">
+    <link rel="stylesheet" href="/static/css/txkt/common.css">
+
+	<link rel="stylesheet" href="/static/css/july/mobile_entrance.css">
+
+	{% include "mobile/header.html"%}
+	<body>
+
+        <div style="height:60px; background-color:#f8f8f8; width:100%;">
+        </div>
+		<div class="entrance">
+
+			<div class="container content">
+
+                {%for course in offcourses%}
+				<div class="row">
+					<div class="col-md-12">
+                        <h3 class="category_header">{{course.status}}</h3></div>
+				</div>
+				<div class="row">
+					<div class="col-md-6 col-xs-12">
+						<div class="course_img" style="height:190px;">
+                            <img src="{{course.img_path}}">
+						</div>
+					</div>
+					<div class="col-md-6 col-xs-12">
+						<div class="coures_detail" style="margin-left:0px;">
+                            <h3>{{course.title}}</h3>
+                            <p>{{course.short_info}}</p>
+							<ul style="margin-left:0px;">
+								<li><strong>开班时间：</strong>
+                                <span>{{course.start_time}}</span></li>
+							</ul>
+                            <a href="/offline-detail/?id={{course.id}}">查看详情</a>
+						</div>
+					</div>
+				</div>
+                {%endfor%}
+
+			</div>
+
+                <div class="clear" style="margin-top:50px;"></div>
+                <div class="sort-page">
+                    <a href="{{get_content}}page={{pre_page}}" class="page-btn" style="width: 100px;">上一页</a>
+                    {% for i in pages_before %}
+                    <a href="{{get_content}}page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a>
+                    {% endfor %}
+                    <a href="{{get_content}}page={{cur_page}}" data-page={{cur_page}} class="page-btn page-btn-cur">{{cur_page}}</a>
+                    {% for i in pages_after %}
+                    <a href="{{get_content}}page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a>
+                    {% endfor %}
+                    <a href="{{get_content}}page={{after_page}}" class="page-btn" style="width: 100px;">下一页</a>
+                </div>
+
+		</div>
+
+	</body>
+
+</html>

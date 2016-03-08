@@ -43,7 +43,7 @@ def download(request):
     return response
 
 
-@super_user
+# @super_user
 def test(request):
     print "TEST"
     msg = {}

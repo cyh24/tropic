@@ -103,5 +103,15 @@ urlpatterns = patterns('',
     url(r'^alipay_notify/$', 'app.ali_pay.alipay_notify'),
     url(r'^alipay_return/$', 'app.ali_pay.alipay_return'),
     url(r'^info_wait/', 'app.db_pro.info_wait'),
+
+    url(r'^offline/', 'app.offline_pro.offline'),
+    url(r'^offline-detail/$', 'app.offline_pro.offline_detail'),
+    url(r'^offline-upload/$', 'app.offline_pro.offline_upload'),
+    url(r'^offline-upload-post/$', 'app.offline_pro.offline_upload_post'),
+    url(r'^offline-update/$', 'app.offline_pro.offline_update'),
+    url(r'^offline-update-post/$', 'app.offline_pro.offline_update_post'),
+    url(r'^offline-delete/$', 'app.offline_pro.offline_delete'),
+    url(r'^offline-manage/$', 'app.offline_pro.offline_manage'),
+
     url(r'^test/', 'app.views.test')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

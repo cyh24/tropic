@@ -470,6 +470,49 @@ with open("/home/www/tropic/app/stopword.txt", "r") as f:
     stop_list = f.readlines()
     stop_list = [line[:-1] for line in stop_list]
 
+# video_list = []
+# with open("/home/www/tropic/app/video.txt", "r") as f:
+    # video_list = f.readlines()
+    # video_list = [line[:-2] for line in video_list]
+
+# keyword_list = []
+# with open("/home/www/tropic/app/keyword.txt", "r") as f:
+    # keyword_list = f.readlines()
+    # keyword_list = [line[:-1] for line in keyword_list]
+
+
+# with open("/home/www/tropic/app/key_videoID.txt", "w") as f:
+    # m = {}
+    # all_v = Video.objects.all()
+    # # print all_v[0].files.all()[0].key.encode("utf8")
+    # # print len(all_v[0].files.all()[0].key.encode("utf8"))
+    # # print video_list[0]
+    # # print len(video_list[0])
+    # # print len("通过身份证号计算出生日期.mp4")
+    # # print len("1招聘数据问题及正确思路.mp4")
+    # for i in range(len(keyword_list)):
+        # for key in keyword_list[i].split():
+            # video_path = video_list[i]
+            # for v in all_v:
+                # for file in v.files.all():
+                    # if file.key.encode("utf8") == str(video_path):
+                        # if m.has_key(key) == False:
+                            # m[key] = []
+                        # m[key].append(v.id)
+                        # break
+
+    # for k in m:
+        # f.write(str(k) + ":" + str(m[k])+"\n")
+
+key_video = []
+key_ = []
+video_ = []
+with open("/home/www/tropic/app/key_videoID.txt", "r") as f:
+    key_video = f.readlines()
+    key_ = [line[:-1].split(':')[0] for line in key_video]
+    video_ = [line[:-1].split(':')[1] for line in key_video]
+
+
 def get_search_videos(request):
     try:
         if request.GET.has_key('title'):
@@ -484,20 +527,43 @@ def get_search_videos(request):
             if getLen(seg_list) == 0:
                 return Video.objects.all()
 
-            for i in range(len(seg_list)):
-                if seg_list[i] in stop_list:
-                    seg_list.remove(seg_list[i])
+            # for i in range(len(seg_list)):
+                # if seg_list[i] in stop_list:
+                    # seg_list.remove(seg_list[i])
+                    # continue
+                # elif seg_list[i].encode("utf8") not in key_:
+                    # seg_list.remove(seg_list[i])
 
-            if getLen(seg_list) == 0:
+            # if getLen(seg_list) == 0:
+                # return Video.objects.all()
+
+            # q_title = seg_list[0]
+            # videos = Video.objects.filter(Q(title__icontains=q_title)|Q(kind_str__icontains=q_title)|Q(tags_str__icontains=q_title)).all()
+            # for i in range(1, len(seg_list)):
+                # q_title = seg_list[i]
+                # videos = videos | Video.objects.filter(Q(title__icontains=q_title)|Q(kind_str__icontains=q_title)|Q(tags_str__icontains=q_title)).all()
+
+            ids = []
+            for seg in seg_list:
+                if seg.encode("utf8") in key_:
+                    v_ids = video_[key_.index(seg.encode("utf8"))]
+                    # print v_ids
+                    for v in v_ids.split(','):
+                        ids.append(v)
+
+            ids =  list(set(ids))
+            videos = None
+            if getLen(ids) >= 1:
+                q_id = ids[0]
+                videos = Video.objects.filter(id=q_id).all()
+                for i in range(1, len(ids)):
+                    q_id = ids[i]
+                    videos = videos | Video.objects.filter(id=q_id).all()
+
+            if getLen(videos) == 0:
                 return Video.objects.all()
-
-            q_title = seg_list[0]
-            videos = Video.objects.filter(Q(title__icontains=q_title)|Q(kind_str__icontains=q_title)|Q(tags_str__icontains=q_title)).all()
-            for i in range(1, len(seg_list)):
-                q_title = seg_list[i]
-                print q_title
-                videos = videos | Video.objects.filter(Q(title__icontains=q_title)|Q(kind_str__icontains=q_title)|Q(tags_str__icontains=q_title)).all()
             return videos
+
         else:
             return Video.objects.all()
 

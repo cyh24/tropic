@@ -27,7 +27,8 @@ def watch_history_add(request):
 
     return JsonResponse(json)
 
-@login_required(login_url='/wechat-login/')
+# @login_required(login_url='/wechat-login/')
+@unlogin_user
 @csrf_exempt
 def play_ui(request):
     msg = init_msg(request)

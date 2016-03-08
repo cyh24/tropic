@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+	{% include "include.html"%}
+
+	<link rel="stylesheet" href="/static/css/july/lectures.css">
+    <link rel="stylesheet" href="/static/qiniu/main.css">
+
+
+	<body>
+		{% include "header.html" %}
+
+	<form action="/offline-upload-post/" method="post" id="id-form" enctype="multipart/form-data" target="post-status">
+		{% csrf_token %}
+		<button id="id-form-submit" style="display: none;" type="submit"></button>
+
+		<div class="container lectures" id="lectures" style="min-height:750px;">
+            <div style="height:15px;"></div>
+			<div class="row" style="margin-left:15px; margin-right:15px;">
+				 <div class="col-md-6" style="width:46%;">
+					<!-- <div class="course_img"> -->
+						<!-- <img src="http://julyedu.com/Public/Image/56a594f5c9caf.png"> -->
+					<!-- </div> -->
+                        <label class="upload_filed_lbl" for="upload_filed_video_title">
+                            <span>标题</span><span class="sign_star">*</span>
+                        </label>
+                        <div class="upload_filed_area">
+                            <input class="rlf-input" type="text" name="title" value="">
+                        </div>
+
+                        <label class="upload_filed_lbl" for="upload_filed_video_title">
+                            <span>简介</span><span class="sign_star">*</span>
+                        </label>
+                        <div class="upload_filed_area">
+                            <textarea id="desc_0" class="textarea" type="text" name="short_info" style="height: 120px;"></textarea>
+                        </div>
+
+                        <label class="upload_filed_lbl" for="upload_filed_video_title">
+                            <span>图片链接</span><span class="sign_star">*</span>
+                        </label>
+                        <div class="upload_filed_area">
+                            <input class="rlf-input" type="text" name="img_path" value="">
+                        </div>
+				</div>
+				<div class="col-md-6">
+					<div class="coures_detail" style="margin-left:25px;">
+						<!-- <h3>5 月深度学习班</h3> -->
+
+                        <!-- <label class="upload_filed_lbl" for="upload_filed_video_title"> -->
+                            <!-- <span>标题</span><span class="sign_star">*</span> -->
+                        <!-- </label> -->
+                        <!-- <div class="upload_filed_area"> -->
+                            <!-- <input class="rlf-input" type="text" name="title" value=""> -->
+                        <!-- </div> -->
+
+                        <!-- <label class="upload_filed_lbl" for="upload_filed_video_title"> -->
+                            <!-- <span>简介</span><span class="sign_star">*</span> -->
+                        <!-- </label> -->
+                        <!-- <div class="upload_filed_area"> -->
+                            <!-- <textarea id="desc_0" class="textarea" type="text" name="short_info" style="height: 120px;"></textarea> -->
+                        <!-- </div> -->
+
+                        <label class="upload_filed_lbl" for="upload_filed_video_title">
+                            <span>开班时间</span><span class="sign_star">*</span>
+                        </label>
+                        <div class="upload_filed_area">
+                            <input class="rlf-input" type="text" name="start_time" value="">
+                        </div>
+
+
+                        <label class="upload_filed_lbl" for="upload_filed_video_title">
+                            <span>课程时长</span><span class="sign_star">*</span>
+                        </label>
+                        <div class="upload_filed_area">
+                            <input class="rlf-input" type="text" name="course_time" value="">
+                        </div>
+
+
+                        <label class="upload_filed_lbl" for="upload_filed_video_title">
+                            <span>价格</span><span class="sign_star">*</span>
+                        </label>
+                        <div class="upload_filed_area">
+                            <input class="rlf-input" type="text" name="price" value="">
+                        </div>
+
+                        <label class="upload_filed_lbl" for="upload_filed_video_title">
+                            <span>状态<br>(即将开始、正在进行、已经结束?)</span><span class="sign_star">*</span>
+                        </label>
+                        <div class="upload_filed_area">
+                            <input class="rlf-input" type="text" name="status" value="">
+                        </div>
+						<!-- <p> -->
+							<!-- 本5月深度学习班为xxxx16年重磅推出，涵盖CV和NLP两个典型的应用领域，以及深度学习中最关键两项技术CNN和RNN。总计10次课，5月7日开始上课，从基础到深入、从理论原理到实践应用，带你一举入门深度学习，hold住其中关键知识点。[ 课程咨询QQ群：xxxx。课程咨询电话：xxxxxx。另，可内推BAT、可开发票 ]  -->
+                        <!-- </p> -->
+						<!-- <ul> -->
+							<!-- <li><strong>开班时间：</strong> -->
+                                <!-- <span>5 月7日开课[每周六、周日上午10~12点]</span></li> -->
+							<!-- <li><strong> 课程时长：</strong> -->
+                                <!-- <span>10次课 [每次课至少2小时，每天集中答疑]</span></li> -->
+							<!-- <li><strong>价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格：</strong> -->
+                                <!-- <span>原价1000 [16年3月份内报名直接8折800]</span></li> -->
+						<!-- </ul> -->
+
+                        <!--
+						<a title="我要报名" href="/baoming/index/37">我要报名</a>
+                        -->
+
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin-left:0px; margin-right:30px;">
+				<div class="col-md-12 tabs-container">
+					<ul class="nav nav-tabs tab-lists">
+						<li role="presentation" class="active"><a href="#introduction"> 课程介绍 </a></li>
+						<li role="presentation" class=""><a href="#dir"> 课程大纲 </a></li>
+						<li role="presentation" class=""><a href="#discard"> 优惠报名 </a></li>
+						<li role="presentation" class=""><a href="#resource"> 预习资料 </a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="introduction">
+							<div class="item">
+                                <div class="upload_filed_area">
+                                    <textarea id="desc_0" class="textarea" type="text" name="detail_intro" style="height: 120px;"></textarea>
+                                </div>
+							</div>
+						</div>
+
+						<div class="tab-pane" id="dir">
+							<div class="item">
+                                <div class="upload_filed_area">
+                                    <textarea id="desc_0" class="textarea" type="text" name="course_intro" style="height: 120px;"></textarea>
+                                </div>
+							</div>
+						</div>
+						<div class="tab-pane" id="discard">
+							<div class="item">
+                                <div class="upload_filed_area">
+                                    <textarea id="desc_0" class="textarea" type="text" name="outlet_intro" style="height: 120px;"></textarea>
+                                </div>
+                            </div>
+						</div>
+						<div class="tab-pane" id="resource">
+							<div class="item">
+                                <div class="upload_filed_area">
+                                    <textarea id="desc_0" class="textarea" type="text" name="prelearn_intro" style="height: 120px;"></textarea>
+                                </div>
+                            </div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+            <div class="row_center">
+                <span id="fileinfo_saving_0" class="btns_txt" style="display:none"></span>
+                <button class="btn_submit" type="button" id="fileinfo_save_0" _hot="uc.upload.saveinfo" onclick="btn_click()">保存</button>
+            </div>
+
+		</div>
+
+    </form>
+
+        <!-- <div class="row_center"> -->
+            <!-- <span id="fileinfo_saving_0" class="btns_txt" style="display:none"></span> -->
+            <!-- <button class="btn_submit" type="button" id="fileinfo_save_0" _hot="uc.upload.saveinfo" onclick="btn_click()">保存</button> -->
+        <!-- </div> -->
+
+        <div class="container">
+            <div class="clear"></div>
+            <div class="mod_upload">
+                <div class="mod_upload_filed">
+                    <iframe id="post-status" name="post-status" style="display:; width:100%" frameborder="no"></iframe>
+                </div>
+            </div>
+        </div>
+
+		{% include "footer.html" %}
+
+	</body>
+
+<script type="text/javascript">
+    $('.nav-tabs li').on("mouseover", function(e){
+        $(this).addClass("active").siblings().removeClass("active");
+        var id = $(this).find('a').attr('href');
+        $(id).addClass('active').siblings().removeClass('active');
+    });
+
+    /*
+    var category = 'machinelearning';
+    $('#common-header').find('li').removeClass('active');
+    $('#' + category).addClass('active');
+    */
+
+    function btn_click() {
+        document.getElementById('id-form-submit').click();
+    }
+
+</script>
+</html>

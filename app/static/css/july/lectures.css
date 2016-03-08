@@ -1,0 +1,234 @@
+.lectures {
+	background-color: #f8f8f8;
+    padding: 0 24px 40px 24px;
+}
+.lectures a { text-decoration: none; }
+.course_img {
+	height: 261px;
+	background-color: #D8D8D8;
+	border-radius: 7px;
+}
+.course_img img {
+	width: 100%;
+	height: 100%;
+	border-radius: 5px;
+}
+.coures_detail {
+	margin-left: 10px;
+
+}
+.coures_detail h3 {
+	font-size: 22px;
+	line-height: 25px;
+	color: #4F4F4F;
+	margin: 0;
+i}
+.coures_detail p {
+	font-size: 12px;
+	line-height: 21px;
+	color: #666666;
+	margin-top: 10px;
+}
+.coures_detail ul {
+    line-height: 28px;
+    margin: 0 0 16px -40px;
+}
+.coures_detail li strong {
+	font-size: 20px;
+	/*line-height: 23px;*/
+	color: #FF6A39;
+}
+.coures_detail li span {
+	font-size: 16px;
+	line-height: 19px;
+	color: #666666;
+}
+.coures_detail a {
+	display: inline-block;
+	width: 144px;height: 43px;
+	background-color: #18A5E5;
+	color: #FFFFFF;
+	font-size: 20px;
+	line-height: 43px;
+	border-radius: 4px;
+	text-align: center;
+}
+.nav-director {
+	background-color: #f8f8f8;
+	margin: 5px -8px;
+	font-size: 12px;
+	line-height: 14px;
+}
+.nav-director a {
+	color: #B9B9B9;
+}
+.nav-director a.active {
+	color: #666666;
+}
+.tabs-container {
+	margin-top: 40px;
+	background-color: #fff;
+	padding: 0;
+    margin-left: 15px;
+    margin-right: 15px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 10px #ccc;
+	width: 97%;
+}
+.tab-lists {
+	border: none;
+}
+.tab-lists li {
+	width: 15%;
+	border-top: 3px solid #CACACA;
+	background-color: #EAEAEA;
+	text-align: center;
+}
+.tab-lists li.active {
+    border-top: 3px solid #18A5E5;
+	/* background-color: #fff; */
+}
+.tab-lists li.active a,.tab-lists li.active a:hover,.tab-lists li.active a:focus {
+        border: none;
+        color: #18A5E5;
+	font-size: 16px;
+}
+.tab-lists li a {
+        color: #484848;
+        font-size: 16px;
+}
+.item {
+	margin: 30px;
+}
+.left_wrap {
+	float: left;
+	margin: 0 20px;
+}
+.icon_01 {
+	display: inline-block;
+	width: 39px;height: 50px;
+	background: url('../Image/newimg/intro.png') left center no-repeat;
+	background-size: 100% 100%;
+}
+.icon_02 {
+
+	display: inline-block;
+	width: 47px;height: 35px;
+	background: url('../Image/newimg/teacher.png') left center no-repeat;
+	background-size: 100% 100%;
+}
+.icon_03 {
+	display: inline-block;
+	width: 51px;height: 50px;
+	background: url('../Image/newimg/behavior.png') left center no-repeat;
+	background-size: 100% 100%;
+
+}
+.icon_04 {
+
+	display: inline-block;
+	width: 43px;height: 47px;
+	background: url('../Image/newimg/timer.png') left center no-repeat;
+	background-size: 100% 100%;
+}
+.icon_05 {
+
+	display: inline-block;
+	width: 43px;height: 47px;
+	background: url('../Image/newimg/binder.png') left center no-repeat;
+	background-size: 100% 100%;
+}
+.icon_06 {
+
+	display: inline-block;
+	width: 40px;height: 40px;
+	background: url('../Image/newimg/teabag.png') left center no-repeat;
+	background-size: 100% 100%;
+}
+.icon_dir {
+	display: inline-block;
+	width: 39px;height: 50px;
+	background: url('../Image/newimg/icon_dir.png') left center no-repeat;
+	background-size: 100% 100%;
+	text-align: center;
+	font-size: 28px;
+	color: #18A5E5;
+	padding-top: 7px;
+
+}
+.right_wrap {
+	border-bottom: 1px solid #CACACA;
+	    margin-left: 80px;
+	    max-width: 80%;
+}
+.right_wrap h3 {
+	font-size: 22px;
+	color: #4F4F4F;
+}
+.right_wrap p {
+	margin-bottom: 30px;
+	color: #666666;
+	font-size: 12px;
+}
+.resource_list {
+font-size: 16px;
+    color: #666666;
+    line-height: 54px;	
+}
+.resource_list li {
+	    list-style-type: decimal;
+}
+#discard {
+	padding-left: 24px;
+}
+#discard h1 {
+        font-size: 35px;
+	font-weight: bold;
+	color: #FF6A39;
+}
+#discard p {
+        font-size: 12px;
+	line-height: 21px;
+	color: #666666;
+
+}
+#discard table {
+	width: 88%;
+}
+#discard thead td {
+        background-color: #18A5E5;
+	color: #fff;
+	text-align: center;
+	height: 38px;
+	line-height: 38px;
+}
+#discard .distance {
+	margin-right: 2px;
+}
+#discard tbody tr {
+	margin-top: 2px;
+}
+#discard tbody tr.active td {
+	background-color: #EBEBEB;
+}
+#discard tbody td {
+	color: #5C5C5C;
+	padding: 14px;
+}
+@media (max-width: 768px){
+    .coures_detail {margin-top: 20px;}
+    .tab-lists li {width: 25%;}
+    .tab-lists li a {padding: 10px 2px;}
+	.tabs-container {width: 90%;}
+}
+.tab-lists li.active a, .tab-lists li.active a:hover, .tab-lists li.active a:focus {font-size: 14px;}
+.tab-lists li a {font-size: 14px;}
+.item li {list-style-type: disc;}
+.item li li {list-style-type: circle;}
+
+.pre_item{
+    font-family: 'Helvetica Neue', 'STHeiti', 'Microsoft YaHei', Helvetica, Arial, sans-serif; 
+    font-size: 14px;
+    border:0px;
+    background-color:#ffffff;
+}

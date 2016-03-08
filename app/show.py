@@ -18,6 +18,21 @@ def index(request):
         else:
             print "Wechat-User: None."
 
+        try:
+            vid = request_get_vid(request)
+            if vid != None:
+                vid = int(vid)
+                from playui import play_ui
+                import copy
+                request_new = copy.copy(request)
+                mutable = request_new.GET._mutable
+                request_new.GET._mutable = True
+                request_new.GET['video-id'] = vid
+                request_new.GET._mutable = mutable
+                return play_ui(request_new)
+        except Exception, e:
+            print "index", str(e)
+
         index_info = IndexInfo.objects.all()
         msg = init_msg(request)
         msg['index_info'] = index_info

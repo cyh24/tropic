@@ -49,3 +49,6 @@ admin.site.register(models.UserOrderInfo, UserOrderInfoAdmin)
 class IndexInfoAdmin(admin.ModelAdmin):
     pass
 admin.site.register(models.IndexInfo, IndexInfoAdmin)
+class OfflineAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.Offline, OfflineAdmin)

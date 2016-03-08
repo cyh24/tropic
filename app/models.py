@@ -266,3 +266,24 @@ class IndexInfo(models.Model):
     release_date = models.DateTimeField(auto_now=True)
     class Meta:
         db_table = u'index_info'
+
+class Offline(models.Model):
+    title       = models.CharField(max_length=200)
+    status      = models.CharField(max_length=20)
+    img_path    = models.CharField(max_length=200)
+
+    short_info  = models.CharField(max_length=1000)
+    start_time  = models.CharField(max_length=100)
+    course_time = models.CharField(max_length=100)
+    price       = models.CharField(max_length=100)
+
+
+    detail_intro = models.CharField(max_length=1000)
+    course_intro = models.CharField(max_length=1000)
+    outlet_intro = models.CharField(max_length=1000)
+    prelearn_intro = models.CharField(max_length=1000)
+
+    release_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = u'offline'
