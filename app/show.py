@@ -110,30 +110,33 @@ def search_result(request):
 
     msg = init_msg(request)
 
-    #videos, msg = get_order_videos(request, msg)
-    videos = get_search_videos(request)
-    videos, msg = get_order_videos(request, videos, msg)
+    try:
+        #videos, msg = get_order_videos(request, msg)
+        videos = get_search_videos(request)
+        videos, msg = get_order_videos(request, videos, msg)
 
-    total_page = (getLen(videos)+PAGE_SIZE-1)/PAGE_SIZE
-    subVideos, cur_page = paginator_show(request, videos, PAGE_SIZE)
+        total_page = (getLen(videos)+PAGE_SIZE-1)/PAGE_SIZE
+        subVideos, cur_page = paginator_show(request, videos, PAGE_SIZE)
 
 
-    pages_before, pages_after = paginator_bar(cur_page, total_page)
+        pages_before, pages_after = paginator_bar(cur_page, total_page)
 
-    msg['videos']     = subVideos
-    msg['cur_page']   = cur_page
-    msg['pages_before'] = pages_before
-    msg['pages_after']  = pages_after
-    msg['pre_page']   = cur_page - 1
-    msg['after_page'] = cur_page + 1
+        msg['videos']     = subVideos
+        msg['cur_page']   = cur_page
+        msg['pages_before'] = pages_before
+        msg['pages_after']  = pages_after
+        msg['pre_page']   = cur_page - 1
+        msg['after_page'] = cur_page + 1
 
-    get_content = "/search/?"
-    for key in request.GET:
-        if key != "page":
-            get_content += "%s=%s&"%(key, request.GET[key])
-    msg['get_content'] = get_content
+        get_content = "/search/?"
+        for key in request.GET:
+            if key != "page":
+                get_content += "%s=%s&"%(key, request.GET[key])
+        msg['get_content'] = get_content
 
-    msg['intrest_videos'] = get_intrest_videos()
+        msg['intrest_videos'] = get_intrest_videos()
+    except Exception, e:
+        print "search_result: ", e
 
 
     if checkMobile(request):

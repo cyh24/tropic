@@ -27,12 +27,100 @@ def watch_history_add(request):
 
     return JsonResponse(json)
 
-# @login_required(login_url='/wechat-login/')
-@unlogin_user
-@csrf_exempt
 def play_ui(request):
     msg = init_msg(request)
     msg['intrest_videos'] = get_intrest_videos()
+    msg['nickname'] = "NONE_USER"
+    if request.GET.has_key('video-id'):
+        try:
+            video_id = int(request.GET['video-id'])
+            video = Video.objects.filter(id=video_id).all()
+            if video != None:
+                video = video[0]
+                msg['video'] = video
+            else:
+                 return render_to_response('videos/play-error.html', msg)
+
+            current_num = 0
+            if request.GET.has_key('current'):
+                current_num = int(request.GET['current'])
+
+            files = video.files.all()
+            if getLen(files) <= current_num:
+                current_num = 0
+
+            key = files[current_num].key
+            video_url = Qiniu.download_private_url(key.encode('utf-8'))
+            msg['video_url'] = video_url
+            play_list = files
+            for i in range(getLen(play_list)):
+                play_list[i].num = i
+                play_list[i].cur_flag = 0
+
+            play_list[current_num].cur_flag = 1
+            msg['play_list'] = play_list
+
+            # add the watch number
+            #add_watch_num(video_id)
+
+            try:
+                account = get_account_from_user(request.user)
+                msg['nickname'] = account.nickname
+            except Exception, e:
+                pass
+
+            try:
+                # get the video's comments
+                comments = Video.objects.filter(id=video_id)[0].comments.all().order_by('release_date')
+                new_comments = []
+                if getLen(comments) > 0:
+                    for cc in comments:
+                        cc.release_date = str(cc.release_date).split(' ')[0]
+                        new_comments.append(cc)
+
+                msg['comments'] = new_comments
+                msg['comments_num'] = getLen(comments)
+            except Exception, e:
+                printError("play_ui: " + str(e))
+
+
+            # check whether need pay for the play
+            is_paid = get_video_state(request.user, video)
+
+            #add_watch_history(request.user, video)
+
+            if if_video_collected(request.user, video):
+                msg['collect_state'] = '1'
+            else:
+                msg['collect_state'] = '0'
+
+            if (video.money <= 0) or (is_paid):
+                # add user watch log
+                #add_user_watch_info(request, video)
+
+                if checkMobile(request):
+                    return render_to_response('mobile/videos/play.html', msg)
+                else:
+                    return render_to_response('videos/play.html', msg)
+            else:
+                if checkMobile(request):
+                    return render_to_response('mobile/videos/play-prohibited.html', msg)
+                else:
+                    return render_to_response('videos/play-prohibited.html', msg)
+
+        except Exception, e:
+            print "play_ui: ", str(e)
+
+    return render_to_response('videos/play-error.html', msg)
+
+
+# @login_required(login_url='/wechat-login/')
+@unlogin_user
+@csrf_exempt
+def play_ui_auth(request):
+    msg = init_msg(request)
+    msg['intrest_videos'] = get_intrest_videos()
+    msg['nickname'] = "NONE_USER"
     if request.GET.has_key('video-id'):
         try:
             video_id = int(request.GET['video-id'])

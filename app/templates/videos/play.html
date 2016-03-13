@@ -17,6 +17,13 @@
 
 
 	<script>
+        function check_auth(){
+            var nick_name = '{{nickname}}';
+            if(nick_name == 'NONE_USER'){
+                window.location.href = "http://el.tropic.com.cn/videos/play_auth/?video-id={{video.id}}"
+                return 0;
+            }
+        }
 		var VOTE_FLAG = 1;
 
 		function voteUpAction() {
@@ -44,6 +51,7 @@
 		}
 
 		function collectCancleAction() {
+            check_auth();
 			collect_state = document.getElementById('btn_collect_cancle').value
 			$.ajax({
 				type: "GET",
@@ -66,6 +74,7 @@
 		}
 
 		function add_comment() {
+            check_auth();
 			var content = $('#comment_text').val();
 			if (content == '有没有什么问题要问导师的？' || content.length < 3) {
 				alert('评论内容不能少于3个字哦~');
@@ -87,6 +96,7 @@
 		}
 
         function delete_comment(comment_id){
+            check_auth();
 			$.ajax({
 				url: "/del-comment/",
 				type: "GET",
@@ -104,6 +114,7 @@
 		var follow_id = -1;
 
 		function replay(self) {
+            check_auth();
 			data_comment_name = document.getElementById(self.id).getAttribute('data-comment-name')
 			data_comment_id = document.getElementById(self.id).getAttribute('data-comment-id')
 			follow_id = Number(data_comment_id)

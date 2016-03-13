@@ -466,9 +466,10 @@ def get_intrest_videos():
 
 
 stop_list = []
-with open("/home/www/tropic/app/stopword.txt", "r") as f:
-    stop_list = f.readlines()
-    stop_list = [line[:-1] for line in stop_list]
+# with open("/home/www/tropic/app/stopword.txt", "r") as f:
+    # stop_list = f.readlines()
+    # stop_list = [line[:-1] for line in stop_list]
+stop_list = {}.fromkeys([ line.rstrip() for line in open('/home/www/tropic/app/stopword.txt') ])
 
 # video_list = []
 # with open("/home/www/tropic/app/video.txt", "r") as f:
@@ -525,55 +526,60 @@ def get_search_videos(request):
                 seg_list.remove(" ")
 
             if getLen(seg_list) == 0:
-                return Video.objects.all()
+                return None
+                # return Video.objects.all()
 
-            # for i in range(len(seg_list)):
-                # if seg_list[i] in stop_list:
+            temp = []
+            for i in range(len(seg_list)):
+                if str(seg_list[i].encode("utf8")) not in stop_list:
+                    print seg_list[i]
+                    temp.append(seg_list[i])
                     # seg_list.remove(seg_list[i])
                     # continue
                 # elif seg_list[i].encode("utf8") not in key_:
                     # seg_list.remove(seg_list[i])
+            seg_list = temp
+            if getLen(seg_list) == 0:
+                return None
 
-            # if getLen(seg_list) == 0:
+            q_title = seg_list[0]
+            videos = Video.objects.filter(Q(title__icontains=q_title)|Q(kind_str__icontains=q_title)|Q(tags_str__icontains=q_title)).all()
+            for i in range(1, len(seg_list)):
+                q_title = seg_list[i]
+                videos = videos | Video.objects.filter(Q(title__icontains=q_title)|Q(kind_str__icontains=q_title)|Q(tags_str__icontains=q_title)).all()
+
+            # ids = []
+            # for seg in seg_list:
+                # if seg.encode("utf8") in key_:
+                    # v_ids = video_[key_.index(seg.encode("utf8"))]
+                    # # print v_ids
+                    # for v in v_ids.split(','):
+                        # ids.append(v)
+
+            # ids =  list(set(ids))
+            # videos = None
+            # if getLen(ids) >= 1:
+                # q_id = ids[0]
+                # videos = Video.objects.filter(id=q_id).all()
+                # for i in range(1, len(ids)):
+                    # q_id = ids[i]
+                    # videos = videos | Video.objects.filter(id=q_id).all()
+
+            # if getLen(videos) == 0:
                 # return Video.objects.all()
-
-            # q_title = seg_list[0]
-            # videos = Video.objects.filter(Q(title__icontains=q_title)|Q(kind_str__icontains=q_title)|Q(tags_str__icontains=q_title)).all()
-            # for i in range(1, len(seg_list)):
-                # q_title = seg_list[i]
-                # videos = videos | Video.objects.filter(Q(title__icontains=q_title)|Q(kind_str__icontains=q_title)|Q(tags_str__icontains=q_title)).all()
-
-            ids = []
-            for seg in seg_list:
-                if seg.encode("utf8") in key_:
-                    v_ids = video_[key_.index(seg.encode("utf8"))]
-                    # print v_ids
-                    for v in v_ids.split(','):
-                        ids.append(v)
-
-            ids =  list(set(ids))
-            videos = None
-            if getLen(ids) >= 1:
-                q_id = ids[0]
-                videos = Video.objects.filter(id=q_id).all()
-                for i in range(1, len(ids)):
-                    q_id = ids[i]
-                    videos = videos | Video.objects.filter(id=q_id).all()
-
-            if getLen(videos) == 0:
-                return Video.objects.all()
             return videos
 
         else:
             return Video.objects.all()
 
     except Exception, e:
-        printError(e)
+        printError("search:"+str(e))
 
     return None
 
 
 def get_order_videos(request, videos, msg):
+    m_videos = None
     try:
         if request.GET.has_key('order_by'):
             order_by = request.GET['order_by']
@@ -597,11 +603,12 @@ def get_order_videos(request, videos, msg):
             m_videos = videos.order_by(order_key)
 
             return m_videos, msg
+        else:
+            m_videos = videos.order_by('-watch_num')
 
     except Exception, e:
         printError(e)
 
-    m_videos = videos.order_by('-watch_num')
     return m_videos, msg
 
 
