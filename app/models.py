@@ -287,3 +287,55 @@ class Offline(models.Model):
 
     class Meta:
         db_table = u'offline'
+
+class Choice(models.Model):
+    correct_flag = models.BooleanField(default=False)
+    choice_info  = models.CharField(max_length=1000)
+    img_path     = models.CharField(max_length=200)
+    class Meta:
+        db_table = u'choice'
+
+class Question(models.Model):
+    kind  = models.IntegerField()
+    score = models.DecimalField(max_digits=5, decimal_places=2)
+    question_info = models.CharField(max_length=1000)
+    img_path      = models.CharField(max_length=200)
+
+    choices   = models.ManyToManyField(Choice)
+    def __get_choices_num(self):
+        try:
+            if self.choices != None:
+                return self.choices.count()
+        except Exception, e:
+            print str(e)
+        return 0
+
+    choices_num = property(__get_choices_num)
+    class Meta:
+        db_table = u'question'
+
+class Exam(models.Model):
+    detail_intro = models.CharField(max_length=1000)
+    img_path    = models.CharField(max_length=200)
+
+    start_time  = models.CharField(max_length=100)
+    end_time    = models.CharField(max_length=100)
+
+    exam_mins   = models.IntegerField()
+
+    questions   = models.ManyToManyField(Question)
+    def __get_questions_num(self):
+        try:
+            if self.questions != None:
+                return self.questions.count()
+        except Exception, e:
+            print str(e)
+        return 0
+
+    questions_num = property(__get_questions_num)
+
+    total_score = models.DecimalField(max_digits=5, decimal_places=2)
+
+    release_date = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        db_table = u'exam'

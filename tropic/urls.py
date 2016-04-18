@@ -114,5 +114,8 @@ urlpatterns = patterns('',
     url(r'^offline-delete/$', 'app.offline_pro.offline_delete'),
     url(r'^offline-manage/$', 'app.offline_pro.offline_manage'),
 
+    url(r'^onlineExam/$', 'app.exam_pro.onlie_exam'),
+    url(r'^onlineExam/question$', 'app.exam_pro.single_select'),
+
     url(r'^test/', 'app.views.test')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

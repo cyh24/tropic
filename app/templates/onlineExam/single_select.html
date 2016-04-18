@@ -3,6 +3,21 @@
 	{% include "include.html"%}
 	<link rel="stylesheet" href="/static/css/onlineExam/exercise.css">
 
+    <script>
+        function select(id){
+            var item = document.getElementById(id);
+            var label = document.getElementById("label-"+id);
+            if(item.className != "subject-options selected"){
+                item.className = "subject-options selected";
+                label.className = "radio checked";
+            }
+            else{
+                item.className = "subject-options";
+                label.className = "radio";
+            }
+        }
+    </script>
+
 	<body>
 		{% include "header.html" %}
 		<div class="nk-main  clearfix">
@@ -22,40 +37,57 @@
 						</a>
 					</div>
 					<div class="subject-title">[单项选择题]</div>
+					<input type="text" id="id-question-kind" value="1" style="display:none;">
 
 					<div class="subject-main">
 						<div class="subject-content">
 							<div class="subject-question">
 								以下是java concurrent包下的4个类，选出差别最大的一个
 							</div>
-							<a href="javascript:void(0);" class="subject-options selected" data-id="45360">
-								<label class="radio checked" id="component_0_checkbox_0">
+
+                            <div onClick="select('1');">
+							<a id="1" href="javascript:void(0);" class="subject-options selected" select-flag="True">
+								<label id="label-1" class="radio checked" >
 									<span class="icons"></span>
-									<input type="radio" data-toggle="radio" value="45360" checked="checked">
-									<pre>Semaphore</pre>
+                                    <!-- <input type="radio" data-toggle="radio" value="45360" checked="checked"> -->
+									<pre>Semaphkfjjaksdjkfjaksdfj</pre>
 								</label>
+                                <input style="display:none;" type="radio" data-toggle="radio" value="45360" checked="checked">
 							</a>
-							<a href="javascript:void(0);" class="subject-options" data-id="45361">
-								<label class="radio" id="component_1_checkbox_1">
+                            </div>
+
+                            <div onClick="select('2');">
+							<a id="2" href="javascript:void(0);" class="subject-options" select-flag="False">
+								<label id="label-2" class="radio" >
 									<span class="icons"></span>
-									<input type="radio" data-toggle="radio" value="45361">
-									<pre>ReentrantLock</pre>
+                                    <!-- <input type="radio" data-toggle="radio" value="45360" checked="checked"> -->
+									<pre>Semaphkfjjaksdjkfjaksdfj</pre>
 								</label>
+                                <input style="display:none;" type="radio" data-toggle="radio"  checked="">
 							</a>
-							<a href="javascript:void(0);" class="subject-options" data-id="45362">
-								<label class="radio" id="component_2_checkbox_2">
+                            </div>
+
+                            <div onClick="select('3');">
+							<a id="3" href="javascript:void(0);" class="subject-options" select-flag="False">
+								<label id="label-3" class="radio" >
 									<span class="icons"></span>
-									<input type="radio" data-toggle="radio" value="45362">
-									<pre>Future</pre>
+                                    <!-- <input type="radio" data-toggle="radio" value="45360" checked="checked"> -->
+									<pre>Semaphkfjjaksdjkfjaksdfj</pre>
 								</label>
+                                <input style="display:none;" type="radio" data-toggle="radio"  checked="">
 							</a>
-							<a href="javascript:void(0);" class="subject-options" data-id="45363">
-								<label class="radio" id="component_3_checkbox_3">
+                            </div>
+
+                            <div onClick="select('4');">
+							<a id="4" href="javascript:void(0);" class="subject-options" select-flag="False">
+								<label id="label-4" class="radio" >
 									<span class="icons"></span>
-									<input type="radio" data-toggle="radio" value="45363">
-									<pre>CountDownLatch</pre>
+                                    <!-- <input type="radio" data-toggle="radio" value="45360" checked="checked"> -->
+									<pre>Semaphkfjjaksdjkfjaksdfj</pre>
 								</label>
+                                <input style="display:none;" type="radio" data-toggle="radio"  checked="">
 							</a>
+                            </div>
 						</div>
 
 						<div class="subject-action clearfix">
@@ -74,8 +106,9 @@
 					</div>
 					<!-- 展开的时候加class:open -->
 					<div class="answer-sheet-box open">
-						<a href="javascript:void(0)" class="card-unfold">展开答题卡</a>
-						<a href="javascript:void(0)" class="card-fold">收起答题卡</a>
+						<!-- <a href="javascript:void(0)" class="card-unfold">展开答题卡</a> -->
+						<!-- <a href="javascript:void(0)" class="card-fold">收起答题卡</a> -->
+                        <p>答题卡</p>
 						<ul class="answer-sheet-num clearfix">
 							<li><a href="javascript:void(0);" class="answer-done" data-qid="44555">1</a></li>
 							<li><a href="javascript:void(0);" class="answer-done" data-qid="44554">2</a></li>
@@ -142,5 +175,6 @@
             setTimeout("countdown()",1000);
         }
     </script>
+
 
 </html>
