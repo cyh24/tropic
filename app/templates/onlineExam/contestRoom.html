@@ -13,43 +13,29 @@
         <div style="height:60px; background-color:#f8f8f8; width:100%;">
         </div>
 		<div class="entrance" style="min-height:800px;">
-            <!--
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <ol class="breadcrumb nav-director">
-                                <li><a href="/">首页</a></li>
-                                <li><a class="active" href="/course/category/2">线下课程</a></li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-            -->
 
 			<div class="container content">
 
-                {%for course in offcourses%}
+                {%for exam in offexams%}
 				<div class="row">
 					<div class="col-md-12">
-                        <h3 class="category_header">{{course.status}}</h3></div>
+                        <h3 class="category_header">即将开始</h3></div>
 				</div>
 				<div class="row">
 					<div class="col-md-6 col-xs-12">
 						<div class="course_img" style="margin-left:25px; margin-right:15px;">
-                            <img src="{{course.img_path}}">
+                            <img src="{{exam.img_path}}">
 						</div>
 					</div>
 					<div class="col-md-6 col-xs-12">
 						<div class="coures_detail">
-                            <h3>{{course.title}}</h3>
-                            <p>{{course.short_info}}</p>
+                            <h3>{{exam.title}}</h3>
+                            <p>你想把使用Excel的工作时间减少80%吗？ 你想制作专业的数据报告吗？ 你想学习使用Excel的正确方法吗？ 你想成为Excel能手吗？ 请参加“企业中的Excel”免费试听会</p>
 							<ul>
-								<li><strong>开班时间：</strong>
-                                <span>{{course.start_time}}</span></li>
+								<li><strong>考试时间：</strong>
+                                <span>{{exam.start_time}}</span></li>
 							</ul>
-                            <a href="/offline-detail/?id={{course.id}}">查看详情</a>
-                            <a href="/onlineExam/single_select/">单选</a>
-                            <a href="/onlineExam/multi_select/">多选</a>
+                            <a href="/examSummary/?id={{exam.id}}">进入考试</a>
 						</div>
 					</div>
 				</div>

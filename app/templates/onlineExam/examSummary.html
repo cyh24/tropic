@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+	{% include "include.html"%}
+
+	<link rel="stylesheet" href="/static/css/txkt/courseList.css">
+	<link rel="stylesheet" href="/static/css/txkt/common.css">
+	<link rel="stylesheet" href="/static/css/july/entrance.css">
+
+	<link rel="stylesheet" href="/static/css/onlineExam/summary.css">
+
+	<body>
+		{% include "header.html" %}
+
+        <div class="nk-container">
+        <div class="nk-main ranking-main clearfix">
+            <div class="crumbs-path">
+                <a href="/">首页</a>
+                <span>&gt;</span>
+                <a href="/contestRoom">真题测试</a>
+                <span>&gt;</span>
+                <span class="crumbs-end">回归线教育笔试题（一）</span>
+            </div>
+            <!--主体内容-->
+            <div class="nk-content">
+                <div class="module-box clearfix">
+                    <div class="module-head clearfix">
+                        <h1>
+        回归线教育笔试题（一）</h1>
+                    </div>
+                    <div class="module-body">
+                        <div class="subject-type">
+                            <div class="target-pic" style="width:166px;"><img src="//static.nowcoder.com/images/target.png"></div>
+                            <div class="content-item-order type-detail">
+                                <p><span class="item-label">客观题：</span>单选20道</p>
+                                <p><span class="item-label">主观题：</span>编程3道</p>
+                                <p>
+                                    <span class="item-label">完成时间：</span> 120分钟
+                                </p>
+                                <p><span class="item-label">难度系数：</span>
+                                    <span class="stars-new star-3" title="难度系数"></span>
+                                </p>
+                                <p>
+                                    <span class="item-label">总分：</span> 100分
+                                </p>
+                            </div>
+                        </div>
+                        <div class="exam-notice">
+                            <p>1、请在规定时间完成试卷内全部题目，考试时间结束，系统将自动交卷。</p>
+                            <p>2、所有题目可通过答题卡返回修改，点击提前交卷后试卷提交，将无法继续答案，请谨慎提交。</p>
+                            <p>3、请诚信答题，独立完成。</p>
+                            <p>4、祝你好运。</p>
+                        </div>
+                        <form id="submitForm" method="post" action="/test/1899956/begin">
+                            <input id="next" type="submit" name="button" class="btn_summary btn_summary-primary begin-exam-btn_summary" value="开始做题">
+                            <input type="hidden" name="token" value="">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--主体内容结束-->
+        </div>
+        </div>
+
+		{% include "footer.html" %}
+	</body>
+
+</html>

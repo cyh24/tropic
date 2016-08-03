@@ -315,6 +315,7 @@ class Question(models.Model):
         db_table = u'question'
 
 class Exam(models.Model):
+    title       = models.CharField(max_length=100)
     detail_intro = models.CharField(max_length=1000)
     img_path    = models.CharField(max_length=200)
 

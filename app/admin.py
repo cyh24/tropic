@@ -49,6 +49,19 @@ admin.site.register(models.UserOrderInfo, UserOrderInfoAdmin)
 class IndexInfoAdmin(admin.ModelAdmin):
     pass
 admin.site.register(models.IndexInfo, IndexInfoAdmin)
+
 class OfflineAdmin(admin.ModelAdmin):
     pass
 admin.site.register(models.Offline, OfflineAdmin)
+
+class ExamAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.Exam, ExamAdmin)
+
+class QuestionAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.Question, QuestionAdmin)
+
+class ChoiceAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.Choice, ChoiceAdmin)

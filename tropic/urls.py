@@ -114,7 +114,8 @@ urlpatterns = patterns('',
     url(r'^offline-delete/$', 'app.offline_pro.offline_delete'),
     url(r'^offline-manage/$', 'app.offline_pro.offline_manage'),
 
-    url(r'^onlineExam/$', 'app.exam_pro.onlie_exam'),
+    url(r'^contestRoom/$', 'app.exam_pro.contestRoom'),
+    url(r'^examSummary/$', 'app.exam_pro.exam_summary'),
     url(r'^onlineExam/question$', 'app.exam_pro.single_select'),
 
     url(r'^test/', 'app.views.test')

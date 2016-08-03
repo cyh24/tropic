@@ -47,7 +47,7 @@ def download(request):
 def test(request):
     print "TEST"
     msg = {}
-    return render_to_response('test.html', msg)
+    return render_to_response('onlineExam/onlineExam.html', msg)
 
 def login_ui(request):
     msg = init_msg(request)

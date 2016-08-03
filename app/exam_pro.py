@@ -5,18 +5,18 @@ from db_pro import *
 from qiniu_pro import *
 from wechat_pro import *
 
-def online_exam(request):
+def contestRoom(request):
     msg = init_msg(request)
 
     try:
-        offline_courses = Offline.objects.all().order_by('-release_date')
+        offline_exams = Exam.objects.all().order_by('-release_date')
 
-        total_page = (getLen(offline_courses)+PAGE_SIZE-1)/PAGE_SIZE
-        subCourses, cur_page = paginator_show(request, offline_courses, PAGE_SIZE)
+        total_page = (getLen(offline_exams)+PAGE_SIZE-1)/PAGE_SIZE
+        subExams, cur_page = paginator_show(request, offline_exams, PAGE_SIZE)
 
         pages_before, pages_after = paginator_bar(cur_page, total_page)
 
-        msg['offcourses'] = subCourses
+        msg['offexams'] = subExams
         msg['cur_page']   = cur_page
         msg['pages_before'] = pages_before
         msg['pages_after']  = pages_after
@@ -25,13 +25,13 @@ def online_exam(request):
         msg['total_page'] = total_page
 
     except Exception, e:
-        print "offline:", e
+        print "contestRoom:", e
 
-    return render_to_response('onlineExam/onlineExam.html', msg)
-    # if checkMobile(request):
-        # return render_to_response('mobile/offline/offline.html', msg)
-    # else:
-        # return render_to_response('offline/offline.html', msg)
+    return render_to_response('onlineExam/contestRoom.html', msg)
+
+def exam_summary(request):
+    msg = init_msg(request)
+    return render_to_response('onlineExam/examSummary.html', msg)
 
 def single_select(request):
     msg = init_msg(request)
