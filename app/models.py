@@ -324,16 +324,37 @@ class Exam(models.Model):
 
     exam_mins   = models.IntegerField()
 
-    questions   = models.ManyToManyField(Question)
-    def __get_questions_num(self):
+
+    exam_excel_content = models.CharField(max_length=1000000)
+    exam_excel_file = models.CharField(max_length=200)
+
+    # questions   = models.ManyToManyField(Question)
+    # def __get_questions_num(self):
+        # try:
+            # if self.questions != None:
+                # return self.questions.count()
+        # except Exception, e:
+            # print str(e)
+        # return 0
+    # questions_num = property(__get_questions_num)
+
+    single_score = models.DecimalField(max_digits=5, decimal_places=2)
+    single_num   = models.IntegerField()
+    multi_score  = models.DecimalField(max_digits=5, decimal_places=2)
+    multi_num    = models.IntegerField()
+
+    max_retry_num = models.IntegerField(default=2)
+    allow_accounts = models.ManyToManyField(Account)
+    def __get_allow_accounts_num(self):
         try:
-            if self.questions != None:
-                return self.questions.count()
+            if self.allow_accounts != None:
+                return self.allow_accounts.count()
         except Exception, e:
             print str(e)
         return 0
+    allow_accounts_num = property(__get_allow_accounts_num)
 
-    questions_num = property(__get_questions_num)
+    public_flag = models.BooleanField()
 
     total_score = models.DecimalField(max_digits=5, decimal_places=2)
 

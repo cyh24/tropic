@@ -1,4 +1,3 @@
-
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 
@@ -35,6 +34,7 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage, PageNotAnIn
 
 USER_PIC_FOLD = "app/static/storage/user-pic/"
 LOGO_FOLD = "app/static/storage/logo-images/"
+EXAM_EXCEL_FOLD="app/static/storage/exam-excel/"
 
 
 from functools import wraps
@@ -129,6 +129,11 @@ def init_msg(request):
             msg['login_state'] = True
             account = Account.objects.filter(user=request.user).all()[0]
             msg['account'] = account
+            if request.user.is_superuser == True:
+                msg['is_superuser'] = True
+            else:
+                msg['is_superuser'] = False
+
         except Exception, e:
             printError(e)
 

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+	{% include "include.html"%}
+
+	<!-- <link rel="stylesheet" href="/static/css/txkt/courseList.css"> -->
+	<!-- <link rel="stylesheet" href="/static/css/txkt/common.css"> -->
+	<!-- <link rel="stylesheet" href="/static/css/july/entrance.css"> -->
+
+	<link rel="stylesheet" href="/static/css/onlineExam/createq1.css">
+	<link rel="stylesheet" href="/static/css/onlineExam/createq2.css">
+
+	<body>
+		{% include "header.html" %}
+
+        <div id="BS">
+            <div style="margin:0 auto;  text-align:left;;">
+
+
+                <form  method="post" action="/upload-exam/" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                    <div class="MBContent" >
+                        <div class="MTitle CRTitle" id="divCrTitle">
+
+                            <h2><span>&nbsp;</span>
+                                <img src="/static/css/onlineExam/images/createq/CRtitle-ico.jpg" width="24" height="34">
+                                <span id="spanTitle">创建试卷</span>
+                            </h2>
+
+                            <!-- <div style="position: relative; float: right;"> -->
+                                <!-- <script type="text/javascript"> -->
+                                    <!-- var hrefOther = document.getElementById("hrefOther"); -->
+                                    <!-- if (window.sb_setmenu) { -->
+                                        <!-- hrefOther.onmouseover = function() { -->
+                                            <!-- var width = this.parentNode.width || this.parentNode.offsetWidth; -->
+                                            <!-- sb_setmenu("divOther", true); -->
+                                        <!-- } -->
+                                        <!-- hrefOther.onmouseout = function() { -->
+                                            <!-- sb_setmenu("divOther", false); -->
+                                        <!-- } -->
+                                    <!-- } else -->
+                                        <!-- hrefOther.style.display = "none"; -->
+                                <!-- </script> -->
+                            <!-- </div> -->
+                        </div>
+                        <div class="CRbox">
+                            <div style="width: 700px; text-align: center; margin:0 auto;">
+
+                                <b style="font-size: 16px;">试卷名称：</b>
+
+                                <input name="title" type="text" maxlength="100" id="" class="inputtext" style="height:35px;width:457px;line-height: 35px; vertical-align: middle;">&nbsp;
+                                <!-- <span id="spanQType"><a href="javascript:" onclick="showData('divSurvey','创建空白试卷','','',0,this);" class="titlelnk" style="display: none;">我要创建调查试卷</a>&nbsp;<a href="javascript:" onclick="showData('divKaoShi','创建考试试卷','?ot=3,选择考试模板','&amp;ks=1,从文本导入考试',1,this);" class="titlelnk">我要创建考试试卷</a> -->
+                                <!-- &nbsp;<a href="javascript:" onclick="showData('divVote','创建投票试卷','?ot=4,选择投票模板','&amp;ks=1,从文本创建投票',2);" class="titlelnk" style="display: none;">投票</a> -->
+                            </span>
+                            </div>
+
+                            <div style="margin:25px 0 30px;">
+                                <table align="center">
+                                    <tbody>
+                                        <tr>
+                                            <td valign="middle">
+                                                <span id="spanCode">
+                                                </span>
+                                            </td>
+                                            <td valign="middle">
+                                                <a href="javascript:;" class="file_upload" style="color:#fff;">选择文件
+                                                    <input type="file" name="exam_excel" id="" onchange="return submit_upload()"></input>
+                                                </a>
+                                            </td>
+							                <button id="id-form-submit" style="display: none;" type="submit"></button>
+                                            <td valign="middle" style="display: none;">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div style="text-align: center;" id="divSurvey">
+                                <hr style="color: #f00; background-color: #888; height: 1px;">
+                                <div class="CR-Occt">
+                                    您可以选择以下创建试卷方式
+                                    <br> ⇓
+                                </div>
+                                <ul class="CR-Obox">
+                                    <li>
+                                        <a href="">
+                                            <span class="CR-Otxt">选择试卷模板</span>
+                                            <p class="CR-pli"></p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="">
+                                            <span class="CR-Otxt">导入试卷文本</span>
+                                            <p class="CR-pli CR-pli2"></p>
+                                        </a>
+                                    </li>
+                                    <li style="margin-right: 0">
+                                        <a href="">
+                                            <span class="CR-Otxt">手动输入试卷</span>
+                                            <p class="CR-pli CR-pli3"></p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div style="height:280px;"></div>
+        </div>
+
+		{% include "footer.html" %}
+	</body>
+
+    <script>
+        function submit_upload(){
+			document.getElementById('id-form-submit').click();
+        }
+    </script>
+
+</html>

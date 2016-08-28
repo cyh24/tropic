@@ -24,18 +24,24 @@
 				<div class="row">
 					<div class="col-md-6 col-xs-12">
 						<div class="course_img" style="margin-left:25px; margin-right:15px;">
-                            <img src="{{exam.img_path}}">
+                            <img src="http://7xoyf9.com2.z0.glb.qiniucdn.com/%E8%90%A5%E9%94%80%E5%B9%BF%E5%91%8A3.png">
 						</div>
 					</div>
 					<div class="col-md-6 col-xs-12">
 						<div class="coures_detail">
                             <h3>{{exam.title}}</h3>
-                            <p>你想把使用Excel的工作时间减少80%吗？ 你想制作专业的数据报告吗？ 你想学习使用Excel的正确方法吗？ 你想成为Excel能手吗？ 请参加“企业中的Excel”免费试听会</p>
+                            <p>{{exam.detail_intro}}</p>
 							<ul>
-								<li><strong>考试时间：</strong>
+								<li><strong>考试开始时间：</strong>
                                 <span>{{exam.start_time}}</span></li>
+								<li><strong>考试结束时间：</strong>
+                                <span>{{exam.end_time}}</span></li>
 							</ul>
                             <a href="/examSummary/?id={{exam.id}}">进入考试</a>
+                            {% if is_superuser == True%}
+                            <a href="/update-exam/?id={{exam.id}}" style='background-color: #a2a2a2;'>编辑试卷</a>
+                            <a href="/delete-exam/?id={{exam.id}}" >删除试卷</a>
+                            {% endif %}
 						</div>
 					</div>
 				</div>

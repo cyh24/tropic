@@ -1,0 +1,39 @@
+﻿body {
+background:#c5c793 url("//image.sojump.com/images/newbg/fubg.jpg") no-repeat fixed top center;
+}
+#jqContent{
+margin:-30px auto 0px !important;
+padding-top:0px;
+}
+#headerCss {
+background: white no-repeat;
+width: 920px;
+margin: 0 auto;
+}
+#mainCss {
+background: white;
+width: 920px;
+margin: 0 auto;
+}
+#footercss {
+width: 920px;
+margin: 0 auto;
+background: white;
+height: 20px;
+}
+.surveyhead h1 {
+font-size: 20px;
+font-weight: bold;
+color: #90b08e;
+}
+
+input.submitbutton {
+border: 1px solid #81a47f;
+background: #90b08e;
+}
+input.submitbutton_hover
+{
+    background:#a0bd9e;
+color:#fff !important;
+boder:1px soild #90b08e;
+}
