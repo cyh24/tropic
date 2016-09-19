@@ -122,6 +122,18 @@ urlpatterns = patterns('',
     url(r'^delete-exam/$', 'app.exam_pro.delete_exam'),
     url(r'^show-exam/$', 'app.exam_pro.showExam'),
 
+    url(r'^group-create/$', 'app.exam_pro.group_create'),
+    url(r'^group-update/$', 'app.exam_pro.group_update'),
+    url(r'^group-delete/$', 'app.exam_pro.group_delete'),
+    url(r'^group-create-post/$', 'app.exam_pro.group_create_post'),
+    url(r'^group-update-post/$', 'app.exam_pro.group_update_post'),
+
+    url(r'^kaoshi/groups/$', 'app.exam_pro.kaoshi_groups'),
+    url(r'^kaoshi/exams/$', 'app.exam_pro.kaoshi_exams'),
+
+
+    url(r'^exam/$', 'app.exam_pro.goto_exam'),
+    url(r'^submit-exam-post/$', 'app.exam_pro.submit_exam_post'),
     url(r'^contestRoom/$', 'app.exam_pro.contestRoom'),
     url(r'^examSummary/$', 'app.exam_pro.exam_summary'),
     url(r'^onlineExam/question$', 'app.exam_pro.single_select'),

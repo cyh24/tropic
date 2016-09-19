@@ -1,0 +1,47 @@
+<html>
+
+	{% include "include.html"%}
+    <link href="/static/css/onlineExam/reviewReport.css" rel="stylesheet" type="text/css" />
+
+	<body>
+		{% include "header.html" %}
+
+        <div class="nk-main analytic-page clearfix">
+            <div class="menu-box">
+                <ul class="menu clearfix">
+                    <li class="selected"><a href="/test/question/analytic?tid=4588538">评估报告</a></li>
+                    <!--<li><a href="/test/question/done?tid=4588538&amp;qid=46325">答案解析</a></li>-->
+                </ul>
+            </div>
+            <div class="review-report">
+                <div class="graph-box clearfix">
+                    <div class="graph-info">
+                        <div class="graph-statistic">
+                            <span class="graph-score">得分：{{total_score}}</span>
+                        </div>
+                        <div class="content-item-order graph-detail">
+                            <p><span class="item-label">试卷：</span> {{title}}
+                                <span class="stars star-3" title="难度系数"></span>
+                            </p>
+                            <p>
+                            <span class="item-label">正确题数：</span> {{correct_num}}/{{total_num}}
+                            </p>
+                            <p>
+                            <span class="item-label">得分：</span> {{total_score}}
+                            </p>
+                            <p>
+                            <span class="item-label">用时：</span> {{use_time}}
+                            </p>
+                            <p>
+                            <a href="/exam/?exam_id={{exam_id}}" class="btn btn-primary js-log-clock nc-req-auth">再试一次</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+	{% include "footer.html" %}
+	</body>
+
+</html>

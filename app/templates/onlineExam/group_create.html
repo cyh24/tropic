@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+        <title>创建群组</title>
+        <link href="/static/css/onlineExam/autocomplete/css/custom-theme/jquery-ui-1.8.7.custom.css" rel="stylesheet" />
+        <link href="/static/css/onlineExam/autocomplete/css/jquery.taghandler.css" rel="stylesheet" />
+        <script src="/static/css/onlineExam/autocomplete/js/jquery-1.7.2.min.js"></script>
+        <script src="/static/css/onlineExam/autocomplete/js/jquery-ui-1.8.20.custom.js"></script>
+        <script src="/static/css/onlineExam/autocomplete/js/jquery.taghandler.js"></script>
+
+        <link href="/static/css/space/setting_2.css" rel="stylesheet">
+    </head>
+
+    <style>
+    .btn_submit {
+      display: inline-block;
+      padding: 0 25px;
+      height: 32px;
+      line-height: 32px;
+      font-size: 16px;
+      color: #fff;
+      background: #ff7a0d;
+      border: 0 none;
+      outline: none;
+    }
+    </style>
+
+<body>
+    <h1 style="text-align:center; color: #666;">创建群组</h1>
+
+    <div style="margin-top: 10px;">
+    <form  method="post" action="/group-create-post/" enctype="multipart/form-data" target="post-status">
+        {% csrf_token %}
+        <div class="wlfg-wrap" style="width:500px;margin:40px auto 0 auto;text-align:center;">
+            <label id='id_group_num' class="my-label" for="nick" style="">群组名称:</label>
+            <div class="rlf-group">
+                <input  type="text" name="group_name" autocomplete="off"  class="rlf-input rlf-input-nick"  placeholder="请输入群组名称.">
+                <p class="rlf-tip-wrap"></p>
+            </div>
+        </div>
+
+        <div style="width:620px;margin:40px auto 0 auto;text-align:center;">
+            <ul id="tags"></ul>
+            <button style="margin-top: 40px; cursor: pointer" class="btn_submit" onclick="goto_submit()" >创建群组</button>
+        </div>
+
+        <input type="text" style="display:none;" id="id-select-names" name="names" />
+
+    </form>
+    </div>
+
+    <div style="margin-top: 100px;">
+        <input id="id-form-submit" type="sumbit" style="display:none;" />
+    </div>
+
+    <div style="margin:200px auto 0 auto;text-align:center;">
+	    <iframe id="post-status" name="post-status" style="display:; width:50%" frameborder="no"></iframe>
+    </div>
+
+<script>
+	var origtags = '';
+	var newstags = origtags.split(',');
+	var arr = new Array(); //将标签放入arr 数组中
+	for (var i = 0; i < newstags.length; i++) {
+		arr[i] = newstags[i];
+	}
+    if(origtags == ''){
+        arr = [];
+    }
+
+    xtags = '{{usernames}}'.split('-=,')
+	jQuery(document).ready(function () {
+		$('#tags').tagHandler({
+			assignedTags: arr, //原有标签,若没有，可以直接写 []
+			availableTags: xtags,//['动漫', '音乐', '素材', '代码'],//用于自动补全的数据，可从后台获取
+			autocomplete: true, //自动补全功能，true为有提示，false则反之
+			onAdd: function (tag) {
+				var addflag = true, tags = $('#tags').tagHandler("getTags");
+				jQuery.each(tags, function (i, e) {
+					if (tag.toUpperCase() === e.toUpperCase()) {
+						$('#tags').find('.tagItem').each(function () {
+							if ($(this).html().toLocaleUpperCase() === tag.toLocaleUpperCase()) {
+								$(this).animate({ opacity: 0.55 }).delay(20).animate({ opacity: 1 }).animate({ opacity: 0.55 }).delay(20).animate({ opacity: 1 });
+							}
+						});
+						addflag = false;
+					}
+				});
+				return addflag;
+
+			}
+			,
+			onDelete: function (tag) { //删除操作
+                /*
+				var addflag = false;
+				var answer = confirm("您确定删除此标签？");
+				if (answer) {
+					addflag = true;
+				}
+				return addflag;
+                */
+                return true;
+			}
+		});
+	});
+
+	$(function () {
+		$("#btnConfirm").click(function () { //提交按钮操作
+			var getTag = $('#tags').tagHandler("getTags");
+			alert(getTag);
+		});
+	});
+
+</script>
+
+    <script>
+        function goto_submit(){
+			var getTag = $('#tags').tagHandler("getTags");
+            document.getElementById('id-select-names').value = getTag;
+			document.getElementById('id-form-submit').click();
+        }
+    </script>
+
+</body>
+
+</html>

@@ -65,3 +65,11 @@ admin.site.register(models.Question, QuestionAdmin)
 class ChoiceAdmin(admin.ModelAdmin):
     pass
 admin.site.register(models.Choice, ChoiceAdmin)
+
+class KaoshiAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.Kaoshi, KaoshiAdmin)
+
+class GroupAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.Group, GroupAdmin)

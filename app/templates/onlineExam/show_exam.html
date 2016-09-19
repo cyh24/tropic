@@ -169,6 +169,19 @@
                                                             <td><input name='max_retry_num' value='{{max_retry_num}}' class='inputtext' style='overflow:hidden;height:28px;width:40px;' ></input></td>
                                                             <th class='rowth' align='left' style=''></th>
                                                         </tr>
+
+                                                        <tr align='left' rowindex='9'>
+                                                            <th class='rowth' align='left' style=' width:25%;'>选择考生群组:</th>
+                                                            <td>
+                                                            <select name="select_group_id">
+                                                                <option value ="-1">所有人员</option>
+                                                                {% for group in groups %}
+                                                                <option value ="{{group.id}}">{{group.group_name}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                            </td>
+                                                        </tr>
+
                                                     </tbody>
                                                 </table>
                                                 <div id='slider1'></div>

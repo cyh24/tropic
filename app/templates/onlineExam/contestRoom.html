@@ -37,11 +37,11 @@
 								<li><strong>考试结束时间：</strong>
                                 <span>{{exam.end_time}}</span></li>
 							</ul>
-                            <a href="/examSummary/?id={{exam.id}}">进入考试</a>
-                            {% if is_superuser == True%}
-                            <a href="/update-exam/?id={{exam.id}}" style='background-color: #a2a2a2;'>编辑试卷</a>
-                            <a href="/delete-exam/?id={{exam.id}}" >删除试卷</a>
-                            {% endif %}
+                            <a href="/examSummary/?exam_id={{exam.id}}">进入考试</a>
+                            <!-- {% if is_superuser == True%} -->
+                            <!-- <a href="/update-exam/?id={{exam.id}}" style='background-color: #a2a2a2;'>编辑试卷</a> -->
+                            <!-- <a href="/delete-exam/?id={{exam.id}}" >删除试卷</a> -->
+                            <!-- {% endif %} -->
 						</div>
 					</div>
 				</div>

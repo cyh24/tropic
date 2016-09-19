@@ -60,8 +60,7 @@ def excel_analyze_by_content(data):
                     i += 1
                     continue
 
-                if row[0].strip() == "分数".decode('utf8'):
-                    tmp_q['score'] = float(row[1])
+                if row[0].strip() == "单选".decode('utf8') or row[0].strip() == "多选".decode('utf8'):
                     break
 
                 if row[1] == '':

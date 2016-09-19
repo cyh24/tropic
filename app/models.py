@@ -314,6 +314,25 @@ class Question(models.Model):
     class Meta:
         db_table = u'question'
 
+class Group(models.Model):
+    group_name   = models.CharField(max_length=100)
+    detail_intro = models.CharField(max_length=1000)
+    img_path     = models.CharField(max_length=200)
+
+    allow_accounts = models.ManyToManyField(Account)
+    def __get_allow_accounts_num(self):
+        try:
+            if self.allow_accounts != None:
+                return self.allow_accounts.count()
+        except Exception, e:
+            print str(e)
+        return 0
+    allow_accounts_num = property(__get_allow_accounts_num)
+
+    release_date = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        db_table = u'groups'
+
 class Exam(models.Model):
     title       = models.CharField(max_length=100)
     detail_intro = models.CharField(max_length=1000)
@@ -344,14 +363,17 @@ class Exam(models.Model):
     multi_num    = models.IntegerField()
 
     max_retry_num = models.IntegerField(default=2)
-    allow_accounts = models.ManyToManyField(Account)
+    # allow_accounts = models.ManyToManyField(Account)
+
+    group = models.ManyToManyField(Group)
     def __get_allow_accounts_num(self):
         try:
-            if self.allow_accounts != None:
-                return self.allow_accounts.count()
+            if len(self.group.all()) > 0:
+                return self.group.all()[0].allow_accounts_num
         except Exception, e:
             print str(e)
         return 0
+
     allow_accounts_num = property(__get_allow_accounts_num)
 
     public_flag = models.BooleanField()
@@ -361,3 +383,21 @@ class Exam(models.Model):
     release_date = models.DateTimeField(auto_now_add=True)
     class Meta:
         db_table = u'exam'
+
+class Kaoshi(models.Model):
+    exam = models.ForeignKey(Exam, unique=False)
+    account = models.ForeignKey(Account, unique=False)
+
+    submit_flag = models.BooleanField(default=False)
+    submit_use_time = models.IntegerField(default=0)
+
+    single_q = models.CharField(max_length=500)
+    single_answer = models.CharField(max_length=500)
+    multi_q  = models.CharField(max_length=500)
+    multi_answer  = models.CharField(max_length=500)
+
+    score = models.DecimalField(max_digits=5, decimal_places=2, default=-1)
+
+    release_date = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        db_table = u'kaoshi'

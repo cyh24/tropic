@@ -1,12 +1,11 @@
 <html>
 
 	{% include "include.html"%}
-    <!-- <link rel="stylesheet" href="/static/css/onlineExam/exercise.css"> -->
+	<!-- <link rel="stylesheet" href="/static/css/onlineExam/exercise.css"> -->
 
     <link id="ctl00_linkDefault" type="text/css" rel="stylesheet" href="/static/css/onlineExam/NewDefault.css" />
     <link href="/static/css/onlineExam/q.css" rel="stylesheet" type="text/css" />
     <link href="/static/css/onlineExam/newsolid_103.css" rel="stylesheet" type="text/css" />
-
 
     <!-- <script> -->
         <!-- function select(id){ -->
@@ -22,12 +21,20 @@
             <!-- } -->
         <!-- } -->
     <!-- </script> -->
+    <style type="text/css">
+    h1{font-family:"微软雅黑";font-size:40px;margin:20px 0;;border-bottom:solid 1px #ccc;padding-bottom:20px;letter-spacing:2px;}
+    .time-item strong{color:#fff;line-height:49px;font-size:24px;font-family:Arial;padding:0 10px;margin-right:0px;border-radius:5px;box-shadow:1px 1px 3px rgba(0,0,0,0.2);}
+    #day_show{float:left;line-height:49px;color:#c71c60;font-size:32px;margin:0 10px;font-family:Arial, Helvetica, sans-serif;}
+    .item-title .unit{background:none;line-height:49px;font-size:24px;padding:0 10px;float:left;}
+    .daojishi {
+        position:fixed;
+        top:50px;
+    }
+    </style>
 
-
+    <script type="text/javascript" src="/static/js/onlineExam/jquery.min.js"></script>
 	<body>
 		{% include "header.html" %}
-
-
 		<!-- <div class="nk-main  clearfix"> -->
 			<!-- <div class="module-box subject-box"> -->
 				<!-- <div class="nowcoder-topic"> -->
@@ -57,6 +64,16 @@
 		<!-- </div> -->
 
     <!-- <div id="divNotRun" style="height:100px; text-align:center; display:none;"></div> -->
+
+        <div class="daojishi">
+            <div class="time-item">
+                <!-- <span id="day_show">0天</span> -->
+                <strong id="hour_show">0h</strong>
+                <strong id="minute_show">0m</strong>
+                <strong id="second_show">0s</strong>
+            </div>
+        </div>
+
         <div id="jqContent" class="" style="text-align: left;">
             <div id="headerCss" style="overflow-x: hidden; overflow-y: hidden; ">
                 <div id="ctl00_header">
@@ -71,7 +88,7 @@
 
                             <div id="ctl00_ContentPlaceHolder1_JQ1_divHead" class="surveyhead" style="border: 0px;">
                                 <h1 id="ctl00_ContentPlaceHolder1_JQ1_h1Name" style="position:relative;">
-                                    <span id="ctl00_ContentPlaceHolder1_JQ1_lblQuestionnaireName">试卷题目</span>
+                                    <span id="ctl00_ContentPlaceHolder1_JQ1_lblQuestionnaireName">{{exam.title}}</span>
                                     <!--<span id="ctl00_ContentPlaceHolder1_JQ1_lblMobile" style="position:absolute; right:-10px; top:6px;">
                                         <a href='javascript:;' onclick='showData(event,this,"https://ks.sojump.hk/m/9370954.aspx",0);' style='display:inline-block;width:50px;height:50px;background:url("//down.sojump.com/handler/qrcode.ashx?chs=50x50&chl=https%3a%2f%2fks.sojump.hk%2fm%2f9370954.aspx") no-repeat;'>
                                         </a>
@@ -93,7 +110,7 @@
                                 </script>-->
 
                                 <div id="ctl00_ContentPlaceHolder1_JQ1_divDec" class="surveydescription">
-                                    <span id="ctl00_ContentPlaceHolder1_JQ1_lblQuestionnaireDescription" style="vertical-align: middle;">考试说明细则：本次考试总分100分, 考试时间30分钟</span>
+                                    <span id="ctl00_ContentPlaceHolder1_JQ1_lblQuestionnaireDescription" style="vertical-align: middle;">{{exam.detail_intro}}</span>
                                 </div>
                                 <div style="clear: both;">
                                 </div>
@@ -106,97 +123,15 @@
                                     <div style="color: Red;font-size:16px; height:30px; line-height:30px;" id='spanMaxTime'></div>
                                 </div>
                                 <div id="ctl00_ContentPlaceHolder1_JQ1_surveyContent">
-                                    <form  method="post" action="/exam-update-post/" enctype="multipart/form-data" target="post-status">
+                                    <form method="post" action="/submit-exam-post/" enctype="multipart/form-data" >
                                     {% csrf_token %}
 
                                     <fieldset class='fieldset' id='fieldset1'>
 
                                         <input type='text' style='display:none;' name='exam_excel_file' value='{{exam_excel_file}}'>
-                                        <input type='text' style='display:none;' name='exam_id' value='{{exam_id}}'>
+                                        <input type='text' style='display:none;' name='kaoshi_id' value='{{kaoshi_id}}'>
 
-                                        <div class='div_question' id='div1'>
-                                            <div class='div_title_question_all'>
-                                                <div id='divTitle1' class='div_title_question'>试卷基本信息：<span style='color:red;'>&nbsp;*</span></div>
-                                                <div style='clear:both;'></div>
-                                            </div>
-                                            <div class='div_table_radio_question' id='divquestion1'>
-                                                <div class='div_table_clear_top'></div>
-                                                <table style='width:100%;' border='0px' cellpadding='5' cellspacing='0'>
-                                                    <tbody>
-                                                        <tr align='left' rowindex='0'>
-                                                            <th class='rowth' align='left' style=' width:25%;'>试卷题目：</th>
-                                                            <td><input name='exam_title' value='{{exam.title}}' class='inputtext' style='overflow:hidden;height:28px;width:400px;'></input></td>
-                                                            <th class='rowth' align='left' style=''></th>
-                                                        </tr>
-                                                        <tr align='left' rowindex='1'>
-                                                            <th class='rowth' align='left' style=' width:25%;'>试卷图片：</th>
-                                                            <td><input name='img_path' value='http://7xoyf9.com2.z0.glb.qiniucdn.com/%E8%90%A5%E9%94%80%E5%B9%BF%E5%91%8A1.png' class='inputtext' style='overflow:hidden;height:28px;width:400px;'></input></td>
-                                                            <th class='rowth' align='left' style=''></th>
-                                                        </tr>
-                                                        <tr align='left' rowindex='2'>
-                                                            <th class='rowth' align='left' style=' width:25%;'>考试说明细则：</th>
-                                                            <td><textarea name='exam_intro' class='inputtext' style='overflow:hidden;height:60px;width:400px;'>{{detail_intro}}</textarea></td>
-                                                            <th class='rowth' align='left' style=''></th>
-                                                        </tr>
-                                                        <tr align='left' rowindex='3'>
-                                                            <th class='rowth' align='left' style=' width:25%;'>考试开始时间:</th>
-                                                            <td><input name='exam_start_time' value='{{exam.start_time}}' class='inputtext' style='overflow:hidden;height:28px;'></input></td>
-                                                            <th class='rowth' align='left' style=''></th>
-                                                        </tr>
-                                                        <tr align='left' rowindex='4'>
-                                                            <th class='rowth' align='left' style=' width:25%;'>考试结束时间:</th>
-                                                            <td><input name='exam_end_time' value='{{exam.end_time}}' class='inputtext' style='overflow:hidden;height:28px;' ></input></td>
-                                                            <th class='rowth' align='left' style=''></th>
-                                                        </tr>
-                                                        <tr align='left' rowindex='5'>
-                                                            <th class='rowth' align='left' style=' width:25%;'>考试时间(分钟):</th>
-                                                            <td><input name='exam_time' value='{{exam.exam_mins}}' class='inputtext' style='overflow:hidden;height:28px;' ></input></td>
-                                                            <th class='rowth' align='left' style=''></th>
-                                                        </tr>
-                                                        <tr align='left' rowindex='6'>
-                                                            <th class='rowth' align='left' >单选题:</th>
-                                                            <td align='left'>
-                                                                总分数:&nbsp;&nbsp;&nbsp;<input name='single_score' class='inputtext' value='{{single_score}}' style='height:28px;width:40px;' ></input>
-                                                                &nbsp;&nbsp;&nbsp;&nbsp;题目数:&nbsp;&nbsp;&nbsp;<input name='single_num' class='inputtext' value='{{single_num}}' style='height:28px;width:40px;' ></input>
-                                                            </td>
-                                                            <th class='rowth' align='left' style=''></th>
-                                                        </tr>
-                                                        <tr align='left' rowindex='7'>
-                                                            <th class='rowth' align='left' >多选题:</th>
-                                                            <td align='left'>
-                                                                总分数:&nbsp;&nbsp;&nbsp;<input name='multi_score' class='inputtext' value='{{multi_score}}' style='height:28px;width:40px;' ></input>
-                                                                &nbsp;&nbsp;&nbsp;&nbsp;题目数:&nbsp;&nbsp;&nbsp;<input name='multi_num' class='inputtext' value='{{multi_num}}' style='height:28px;width:40px;' ></input>
-                                                            </td>
-                                                            <th class='rowth' align='left' style=''></th>
-                                                        </tr>
-                                                        <tr align='left' rowindex='8'>
-                                                            <th class='rowth' align='left' style=' width:25%;'>最大重考次数:</th>
-                                                            <td><input name='max_retry_num' value='{{max_retry_num}}' class='inputtext' style='overflow:hidden;height:28px;width:40px;' ></input></td>
-                                                            <th class='rowth' align='left' style=''></th>
-                                                        </tr>
-
-                                                        <tr align='left' rowindex='9'>
-                                                            <th class='rowth' align='left' style=' width:25%;'>选择考生群组:</th>
-                                                            <td>
-                                                            <select name="select_group_id">
-                                                                <option value ="-1">所有人员</option>
-                                                                {% for group in groups %}
-                                                                <option value ="{{group.id}}">{{group.group_name}}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                            </td>
-                                                        </tr>
-
-                                                    </tbody>
-                                                </table>
-
-                                                <div id='slider1'></div>
-                                                <div class='div_table_clear_bottom'></div>
-                                            </div>
-                                            <div class='errorMessage'></div>
-                                        </div>
-
-                                        <p>单选题部分:</p>
+                                        <p>单选题部分({{exam.single_score}}分):</p>
                                         {% for q in single_Q%}
                                         <div class='div_question'>
                                             <div class='div_title_question_all'>
@@ -212,11 +147,7 @@
                                                 <ul class='ulradiocheck'>
                                                     {% for choice in q.choices%}
                                                     <li style='width:99%;'>
-                                                        {% if choice.answer == 1 %}
-                                                        <input type='radio' name='{{q.q_name}}' checked='checked' disabled/>
-                                                        {% else %}
-                                                        <input type='radio' name='{{q.q_name}}' disabled />
-                                                        {% endif %}
+                                                    <input type='radio' name='{{choice.q_name}}' value='{{choice.name}}'  />
                                                         <label >{{choice.title}}</label>
                                                     </li>
                                                     {% endfor %}
@@ -229,7 +160,7 @@
                                         </div>
                                         {% endfor %}
 
-                                        <p>多选题部分:</p>
+                                        <p>多选题部分({{exam.single_score}}分):</p>
                                         {% for q in multi_Q%}
                                         <div class='div_question' >
                                             <div class='div_title_question_all'>
@@ -245,11 +176,7 @@
                                                 <ul class='ulradiocheck'>
                                                     {% for choice in q.choices %}
                                                     <li style='width:99%;'>
-                                                        {% if choice.answer == 1 %}
-                                                        <input type='checkbox' name='{{choice.name}}' checked='checked' disabled/>
-                                                        {% else %}
-                                                        <input type='checkbox' name='{{choice.name}}' disabled />
-                                                        {% endif %}
+                                                        <input type='checkbox' name='{{choice.name}}'  />
                                                         <label >{{choice.title}}</label>
                                                     </li>
                                                     {% endfor %}
@@ -676,7 +603,7 @@
                             </script>
 
                             <script type="text/javascript" src="/static/js/onlineExam/hintinfo.js"></script>
-                            <script type="text/javascript" src="/static/js/onlineExam/jqnew2.js"></script>
+                            <!-- <script type="text/javascript" src="/static/js/onlineExam/jqnew2.js"></script> -->
 
                             <script type="text/javascript">
                                 try {
@@ -786,6 +713,41 @@
         function submit_click(){
 			document.getElementById('id-form-submit').click();
         }
+    </script>
+    <script type="text/javascript">
+
+    var intDiff = parseInt({{daojishi}});//倒计时总秒数量
+
+    function timer(intDiff){
+        window.setInterval(function(){
+        var day=0,
+            hour=0,
+            minute=0,
+            second=0;//时间默认值
+        if(intDiff > 0){
+            day = Math.floor(intDiff / (60 * 60 * 24));
+            hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+            minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+            second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+        }
+        if (minute <= 9) minute = '0' + minute;
+        if (second <= 9) second = '0' + second;
+        <!-- $('#day_show').html(day+"天"); -->
+        $('#hour_show').html('<s id="h"></s>'+hour+'h');
+        $('#minute_show').html('<s></s>'+minute+'m');
+        $('#second_show').html('<s></s>'+second+'s');
+        intDiff--;
+
+        if(intDiff <=  0){
+		    document.getElementById('id-form-submit').click();
+        }
+
+        }, 1000);
+    }
+
+    $(function(){
+        timer(intDiff);
+    });
     </script>
 
 
