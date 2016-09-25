@@ -265,29 +265,36 @@ def get_existing_kaoshi(kaoshi):
     return select_single, select_multi, kaoshi
 
 def get_validate_kaoshi(kaoshis, max_kaoshi_time):
-    k_len = getLen(kaoshis)
-    if k_len == 0:
-        return 0, None
-
-    for k in kaoshis:
-        start_time = k.release_date
-        end_time = datetime.datetime.now()
-        spend_time = (end_time - start_time).seconds
-        if spend_time > k.exam.exam_mins*60:
-            print "time over."
-            k.submit_flag = True
-            k.save()
-
-    if k_len == max_kaoshi_time:
-        if kaoshis[k_len-1].submit_flag == True:
-            return -1, None
-    elif k_len < max_kaoshi_time:
-        if kaoshis[k_len-1].submit_flag == False:
-            return 1, kaoshis[k_len-1]
-        else:
+    try:
+        k_len = getLen(kaoshis)
+        if k_len == 0:
             return 0, None
-    else:
-        return -1, None
+
+        for k in kaoshis:
+            start_time = k.release_date
+            end_time = datetime.datetime.now()
+            spend_time = (end_time - start_time).seconds
+            if spend_time > k.exam.exam_mins*60:
+                print "time over."
+                k.submit_flag = True
+                k.save()
+
+        if k_len == max_kaoshi_time:
+            if kaoshis[0].submit_flag == True:
+                return -1, None
+            else:
+                return 1, kaoshis[0]
+        elif k_len < max_kaoshi_time:
+            if kaoshis[k_len-1].submit_flag == False:
+                return 1, kaoshis[k_len-1]
+            else:
+                return 0, None
+        else:
+            return -1, None
+    except Exception, e:
+        print "error, get_validate_kaoshi:", str(e)
+
+    print "get_validate_kaoshi, none."
 
 def generate_exam(exam, account):
     try:
@@ -493,6 +500,7 @@ def submit_exam_post(request):
         msg['exam_id'] = kaoshi.exam.id
 
         kaoshi.submit_flag = True
+        kaoshi.score = total_score
         kaoshi.save()
 
 

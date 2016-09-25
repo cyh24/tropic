@@ -138,5 +138,7 @@ urlpatterns = patterns('',
     url(r'^examSummary/$', 'app.exam_pro.exam_summary'),
     url(r'^onlineExam/question$', 'app.exam_pro.single_select'),
 
+    url(r'^management/exam-data/$', 'app.data_manage.exam_data'),
+
     url(r'^test/', 'app.views.test')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
