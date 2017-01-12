@@ -58,6 +58,7 @@ def set_Q(Q, pre):
                 Q[q_i]['choices'].append(choice)
     return Q
 
+@super_user
 def exam_upload_post(request):
     msg = {'state': 'fail'}
     try:
@@ -79,6 +80,7 @@ def exam_upload_post(request):
 
     return render_to_response('info.html', msg)
 
+@super_user
 def exam_update_post(request):
     msg = {'state': 'fail'}
     try:
@@ -101,10 +103,12 @@ def exam_update_post(request):
 
     return render_to_response('info.html', msg)
 
+@super_user
 def createExam(request):
     msg = init_msg(request)
     return render_to_response('onlineExam/create_exam.html', msg)
 
+@super_user
 def update_exam(request):
     msg = init_msg(request)
     msg['state'] = 'fail'
@@ -136,6 +140,7 @@ def update_exam(request):
 
     return render_to_response('onlineExam/update_exam.html', msg)
 
+@super_user
 def db_delete_exam(request):
     try:
         exam_id = int(request.GET['exam_id'])
@@ -148,6 +153,7 @@ def db_delete_exam(request):
 
     return False
 
+@super_user
 def delete_exam(request):
     json = {'state': 'fail'}
     try:
@@ -158,6 +164,7 @@ def delete_exam(request):
         printError(e)
     return JsonResponse(json)
 
+@super_user
 def upload_exam(request):
     msg = init_msg(request)
     msg['state'] = 'fail'
@@ -193,6 +200,7 @@ def upload_exam(request):
 
     return render_to_response('onlineExam/show_exam.html', msg)
 
+@super_user
 def showExam(request):
     msg = init_msg(request)
     return render_to_response('onlineExam/show_exam.html', msg)
@@ -520,6 +528,7 @@ def get_usernames_ids():
     return names, ids
 
 
+@super_user
 def group_create(request):
     msg = init_msg(request)
     msg['state'] = 'fail'
@@ -540,6 +549,7 @@ def group_create(request):
 
     return render_to_response('onlineExam/group_create.html', msg)
 
+@super_user
 def group_update(request):
     msg = init_msg(request)
     msg['state'] = 'fail'
@@ -642,6 +652,7 @@ def group_update_post(request):
 
     return render_to_response('info.html', msg)
 
+@super_user
 def kaoshi_groups(request):
     msg = init_msg(request)
     groups = Group.objects.all()
@@ -693,6 +704,7 @@ def group_delete(request):
         printError(e)
     return JsonResponse(json)
 
+@super_user
 def kaoshi_exams(request):
     msg = init_msg(request)
     exams = Exam.objects.all()

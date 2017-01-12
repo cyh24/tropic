@@ -140,5 +140,10 @@ urlpatterns = patterns('',
 
     url(r'^management/exam-data/$', 'app.data_manage.exam_data'),
 
+    url(r'^banji-course/$', 'app.banji.banji_course'),
+    url(r'^banji/courses/$', 'app.banji.courses'),
+    url(r'^banji/upload-banji-course/$', 'app.banji.upload_banji_course_ui'),
+    url(r'^banji/upload-banji-course-post/', 'app.banji.upload_banji_course_post'),
+
     url(r'^test/', 'app.views.test')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

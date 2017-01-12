@@ -64,8 +64,15 @@
                     <ul class="nav" id="main-menu">
 
                         <li>
-                            <a class="active-menu" href="index.html"><i class="fa fa-dashboard"></i> 考试数据</a>
+                            <a class="menu" href=""><i class="fa fa-file"></i> 课程管理</a>
                         </li>
+                        <li>
+                            <a class=menu href=""><i class="fa fa-user"></i> 学习进度</a>
+                        </li>
+                        <li>
+                            <a class="active-menu" href=""><i class="fa fa-dashboard"></i> 考试数据</a>
+                        </li>
+
                     </ul>
 
                 </div>
@@ -76,7 +83,7 @@
             <div id="page-wrapper">
                 <div class="header">
                     <h1 class="page-header">
-                            考试数据 <small>Welcome</small>
+                        考试数据 <small>Welcome {{account.nickname}} !</small>
                         </h1>
                     <ol class="breadcrumb">
                         <li>
@@ -85,7 +92,7 @@
                         <li>
                             <a href="#">Dashboard</a>
                         </li>
-                        <li class="active">Data</li>
+                        <li class="active">{{exam_title}}</li>
                     </ol>
 
                 </div>
@@ -207,7 +214,7 @@
 
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    Responsive Table Example
+                                    考生成绩单
                                 </div>
                                 <div class="panel-body">
                                     <div class="table-responsive">

@@ -11,7 +11,7 @@ import json
 
 def analyze_exam_data(exam, msg):
     try:
-        kaoshis = Kaoshi.objects.filter(exam=exam).all()
+        kaoshis = Kaoshi.objects.filter(exam=exam).all().order_by("-release_date")
         kscs = getLen(kaoshis)
 
         account_map = {}
@@ -19,10 +19,10 @@ def analyze_exam_data(exam, msg):
         tgrs = 0
         count = 0
         for i, kaoshi in enumerate(kaoshis):
-            if kaoshi.submit_flag == False:
-                continue
             count += 1
             kaoshis[i].no = count
+            if kaoshi.submit_flag == False:
+                continue
             account_id = kaoshi.account
             if account_map.has_key(account_id) == False:
                 ckrs += 1
@@ -35,6 +35,7 @@ def analyze_exam_data(exam, msg):
                 tgrs += 1
 
         msg['kaoshis'] = kaoshis
+        msg['exam_title'] = exam.title
 
         msg['ckrs_str'] = "%d/%d"%(ckrs, exam.allow_accounts_num)
         msg['ckrs'] = ckrs
@@ -42,57 +43,59 @@ def analyze_exam_data(exam, msg):
         msg['tgrs_str'] = "%d/%d"%(tgrs, ckrs)
         msg['tgrs'] = tgrs
         msg['qkrs'] = exam.allow_accounts_num - ckrs
-        area_data = [{
-                                    "period": '2010 Q1',
-                                    "iphone": 2666,
-                                    "ipad": 0,
-                                    "itouch": 2647
-                                }, {
-                                    "period": '2010 Q2',
-                                    "iphone": 2778,
-                                    "ipad": 2294,
-                                    "itouch": 2441
-                                }, {
-                                    "period": '2010 Q3',
-                                    "iphone": 4912,
-                                    "ipad": 1969,
-                                    "itouch": 2501
-                                }, {
-                                    "period": '2010 Q4',
-                                    "iphone": 3767,
-                                    "ipad": 3597,
-                                    "itouch": 5689
-                                }, {
-                                    "period": '2011 Q1',
-                                    "iphone": 6810,
-                                    "ipad": 1914,
-                                    "itouch": 2293
-                                }, {
-                                    "period": '2011 Q2',
-                                    "iphone": 5670,
-                                    "ipad": 4293,
-                                    "itouch": 1881
-                                }, {
-                                    "period": '2011 Q3',
-                                    "iphone": 4820,
-                                    "ipad": 3795,
-                                    "itouch": 1588
-                                }, {
-                                    "period": '2011 Q4',
-                                    "iphone": 15073,
-                                    "ipad": 5967,
-                                    "itouch": 5175
-                                }, {
-                                    "period": '2012 Q1',
-                                    "iphone": 10687,
-                                    "ipad": 4460,
-                                    "itouch": 2028
-                                }, {
-                                    "period": '2012 Q2',
-                                    "iphone": 8432,
-                                    "ipad": 5713,
-                                    "itouch": 1791
-                                }]
+        # area_data = [{
+                                    # "period": '2010 Q1',
+                                    # "iphone": 2666,
+                                    # "ipad": 0,
+                                    # "itouch": 2647
+                                # }, {
+                                    # "period": '2010 Q2',
+                                    # "iphone": 2778,
+                                    # "ipad": 2294,
+                                    # "itouch": 2441
+                                # }, {
+                                    # "period": '2010 Q3',
+                                    # "iphone": 4912,
+                                    # "ipad": 1969,
+                                    # "itouch": 2501
+                                # }, {
+                                    # "period": '2010 Q4',
+                                    # "iphone": 3767,
+                                    # "ipad": 3597,
+                                    # "itouch": 5689
+                                # }, {
+                                    # "period": '2011 Q1',
+                                    # "iphone": 6810,
+                                    # "ipad": 1914,
+                                    # "itouch": 2293
+                                # }, {
+                                    # "period": '2011 Q2',
+                                    # "iphone": 5670,
+                                    # "ipad": 4293,
+                                    # "itouch": 1881
+                                # }, {
+                                    # "period": '2011 Q3',
+                                    # "iphone": 4820,
+                                    # "ipad": 3795,
+                                    # "itouch": 1588
+                                # }, {
+                                    # "period": '2011 Q4',
+                                    # "iphone": 15073,
+                                    # "ipad": 5967,
+                                    # "itouch": 5175
+                                # }, {
+                                    # "period": '2012 Q1',
+                                    # "iphone": 10687,
+                                    # "ipad": 4460,
+                                    # "itouch": 2028
+                                # }, {
+                                    # "period": '2012 Q2',
+                                    # "iphone": 8432,
+                                    # "ipad": 5713,
+                                    # "itouch": 1791
+                                # }]
+        month_days = getThismonthDays(datetime.datetime.now())
+        area_data = []
 
         msg['area_data'] = json.dumps(area_data)
 

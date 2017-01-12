@@ -15,6 +15,7 @@ def index(request):
 
             if check_wx_unionid(request, wechat_user) == True:
                 wx_login_do(request, wechat_user)
+                return HttpResponseRedirect('/space/')
         else:
             print "Wechat-User: None."
 

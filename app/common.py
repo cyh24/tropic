@@ -291,3 +291,15 @@ def data_to_txt(filename, data):
     with open(filename, 'w') as f:
         f.write(data)
         print "data to txt: ", filename
+
+def getThismonthDays(t):
+    day = 31                #定义每月最多的天数
+    year = t.year
+    month = t.month
+    while day:
+        try:
+            time.strptime( '%s-%s-%d'%( year, month, day ), '%Y-%m-%d' )      #尝试将这个月最大的天数的字符串进行转化
+            return day      #成功时返回得就是这个月的天数
+        except:
+            day -= 1        #否则将天数减1继续尝试转化, 直到成功为止
+    return -1
