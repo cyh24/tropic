@@ -16,10 +16,16 @@
 
 			<div class="container content">
 
-                {%for exam in offexams%}
+                {%for exam in olexams%}
 				<div class="row">
 					<div class="col-md-12">
+                        {%if exam.time_flag == -1%}
                         <h3 class="category_header">即将开始</h3></div>
+                        {%elif exam.time_flag == 0%}
+                        <h3 class="category_header" style="background-color:#3a3">正在进行</h3></div>
+                        {%else%}
+                        <h3 class="category_header" style="background-color:#a1a1a1;">已经结束</h3></div>
+                        {%endif%}
 				</div>
 				<div class="row">
 					<div class="col-md-6 col-xs-12">
@@ -30,14 +36,22 @@
 					<div class="col-md-6 col-xs-12">
 						<div class="coures_detail">
                             <h3>{{exam.title}}</h3>
-                            <p>{{exam.detail_intro}}</p>
+                            <!-- <p>{{exam.detail_intro}}</p> -->
+                            <p style="font-size:15px;">考试人员: {{exam.allow_group_name}}</p>
 							<ul>
 								<li><strong>考试开始时间：</strong>
                                 <span>{{exam.start_time}}</span></li>
 								<li><strong>考试结束时间：</strong>
                                 <span>{{exam.end_time}}</span></li>
 							</ul>
+                            {%if exam.time_flag == -1%}
+                            <a>进入考试</a>
+                            {%elif exam.time_flag == 0%}
                             <a href="/examSummary/?exam_id={{exam.id}}">进入考试</a>
+                            {%else%}
+                            <a style="background-color:#a1a1a1;">已经结束</a>
+                            {%endif%}
+
                             <!-- {% if is_superuser == True%} -->
                             <!-- <a href="/update-exam/?id={{exam.id}}" style='background-color: #a2a2a2;'>编辑试卷</a> -->
                             <!-- <a href="/delete-exam/?id={{exam.id}}" >删除试卷</a> -->
@@ -45,6 +59,7 @@
 						</div>
 					</div>
 				</div>
+                <hr>
                 {%endfor%}
 
 			</div>

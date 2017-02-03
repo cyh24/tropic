@@ -20,67 +20,67 @@
         <link rel="stylesheet" href="/static/css/assets/js/Lightweight-Chart/cssCharts.css">
     </head>
 
-    <body>
-        <div id="wrapper">
-            <nav class="navbar navbar-default top-navbar" role="navigation">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                    <a class="navbar-brand" href="index.html"><strong><i class="icon fa fa-plane"></i> 后台管理</strong></a>
+    <body style="background: rgb(237, 237, 237);">
+        <div id="wrapper" style="width: 80%; margin-left: 10%; margin-right: 10%;">
+            <!-- <nav class="navbar navbar-default top-navbar" role="navigation"> -->
+                <!-- <div class="navbar-header"> -->
+                    <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse"> -->
+                    <!-- <span class="sr-only">Toggle navigation</span> -->
+                    <!-- <span class="icon-bar"></span> -->
+                    <!-- <span class="icon-bar"></span> -->
+                    <!-- <span class="icon-bar"></span> -->
+                <!-- </button> -->
+                    <!-- <a class="navbar-brand" href="index.html"><strong><i class="icon fa fa-plane"></i> 后台管理</strong></a> -->
 
-                    <div id="sideNav" href="">
-                        <i class="fa fa-bars icon"></i>
-                    </div>
-                </div>
+                    <!-- <div id="sideNav" href=""> -->
+                        <!-- <i class="fa fa-bars icon"></i> -->
+                    <!-- </div> -->
+                <!-- </div> -->
 
-                <ul class="nav navbar-top-links navbar-right">
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                            <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li>
-                                <a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
+                <!-- <ul class="nav navbar-top-links navbar-right"> -->
+                    <!-- <li class="dropdown"> -->
+                        <!-- <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"> -->
+                            <!-- <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i> -->
+                        <!-- </a> -->
+                        <!-- <ul class="dropdown-menu dropdown-user"> -->
+                            <!-- <li> -->
+                                <!-- <a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a> -->
+                            <!-- </li> -->
+                            <!-- <li> -->
+                                <!-- <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a> -->
+                            <!-- </li> -->
+                            <!-- <li class="divider"></li> -->
+                            <!-- <li> -->
+                                <!-- <a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a> -->
+                            <!-- </li> -->
+                        <!-- </ul> -->
+                    <!-- </li> -->
+                <!-- </ul> -->
+            <!-- </nav> -->
 
             <!--/. NAV TOP  -->
-            <nav class="navbar-default navbar-side" role="navigation">
-                <div class="sidebar-collapse">
-                    <ul class="nav" id="main-menu">
+            <!-- <nav class="navbar-default navbar-side" role="navigation"> -->
+                <!-- <div class="sidebar-collapse"> -->
+                    <!-- <ul class="nav" id="main-menu"> -->
 
-                        <li>
-                            <a class="menu" href=""><i class="fa fa-file"></i> 课程管理</a>
-                        </li>
-                        <li>
-                            <a class=menu href=""><i class="fa fa-user"></i> 学习进度</a>
-                        </li>
-                        <li>
-                            <a class="active-menu" href=""><i class="fa fa-dashboard"></i> 考试数据</a>
-                        </li>
+                        <!-- <li> -->
+                            <!-- <a class="menu" href=""><i class="fa fa-file"></i> 课程管理</a> -->
+                        <!-- </li> -->
+                        <!-- <li> -->
+                            <!-- <a class=menu href=""><i class="fa fa-user"></i> 学习进度</a> -->
+                        <!-- </li> -->
+                        <!-- <li> -->
+                            <!-- <a class="active-menu" href=""><i class="fa fa-dashboard"></i> 考试数据</a> -->
+                        <!-- </li> -->
 
-                    </ul>
+                    <!-- </ul> -->
 
-                </div>
+                <!-- </div> -->
 
-            </nav>
+            <!-- </nav> -->
 
 
-            <div id="page-wrapper">
+            <div id="page-wrapper2">
                 <div class="header">
                     <h1 class="page-header">
                         考试数据 <small>Welcome {{account.nickname}} !</small>
@@ -181,38 +181,7 @@
 
                     <div class="row">
                         <div class="col-md-9 col-sm-12 col-xs-12">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    考试情况分析
-                                </div>
-                                <div class="panel-body">
-                                    <div id="morris-area-chart"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-12 col-xs-12">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    考试人员分析
-                                </div>
-                                <div class="panel-body">
-                                    <div id="morris-donut-chart"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-
-                        </div>
-                    </div>
-                    <!-- /. ROW  -->
-
-                    <div class="row">
-                        <div class="col-md-8 col-sm-12 col-xs-12" style="width:100%;">
-
-                            <div class="panel panel-default">
+                                <div class="panel panel-default">
                                 <div class="panel-heading">
                                     考生成绩单
                                 </div>
@@ -246,15 +215,33 @@
                             </div>
 
                         </div>
+
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    考试人员分析
+                                </div>
+                                <div class="panel-body" style="margin-top:-80px; height:320px;">
+                                    <div id="morris-donut-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+
+                        </div>
                     </div>
                     <!-- /. ROW  -->
 
-                    <footer>
-                        <p>Copyright &copy; 2016.Company name All rights reserved.
-                            <!--<a target="_blank" href="/index/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a>-->
-                        </p>
+                    <!-- /. ROW  -->
 
-                    </footer>
+                    <!-- <footer style="bottom:10px;"> -->
+                        <!-- <p>Copyright &copy; 2016.Company name All rights reserved. -->
+                        <!-- </p> -->
+
+                    <!-- </footer> -->
                 </div>
                 <!-- /. PAGE INNER  -->
             </div>

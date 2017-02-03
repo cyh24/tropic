@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="/static/css/july/entrance.css">
 
 	<link rel="stylesheet" href="/static/css/onlineExam/summary.css">
+	<link rel="stylesheet" href="/static/css/onlineExam/profilePaperList.css">
 
 	<body>
 		{% include "header.html" %}
@@ -44,17 +45,72 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="exam-notice">
-                            <p>1、请在规定时间完成试卷内全部题目，考试时间结束，系统将自动交卷。</p>
-                            <p>2、所有题目可通过答题卡返回修改，点击提前交卷后试卷提交，将无法继续答案，请谨慎提交。</p>
-                            <p>3、请诚信答题，独立完成。</p>
-                            <p>4、祝你好运。</p>
-                        </div>
+                        <!-- <div class="exam-notice"> -->
+                            <pre>{{exam.detail_intro}}</pre>
+                            <!-- <p>1、请在规定时间完成试卷内全部题目，考试时间结束，系统将自动交卷。</p> -->
+                            <!-- <p>2、所有题目可通过答题卡返回修改，点击提前交卷后试卷提交，将无法继续答案，请谨慎提交。</p> -->
+                            <!-- <p>3、请诚信答题，独立完成。</p> -->
+                            <!-- <p>4、祝你好运。</p> -->
+                        <!-- </div> -->
                         <!-- <form id="submitForm" method="post" action="/test/1899956/begin"> -->
-                        <a class="btn_summary btn_summary-primary begin-exam-btn_summary" href='/exam/?exam_id={{exam.id}}' >开始做题</a>
+                        {%if can_try == True %}
+                        <a style="margin-top:30px;" class="btn_summary btn_summary-primary begin-exam-btn_summary" href='/exam/?exam_id={{exam.id}}' >开始做题({{kaoshis_num}}/{{exam.max_retry_num}})</a>
+                        {%else%}
+                        <a style="margin-top:30px;" class="btn_summary btn_summary-primary begin-exam-btn_summary" href='javascript:void(0);' onclick='alert("考试次数已经用尽!");' style="background-color:#b8b8b8;" >开始做题({{kaoshis_num}}/{{exam.max_retry_num}})</a>
+                        {%endif%}
                             <!-- <input type="hidden" name="token" value=""> -->
                         <!-- </form> -->
                     </div>
+
+
+                <hr style="margin-top:40px;">
+                <div class="menu-box">
+                    <ul class="menu clearfix">
+                        <li class="selected"><a href="/test/question/analytic?tid=4588538">评估报告</a></li>
+                        <!--<li><a href="/test/question/done?tid=4588538&amp;qid=46325">答案解析</a></li>-->
+                </div>
+
+                </ul>
+                    <div class="module-body">
+                        <ul class="paper-list clearfix">
+                            {%if empty == True%}
+                            <div class="uncourse" style="padding: 140px 0;font-size: 18px;color: #c6c7c9;text-align: center;">
+                                <p>暂无任何测试记录</p>
+                            </div>
+                            {%endif%}
+                            {%for kaoshi in kaoshis%}
+                            {%if kaoshi.submit_flag == False%}
+                            <li class="paper-item ">
+                                    <div class="paper-title">
+                                        {{kaoshi.exam.title}}<br>
+                                        （第{{kaoshi.no}}次测试）
+                                    </div>
+                                    <div class="paper-type nofinish-paper">未完成</div>
+                                    <ul class="paper-result">
+                                        <li><i class="finish-time"></i>完成时间： 未完成
+                                        </li>
+                                        <li><i class="finish-score"></i>得分：未完成</li>
+                                        <li><a href="/exam/?exam_id={{kaoshi.exam.id}}"><i class="finish-num"></i></a><a href="/exam/?exam_id={{kaoshi.exam.id}}" class="link-green ">再做一次</a></li>
+                                    </ul>
+                            </li>
+                            {%else%}
+                            <li class="paper-item ">
+                                    <div class="paper-title">
+                                        {{kaoshi.exam.title}}<br>
+                                        （第{{kaoshi.no}}次测试）
+                                    </div>
+                                    <div style="background-color:#00bc9b;" class="paper-type nofinish-paper">已完成</div>
+                                    <ul class="paper-result">
+                                        <li><i class="finish-time"></i>完成时间：{{kaoshi.use_time}}
+                                        </li>
+                                        <li><i class="finish-score"></i>得分：{{kaoshi.score}}</li>
+                                    </ul>
+                            </li>
+                            {%endif%}
+                            {%endfor%}
+                        </ul>
+                    </div>
+
                 </div>
             </div>
             <!--主体内容结束-->

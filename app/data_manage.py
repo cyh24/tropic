@@ -42,7 +42,7 @@ def analyze_exam_data(exam, msg):
         msg['kscs'] = kscs
         msg['tgrs_str'] = "%d/%d"%(tgrs, ckrs)
         msg['tgrs'] = tgrs
-        msg['qkrs'] = exam.allow_accounts_num - ckrs
+        msg['qkrs'] = max(0, exam.allow_accounts_num - ckrs)
         # area_data = [{
                                     # "period": '2010 Q1',
                                     # "iphone": 2666,
@@ -94,10 +94,9 @@ def analyze_exam_data(exam, msg):
                                     # "ipad": 5713,
                                     # "itouch": 1791
                                 # }]
-        month_days = getThismonthDays(datetime.datetime.now())
-        area_data = []
+        # month_days = getThismonthDays(datetime.datetime.now())
 
-        msg['area_data'] = json.dumps(area_data)
+        # msg['area_data'] = json.dumps(area_data)
 
     except Exception, e:
         print "analyze_exam_data: ", str(e)

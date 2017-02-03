@@ -5,14 +5,22 @@ from db_pro import *
 from qiniu_pro import *
 from wechat_pro import *
 from excel_analyze import excel_analyze
+from django.db.models import Q
 import random
 import datetime
+
+def keep_enter(data):
+    data = data.replace("\n", "<br/>")
+    data = data.replace("\r", "<br/>")
+    data = data.replace("\t", "!@")
+    return data
 
 def set_exam_data(exam, data):
     try:
         exam.title = data['exam_title']
         exam.img_path = data['img_path']
         exam.detail_intro = data['exam_intro']
+
         exam.start_time = data['exam_start_time']
         exam.end_time = data['exam_end_time']
         exam.exam_mins = int(data['exam_time'])
@@ -216,7 +224,20 @@ def contestRoom(request):
 
         pages_before, pages_after = paginator_bar(cur_page, total_page)
 
-        msg['offexams'] = subExams
+        local_time = time.time()
+        for sub in subExams:
+            sub.time_flag = -1
+            try:
+                exam_start = time.mktime(time.strptime(sub.start_time,'%Y-%m-%d,%H:%M:%S'))
+                exam_end = time.mktime(time.strptime(sub.end_time,'%Y-%m-%d,%H:%M:%S'))
+                if exam_start <= local_time <= exam_end:
+                    sub.time_flag = 0
+                elif local_time > exam_end:
+                    sub.time_flag = 1
+            except Exception, e:
+                print "contestRoom:", str(e)
+
+        msg['olexams'] = subExams
         msg['cur_page']   = cur_page
         msg['pages_before'] = pages_before
         msg['pages_after']  = pages_after
@@ -234,6 +255,25 @@ def exam_summary(request):
     try:
         exam_id = int(request.GET['exam_id'])
         online_exam = Exam.objects.filter(id=exam_id)[0]
+        kaoshis = Kaoshi.objects.filter(account=msg['account']).all()
+        if getLen(kaoshis) > 0:
+            kaoshis = kaoshis.filter(exam=exam_id).all()
+        msg['can_try'] = True
+        msg['empty'] = True
+        if kaoshis is not None:
+            # check time over
+            get_validate_kaoshi(kaoshis, online_exam.max_retry_num)
+
+            if len(kaoshis) > 0:
+                msg['empty'] = False
+            msg['kaoshis_num'] = 0
+            for i in range(len(kaoshis)):
+                if kaoshis[i].submit_flag == True:
+                    msg['kaoshis_num'] += 1
+                kaoshis[i].no = i+1
+            if msg['kaoshis_num'] >= online_exam.max_retry_num:
+                msg['can_try'] = False
+        msg['kaoshis'] = kaoshis
         msg['exam'] = online_exam
     except Exception, e:
         print "exam_summary: ", e
@@ -283,7 +323,9 @@ def get_validate_kaoshi(kaoshis, max_kaoshi_time):
             end_time = datetime.datetime.now()
             spend_time = (end_time - start_time).seconds
             if spend_time > k.exam.exam_mins*60:
-                print "time over."
+                # print k.id
+                # print start_time, end_time, k.exam.exam_mins, spend_time
+                # print "time over."
                 k.submit_flag = True
                 k.save()
 
@@ -293,11 +335,12 @@ def get_validate_kaoshi(kaoshis, max_kaoshi_time):
             else:
                 return 1, kaoshis[0]
         elif k_len < max_kaoshi_time:
-            if kaoshis[k_len-1].submit_flag == False:
-                return 1, kaoshis[k_len-1]
+            if kaoshis[0].submit_flag == False:
+                return 1, kaoshis[0]
             else:
                 return 0, None
         else:
+            print "else"
             return -1, None
     except Exception, e:
         print "error, get_validate_kaoshi:", str(e)
@@ -423,6 +466,8 @@ def goto_exam(request):
             return ret
 
         select_single, select_multi, kaoshi = generate_exam(exam, msg['account'])
+        if kaoshi is None:
+            return render_to_response('404.html', msg)
 
         start_time = kaoshi.release_date
         end_time = datetime.datetime.now()
@@ -450,8 +495,10 @@ def get_shijiancha(start_time, end_time):
 def submit_exam_post(request):
     msg = init_msg(request)
     try:
+        submit_answer = {}
         for x in request.POST:
-            print x, request.POST[x]
+            submit_answer[x] = request.POST[x]
+        print submit_answer
 
         kaoshi_id = int(request.POST['kaoshi_id'])
         kaoshi = Kaoshi.objects.filter(id=kaoshi_id).all()[0]
@@ -459,7 +506,6 @@ def submit_exam_post(request):
         multi_answer_str = kaoshi.multi_answer
         single_answer = single_answer_str.split(';')
         multi_answer  = multi_answer_str.split(';')
-        print single_answer, multi_answer
 
         single_correct_num = 0
         multi_correct_num  = 0
@@ -495,7 +541,6 @@ def submit_exam_post(request):
 
         single_score = single_correct_num * kaoshi.exam.single_score/kaoshi.exam.single_num
         multi_score  = multi_correct_num * kaoshi.exam.multi_score/kaoshi.exam.multi_num
-        print single_score, multi_score
 
         total_score = single_score + multi_score
         use_time = get_shijiancha(kaoshi.release_date, datetime.datetime.now())
@@ -509,6 +554,10 @@ def submit_exam_post(request):
 
         kaoshi.submit_flag = True
         kaoshi.score = total_score
+        kaoshi.total_q_num = max(0, msg['total_num'])
+        kaoshi.correct_q_num = max(0, msg['correct_num'])
+        kaoshi.use_time = use_time
+        kaoshi.submit_answer = str(submit_answer)
         kaoshi.save()
 
 

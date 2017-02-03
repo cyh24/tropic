@@ -1,3 +1,5 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
@@ -374,7 +376,16 @@ class Exam(models.Model):
             print str(e)
         return 0
 
+    def __get_allow_group_name(self):
+        try:
+            if len(self.group.all()) > 0:
+                return self.group.all()[0].group_name
+        except Exception, e:
+            print str(e)
+        return u"所有人员"
+
     allow_accounts_num = property(__get_allow_accounts_num)
+    allow_group_name = property(__get_allow_group_name)
 
     public_flag = models.BooleanField()
 
@@ -397,6 +408,11 @@ class Kaoshi(models.Model):
     multi_answer  = models.CharField(max_length=500)
 
     score = models.DecimalField(max_digits=5, decimal_places=2, default=-1)
+
+    use_time = models.CharField(max_length=50, default="00:00:00")
+    total_q_num = models.IntegerField(default=0)
+    correct_q_num = models.IntegerField(default=0)
+    submit_answer = models.CharField(max_length=10240, default="")
 
     release_date = models.DateTimeField(auto_now_add=True)
     class Meta:
