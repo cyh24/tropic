@@ -45,7 +45,10 @@ def play_ui(request):
             if request.GET.has_key('current'):
                 current_num = int(request.GET['current'])
 
-            files = video.files.all()
+            if video.is_reverse == 1:
+                files = video.files.all()[::-1]
+            else:
+                files = video.files.all()
             if getLen(files) <= current_num:
                 current_num = 0
 

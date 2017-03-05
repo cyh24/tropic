@@ -293,11 +293,13 @@
 					</ul>
 
 					<div class="mod_pages">
+                        <a href="/videos/manage/?page={{first_page}}" class="page-btn" style="width: 100px;">首页</a> 
 						<a href="/videos/manage/?page={{pre_page}}" class="page-btn" style="width: 100px;">上一页</a> {% for i in pages_before %}
 						<a href="/videos/manage/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a> {% endfor %}
 						<a href="/videos/manage/?page={{cur_page}}" data-page={{cur_page}} class="current">{{cur_page}}</a> {% for i in pages_after %}
 						<a href="/videos/manage/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a> {% endfor %}
 						<a href="/videos/manage/?page={{after_page}}" data-page="2" class="page-btn" style="width: 100px;">下一页</a>
+                        <a href="/videos/manage/?page={{last_page}}" class="page-btn" style="width: 100px;">尾页</a> 
 					</div>
 
 				</div>

@@ -45,6 +45,8 @@ def excel_analyze_by_content(data):
             i += 1
             while (i < table.nrows) == True:
                 row = table.row_values(i)
+                if type(row[0]) == type(1.0):
+                    row[0] = str(row[0])
                 if row[0].strip() == "".decode('utf8'):
                     i += 1
                     continue
@@ -56,6 +58,8 @@ def excel_analyze_by_content(data):
             while (i < table.nrows) == True:
 
                 row = table.row_values(i)
+                if type(row[0]) == type(1.0):
+                    row[0] = str(row[0])
                 if row[0].strip() == "".decode('utf8'):
                     i += 1
                     continue

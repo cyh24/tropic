@@ -55,6 +55,8 @@ def videos_manage(request):
     msg['videos']     = subVideos
     msg['videos_len'] = len(videos)
     msg['cur_page']   = cur_page
+    msg['first_page'] = 1
+    msg['last_page'] = total_page
     msg['pages_before'] = pages_before
     msg['pages_after']  = pages_after
     msg['pre_page']   = cur_page - 1

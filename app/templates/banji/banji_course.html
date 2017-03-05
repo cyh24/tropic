@@ -11,7 +11,7 @@
             <div id="maintain_info_box" class="g-flow"></div>
         </div>
         <div id="advertisement_box" class="advertisement_box f-pf" style="display:none;"></div>
-        <div class="g-flow">
+        <div class="g-flow" style="width: 960px;">
             <div class="b-20"></div>
             <div>
                 <div class="f-bg headBox" id="courseHead">
@@ -30,7 +30,7 @@
                                                 <span >Excel 图表篇</span>
                                             </h2>
                                             <div class="f-cb margin-top-15">
-                                                <span>1.    成为图表高手，像专业人士一样设计图表, 突破EXCEL的图表布局，制作专业图表。   掌握图表创建编辑方法，随心所欲编排图表元素。 2.   区分源数据和作图数据 要想使制作的图表更加专业有效，就需要将源数据加工成作图数据。作图数据的组织就是重要的挑战。通过组织作图数据，可使图表思路更清晰，制作一些看似无法完成的精巧图表。</span>
+                                                <span>1.    成为图表高手，像专业人士一样设计图表, 突破EXCEL的图表布局，制作专业图表。   掌握图表创建编辑方法，随心所欲编排图表元素。 <br>2.   区分源数据和作图数据 要想使制作的图表更加专业有效，就需要将源数据加工成作图数据。作图数据的组织就是重要的挑战。通过组织作图数据，可使图表思路更清晰，制作一些看似无法完成的精巧图表。</span>
                                                 <!-- <span class="hot f-fs0">46163</span> -->
                                                 <!-- <span class="j-starNode starall"> -->
                                                     <!-- <div class="u-rating"> -->
@@ -101,26 +101,8 @@
         </div>
         <div class="f-cb">
             <div class="g-cisd2" id="bdCom">
-                <div id="j-startBox" class="f-dn">
-                    <div class="startBox f-bg">
-                        <a class="j-startBtn startBtn f-pr" id="j-startBtn">
-                            <p>想要更高效地学习？</p>
-                            <p>想适时收到学习提醒？</p>
-                        </a>
-                        <div class="timingBox" id="j-timingBox">
-                            <p>想进行自由松散的学习，
-                                <a class="exitBtn f-pr" id="j-exitBtn">取消计时</a>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="b-15"></div>
-                </div>
-                <div id="j-repo-box" class="f-dn f-bg repoBox f-cb">
-                    <h2 class="u-ctit">相关题库</h2>
-                    <div id="j-repoList" class="repoList f-bdr"> </div>
-                </div>
                 <div id="j-courseNotice" class="m-notice f-cb f-bg">
-                    <h2 class="u-ctit">公告</h2>
+                    <h2 class="u-ctit" style="height: 35px;">公告</h2>
                     <div id="j-notice-box" class="f-bdr">
                         <div class="m-courseNotice">
                             <!-- div class='m-noticetitle'> <h2 class="u-ctit">公告</h2> </div -->
@@ -136,13 +118,9 @@
                                                             <div class="u-time j-date">9月27日</div>
                                                         </div>
                                                     </div>
-                                                    <div class="notice-opt j-opt f-fl" style="display: none;">
-                                                        <a class="f-icon notice-edit noteedit j-edit" id="auto-id-1475841466703">编辑</a>
-                                                        <a class="f-icon notice-del notedel j-del" id="auto-id-1475841466704">删除</a>
-                                                    </div>
-                                                    <div class="notice-opt j-opt f-fr">
-                                                        <a class="j-more m-gmore f-fr" id="auto-id-1475841466701">详情&gt;</a>
-                                                    </div>
+                                                    <!-- <div class="notice-opt j-opt f-fr"> -->
+                                                        <!-- <a class="j-more m-gmore f-fr" id="auto-id-1475841466701">详情&gt;</a> -->
+                                                    <!-- </div> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -156,33 +134,6 @@
                 </div>
                 <div class="b-15" id="j-notice-b-15"></div>
 
-                <div id="j-courseusers" class="usersBd">
-                    <div>
-                        {% if student_num == 0 %}
-                        <div class="j-default userDefault f-bg" style="">
-                            <h4>尚未添加学员</h4>
-                        </div>
-                        {% else %}
-                        <div class="u-Pusers j-Pusers f-bg f-cb f-pr">
-                            <h3 class="f-cb">
-                                <em class="num j-num f-fl">学员</em>
-                                <span class="nTask nCourse j-taskOrCourse f-fl"></span>
-                            </h3>
-                            <div class="j-pics pics">
-                                <div>
-                                <a class="uItem j-uItem f-fl f-pr" target="_blank" href="">
-                                    <div class="j-icon" >
-                                        <img class="j-img" src="http://imgsize.ph.126.net/?enlarge=true&amp;imgurl=http://img2.ph.126.net/aHf6OXU-PFyZwjen_Uov-A==/6619514097514363700.jpg_49x49x1x95.jpg">
-                                        <em class="f-thide">零點Amy</em>
-                                    </div>
-
-                                </a>
-                                </div>
-                            </div>
-                        </div>
-                        {%endif%}
-                    </div>
-                </div>
             </div>
             <div class="g-cimn2" id="bdDir">
                 <div class="g-cimn2c">
@@ -193,14 +144,12 @@
                     </div>
                     <div class="f-cb f-bg f-pr" id="j-chapter-list" style="z-index:10;">
                         <div class="f-cb">
-                            <h2 class="u-ctit f-thide f-fl" id="j-chapter-title" style="width:320px;">目录</h2>
-                            <div class="u-cotinued f-fr" id="j-continued" style="display:none;">连载</div>
-                            <div class="f-fr u-muluchaptertime" id="muluchaptertime"> </div>
+                            <h2 class="u-ctit f-thide f-fl" id="j-chapter-title" style="width:320px; height:35px;">目录</h2>
                         </div>
                         <div class="m-chapterList f-pr">
                             <div class="chapter f-pr">
-                                <div class="chapterhead"> <span class="f-fl chaptertitle">章节</span>
-                                    <span class="f-fl chaptericon">1</span>
+                                <div class="chapterhead"> <span class="f-fl chaptertitle">课程</span>
+                                    <span class="f-fl chaptericon">20</span>
                                     <span class="f-fl f-thide chaptername">商务图表制作</span>
                                     <div class="f-fr j-chaptertime-0"> </div>
                                 </div>
@@ -209,9 +158,6 @@
                                         <span class="f-fl f-thide ks">课时1</span>
                                         <span class="f-fl ksicon ksicon-30" title="已完成"></span>
                                         <span class="f-fl f-thide ksname">成为图表高手第1步（什么样的数找什么样的图）</span>
-                                        <a class="f-fr ksbtn j-hovershow" style="display: none;">
-                                            <span>再次学习</span>
-                                        </a>
                                         <span class="f-fr ksinfo j-hoverhide" style="display: block;">
                                             <span class="f-fr f-thide kstime">13:08</span>
                                             <span class="f-fr ksinfoicon ksinfoicon-2 title=" 视频 ""=""></span>
@@ -222,9 +168,6 @@
                                         <span class="f-fl f-thide ks">课时2</span>
                                         <span class="f-fl ksicon ksicon-30" title="已完成"></span>
                                         <span class="f-fl f-thide ksname">成为图表高手第1步（雷达图、散点图、象限图、气泡图） </span>
-                                        <a class="f-fr ksbtn j-hovershow" style="display: none;">
-                                            <span>再次学习</span>
-                                        </a>
                                         <span class="f-fr ksinfo j-hoverhide" style="display: block;">
                                             <span class="f-fr f-thide kstime">25:29</span>
                                             <span class="f-fr ksinfoicon ksinfoicon-2 title=" 视频 ""=""></span>
@@ -233,28 +176,28 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="chapter f-pr">
-                                <div class="chapterhead">
-                                    <span class="f-fl chaptertitle">章节</span>
-                                    <span class="f-fl chaptericon">2</span> <span class="f-fl f-thide chaptername">图表知识全掌握【王正华老师】</span>
-                                    <div class="f-fr j-chaptertime-1"> </div>
-                                </div>
-                                <div class="sectionarea">
-                                    <div class="section section-last" data-lesson="2" data-chapter="1">
-                                        <span class="f-fl f-thide ks">课时3</span>
-                                        <span class="f-fl ksicon ksicon-0" title="未开始"></span>
-                                        <span class="f-fl f-thide ksname">商务图表系列.标准图表制作</span>
-                                        <a class="f-fr ksbtn j-hovershow" style="display: none;">
-                                            <span>开始学习</span>
-                                        </a>
-                                        <span class="f-fr ksinfo j-hoverhide" style="display: block;">
-                                            <span class="f-fr f-thide kstime">32:16</span>
-                                            <span class="f-fr ksinfoicon ksinfoicon-2 title=" 视频 ""=""></span>
-                                            <span class="f-fr flag flag-10" title=""></span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- <div class="chapter f-pr"> -->
+                                <!-- <div class="chapterhead"> -->
+                                    <!-- <span class="f-fl chaptertitle">章节</span> -->
+                                    <!-- <span class="f-fl chaptericon">2</span> <span class="f-fl f-thide chaptername">图表知识全掌握【王正华老师】</span> -->
+                                    <!-- <div class="f-fr j-chaptertime-1"> </div> -->
+                                <!-- </div> -->
+                                <!-- <div class="sectionarea"> -->
+                                    <!-- <div class="section section-last" data-lesson="2" data-chapter="1"> -->
+                                        <!-- <span class="f-fl f-thide ks">课时3</span> -->
+                                        <!-- <span class="f-fl ksicon ksicon-0" title="未开始"></span> -->
+                                        <!-- <span class="f-fl f-thide ksname">商务图表系列.标准图表制作</span> -->
+                                        <!-- <a class="f-fr ksbtn j-hovershow" style="display: none;"> -->
+                                            <!-- <span>开始学习</span> -->
+                                        <!-- </a> -->
+                                        <!-- <span class="f-fr ksinfo j-hoverhide" style="display: block;"> -->
+                                            <!-- <span class="f-fr f-thide kstime">32:16</span> -->
+                                            <!-- <span class="f-fr ksinfoicon ksinfoicon-2 title=" 视频 ""=""></span> -->
+                                            <!-- <span class="f-fr flag flag-10" title=""></span> -->
+                                        <!-- </span> -->
+                                    <!-- </div> -->
+                                <!-- </div> -->
+                            <!-- </div> -->
                         </div>
                     </div>
                     <div id="j-recommend" style="display:none;">

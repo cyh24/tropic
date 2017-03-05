@@ -303,6 +303,14 @@ def save_video(request, logo_path, need_authority=True):
         if data.has_key('money'):
             video.money = float(data['money'].encode('utf-8'))
 
+        if data.has_key('is_reverse'):
+            is_reverse = 0
+            try:
+                is_reverse = int(float(data['is_reverse']))
+            except Exception, e:
+                is_reverse = 0
+            video.is_reverse = is_reverse
+
         with transaction.atomic():
             qfiles = []
             if data.has_key('table_json'):
@@ -395,6 +403,14 @@ def update_video(request, logo_path="", need_authority=True):
             video.info = data['desc'].encode('utf-8')
         if data.has_key('money'):
             video.money = float(data['money'].encode('utf-8'))
+
+        if data.has_key('is_reverse'):
+            is_reverse = 0
+            try:
+                is_reverse = int(float(data['is_reverse']))
+            except Exception, e:
+                is_reverse = 0
+            video.is_reverse = is_reverse
 
         with transaction.atomic():
             qfiles = []

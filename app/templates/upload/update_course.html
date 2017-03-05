@@ -99,6 +99,17 @@
 									</div>
 								</div>
 
+								<div class="clear"></div>
+								<div class="select_left">
+									<label class="upload_filed_lbl">
+										<span>倒序 (0:否, 1:是)</span>
+										<!-- <span class="sign_star">*</span> -->
+									</label>
+									<div class="upload_is_reverse" style="width: 40px;">
+                                        <input class="rlf-input" type="text" name="is_reverse" value="{{video.is_reverse}}">
+									</div>
+								</div>
+
 							</div>
 
 							<div class="mod_upload_box_right">
@@ -120,7 +131,6 @@
 								</div>
 							</div>
 
-							
 
 							<!--<input type="TEXT" id="id_rand_key" name="key" style="display:none;">
 							<input type="TEXT" id="id_link" name="video-link" style="display: none;">
@@ -151,6 +161,7 @@
 								</table>
 								<br />
 								<input type="button" name="Submit" value="新增视频" onclick="AddRow(document.getElementById('tabProduct'),1)" />
+								<input type="button" name="Submit2" value="插入视频" onclick="InsertRow(document.getElementById('tabProduct'),1)" />
 								<input type="button" name="Submit2" value="删除视频" onclick="DeleteRow(document.getElementById('tabProduct'),1)" />
 								<!--<input type="button" name="Submit22" value="重置" onclick="window.location.reload()" />-->
 								<!--<input type="submit" name="Submit3" value="提交" onclick="GetTableData(document.getElementById('tabProduct'));return false;" />-->
@@ -368,45 +379,76 @@
 		function ClearChild(element) {
 				element.innerHTML = "";
 			}
-			//添加行
 
+			//添加行
 		function AddRow(table, index) {
 				var lastRow = table.rows[table.rows.length - 1];
-			
-				//alert(JSON.stringify(GetTableData(table))); 
+				//alert(JSON.stringify(GetTableData(table)));
 				var newRow = lastRow.cloneNode(true);
-				
 				newRow.cells[1].innerText = (table.rows.length).toString();
 				newRow.cells[2].innerHTML = "";
 				newRow.cells[3].innerHTML = "";
 				newRow.cells[4].innerHTML = "";
-//				newRow.cells[2].innerHTML = '<input class="table_input" name="vname_' + (table.rows.length).toString()+ '" value="" />';
-//				newRow.cells[3].innerHTML = '<input class="table_input" name="vkey_' + (table.rows.length).toString()+ '" value="" />';
-//				newRow.cells[4].innerHTML = '<input class="table_input" name="vtime_' + (table.rows.length).toString()+ '" value="" />';
-//				
 				table.tBodies[0].appendChild(newRow);
 				SetRowCanEdit(newRow);
+                ReOrder(table);
 				return newRow;
 			}
-			//删除行
 
+
+        function InsertRow(table, index){
+            var insert_no = table.rows.length;
+            for (var i = table.rows.length - 1; i > 0; i--) {
+                var chkOrder = table.rows[i].cells[0].firstChild;
+                if (chkOrder) {
+                    if (chkOrder.type = "CHECKBOX") {
+                        if (chkOrder.checked) {
+                            //执行删除
+                            insert_no = i;
+                            break;
+                        }
+                    }
+                }
+            }
+
+			var lastRow = table.rows[table.rows.length - 1];
+            var newRow = table.insertRow(insert_no);
+            for(var i = 0; i < 5; i++){
+                var cell = newRow.insertCell(i);
+                cell = (lastRow.cells[i]).cloneNode(true);
+            }
+            newRow.cells[1].innerText = (insert_no).toString();
+            newRow.cells[2].innerHTML = "";
+            newRow.cells[3].innerHTML = "";
+            newRow.cells[4].innerHTML = "";
+			SetRowCanEdit(newRow);
+
+            ReOrder(table);
+        }
+
+        function ReOrder(table){
+            for(var i = 0; i < table.rows.length; i++){
+                table.rows[i].cells[1].innerText = (i).toString();
+            }
+        }
+
+			//删除行
 		function DeleteRow(table, index) {
-			
 				for (var i = table.rows.length - 1; i > 0; i--) {
 					var chkOrder = table.rows[i].cells[0].firstChild;
 					if (chkOrder) {
 						if (chkOrder.type = "CHECKBOX") {
 							if (chkOrder.checked) {
-					
 								//执行删除
 								table.deleteRow(i);
 							}
 						}
 					}
 				}
+                ReOrder(table);
 			}
-			//提取表格的值,JSON格式
 
+			//提取表格的值,JSON格式
 		function GetTableData(table) {
 				var tableData = new Array();
 				//alert("行数：" + table.rows.length);
@@ -415,8 +457,8 @@
 				}
 				return tableData;
 			}
-			//提取指定行的数据，JSON格式
 
+			//提取指定行的数据，JSON格式
 		function GetRowData(row) {
 				var rowData = {};
 				for (var j = 0; j < row.cells.length; j++) {
@@ -433,8 +475,8 @@
 				//或者这样：alert("ProductName:" + rowData["ProductName"]);
 				return rowData;
 			}
-			//检查当前数据行中需要运行的字段
 
+			//检查当前数据行中需要运行的字段
 		function CheckExpression(row) {
 				for (var j = 0; j < row.cells.length; j++) {
 					expn = row.parentNode.rows[0].cells[j].getAttribute("Expression");
@@ -451,8 +493,8 @@
 					}
 				}
 			}
-			//计算需要运算的字段
 
+			//计算需要运算的字段
 		function Expression(row, expn) {
 				var rowData = GetRowData(row);
 				//循环代值计算

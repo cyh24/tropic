@@ -548,7 +548,7 @@ def submit_exam_post(request):
         msg['title'] = kaoshi.exam.title
         msg['total_num'] = kaoshi.exam.single_num + kaoshi.exam.multi_num
         msg['correct_num'] = single_correct_num + multi_correct_num
-        msg['total_score'] = total_score
+        msg['total_score'] = round(total_score, 2)
         msg['use_time'] = use_time
         msg['exam_id'] = kaoshi.exam.id
 
