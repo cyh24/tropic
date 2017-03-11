@@ -832,6 +832,16 @@ def check_wx_unionid(request, wx_user):
             return True
         else:
             account = account[0]
+            if checkMobile(request) == True:
+                if account.wx_wx_openid == None or account.wx_wx_openid == "":
+                    print "wx_wx_openid is none."
+                    account.wx_wx_openid = wx_user['openid']
+                    account.save()
+            else:
+                if account.wx_pc_openid == None or account.wx_pc_openid == "":
+                    print "wx_pc_openid is none."
+                    account.wx_pc_openid = wx_user['openid']
+                    account.save()
             return True
 
     except Exception, e:
@@ -963,11 +973,13 @@ def get_video_state(user, video):
                 if o.video == video:
                     if o.pay_state == 2:
                         if check_chaoshi(o.release_date, o.order_valid_day) == True:
+                            o.pay_state = 1
+                            o.save()
                             return False
                         else:
                             return True
                     elif o.pay_state == 1:
-                        if check_pay_by_order_num(o.order_num) == True:
+                        if check_pay_by_order_num(o.order_num) == True and check_chaoshi(o.release_date, o.order_valid_day) == False:
                             o.pay_state = 2
                             o.save()
                             # add user order info
