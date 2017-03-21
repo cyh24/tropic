@@ -344,10 +344,14 @@ def get_qiniu_files(data):
         video_key  = row['video_key'].encode('utf-8').strip()
         video_time = int(row['video_time'].encode('utf-8').strip())
         title      = row['video_name'].encode('utf-8').strip()
+        chapter_num = int(row['chapter_num'].encode('utf-8').strip())
+        chapter_name = row['chapter_name'].encode('utf-8').strip()
 
         if video_key == "" or title == "":
             break
 
+        qiniu_file.chapter_num = chapter_num
+        qiniu_file.chapter_name = chapter_name
         qiniu_file.key        = video_key
         qiniu_file.video_time = video_time
         qiniu_file.title      = title

@@ -34,6 +34,9 @@ class QiniuFile(models.Model):
 
     video_time = models.IntegerField(default=0)
 
+    chapter_num = models.IntegerField(default=-1)
+    chapter_name = models.CharField(max_length=128, default="")
+
     release_date = models.DateTimeField(auto_now=True)
 
     class Meta:

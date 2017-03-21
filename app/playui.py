@@ -55,12 +55,31 @@ def play_ui(request):
             key = files[current_num].key
             video_url = Qiniu.download_private_url(key.encode('utf-8'))
             msg['video_url'] = video_url
-            play_list = files
+            play_list = [val for val in files]
+
+            if getLen(play_list) == 0 or play_list[0].chapter_num == -1:
+                chapter_idx = []
+            else:
+                chapter_idx = [[0, play_list[0].chapter_name]]
+
+            for i in range(1, getLen(play_list)):
+                if play_list[i].chapter_num != -1 and play_list[i].chapter_num != play_list[i-1].chapter_num:
+                    chapter_idx.append([i, play_list[i].chapter_name])
+
+            chapter_idx.reverse()
+
             for i in range(getLen(play_list)):
                 play_list[i].num = i
                 play_list[i].cur_flag = 0
 
             play_list[current_num].cur_flag = 1
+
+            for idx in chapter_idx:
+                chapter = {}
+                chapter['is_chapter'] = True
+                chapter['chapter_name'] = idx[1]
+                play_list.insert(idx[0], chapter)
+
             msg['play_list'] = play_list
 
             # add the watch number

@@ -143,19 +143,23 @@
 								<h3></h3>
 								<table width="100%" border="1" cellpadding="1" cellspacing="1" id="tabProduct">
 									<tr>
-										<td width="8%" align="center" bgcolor="#EFEFEF" name="check"><input type="checkbox" name="checkbox" value="checkbox" /></td>
-										<td width="8%" align="center" bgcolor="#EFEFEF" name="video_num" EditType="">序号</td>
-										<td width="30%" align="center" bgcolor="#EFEFEF" name="video_name" EditType="TextBox">视频名称</td>
-										<td width="30%" align="center" bgcolor="#EFEFEF" name="video_key" EditType="TextBox">视频地址</td>
-										<td width="26%" align="center" bgcolor="#EFEFEF" name="video_time" EditType="TextBox">视频时间</td>
+										<td width="4%" align="center" bgcolor="#EFEFEF" name="check"><input type="checkbox" name="checkbox" value="checkbox" /></td>
+										<td width="5%" align="center" bgcolor="#EFEFEF" name="video_num" EditType="">序号</td>
+										<td width="25%" align="center" bgcolor="#EFEFEF" name="video_name" EditType="TextBox">视频名称</td>
+										<td width="25%" align="center" bgcolor="#EFEFEF" name="video_key" EditType="TextBox">视频地址</td>
+                                        <td width="8%" align="center" bgcolor="#EFEFEF" name="video_time" EditType="TextBox" >时间</td>
+										<td width="8%" align="center" bgcolor="#EFEFEF" name="chapter_num" EditType="TextBox" >章节</td>
+										<td width="25%" align="center" bgcolor="#EFEFEF" name="chapter_name" EditType="TextBox" >章节名</td>
 									</tr>
 									{% for v in play_list%}
 									<tr>
-										<td width="8%" align="center"><input type="checkbox" name="checkbox2" value="checkbox" /></td>
-										<td width="8%" align="center">{{v.num}}</td>
-										<td width="30%">{{v.title}}</td>
-										<td width="30%">{{v.key}}</td>
-										<td width="26%">{{v.video_time}}</td>
+										<td width="4%" align="center"><input type="checkbox" name="checkbox2" value="checkbox" /></td>
+                                        <td width="5%" align="center">{{v.num}}</td>
+                                        <td width="25%">{{v.title}}</td>
+                                        <td width="25%">{{v.key}}</td>
+                                        <td width="8%" style="text-align:center;">{{v.video_time}}</td>
+                                        <td width="8%" style="text-align:center;">{{v.chapter_num}}</td>
+                                        <td width="25%" style="text-align:center;">{{v.chapter_name}}</td>
 									</tr>
 									{% endfor %}
 								</table>
