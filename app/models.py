@@ -118,6 +118,7 @@ class Video(models.Model):
     teacher_info = property(__get_teacher_info)
 
     is_reverse = models.IntegerField(default=0)
+    is_customize = models.IntegerField(default=0)
 
     title    = models.CharField(max_length=50)
     logo_img = models.CharField(max_length=200)

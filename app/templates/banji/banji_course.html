@@ -148,33 +148,30 @@
                         </div>
                         <div class="m-chapterList f-pr">
                             <div class="chapter f-pr">
-                                <div class="chapterhead"> <span class="f-fl chaptertitle">课程</span>
-                                    <span class="f-fl chaptericon">20</span>
-                                    <span class="f-fl f-thide chaptername">商务图表制作</span>
-                                    <div class="f-fr j-chaptertime-0"> </div>
-                                </div>
+
+                                {% for v in play_list%}
                                 <div class="sectionarea">
-                                    <div class="section" >
-                                        <span class="f-fl f-thide ks">课时1</span>
-                                        <span class="f-fl ksicon ksicon-30" title="已完成"></span>
-                                        <span class="f-fl f-thide ksname">成为图表高手第1步（什么样的数找什么样的图）</span>
-                                        <span class="f-fr ksinfo j-hoverhide" style="display: block;">
-                                            <span class="f-fr f-thide kstime">13:08</span>
-                                            <span class="f-fr ksinfoicon ksinfoicon-2 title=" 视频 ""=""></span>
-                                            <span class="f-fr flag flag-0" title=""></span>
-                                        </span>
+                                    {% if v.is_chapter == True%}
+                                    <div class="chapterhead"> <span class="f-fl chaptertitle">章节</span> 
+                                        <span class="f-fl chaptericon">{{v.chapter_num}}</span>
+                                        <span class="f-fl f-thide chaptername">{{v.chapter_name}}</span>
+                                        <div class="f-fr j-chaptertime-0"> </div>
                                     </div>
-                                    <div class="section section-last">
-                                        <span class="f-fl f-thide ks">课时2</span>
-                                        <span class="f-fl ksicon ksicon-30" title="已完成"></span>
-                                        <span class="f-fl f-thide ksname">成为图表高手第1步（雷达图、散点图、象限图、气泡图） </span>
-                                        <span class="f-fr ksinfo j-hoverhide" style="display: block;">
-                                            <span class="f-fr f-thide kstime">25:29</span>
-                                            <span class="f-fr ksinfoicon ksinfoicon-2 title=" 视频 ""=""></span>
-                                            <span class="f-fr flag flag-0" title=""></span>
-                                        </span>
-                                    </div>
+                                    {% else %}
+                                        <div class="section" >
+                                            <span class="f-fl f-thide ks">课时1</span>
+                                            <span class="f-fl ksicon ksicon-30" title="已完成"></span>
+                                            <span class="f-fl f-thide ksname">{{v.title}}</span>
+                                            <span class="f-fr ksinfo j-hoverhide" style="display: block;">
+                                                <span class="f-fr f-thide kstime">13:08</span>
+                                                <span class="f-fr ksinfoicon ksinfoicon-2 title=" 视频 ""=""></span>
+                                                <span class="f-fr flag flag-0" title=""></span>
+                                            </span>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
                                 </div>
+
                             </div>
                             <!-- <div class="chapter f-pr"> -->
                                 <!-- <div class="chapterhead"> -->
@@ -210,6 +207,7 @@
             </div>
         </div>
         </div>
+
         {%include "footer.html"%}
 
 </body>

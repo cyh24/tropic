@@ -22,9 +22,9 @@ def info_wait(request):
 def upload_course_post(request):
     msg = {'state': 'fail'}
     try:
-        if request.method == "POST":
-            for x in request.POST:
-                print x, request.POST[x]
+        # if request.method == "POST":
+            # for x in request.POST:
+                # print x, request.POST[x]
 
         if request.FILES.has_key('logo'):
             postfix = (request.FILES['logo'].name).split('.')[-1]
@@ -73,10 +73,9 @@ def modify_order_post(request):
 def update_course_post(request):
     msg = {'state': 'fail'}
     try:
-        if request.method == "POST":
-            for x in request.POST:
-                print x, request.POST[x]
-
+        # if request.method == "POST":
+            # for x in request.POST:
+                # print x, request.POST[x]
 
         if request.FILES.has_key('logo'):
             if request.FILES['logo'] != None:
@@ -102,9 +101,9 @@ def update_course_post(request):
 def index_info_post(request):
     msg = {'state': 'fail'}
     try:
-        if request.method == "POST":
-            for x in request.POST:
-                print x, request.POST[x]
+        # if request.method == "POST":
+            # for x in request.POST:
+                # print x, request.POST[x]
 
             save_index_info(request.POST)
             msg ={'state': 'ok'}
@@ -311,6 +310,14 @@ def save_video(request, logo_path, need_authority=True):
                 is_reverse = 0
             video.is_reverse = is_reverse
 
+        if data.has_key('is_customize'):
+            is_customize = 0
+            try:
+                is_customize = int(float(data['is_customize']))
+            except Exception, e:
+                is_customize = 0
+            video.is_customize = is_customize
+
         with transaction.atomic():
             qfiles = []
             if data.has_key('table_json'):
@@ -415,6 +422,15 @@ def update_video(request, logo_path="", need_authority=True):
             except Exception, e:
                 is_reverse = 0
             video.is_reverse = is_reverse
+
+        if data.has_key('is_customize'):
+            is_customize = 0
+            try:
+                is_customize = int(float(data['is_customize']))
+            except Exception, e:
+                is_customize = 0
+            video.is_customize = is_customize
+
 
         with transaction.atomic():
             qfiles = []
