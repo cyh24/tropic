@@ -73,3 +73,11 @@ admin.site.register(models.Kaoshi, KaoshiAdmin)
 class GroupAdmin(admin.ModelAdmin):
     pass
 admin.site.register(models.Group, GroupAdmin)
+
+class WatchStatusAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.WatchStatus, WatchStatusAdmin)
+
+class CourseProgressAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.CourseProgress, CourseProgressAdmin)

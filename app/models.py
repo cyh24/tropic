@@ -85,6 +85,25 @@ class Kind(models.Model):
     class Meta:
         db_table = u'kind'
 
+class Group(models.Model):
+    group_name   = models.CharField(max_length=100)
+    detail_intro = models.CharField(max_length=1000)
+    img_path     = models.CharField(max_length=200)
+
+    allow_accounts = models.ManyToManyField(Account)
+    def __get_allow_accounts_num(self):
+        try:
+            if self.allow_accounts != None:
+                return self.allow_accounts.count()
+        except Exception, e:
+            print str(e)
+        return 0
+    allow_accounts_num = property(__get_allow_accounts_num)
+
+    release_date = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        db_table = u'groups'
+
 class Video(models.Model):
     teacher = models.ForeignKey(Account, unique=False)
     def __get_teacher_name(self):
@@ -159,6 +178,28 @@ class Video(models.Model):
 
     info = models.CharField(max_length=400, default="")
     valid_day = models.IntegerField(default=-1)
+
+    group = models.ManyToManyField(Group)
+    def __get_allow_accounts_num(self):
+        try:
+            if len(self.group.all()) > 0:
+                return self.group.all()[0].allow_accounts_num
+        except Exception, e:
+            print str(e)
+        return 0
+
+    def __get_allow_group_name(self):
+        try:
+            if len(self.group.all()) > 0:
+                return self.group.all()[0].group_name
+        except Exception, e:
+            print str(e)
+        return u"所有人员"
+
+    allow_accounts_num = property(__get_allow_accounts_num)
+    allow_group_name = property(__get_allow_group_name)
+
+    public_flag = models.BooleanField(default=False)
 
     release_date = models.DateTimeField(auto_now=False)
     class Meta:
@@ -321,24 +362,24 @@ class Question(models.Model):
     class Meta:
         db_table = u'question'
 
-class Group(models.Model):
-    group_name   = models.CharField(max_length=100)
-    detail_intro = models.CharField(max_length=1000)
-    img_path     = models.CharField(max_length=200)
+# class Group(models.Model):
+    # group_name   = models.CharField(max_length=100)
+    # detail_intro = models.CharField(max_length=1000)
+    # img_path     = models.CharField(max_length=200)
 
-    allow_accounts = models.ManyToManyField(Account)
-    def __get_allow_accounts_num(self):
-        try:
-            if self.allow_accounts != None:
-                return self.allow_accounts.count()
-        except Exception, e:
-            print str(e)
-        return 0
-    allow_accounts_num = property(__get_allow_accounts_num)
+    # allow_accounts = models.ManyToManyField(Account)
+    # def __get_allow_accounts_num(self):
+        # try:
+            # if self.allow_accounts != None:
+                # return self.allow_accounts.count()
+        # except Exception, e:
+            # print str(e)
+        # return 0
+    # allow_accounts_num = property(__get_allow_accounts_num)
 
-    release_date = models.DateTimeField(auto_now_add=True)
-    class Meta:
-        db_table = u'groups'
+    # release_date = models.DateTimeField(auto_now_add=True)
+    # class Meta:
+        # db_table = u'groups'
 
 class Exam(models.Model):
     title       = models.CharField(max_length=100)
@@ -422,3 +463,68 @@ class Kaoshi(models.Model):
     release_date = models.DateTimeField(auto_now_add=True)
     class Meta:
         db_table = u'kaoshi'
+
+class WatchStatus(models.Model):
+    # 0: unwatched
+    # 1: watching
+    # 2: finished
+    step = models.IntegerField(default=0)
+    qfile_id = models.IntegerField()
+
+    created_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    class Meta:
+        db_table = u'watch_status'
+
+class CourseProgress(models.Model):
+    account = models.ForeignKey(Account)
+    video   = models.ForeignKey(Video)
+
+    statuses = models.ManyToManyField(WatchStatus)
+
+    def get_qfile_status(self, qfile_id):
+        self.clean_qfile_status()
+        statuses = self.statuses.all()
+        if statuses:
+            for w_status in statuses:
+                if w_status.qfile_id == qfile_id:
+                    return w_status
+
+        w_status = WatchStatus()
+        w_status.qfile_id = qfile_id
+        w_status.save()
+        self.statuses.add(w_status)
+        self.save()
+        return w_status
+
+    def set_qfile_status_watched(self, qfile_id):
+        self.clean_qfile_status()
+        w_status = self.get_qfile_status(qfile_id)
+        w_status.step = 1
+        w_status.save()
+
+        return w_status
+
+    def clean_qfile_status(self):
+        qfiles = self.video.files.all()
+        qfiles_ids = [file.id for file in qfiles]
+        if self.statuses and self.statuses.count() > 0:
+            for w_status in self.statuses.all():
+                if w_status.qfile_id not in qfiles_ids:
+                    print "not in qfiles"
+                    self.statuses.remove(w_status)
+            self.save()
+
+    def get_status(self):
+        self.clean_qfile_status()
+        qfiles = self.video.files.all()
+        if qfiles:
+            status_list = [(self.get_qfile_status(file.id)).step for file in qfiles]
+            return status_list
+        else:
+            return []
+
+    release_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    class Meta:
+        db_table = u'course_progress'

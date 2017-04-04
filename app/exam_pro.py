@@ -36,12 +36,15 @@ def set_exam_data(exam, data):
         group_id = int(data['select_group_id'])
         if group_id == -1:
             exam.public_flag = True
+            exam.group.clear()
+            exam.save()
         else:
             exam.public_flag = False
             with transaction.atomic():
                 exam.save()
                 exam.group.clear()
                 exam.group.add(group_id)
+                exam.save()
 
     except Exception, e:
         print "set_exam_data.", e
@@ -92,9 +95,6 @@ def exam_upload_post(request):
 def exam_update_post(request):
     msg = {'state': 'fail'}
     try:
-        for x in request.POST:
-            print x, request.POST[x]
-
         # exam_excel_file = request.POST['exam_excel_file']
         # exam_excel_content = open(exam_excel_file).readlines()
         exam_id = int(request.POST['exam_id'])
@@ -129,6 +129,12 @@ def update_exam(request):
         single_Q, multi_Q = excel_analyze(path)
 
         groups = Group.objects.all()
+        selected_group = exam.group.all()
+        if selected_group:
+            selected_group = selected_group[0]
+            msg['selected'] = True
+            msg['selected_group_id'] = selected_group.id
+            msg['selected_group_name'] = selected_group.group_name
         msg['groups'] = groups
         msg['exam'] = exam
 
@@ -178,14 +184,10 @@ def upload_exam(request):
     msg['state'] = 'fail'
     try:
         file_key = 'exam_excel'
-        if request.method == "POST":
-            for x in request.POST:
-                print x, request.POST[x]
 
         if request.FILES.has_key(file_key):
             postfix = (request.FILES[file_key].name).split('.')[-1]
             path = EXAM_EXCEL_FOLD + getRandomStr() + "." + postfix
-            print path
             handle_uploaded_photo(path, request.FILES[file_key])
 
             single_Q, multi_Q = excel_analyze(path)
@@ -404,10 +406,6 @@ def generate_exam(exam, account):
 
         single_answer_str = get_answer_str(select_single)
         multi_answer_str = get_answer_str(select_multi)
-        print single_str
-        print multi_str
-        print single_answer_str
-        print multi_answer_str
 
 
         new_kaoshi = Kaoshi()
@@ -498,7 +496,6 @@ def submit_exam_post(request):
         submit_answer = {}
         for x in request.POST:
             submit_answer[x] = request.POST[x]
-        print submit_answer
 
         kaoshi_id = int(request.POST['kaoshi_id'])
         kaoshi = Kaoshi.objects.filter(id=kaoshi_id).all()[0]

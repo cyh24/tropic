@@ -128,6 +128,24 @@
 										<input style="width: 100%;" class="rlf-input" type="text" name="is_customize" value="0">
 									</div>
 								</div>
+
+								<div class="clear"></div>
+								<div class="select_left">
+									<label class="upload_filed_lbl">
+										<span>选择学生群组</span>
+									</label>
+                                    <select name="select_group_id">
+                                        {% if selected = True %}
+                                        <option value ="{{selected_group_id}}">{{selected_group_name}}</option>
+                                        {% endif %}
+
+                                        <option value ="-1">所有人员</option>
+                                        {% for group in groups %}
+                                        <option value ="{{group.id}}">{{group.group_name}}</option>
+                                        {% endfor %}
+                                    </select>
+									</div>
+								</div>
 							</div>
 
 							<div class="mod_upload_box_right">

@@ -27,6 +27,11 @@ def watch_history_add(request):
 
     return JsonResponse(json)
 
+
+def add_course_watch(user, video, qfile_id):
+    course_progress = get_course_progress(user, video)
+    course_progress.set_qfile_status_watched(qfile_id)
+
 def play_ui(request):
     msg = init_msg(request)
     msg['intrest_videos'] = get_intrest_videos()
@@ -108,6 +113,15 @@ def play_ui(request):
 
             # check whether need pay for the play
             is_paid = get_video_state(request.user, video)
+
+            # add customize course watch.
+            add_course_watch(request.user, video, files[current_num].id)
+
+            if video.is_customize == True and not is_paid:
+                if checkMobile(request):
+                    return render_to_response('mobile/videos/play-prohibited.html', msg)
+                else:
+                    return render_to_response('videos/play-prohibited.html', msg)
 
             #add_watch_history(request.user, video)
 
@@ -195,6 +209,15 @@ def play_ui_auth(request):
 
             # check whether need pay for the play
             is_paid = get_video_state(request.user, video)
+
+            # add customize course watch.
+            add_course_watch(request.user, video, files[current_num].id)
+
+            if video.is_customize == True and not is_paid:
+                if checkMobile(request):
+                    return render_to_response('mobile/videos/play-prohibited.html', msg)
+                else:
+                    return render_to_response('videos/play-prohibited.html', msg)
 
             #add_watch_history(request.user, video)
 

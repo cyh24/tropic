@@ -179,6 +179,9 @@
                                                             <th class='rowth' align='left' style=' width:25%;'>选择考生群组:</th>
                                                             <td>
                                                             <select name="select_group_id">
+                                                                {% if selected = True %}
+                                                                <option value ="{{selected_group_id}}">{{selected_group_name}}</option>
+                                                                {% endif %}
                                                                 <option value ="-1">所有人员</option>
                                                                 {% for group in groups %}
                                                                 <option value ="{{group.id}}">{{group.group_name}}</option>

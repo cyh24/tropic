@@ -30,7 +30,7 @@ def upload_course_post(request):
             postfix = (request.FILES['logo'].name).split('.')[-1]
             path = LOGO_FOLD + getRandomStr() + "." + postfix
             handle_uploaded_photo(path, request.FILES['logo'])
-            print "logo: ", path
+            # print "logo: ", path
 
             #path_logo = path[3:]
             new_path = upload_free_file(path)
@@ -168,7 +168,7 @@ def save_index_info(data):
             index_info.save()
 
 def save_tag(tag_name):
-    print "save tag: ", tag_name
+    # print "save tag: ", tag_name
     db_tags = Tag.objects.all()
     db_tlist = []
     if db_tags != None:
@@ -187,7 +187,6 @@ def save_tag(tag_name):
     return True
 
 def save_kind(kind_name):
-    print "save kind; ", kind_name
     db_kinds = Tag.objects.all()
     db_klist = []
     if db_kinds != None:
@@ -335,6 +334,16 @@ def save_video(request, logo_path, need_authority=True):
                     video.files.add(qfiles[i])
 
             video.save()
+            if data.has_key('select_group_id'):
+                group_id = int(data['select_group_id'])
+                if group_id == -1:
+                    video.public_flag = True
+                    video.group.clear()
+                else:
+                    video.public_flag = False
+                    with transaction.atomic():
+                        video.group.clear()
+                        video.group.add(group_id)
             return True
     except Exception, e:
         print str(e)
@@ -431,6 +440,16 @@ def update_video(request, logo_path="", need_authority=True):
                 is_customize = 0
             video.is_customize = is_customize
 
+        if data.has_key('select_group_id'):
+            group_id = int(data['select_group_id'])
+            if group_id == -1:
+                video.public_flag = True
+                video.group.clear()
+            else:
+                video.public_flag = False
+                with transaction.atomic():
+                    video.group.clear()
+                    video.group.add(group_id)
 
         with transaction.atomic():
             qfiles = []
@@ -566,9 +585,8 @@ def get_search_videos(request):
                 # return Video.objects.all()
 
             temp = []
-            for i in range(len(seg_list)):
+            for i in range(getLen(seg_list)):
                 if str(seg_list[i].encode("utf8")) not in stop_list:
-                    print seg_list[i]
                     temp.append(seg_list[i])
                     # seg_list.remove(seg_list[i])
                     # continue
@@ -579,8 +597,8 @@ def get_search_videos(request):
                 return None
 
             q_title = seg_list[0]
-            videos = Video.objects.filter(Q(title__icontains=q_title)|Q(kind_str__icontains=q_title)|Q(tags_str__icontains=q_title)).all()
-            for i in range(1, len(seg_list)):
+            videos = Video.objects.filter(is_customize=False).filter(Q(title__icontains=q_title)|Q(kind_str__icontains=q_title)|Q(tags_str__icontains=q_title)).all()
+            for i in range(1, getLen(seg_list)):
                 q_title = seg_list[i]
                 videos = videos | Video.objects.filter(Q(title__icontains=q_title)|Q(kind_str__icontains=q_title)|Q(tags_str__icontains=q_title)).all()
 
@@ -744,7 +762,7 @@ def add_comment(request):
             follow_id = int(request.GET['follow_id'])
         if request.GET.has_key('content'):
             content = request.GET['content'].encode('utf-8')
-        print video_id, follow_id, content
+        # print video_id, follow_id, content
 
         comment = Comment()
         comment.user = Account.objects.filter(user=request.user).all()[0]
@@ -981,6 +999,20 @@ def get_video_state(user, video):
         account = get_account_from_user(user)
         if account == None:
             return False
+        try:
+            if video.is_customize == True:
+                group = video.group.all()
+                if group.count() > 0:
+                    group = group[0]
+                    if account in group.allow_accounts.all():
+                        return True
+                    else:
+                        return False
+                else:
+                    return True
+        except Exception as e:
+            print "get_video_state:", str(e)
+
 
         user_orders = Order.objects.filter(account=account).all()
         is_paid = False
@@ -1549,3 +1581,21 @@ def pay_result(request):
     ###应添加订单状态处理
     return render_to_response('pay/notice.html', msg)
 
+
+def get_course_progress(user, video):
+    try:
+        account = get_account_from_user(user)
+        course_progress = None
+        try:
+            course_progress = CourseProgress.objects.get(account=account, video=video)
+        except Exception as e1:
+            print "course progress query not match: ", str(e1)
+        if not course_progress:
+            course_progress = CourseProgress(account=account, video=video)
+            course_progress.save()
+        return course_progress
+
+    except Exception as e:
+        print "get_course_status:", str(e)
+
+    return None

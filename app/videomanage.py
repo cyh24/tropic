@@ -110,11 +110,11 @@ def add_intrestvideo(request):
 #@login_required(login_url='/login/')
 @super_user
 def upload_course_ui(request):
-    data = init_msg(request)
+    msg = init_msg(request)
+    groups = Group.objects.all()
+    msg['groups'] = groups
 
-    return render_to_response('upload/upload_course.html', data)
-
-
+    return render_to_response('upload/upload_course.html', msg)
 
 
 #@login_required(login_url='/login/')
@@ -129,6 +129,15 @@ def update_course_ui(request):
 
             video = get_video_by_id(video_id)
 
+            groups = Group.objects.all()
+            selected_group = video.group.all()
+            if selected_group:
+                selected_group = selected_group[0]
+                msg['selected'] = True
+                msg['selected_group_id'] = selected_group.id
+                msg['selected_group_name'] = selected_group.group_name
+
+            msg['groups'] = groups
             msg['video'] = video
             msg['play_list'] = video.files.all()
             for i in range(len(msg['play_list'])):

@@ -20,17 +20,18 @@
                             <div class="courseMark djMark f-pa j-djMark"></div>
                             <div class="courseMark sfMark f-pa j-sfMark"></div>
                             <div class="g-sd1 left j-chimg">
-                                <img width="450" height="250" src="http://7xoyf9.com2.z0.glb.qiniucdn.com/151208041707O0tr.png">
+                                <img width="450" height="250" src="{{course.logo_img}}">
                             </div>
                             <div class="g-mn1">
                                 <div class="g-mn1c right j-right f-pr">
                                     <div class="ctarea f-fl j-cht">
                                         <div class="u-coursetitle f-fl">
                                             <h2 class="f-thide">
-                                                <span >Excel 图表篇</span>
+                                                <span >{{course.title}}</span>
                                             </h2>
                                             <div class="f-cb margin-top-15">
-                                                <span>1.    成为图表高手，像专业人士一样设计图表, 突破EXCEL的图表布局，制作专业图表。   掌握图表创建编辑方法，随心所欲编排图表元素。 <br>2.   区分源数据和作图数据 要想使制作的图表更加专业有效，就需要将源数据加工成作图数据。作图数据的组织就是重要的挑战。通过组织作图数据，可使图表思路更清晰，制作一些看似无法完成的精巧图表。</span>
+                                                <!-- <span>1.    成为图表高手，像专业人士一样设计图表, 突破EXCEL的图表布局，制作专业图表。   掌握图表创建编辑方法，随心所欲编排图表元素。 <br>2.   区分源数据和作图数据 要想使制作的图表更加专业有效，就需要将源数据加工成作图数据。作图数据的组织就是重要的挑战。通过组织作图数据，可使图表思路更清晰，制作一些看似无法完成的精巧图表。</span> -->
+                                                <span>{{course.info}}</span>
                                                 <!-- <span class="hot f-fs0">46163</span> -->
                                                 <!-- <span class="j-starNode starall"> -->
                                                     <!-- <div class="u-rating"> -->
@@ -54,10 +55,10 @@
                         </div>
                     </div>
                     <form action="" method="post" class="j-payForm" target="_blank"> <input type="hidden" name="productId" class="j-courseId"> <input type="hidden" name="productType" value="0"> </form>
-                    <ul class="f-cb tabarea">
-                        <li class="f-fl">
-                            <a class="j-chtab selected" hidefocus="true" href="">主页</a>
-                        </li>
+                    <!-- <ul class="f-cb tabarea"> -->
+                        <!-- <li class="f-fl"> -->
+                            <!-- <a class="j-chtab selected" hidefocus="true" href="">主页</a> -->
+                        <!-- </li> -->
                         <!-- <li class="f-fl"> -->
                             <!-- <a class="j-chtab" hidefocus="true" href="/note/noteIndex.htm?id=1002904008&amp;type=0">笔记</a> -->
                         <!-- </li> -->
@@ -67,7 +68,7 @@
                         <!-- <li class="f-fr"> -->
                             <!-- <a class="j-chtab s-fc5" hidefocus="true" href="/ask/askIndex.htm?fromId=1002904008&amp;fromType=0">问答</a> -->
                         <!-- </li> -->
-                    </ul>
+                    <!-- </ul> -->
                 </div>
             </div>
         </div>
@@ -80,61 +81,62 @@
                             <div class="g-mn2">
                                 <div class="g-mn2c">
                                     <div class="probg">
-                                        <div class="probar" style="width: 13.0435%;"></div>
+                                        <div class="probar" style="width: {{percent}}%;"></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="g-sd2">
-                                <a class="btn f-fr j-btn" href="" style="width: 110px; margin-top: -10px;">
+                                <a class="btn f-fr j-btn" target="_blank" href="/videos/play/?video-id={{video_id}}&current={{next_id}}" style="width: 110px; margin-top: -10px;">
                                     <span>继续学习</span>
                                 </a>
                             </div>
                         </div>
                         <div class="proDetail f-cb">
-                            <span class="pFinished j-pFinished f-fl">目前已完成<em> 3 </em>个课时, 加油啊！</span>
-                            <span class="pTaskLeft j-pTaskLeft f-thide f-fr" title="">下一个课时 : HTML5绘图(上)-1</span>
+                            <span class="pFinished j-pFinished f-fl">目前已完成<em> {{finished_num}}/{{total_num}}</em>个课时, 加油啊！</span>
+                            <span class="pTaskLeft j-pTaskLeft f-thide f-fr" title="">下一个课时 : {{next_title}}</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="b-15"></div>
         </div>
-        <div class="f-cb">
-            <div class="g-cisd2" id="bdCom">
-                <div id="j-courseNotice" class="m-notice f-cb f-bg">
-                    <h2 class="u-ctit" style="height: 35px;">公告</h2>
-                    <div id="j-notice-box" class="f-bdr">
-                        <div class="m-courseNotice">
-                            <!-- div class='m-noticetitle'> <h2 class="u-ctit">公告</h2> </div -->
-                            <div class="j-noticeContent m-noticeContent">
-                                <div class="m-noticeitem f-notshow" id="auto-id-1475841466702">
-                                    <div class="j-noedit-box noedit">
-                                        <div class="notice-main j-notice-main f-cb f-last f-notshow">
-                                            <div class="notice-content">
-                                                <div class="notice-desc j-desc">进阶+高级+项目高清视频，进群免费领取。进群备注所学课程。</div>
-                                                <div class="notice-bar f-cb">
-                                                    <div class="notice-info m-info f-cb f-fl">
-                                                        <div class="u-user f-fl">
-                                                            <div class="u-time j-date">9月27日</div>
-                                                        </div>
-                                                    </div>
+
+        <!-- <div class="f-cb"> -->
+            <!-- <div class="g-cisd2" id="bdCom"> -->
+                <!-- <div id="j-courseNotice" class="m-notice f-cb f-bg"> -->
+                    <!-- <h2 class="u-ctit" style="height: 35px;">公告</h2> -->
+                    <!-- <div id="j-notice-box" class="f-bdr"> -->
+                        <!-- <div class="m-courseNotice"> -->
+                            <!-- [> <div class='m-noticetitle'> <h2 class="u-ctit">公告</h2> </div> <] -->
+                            <!-- <div class="j-noticeContent m-noticeContent"> -->
+                                <!-- <div class="m-noticeitem f-notshow" id="auto-id-1475841466702"> -->
+                                    <!-- <div class="j-noedit-box noedit"> -->
+                                        <!-- <div class="notice-main j-notice-main f-cb f-last f-notshow"> -->
+                                            <!-- <div class="notice-content"> -->
+                                                <!-- <div class="notice-desc j-desc">进阶+高级+项目高清视频，进群免费领取。进群备注所学课程。</div> -->
+                                                <!-- <div class="notice-bar f-cb"> -->
+                                                    <!-- <div class="notice-info m-info f-cb f-fl"> -->
+                                                        <!-- <div class="u-user f-fl"> -->
+                                                            <!-- <div class="u-time j-date">9月27日</div> -->
+                                                        <!-- </div> -->
+                                                    <!-- </div> -->
                                                     <!-- <div class="notice-opt j-opt f-fr"> -->
                                                         <!-- <a class="j-more m-gmore f-fr" id="auto-id-1475841466701">详情&gt;</a> -->
                                                     <!-- </div> -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="j-edit-box edit" style="display: none;"></div>
-                                </div>
-                            </div>
-                            <div class="m-ckgd j-op f-dn" id="auto-id-1475841466649">查看更多</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="b-15" id="j-notice-b-15"></div>
+                                                <!-- </div> -->
+                                            <!-- </div> -->
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+                                    <!-- <div class="j-edit-box edit" style="display: none;"></div> -->
+                                <!-- </div> -->
+                            <!-- </div> -->
+                            <!-- <div class="m-ckgd j-op f-dn" id="auto-id-1475841466649">查看更多</div> -->
+                        <!-- </div> -->
+                    <!-- </div> -->
+                <!-- </div> -->
+                <!-- <div class="b-15" id="j-notice-b-15"></div> -->
+            <!-- </div> -->
 
-            </div>
             <div class="g-cimn2" id="bdDir">
                 <div class="g-cimn2c">
                     <div id="j-livecourse-remind"> </div>
@@ -159,14 +161,20 @@
                                     </div>
                                     {% else %}
                                         <div class="section" >
-                                            <span class="f-fl f-thide ks">课时1</span>
-                                            <span class="f-fl ksicon ksicon-30" title="已完成"></span>
-                                            <span class="f-fl f-thide ksname">{{v.title}}</span>
-                                            <span class="f-fr ksinfo j-hoverhide" style="display: block;">
-                                                <span class="f-fr f-thide kstime">13:08</span>
-                                                <span class="f-fr ksinfoicon ksinfoicon-2 title=" 视频 ""=""></span>
-                                                <span class="f-fr flag flag-0" title=""></span>
-                                            </span>
+                                            <a target="_blank" href="/videos/play/?video-id={{video_id}}&current={{v.num}}">
+                                                <span class="f-fl f-thide ks">课时{{v.v_num}}</span>
+                                                {% if v.watched = 1%}
+                                                <span class="f-fl ksicon ksicon-30"></span>
+                                                {% else %}
+                                                <span class="f-fl ksicon ksicon-0"></span>
+                                                {% endif %}
+                                                <span class="f-fl f-thide ksname">{{v.title}}</span>
+                                                <span class="f-fr ksinfo j-hoverhide" style="display: block;">
+                                                    <!-- <span class="f-fr f-thide kstime">13:08</span> -->
+                                                    <span class="f-fr ksinfoicon ksinfoicon-2 title="></span>
+                                                    <span class="f-fr flag flag-0" title=""></span>
+                                                </span>
+                                            </a>
                                         </div>
                                     {% endif %}
                                 {% endfor %}
@@ -208,7 +216,6 @@
         </div>
         </div>
 
-        {%include "footer.html"%}
 
 </body>
 
