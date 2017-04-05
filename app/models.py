@@ -482,44 +482,48 @@ class CourseProgress(models.Model):
 
     statuses = models.ManyToManyField(WatchStatus)
 
-    def get_qfile_status(self, qfile_id):
-        self.clean_qfile_status()
+    def get_qfile_status(self, num):
+        # self.clean_qfile_status()
         statuses = self.statuses.all()
         if statuses:
-            for w_status in statuses:
-                if w_status.qfile_id == qfile_id:
+            for i, w_status in enumerate(statuses):
+                if i == num:
                     return w_status
 
         w_status = WatchStatus()
-        w_status.qfile_id = qfile_id
+        w_status.qfile_id = -1
         w_status.save()
         self.statuses.add(w_status)
         self.save()
         return w_status
 
-    def set_qfile_status_watched(self, qfile_id):
-        self.clean_qfile_status()
-        w_status = self.get_qfile_status(qfile_id)
+
+    def set_qfile_status_watched(self, num):
+        # self.clean_qfile_status()
+        w_status = self.get_qfile_status(num)
         w_status.step = 1
         w_status.save()
 
         return w_status
 
     def clean_qfile_status(self):
-        qfiles = self.video.files.all()
-        qfiles_ids = [file.id for file in qfiles]
-        if self.statuses and self.statuses.count() > 0:
-            for w_status in self.statuses.all():
-                if w_status.qfile_id not in qfiles_ids:
-                    print "not in qfiles"
-                    self.statuses.remove(w_status)
-            self.save()
+        try:
+            qfiles = self.video.files.all()
+            if self.statuses and self.statuses.count() > 0:
+                size_ = 0
+                if not qfiles:
+                    size_ = 0
+                for i in range(size_, self.statuses.count()):
+                    self.statuses.remove(self.statuses.all()[i])
+                self.save()
+        except Exception as e:
+            print "clean_qfile_status:", str(e)
 
     def get_status(self):
-        self.clean_qfile_status()
+        # self.clean_qfile_status()
         qfiles = self.video.files.all()
         if qfiles:
-            status_list = [(self.get_qfile_status(file.id)).step for file in qfiles]
+            status_list = [(self.get_qfile_status(i)).step for i in range(qfiles.count())]
             return status_list
         else:
             return []

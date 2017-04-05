@@ -16,7 +16,6 @@
    	 	}
 
 		function show_delete() {
-			
 			var list = document.getElementById("course_list"); //获取检索范围
 			var str = list.getElementsByTagName("a"); //获取检索内容块
 			for (var i = 0; i < str.length; i++) //遍历内容块
@@ -41,7 +40,6 @@
 					document.getElementById(str[i].id).style.display = "none";
 				}
 			}
-			
 			document.getElementById('btn-show-delete').style.display = "";
 			document.getElementById('btn-hide-delete').style.display = "none";
 		}
@@ -191,13 +189,20 @@
 
 									<div class="course-card course-card1  course-card-nobtn mod-course-card_lu">
 										<div class="course-face">
+                                            {% if v.is_customize = True %}
+											<a href="/banji-course/?video-id={{v.id}}">
+												<img class="item-img" src="{{v.logo_img}}" onerror="this.src='http://9.url.cn/edu/img/img-err.png';this.onerror=null;">
+												<i class="icon-card-lu"></i>
+											</a>
+                                            {% else %}
 											<a href="/videos/play/?video-id={{v.id}}">
 												<img class="item-img" src="{{v.logo_img}}" onerror="this.src='http://9.url.cn/edu/img/img-err.png';this.onerror=null;">
 												<i class="icon-card-lu"></i>
 											</a>
+                                            {% endif %}
 										</div>
-										<div class="course-title"> 
-											<div href="/videos/play/?video-id={{v.id}}" class="item-tt-link">{{v.title}}</div> 
+										<div class="course-title">
+											<div href="" class="item-tt-link">{{v.title}}</div> 
 										</div>
 										<div class="course-emphasis">
 											{% if v.money == 0 %}

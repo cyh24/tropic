@@ -1294,6 +1294,7 @@ def del_unpay(user, video_id):
 def get_paid(user):
     if user == None:
         return None, 0
+    order_videos = None
     try:
         account = get_account_from_user(user)
         if account == None:
@@ -1304,19 +1305,31 @@ def get_paid(user):
         for o in paid_orders:
             order_videos.append(o.video)
 
-
-        return order_videos, getLen(paid_orders)
-
     except Exception, e:
         printError(e)
 
-    return None, 0
+    try:
+        customize_videos = Video.objects.filter(is_customize=True).all()
+        if customize_videos:
+            for v in customize_videos:
+                if v not in order_videos:
+                    if v.group.count() > 0:
+                        if account in v.group.all()[0].allow_accounts.all():
+                            order_videos.append(v)
+                    else:
+                        order_videos.append(v)
+    except Exception as e:
+        print "get_paid, customize:", str(e)
+
+    return order_videos, getLen(order_videos)
 
 def get_paid_num(user):
     try:
-        account = get_account_from_user(user)
-        paid_order = Order.objects.filter(account=account).filter(pay_state=2).all()
-        return getLen(paid_order)
+        videos, num = get_paid(user)
+        return num
+        # account = get_account_from_user(user)
+        # paid_order = Order.objects.filter(account=account).filter(pay_state=2).all()
+        # return getLen(paid_order)
     except Exception, e:
         printError(e)
 
@@ -1596,6 +1609,6 @@ def get_course_progress(user, video):
         return course_progress
 
     except Exception as e:
-        print "get_course_status:", str(e)
+        print "get_course_progress:", str(e)
 
     return None

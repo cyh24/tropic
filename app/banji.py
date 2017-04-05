@@ -87,7 +87,10 @@ def banji_course(request):
             msg['course'] = video
             msg['play_list'] = play_list
 
-            return render_to_response('banji/banji_course.html', msg)
+            if checkMobile(request):
+                return render_to_response('mobile/banji/banji_course.html', msg)
+            else:
+                return render_to_response('banji/banji_course.html', msg)
         except Exception, e:
             print "banji_course:", str(e)
 
