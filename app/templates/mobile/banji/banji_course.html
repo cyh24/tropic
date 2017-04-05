@@ -1,0 +1,156 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh">
+
+	{% include "mobile/include.html"%}
+    <link href="/static/css/mobile/netease/core.css" type="text/css" rel="stylesheet">
+    <link href="/static/css/mobile/netease/pt_pages_course_courseMain.css" type="text/css" rel="stylesheet">
+
+		{% include "mobile/header.html" %}
+    <body>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span12">
+                    <div>
+						<ul class="breadcrumb">
+							<li>
+								<a href="/">首页</a> <span class="divider">/</span>
+							</li>
+							<li>
+								<a href="/videos/">全部视频</a> <span class="divider">/</span>
+							</li>
+							<li class="active">
+								{{video.title}}
+							</li>
+						</ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+		<div class="video_player">
+            <img style="margin-left:0px;" width="" height="" src="{{course.logo_img}}">
+        </div>
+
+        <!-- <div class="m-maintainInfo" style="display:none"> -->
+            <!-- <div id="maintain_info_box" class="g-flow"></div> -->
+        <!-- </div> -->
+        <!-- <div id="advertisement_box" class="advertisement_box f-pf" style="display:none;"></div> -->
+        <!-- <div class="g-flow" style="width:"> -->
+            <!-- <div class="b-20"></div> -->
+            <!-- <div> -->
+                <!-- <div class="f-bg headBox" id="courseHead"> -->
+                    <!-- <div class="u-courseHead"> -->
+                        <!-- <div class="ov f-pr j-ch" style="height: 300px;"> -->
+                            <!-- <div class="courseMark djMark f-pa j-djMark"></div> -->
+                            <!-- <div class="courseMark sfMark f-pa j-sfMark"></div> -->
+                            <!-- <div class="g-sd1 left j-chimg"> -->
+                                <!-- <img style="margin-left:0px;" width="" height="" src="{{course.logo_img}}"> -->
+                            <!-- </div> -->
+                            <!-- <div class="g-mn1"> -->
+                                <!-- <div class="g-mn1c right j-right f-pr"> -->
+                                    <!-- <div class="ctarea f-fl j-cht"> -->
+                                        <!-- <div class="u-coursetitle f-fl"> -->
+                                            <!-- <h2 class="f-thide"> -->
+                                                <!-- <span >{{course.title}}</span> -->
+                                            <!-- </h2> -->
+                                            <!-- <div class="f-cb margin-top-15"> -->
+                                                <!-- <span>{{course.info}}</span> -->
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+                                <!-- </div> -->
+                            <!-- </div> -->
+                        <!-- </div> -->
+                    <!-- </div> -->
+                <!-- </div> -->
+            <!-- </div> -->
+        <!-- </div> -->
+
+        <div class="b-15"></div>
+        <div id="processwrap">
+            <div class="learnPro f-bg f-cb" id="course-process">
+                <div class="m-learnProgress f-pr">
+                    <div class="barBox f-cb">
+                        <div class="f-cb">
+                            <div class="g-mn2">
+                                <div class="g-mn2c">
+                                    <div class="probg">
+                                        <div class="probar" style="width: {{percent}}%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="g-sd2">
+                                <a class="btn f-fr j-btn" target="_blank" href="/videos/play/?video-id={{video_id}}&current={{next_id}}" style="width: 110px; margin-top: -10px;">
+                                    <span>继续学习</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="proDetail f-cb">
+                            <span class="pFinished j-pFinished f-fl">目前已完成<em> {{finished_num}}/{{total_num}}</em>个课时, 加油啊！</span>
+                            <span class="pTaskLeft j-pTaskLeft f-thide f-fr" title="">下一个课时 : {{next_title}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="b-15"></div>
+        </div>
+
+            <div class="g-cimn2" style="" id="bdDir">
+                <div class="g-cimn2c">
+                    <div id="j-livecourse-remind"> </div>
+                    <div id="j-duration" class="duration f-bg" style="display:none;">
+                        <h2 class="u-ctit">学习时间提醒</h2>
+                        <p>本课程共有<em class="j-total s-fcorange">0分钟</em>学习时间，当前剩余<em class="j-remain s-fcorange">0分钟</em></p>
+                    </div>
+                    <div class="f-cb f-bg f-pr" id="j-chapter-list" style="z-index:10;">
+                        <div class="f-cb">
+                            <h2 class="u-ctit f-thide f-fl" id="j-chapter-title" style="height:35px;">目录</h2>
+                        </div>
+                        <div class="m-chapterList f-pr">
+                            <div class="chapter f-pr">
+
+                                <div class="sectionarea">
+                                {% for v in play_list%}
+                                    {% if v.is_chapter == True%}
+                                    <div class="chapterhead"> <span class="f-fl chaptertitle">章节</span> 
+                                        <span class="f-fl chaptericon">{{v.chapter_num}}</span>
+                                        <span class="f-fl f-thide chaptername">{{v.chapter_name}}</span>
+                                        <div class="f-fr j-chaptertime-0"> </div>
+                                    </div>
+                                    {% else %}
+                                        <div class="section" >
+                                            <a target="_blank" href="/videos/play/?video-id={{video_id}}&current={{v.num}}">
+                                                <span class="f-fl f-thide ks">课时{{v.v_num}}</span>
+                                                {% if v.watched = 1%}
+                                                <span class="f-fl ksicon ksicon-30"></span>
+                                                {% else %}
+                                                <span class="f-fl ksicon ksicon-0"></span>
+                                                {% endif %}
+                                                <span class="f-fl f-thide ksname">{{v.title}}</span>
+                                                <span class="f-fr ksinfo j-hoverhide" style="display: block;">
+                                                    <span class="f-fr f-thide kstime">13:08</span>
+                                                    <span class="f-fr ksinfoicon ksinfoicon-2 title="></span>
+                                                    <span class="f-fr flag flag-0" title=""></span>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="j-recommend" style="display:none;">
+                        <div class="b-15"></div>
+                        <div class="f-cb f-bg f-pr recommedCourse" id="j-recommendCourse">
+                            <h2 class="u-ctit f-thide recommend">学习过该课程的人还学习过：</h2> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+
+</body>
+
+</html>
