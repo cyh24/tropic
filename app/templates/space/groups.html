@@ -1,0 +1,286 @@
+<html lang="zh-CN">
+
+	{% include "include.html"%}
+	<link href="/static/css/space/space.css" rel="stylesheet">
+	<link rel="stylesheet" href="/static/css/txkt/courseList.css">
+
+	<script>
+        function open_apply(account_id, group_id, group_name, password){
+            document.getElementById('id_group_name').value = group_name;
+            document.getElementById('id_group_id').value = group_id;
+            document.getElementById('id_account_id').value = account_id;
+            document.getElementById('id_real_password').value = password;
+
+            $('#myModal').modal();
+        }
+
+        function apply_group(){
+            var real_password = document.getElementById('id_real_password').value
+            var apply_password = document.getElementById('id_apply_password').value
+            var account_id = document.getElementById('id_account_id').value;
+            var group_id = document.getElementById('id_group_id').value;
+
+            if(real_password != apply_password){
+                alert('密码错误!');
+                return false;
+            }
+
+            form_data = {"account_id": account_id, "group_id": group_id};
+
+            $.ajax({
+                type: 'GET',
+                url: "/space/apply_group/",
+                data: form_data,
+                beforeSend: function(XMLHttpRequest){
+                },
+                success: function(rets, statues, xml){
+                    rets = JSON.parse(rets);
+                    if(rets['flag'] == 'true'){
+                        alert("发送申请成功!");
+                        location.reload();
+                    } else {
+                        alert("发送申请失败，请重试!");
+                    }
+                },
+                complete: function(XMLHttpRequest, textStatus){
+                },
+                error: function(response){
+                }
+            });
+        }
+	</script>
+
+	<input type="text" id="id-show-state" value={{show_del}} style="display: none;">
+
+	<body>
+		{% include "header.html"%}
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <input type="text" id="id_real_password" style="display:none;">
+                    <input type="text" id="id_account_id" style="display:none;">
+                    <input type="text" id="id_group_id" style="display:none;">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="myModalLabel">申请加入班级</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label >班级名称</label>
+                            <input readOnly="true" type="text" class="form-control" id="id_group_name">
+                        </div>
+                        <div class="form-group">
+                            <label >申请密码</label>
+                            <input type="text" class="form-control" id="id_apply_password">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            <!-- <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭 -->
+                            关闭
+                        </button>
+                        <button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal" onclick="apply_group();">
+                            <!-- <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存 -->
+                            保存
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+		<div id="main">
+
+			<div class="container clearfix">
+				<div class="main-body">
+					<div class="l">
+						<div class="sider">
+							<div class="user-info">
+								<span class="user-pic">
+								<a href="/user/setavator" >
+                                <img src={{account.user_pic}} >
+                                </a>
+							</span>
+								<ul class="user-lay" style="list-style-type:none">
+									<li class="mynick-name">
+										<span class="user-name">{{account.nickname}}</span>
+									</li>
+									<li>
+										{% if account.sex == 1%}
+										<span class="user-site"> 男 </span> {% elif account.sex == 0%}
+										<span class="user-site"> 女 </span> {% else %}
+										<span class="user-site"> 未知 </span> {% endif %}
+									</li>
+									<li><a href="/user/setprofile" class="user-setup">设置</a></li>
+								</ul>
+							</div>
+							<div class="user-desc">
+								<div class="sign-wrap">
+									<p id="signed" class="signed">
+										<strong>{{account.info}}</strong>
+										<a href="/user/setprofile">
+											<em class="publish-sign" id="publishsign"> </em>
+										</a>
+									</p>
+									<textarea class="sign-editor" id="js-sign-editor">这位童鞋很懒，什么也没有留下～～！</textarea>
+									<p id="rlf-tip-wrap" class="rlf-tip-wrap"></p>
+								</div>
+							</div>
+							<!--
+						<ul class="mp clearfix">
+							<li class="l mp-item">
+								<span class="mp-atag">
+            <p class="mp-num"> 1分</p>
+            <p class="mp-title">学习</p>
+          </span>
+							</li>
+							<li class="mp-item">
+								<a class="mp-atag" href="/space/experience">
+									<span class="mp-num mp-hover">
+                45            </span>
+									<span class="mp-title mp-hover">经验</span>
+								</a>
+							</li>
+						</ul>
+                        -->
+							<ul class="subnav" style="list-style-type:none">
+								<li>
+									<a class="js-count-course" href="/space/index"><i class="icon-nav"></i>历史记录<em class="got-num">{{history_num}}</em></a>
+								</li>
+								<li>
+									<a class="js-count-plan" href="/space/collect"><i class="icon-nav"></i>我的收藏<em class="got-num">{{collect_num}}</em></a>
+								</li>
+								<li>
+									<a class="js-count-note" href="/space/paid"><i class="icon-nav"></i>已买课程<em class="got-num">{{paid_num}}</em></a>
+								</li>
+								<li>
+									<a class="js-count-note" href="/space/customize"><i class="icon-nav"></i>定制课程<em class="got-num">{{customize_num}}</em></a>
+								</li>
+
+								<li>
+									<a class="active" href="/space/groups"><i class="icon-nav"></i>定制班级<em class="got-num">{{groups_num}}</em></a>
+								</li>
+
+								<li>
+									<a class="js-count-plan" href="/space/shopping-cart"><i class="icon-nav"></i>购 物 车<em class="got-num">{{unpay_num}}</em></a>
+								</li>
+								<!--
+							<li class="rd-dissu">
+								<a class="read-mine" href="/myclub/myquestion/t/ques">查看我的社区</a>
+								<p class="read-notice">看看里面有什么好玩的事情吧～～</p>
+							</li>
+                            -->
+							</ul>
+						</div>
+						<!--sider end-->
+					</div>
+					<div class="r space-main">
+
+						<div class="family">
+							<h1 class="family-hd">所有班级</h1>
+						</div>
+						<div class="course-tool-bar clearfix">
+							<div class="tool-left l">
+								<a href="/space/index" class="sort-item active">定制班级 (共<b>{{v_num}}</b>个班级)</a>
+							<!-- <a href="/space/course/t/0" class="sort-item ">已学</a> -->
+							<!-- <a href="/space/course/t/2" class="sort-item ">已学完</a> -->
+							</div>
+							<div class="tool-right r">
+								<!--
+							<div class="tool-all">
+								<span id="js-columall" class="tool-item"><strong>全部</strong> <i class="tool-item icon icon-down"></i></span>
+								<ul id="js-columbd" class="all-cont" style="display: none;">
+									<li><a data-id="0" href="/space/index/sid/0">全部</a></li>
+								</ul>
+							</div>
+                            -->
+
+								<span class="tool-item tool-pager">
+                                <span class="pager-num">
+                                    <b class="pager-cur">{{cur_page}}</b>/<em class="pager-total">{{total_page}}</em>
+                                </span>
+								<a href="/space/groups/?page={{pre_page}}" class="pager-action pager-prev hide-text disabled"></a>
+
+								<a href="/space/groups/?page={{after_page}}" class="pager-action pager-next hide-text disabled"></a>
+								</span>
+								<!-- {% if show_del == 'True' %} -->
+								<!-- <span id="btn-show-delete" class="tool-item tool-remove js-program-edit" onclick="show_delete()" style="display: none;"> -->
+                                <!-- <i class="icon icon2-delete"></i><b>删除</b> -->
+                                <!-- </span> -->
+								<!-- <span id="btn-hide-delete" class="tool-item tool-remove js-program-edit status-edit" onclick="hide_delete()" style="display: ;"> -->
+                                <!-- <b>完成</b> -->
+                                <!-- </span> -->
+                                <!-- {% else %} -->
+								<!-- <span id="btn-show-delete" class="tool-item tool-remove js-program-edit" onclick="show_delete()" style=""> -->
+                                <!-- <i class="icon icon2-delete"></i><b>删除</b> -->
+                                <!-- </span> -->
+
+								<!-- <span id="btn-hide-delete" class="tool-item tool-remove js-program-edit status-edit" onclick="hide_delete()" style="display: none;"> -->
+                                <!-- <b>完成</b> -->
+                                <!-- </span> -->
+                                <!-- {% endif %} -->
+							</div>
+						</div>
+						{% if v_num != 0%}
+						<div class="market-bd market-bd-6 course-list">
+							<ul class="market-list-mod" id="course_list">
+
+								{% for v in videos%}
+								<li class="mlm-item">
+
+									<div class="course-card course-card1  course-card-nobtn mod-course-card_lu" style="height:170px;">
+										<div class="course-face">
+											<!-- <a href=""> -->
+												<img class="item-img" src="{{v.img_path}}"/>
+												<i class="icon-card-lu"></i>
+											<!-- </a> -->
+										</div>
+										<div class="course-title">
+											<div href="" class="item-tt-link">{{v.title}}</div>
+										</div>
+										<div class="course-emphasis">
+                                            {% if v.is_joined == True %}
+                                            <span class="course-price course-price-free item-price-free" style="float: left;"> 已加入 </span>
+                                            {% elif v.is_applied == True %}
+                                            <span class="course-price" style="float: left; color: #999;"> 已申请 </span>
+                                            {% else %}
+                                            <a href="javascript:void(0)" onclick="open_apply('{{account.id}}', '{{v.id}}', '{{v.group_name}}', '{{v.password}}');">
+                                                <span  class="course-price course-price-free item-price" style="float: left;">申请加入</span>
+                                            </a>
+                                            {% endif %}
+
+                                            <span class="icon-sep"></span>
+                                            <!-- <a class="course-agency nor-link" href="" title=""> -->
+                                            <span class="course-agency-name">{{v.group_name}}</span>
+											</a>
+										</div>
+										<!-- <div class="course-emphasis course-relations" style="float: left;"> -->
+										<!-- <span class="course-num">  {{v.watch_num}} 观看  </span> -->
+										<!-- </div> -->
+									<!-- <div class="course-emphasis course-relations" style="float: left;"> -->
+										<!-- <span class="course-num">  &nbsp;,&nbsp;{{v.like_num}} 赞  </span> -->
+									<!-- </div> -->
+									</div>
+								</li>
+								{% endfor %}
+
+							</ul>
+						</div>
+						{% else %}
+						<ul class="follow-list">
+							<div class="uncourse">
+								<p>暂无任何购买记录</p>
+							</div>
+						</ul>
+						{% endif %}
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+		{% include "footer.html" %}
+	</body>
+
+</html>

@@ -5,13 +5,13 @@
 		<link rel="stylesheet" href="/static/css/mobile/space.css?uuid" />
 
 	</head>
-	
+
 	<script>
 		function delete_record(self){
 			var video_id = document.getElementById(self.id).getAttribute('data-video-id')
 
 			$.ajax({
-				url: "/del-collect/",
+				url: "/del-history/",
 				type: "GET",
 				dataType: "json",
 				data: {
@@ -74,6 +74,24 @@
 								{% for v in videos%}
 								<li class="course border-top border-bottom" id="id-show-{{v.id}}" >
 									<!--<p class="course__status-bar border-bottom ">已看至第1节，共10节</p>-->
+                                    {% if v.is_customize = True %}
+									<a href="/banji-course/?video-id={{v.id}}">
+									<div class="course__cnt border-bottom">
+										<div class="course__cover i-play" style="background-image:url({{v.logo_img}})" > </div>
+										<div class="course__info">
+											<h3 class="course__title">{{v.title}}</h3>
+											<p>
+												{% if v.money <= 0 %} 
+													<span class="course__price course__price--free"> 免费 </span>
+												{% else %}
+													<span class="course__price course__price">  ¥{{v.money}}  </span> 
+												{% endif %}
+													<span class="course__sep">|</span><span class="course__agency">{{v.teacher_name}}</span>
+											</p>
+										</div>
+									</div>
+									</a>
+                                    {% else %}
 									<a href="/videos/play/?video-id={{v.id}}">
 									<div class="course__cnt border-bottom">
 										<div class="course__cover i-play" style="background-image:url({{v.logo_img}})" > </div>
@@ -90,45 +108,31 @@
 										</div>
 									</div>
 									</a>
-									{% if v.money <= 0.0 %}
-									<div class="course__btn-group">
-										<button class="course__btn " data-video-id='{{v.id}}' id="btn_delete_record_{{v.id}}" onclick="delete_record(this)">删除记录</button>		
-									</div>
-									{% else %}
-									<div class="course__btn-group" >
-										<a href="/videos/play/?video-id={{v.id}}">
-										<button class="course__btn orange" data-operation="pay">去付款</button>
-										</a>
-										<button class="course__btn " data-video-id='{{v.id}}' id="btn_delete_record_{{v.id}}" onclick="delete_record(this)">删除记录</button>
-									</div>
-									{% endif %}
+                                    {% endif %}
 								</li>
-								
 								{% endfor%} 
 							{% else %} 
 							<li class="course border-top border-bottom">
 								<div class="uncourse">
-									<p>暂无任何收藏</p>
+									<p>暂无任何定制课程</p>
 								</div>
 							</li>
 							{% endif %}
-							
 						</ul>
 					</div>
 				</li>
 			</ul>
 		</div>
-		
 		<div class="pagination" >
 			<ul>
 				<li >
-					<a href="/space/collect/?page={{pre_page}}" style="width: 75px;">上一页</a>
+					<a href="/space/paid/?page={{pre_page}}" style="width: 75px;">上一页</a>
 				</li>
 				<li>
-					<a href="/space/collect/?page={{cur_page}}" style="width: 60px;">第 {{cur_page}} 页</a>
+					<a href="/space/paid/?page={{cur_page}}" style="width: 60px;">第 {{cur_page}} 页</a>
 				</li>
 				<li>
-					<a href="/space/collect/?page={{after_page}}" style="width: 75px">下一页</a>
+					<a href="/space/paid/?page={{after_page}}" style="width: 75px">下一页</a>
 				</li>
 			</ul>
 		</div>

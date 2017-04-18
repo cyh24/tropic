@@ -625,6 +625,8 @@ def group_update(request):
 
         msg['exist_usernames'] = exist_usernames_str
         msg['group_name'] = group.group_name
+        msg['img_path'] = group.img_path
+        msg['password'] = group.password
         msg['group_id'] = int(group.id)
         msg['usernames'] = names_str
 
@@ -633,9 +635,11 @@ def group_update(request):
 
     return render_to_response('onlineExam/group_update.html', msg)
 
-def set_group(group, group_name, ids):
+def set_group(group, group_name, password, img_path, ids):
     with transaction.atomic():
+        group.img_path = img_path
         group.group_name = group_name
+        group.password = password
         group.save()
         group.allow_accounts.clear()
         for id in ids:
@@ -649,6 +653,8 @@ def group_create_post(request):
             # print x, request.POST[x]
 
         group_name = request.POST['group_name']
+        password = request.POST['password']
+        img_path = request.POST['img_path']
         if group_name.strip() == "":
             return render_to_response('info.html', msg)
 
@@ -662,7 +668,7 @@ def group_create_post(request):
             ids.append(id_)
 
         group = Group()
-        set_group(group, group_name, ids)
+        set_group(group, group_name, password, img_path, ids)
         msg['state'] = 'ok'
 
 
@@ -688,8 +694,10 @@ def group_update_post(request):
             ids.append(id_)
 
         group_id = int(request.POST['group_id'])
+        password = request.POST['password']
+        img_path = request.POST['img_path']
         group = Group.objects.filter(id=group_id)[0]
-        set_group(group, group_name, ids)
+        set_group(group, group_name, password, img_path, ids)
         msg['state'] = 'ok'
 
 

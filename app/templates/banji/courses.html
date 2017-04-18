@@ -8,6 +8,34 @@
 	<script src="/static/css/confirm/xcConfirm.js" type="text/javascript"></script>
 
     <script>
+        function my_ok_func()
+        {
+            do_delete_video();
+        }
+
+        function do_delete_video()
+        {
+            var video_id = document.getElementById('temp-delete-id').value;
+            $.ajax({
+                url: "/delete-video/",
+                type: "GET",
+                dataType: "json",
+                data:{
+                    video_id: video_id,
+                },
+                success:function(obj){
+                    if( obj['state'] == 'success' ){
+                        var data = '删除视频成功！';
+			            window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.info);
+                    }
+                    else{
+                        var data = '删除视频失败！';
+			            window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.info);
+                    }
+                }
+            });
+        }
+
         function click_delete_video(self)
         {
             var data = "确定要删除该视频？".toString();
@@ -43,6 +71,11 @@
 						<li class="item ">
 							<a href="/kaoshi/groups/" class="navi_inner _vmanage" _hot="uc.side._vmanage"><i class="icon2_vmanage"></i><span class="text">群组管理</span></a>
 						</li>
+
+						<li class="item ">
+							<a href="/banji/application/" class="navi_inner _vmanage" _hot="uc.side._vmanage"><i class="icon2_vmanage"></i><span class="text">群组申请</span></a>
+						</li>
+
 
 						<li class="item ">
 							<a href="/banji/courses/" class="navi_inner _vmanage current" _hot="uc.side._vmanage"><i class="icon2_vmanage"></i><span class="text">课程管理</span></a>
@@ -105,11 +138,11 @@
 							<div class="item_d">
 								<ol class="option_list">
 									<li class="item">
-										<a href="/update-course/?video_id={{course.id}}" target="_blank" class="btn_normal _edit_video" data-vid={{v.id}}>
+										<a href="/update-course/?video_id={{course.id}}" target="_blank" class="btn_normal _edit_video">
 											<i class="icon_edited"></i>
 											<span class="inner">编辑</span>
 										</a>
-                                        <a href="javascript:void(0)" id="id-delete-{{v.id}}" onclick="click_delete_video(this)" class="btn_normal _del_video" data-video-id={{v.id}} >
+                                        <a href="javascript:void(0)" id="id-delete-{{course.id}}" onclick="click_delete_video(this)" class="btn_normal _del_video" data-video-id={{course.id}} >
 											<i class="icon_delete"></i>
 											<span class="inner">删除</span>
 										</a>

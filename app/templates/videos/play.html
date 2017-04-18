@@ -236,9 +236,9 @@
                                             <a class="course_list" style="color: rgb(255, 255, 255);">【{{p.chapter_name}}】</a><br>
                                         {% else %}
                                             {% if p.cur_flag == 1%}
-                                            <a class="course_list" href="/videos/play/?video-id={{video.id}}&current={{p.num}}" style="color: rgb(118, 234, 156);">{{p.title}}</a>
+                                            <a class="course_list" href="/videos/play/?video-id={{video.id}}&current={{p.num}}" style="margin-left:10px; color: rgb(118, 234, 156);">{{p.title}}</a>
                                             {% else %}
-                                            <a class="course_list" href="/videos/play/?video-id={{video.id}}&current={{p.num}}">{{p.title}}</a>
+                                            <a class="course_list" href="/videos/play/?video-id={{video.id}}&current={{p.num}}" style="margin-left:10px;">{{p.title}}</a>
                                             {% endif %}
                                             <br>
                                         {% endif %}

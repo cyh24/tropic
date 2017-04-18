@@ -6,19 +6,19 @@
 
 		{% include "mobile/header.html" %}
     <body>
-		<div class="container-fluid">
+		<div class="container-fluid" style="margin-top:-10px; margin-bottom:-10px;">
 			<div class="row-fluid">
 				<div class="span12">
                     <div>
 						<ul class="breadcrumb">
 							<li>
-								<a href="/">首页</a> <span class="divider">/</span>
+								<a style="color: #0088cc;text-decoration: none;" href="/">首页</a> <span class="divider">/</span>
 							</li>
 							<li>
-								<a href="/videos/">全部视频</a> <span class="divider">/</span>
+								<a style="color: #0088cc; text-decoration: none;" href="/space/customize">定制课程</a> <span class="divider">/</span>
 							</li>
 							<li class="active">
-								{{video.title}}
+								{{course.title}}
 							</li>
 						</ul>
                     </div>
@@ -126,7 +126,7 @@
                                                 {% endif %}
                                                 <span class="f-fl f-thide ksname">{{v.title}}</span>
                                                 <span class="f-fr ksinfo j-hoverhide" style="display: block;">
-                                                    <span class="f-fr f-thide kstime">13:08</span>
+                                                    <!-- <span class="f-fr f-thide kstime">13:08</span> -->
                                                     <span class="f-fr ksinfoicon ksinfoicon-2 title="></span>
                                                     <span class="f-fr flag flag-0" title=""></span>
                                                 </span>

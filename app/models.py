@@ -18,6 +18,9 @@ class Account(models.Model):
     sex      = models.IntegerField(default=-1)
     info     = models.CharField(max_length=400)
 
+    # def __str__(self):
+         # return "%s" % (self.nickname).encode("utf8")
+
     class Meta:
         db_table = u'account'
 
@@ -90,6 +93,8 @@ class Group(models.Model):
     detail_intro = models.CharField(max_length=1000)
     img_path     = models.CharField(max_length=200)
 
+    password = models.CharField(max_length=64, default="tropic")
+
     allow_accounts = models.ManyToManyField(Account)
     def __get_allow_accounts_num(self):
         try:
@@ -101,8 +106,20 @@ class Group(models.Model):
     allow_accounts_num = property(__get_allow_accounts_num)
 
     release_date = models.DateTimeField(auto_now_add=True)
+
+    # def __str__(self):
+         # return "%s" % (self.group_name).encode("utf8")
+
     class Meta:
         db_table = u'groups'
+
+class ApplyGroup(models.Model):
+    account = models.ForeignKey(Account)
+    group = models.ForeignKey(Group)
+    status = models.IntegerField(default=0)
+    class  Meta:
+        db_table = u'apply_group'
+
 
 class Video(models.Model):
     teacher = models.ForeignKey(Account, unique=False)

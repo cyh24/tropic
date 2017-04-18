@@ -127,3 +127,16 @@ def upload_banji_course_ui(request):
 
 def upload_banji_course_post(request):
     pass
+
+@super_user
+def application(request):
+    msg = init_msg(request)
+    applications  = ApplyGroup.objects.filter().all()
+    for i, app in enumerate(applications):
+        applications[i].account_name = app.account.nickname
+        applications[i].group_name = app.group.group_name
+
+    msg['applications'] = applications
+
+    return render_to_response('banji/application.html', msg)
+

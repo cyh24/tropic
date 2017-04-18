@@ -74,9 +74,9 @@
 							CancelEditCell(this.parentNode, this.value);
 						}
 
-                    var order_id = element.getAttribute("order_id");
+                    var application_id = element.getAttribute("application_id");
 					textBox.onchange = function() {
-							ModifyCell(this.parentNode, this.value, this.name, order_id);
+							ModifyCell(this.parentNode, this.value, this.name, application_id);
 						}
 						//向当前单元格添加文本框
 					ClearChild(element);
@@ -142,12 +142,12 @@
 				//CheckExpression(element.parentNode);
 			}
 
-		function ModifyCell(element, value, name, order_id) {
+		function ModifyCell(element, value, name, application_id) {
 			$.ajax({
 				type: "GET",
-				url: "/modify-order-post/",
+				url: "/modify-application-post/",
 				data: {
-					order_id: order_id,
+					application_id: application_id,
                     name:     name,
                     value:    value,
 				},
@@ -155,9 +155,11 @@
 				success: function(data) {
 					if (data['state'] === 'ok') {
                         alert("修改成功!");
+                        location.reload();
                     }
                     else{
                         alert("修改失败!");
+                        location.reload();
                     }
 				},
                 error: function(){
@@ -201,35 +203,20 @@
 
 					<ul class="navigate_list">
 
-						<!-- <li class="item "> -->
-							<!-- <a href="/upload/course/" class="navi_inner _upload" _hot="uc.side._upload" target="_blank"><i class="icon2_upload"></i><span class="text">上传视频</span></a> -->
-						<!-- </li> -->
-
 						<li class="item ">
-							<a href="/videos/manage/" class="navi_inner _vmanage" _hot="uc.side._vmanage"><i class="icon2_vmanage"></i><span class="text">视频管理</span></a>
+							<a href="/kaoshi/groups/" class="navi_inner _vmanage" _hot="uc.side._vmanage"><i class="icon2_vmanage"></i><span class="text">群组管理</span></a>
 						</li>
 
 						<li class="item ">
-							<a href="/videos/data-manage/" class="navi_inner _data"><i class="icon2_data"></i><span class="text">数据统计</span></a>
-                        </li>
-
-						<li class="item ">
-							<a href="/manage/index-info" class="navi_inner _data" target="_blank"><i class="icon2_data"></i><span class="text">首页广告</span></a>
-                        </li>
-
-                        <li class="item ">
-							<a href="/manage/order-manage" class="navi_inner _data current" target=""><i class="icon2_vmanage"></i><span class="text">订单管理</span></a>
-                        </li>
-						<li class="item ">
-							<a href="/offline-upload/" class="navi_inner _upload" _hot="uc.side._upload" target="_blank"><i class="icon2_upload"></i><span class="text">上传线下课程</span></a>
+							<a href="/banji/application/" class="navi_inner _vmanage current" _hot="uc.side._vmanage"><i class="icon2_vmanage"></i><span class="text">群组申请</span></a>
 						</li>
 
 						<li class="item ">
-							<a href="/offline-manage/" class="navi_inner _upload" _hot="uc.side._upload" ><i class="icon2_vmanage"></i><span class="text">线下课程管理</span></a>
+							<a href="/banji/courses/" class="navi_inner _vmanage" _hot="uc.side._vmanage"><i class="icon2_vmanage"></i><span class="text">课程管理</span></a>
 						</li>
 
 						<li class="item ">
-							<a href="/kaoshi/groups/" class="navi_inner _upload" _hot="uc.side._upload" target="_blank"><i class="icon2_vmanage"></i><span class="text">考试、定制课程</span></a>
+							<a href="/kaoshi/exams/" class="navi_inner _vmanage" _hot="uc.side._vmanage"><i class="icon2_vmanage"></i><span class="text">试卷管理</span></a>
 						</li>
 					</ul>
 				</div>
@@ -237,16 +224,9 @@
 
 				<div class="main_content" id="video_view">
 
-                    <div style="line-height:28px;text-align:center;">
-                        <form action="/manage/order-manage/" class="form-search form-inline">
-                            <input name="order_id" style="width:200px;" class="input-medium search-query" placeholder="输入订单ID进行搜索" type="text" />
-                            <button type="submit" class="btn">查找</button>
-                        </form>
-                    </div>
-
 					<ul class="mod_tab_list">
 						<li class="item current _videoBtn">
-							<a class="txt">订单 {{orders_len}} </a>
+							<a class="txt">班级申请 {{application_len}} </a>
 						</li>
 					</ul>
 
@@ -256,7 +236,7 @@
 							<div class="item_a">
 								<input type="checkbox" class="_check_all">
 							</div>
-							<div class="item_b"><span class="text">订单信息</span></div>
+							<div class="item_b"><span class="text">申请信息</span></div>
 						</li>
 
 					</ul>
@@ -264,44 +244,23 @@
                     <table id="id_tabProduct" cellpadding="1" cellspacing="1" style="width:92%;" class="order_table table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th style="line-height:20px">订单ID</th>
-                                <th>课程名称</th>
+                                <th style="line-height:20px">申请ID</th>
                                 <th>用户昵称</th>
-                                <th>价格(元)</th>
-                                <th>有效期(天)</th>
-                                <th>创建时间</th>
-                                <th>状态</th>
+                                <th>班级</th>
+                                <th>状态（0:申请,1:通过,-1:不通过）</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for order in orders%}
+                            {% for application in applications%}
                             <tr>
-                                <th style="line-height:20px">{{order.id}}</th>
-                                <th>{{order.name}}</th>
-                                <th>{{order.user_nickname}}</th>
-                                <th order_id={{order.id}} name="price" EditType="TextBox">{{order.price}}</th>
-                                <th order_id={{order.id}} name="order_valid_day" EditType="TextBox">{{order.order_valid_day}}</th>
-                                <th>{{order.release_date}}</th>
-
-                                    {% if order.pay_state == 1%}
-                                    <th>未付款</th>
-                                    {% elif order.pay_state == 2%}
-                                    <th>已付款</th>
-                                    {% else%}
-                                    <th>无效</th>
-                                    {% endif %}
+                                <th style="line-height:20px">{{application.id}}</th>
+                                <th>{{application.account_name}}</th>
+                                <th>{{application.group_name}}</th>
+                                <th application_id={{application.id}} name="status" EditType="TextBox">{{application.status}}</th>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
-
-					<div class="mod_pages">
-						<a href="/manage/order-manage/?page={{pre_page}}" class="page-btn" style="width: 100px;">上一页</a> {% for i in pages_before %}
-						<a href="/manage/order-manage/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a> {% endfor %}
-						<a href="/manage/order-manage/?page={{cur_page}}" data-page={{cur_page}} class="current">{{cur_page}}</a> {% for i in pages_after %}
-						<a href="/manage/order-manage/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a> {% endfor %}
-						<a href="/manage/order-manage/?page={{after_page}}" data-page="2" class="page-btn" style="width: 100px;">下一页</a>
-					</div>
 
 				</div>
 

@@ -2,7 +2,7 @@
 
 	<head>
 		{% include "mobile/include.html"%}
-		<link rel="stylesheet" href="/static/css/mobile/space.css" />
+		<link rel="stylesheet" href="/static/css/mobile/space.css?uuid" />
 
 	</head>
 	
@@ -36,22 +36,28 @@
 					</div>
 
 					<ul class="banner__nav">
-						<li class="banner__item banner__item--management" >
+						<li class="banner__item banner__item--history" >
 							<a class="banner__link" href="/space/" data-jump="management">
 								<p id="js-management-total" class="banner__count">{{history_num}}</p>
 								<p class="banner__word">历史记录</p>
 							</a>
 						</li>
-						<li class="banner__item banner__item--fav">
+						<li class="banner__item banner__item--collect">
 							<a class="banner__link" href="/space/collect/" data-jump="fav">
 								<p id="js-fav-total" class="banner__count">{{collect_num}}</p>
 								<p class="banner__word">收藏</p>
 							</a>
 						</li>
-						<li class="banner__item banner__item--record">
+						<li class="banner__item banner__item--paid">
 							<a class="banner__link" href="/space/paid/" data-jump="record">
 								<p id="js-record-total" class="banner__count">{{paid_num}}</p>
 								<p class="banner__word">已购买</p>
+							</a>
+						</li>
+						<li class="banner__item banner__item--customize">
+							<a class="banner__link" href="/space/customize/" data-jump="record">
+								<p id="js-record-total" class="banner__count">{{customize_num}}</p>
+								<p class="banner__word">定制课程</p>
 							</a>
 						</li>
 					</ul>

@@ -32,10 +32,27 @@
     <div style="margin-top: 10px;">
     <form  method="post" action="/group-update-post/" enctype="multipart/form-data" target="post-status">
         {% csrf_token %}
+
+        <div class="wlfg-wrap" style="width:500px;margin:40px auto 0 auto;text-align:center;">
+            <label id='id_group_num' class="my-label" for="nick" style="">Logo:</label>
+            <div class="rlf-group">
+                <input  type="text" name="img_path" value='{{img_path}}' class="rlf-input rlf-input-nick">
+                <!-- <p class="rlf-tip-wrap"></p> -->
+            </div>
+        </div>
+
         <div class="wlfg-wrap" style="width:500px;margin:40px auto 0 auto;text-align:center;">
             <label id='id_group_num' class="my-label" for="nick" style="">群组名称:</label>
             <div class="rlf-group">
                 <input  type="text" name="group_name" value='{{group_name}}' autocomplete="off"  class="rlf-input rlf-input-nick"  placeholder="请输入群组名称.">
+                <p class="rlf-tip-wrap"></p>
+            </div>
+        </div>
+
+        <div class="wlfg-wrap" style="width:500px;margin:40px auto 0 auto;text-align:center;">
+            <label  class="my-label" for="nick" style="">PASSWORD:</label>
+            <div class="rlf-group">
+                <input  type="text" name="password" value='{{password}}'  class="rlf-input rlf-input-pwd">
                 <p class="rlf-tip-wrap"></p>
             </div>
         </div>

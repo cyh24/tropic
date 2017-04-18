@@ -19,6 +19,7 @@ def get_space_msg(request, get_videos_method):
 
     msg['history_num'] = 0
     msg['paid_num']    = 0
+    msg['customize_num']    = 0
     msg['unpay_num']  = 0
     msg['collect_num'] = 0
 
@@ -30,13 +31,25 @@ def get_space_msg(request, get_videos_method):
         msg['collect_num'] = get_collect_num(request.user)
 
         videos, videos_num = get_videos_method(request.user)
+        try:
+            aa, bb = get_customize(request.user)
+            cc, dd = get_groups(request.user)
+            msg['customize_num'] = bb
+            msg['groups_num'] = dd
+        except Exception as e:
+            msg['customize_num'] = 0
+            msg['groups_num'] = 0
+            print "fff get_space_msg_customize."
 
         total_page = (getLen(videos)+8-1)/8
         subVideos, cur_page = paginator_show(request, videos, 8)
 
         if getLen(subVideos) > 0:
             for v in subVideos:
-                v.order_id = get_orderid_given_user_video(request.user, v)
+                try:
+                    v.order_id = get_orderid_given_user_video(request.user, v)
+                except Exception, e:
+                    print e
 
         msg['videos']     = subVideos
         msg['v_num']  = videos_num
@@ -109,6 +122,40 @@ def space_paid(request):
         return render_to_response('mobile/space/paid.html', msg)
     else:
         return render_to_response('space/paid.html', msg)
+
+@login_required(login_url='/wechat-login/')
+@csrf_exempt
+def space_groups(request):
+    msg = get_space_msg(request, get_groups)
+    return render_to_response('space/groups.html', msg)
+
+@csrf_exempt
+def space_apply_group(request):
+    msg = {}
+    msg['flag'] = 'flase'
+    try:
+        account_id = request.GET['account_id']
+        group_id = request.GET['group_id']
+        apply_group = ApplyGroup(account_id=account_id, group_id=group_id)
+        apply_group.save()
+        msg['flag'] = 'true'
+    except Exception, e:
+        pass
+    return HttpResponse(json.dumps(msg))
+
+@login_required(login_url='/wechat-login/')
+@csrf_exempt
+# watching history list
+def space_customize(request):
+    msg = get_space_msg(request, get_customize)
+    if request.GET.has_key('show_del'):
+        if request.GET['show_del'] == 'True':
+            msg['show_del'] = 'True'
+
+    if checkMobile(request):
+        return render_to_response('mobile/space/customize.html', msg)
+    else:
+        return render_to_response('space/customize.html', msg)
 
 
 def setprofile(request):

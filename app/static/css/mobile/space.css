@@ -85,16 +85,23 @@ ol, ul {
 	color:#eee
 }
 
-.banner__item--management{
+.banner__item--history{
 	left:0
 }
 
-.banner__item--fav{
-	left:50%;
-	margin-left:-40px
+.banner__item--collect{
+	left:26%;
+	/* margin-left:-40px */
 }
 
-.banner__item--record{
+.banner__item--paid{
+    right:26%;
+	/* right:0 */
+	/* left:25%; */
+    /* margin-left:40px */
+}
+
+.banner__item--customize{
 	right:0
 }
 

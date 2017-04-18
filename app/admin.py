@@ -81,3 +81,7 @@ admin.site.register(models.WatchStatus, WatchStatusAdmin)
 class CourseProgressAdmin(admin.ModelAdmin):
     pass
 admin.site.register(models.CourseProgress, CourseProgressAdmin)
+
+class ApplyGroupAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.ApplyGroup, ApplyGroupAdmin)

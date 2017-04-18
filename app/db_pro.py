@@ -70,6 +70,34 @@ def modify_order_post(request):
 
     return JsonResponse(json)
 
+def modify_application_post(request):
+    json = {'state': 'fail'}
+    try:
+        application_id, name, value = None, None, None
+        if request.GET.has_key("application_id"):
+            application_id = int(request.GET['application_id'])
+
+        if request.GET.has_key("value"):
+            status = request.GET['value']
+
+        application = ApplyGroup.objects.get(id=application_id)
+        account = get_account_from_user(request.user)
+
+        if int(status) == 1:
+            application.status = 1
+            application.group.allow_accounts.add(account)
+            application.delete()
+        elif int(status) == -1:
+            application.status = -1
+            application.delete()
+
+        json['state'] = 'ok';
+
+    except Exception, e:
+        print "modify_order_post: ", str(e)
+
+    return JsonResponse(json)
+
 def update_course_post(request):
     msg = {'state': 'fail'}
     try:
@@ -1291,6 +1319,56 @@ def del_unpay(user, video_id):
 
     return False
 
+def get_groups(user):
+    if user == None:
+        return None, 0
+    groups = None
+    try:
+        account = get_account_from_user(user)
+        if account == None:
+            return None, 0
+
+        groups = Group.objects.all()
+        for i, group in enumerate(groups):
+            if account in group.allow_accounts.all():
+                groups[i].is_joined = True
+            if ApplyGroup.objects.filter(account=account, status=0).all():
+                groups[i].is_applied = True
+
+    except Exception, e:
+        printError(e)
+
+    return groups, getLen(groups)
+
+def get_customize(user):
+    if user == None:
+        return None, 0
+    order_videos = None
+    try:
+        account = get_account_from_user(user)
+        if account == None:
+            return None, 0
+
+        order_videos = []
+
+    except Exception, e:
+        printError(e)
+
+    try:
+        customize_videos = Video.objects.filter(is_customize=True).all()
+        if customize_videos:
+            for v in customize_videos:
+                if v not in order_videos:
+                    if v.group.count() > 0:
+                        if account in v.group.all()[0].allow_accounts.all():
+                            order_videos.append(v)
+                    else:
+                        order_videos.append(v)
+    except Exception as e:
+        print "get_customize, customize:", str(e)
+
+    return order_videos, getLen(order_videos)
+
 def get_paid(user):
     if user == None:
         return None, 0
@@ -1308,18 +1386,18 @@ def get_paid(user):
     except Exception, e:
         printError(e)
 
-    try:
-        customize_videos = Video.objects.filter(is_customize=True).all()
-        if customize_videos:
-            for v in customize_videos:
-                if v not in order_videos:
-                    if v.group.count() > 0:
-                        if account in v.group.all()[0].allow_accounts.all():
-                            order_videos.append(v)
-                    else:
-                        order_videos.append(v)
-    except Exception as e:
-        print "get_paid, customize:", str(e)
+    # try:
+        # customize_videos = Video.objects.filter(is_customize=True).all()
+        # if customize_videos:
+            # for v in customize_videos:
+                # if v not in order_videos:
+                    # if v.group.count() > 0:
+                        # if account in v.group.all()[0].allow_accounts.all():
+                            # order_videos.append(v)
+                    # else:
+                        # order_videos.append(v)
+    # except Exception as e:
+        # print "get_paid, customize:", str(e)
 
     return order_videos, getLen(order_videos)
 
