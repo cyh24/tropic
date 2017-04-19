@@ -27,6 +27,7 @@
                     if( obj['state'] == 'success' ){
                         var data = '删除视频成功！';
 			            window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.info);
+                        window.location.reload();
                     }
                     else{
                         var data = '删除视频失败！';

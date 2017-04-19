@@ -129,15 +129,15 @@ def update_course_ui(request):
 
             video = get_video_by_id(video_id)
 
-            groups = Group.objects.all()
+            groups = Group.objects.filter(is_valid=True).all()
             selected_group = video.group.all()
-            if selected_group:
-                selected_group = selected_group[0]
-                msg['selected'] = True
-                msg['selected_group_id'] = selected_group.id
-                msg['selected_group_name'] = selected_group.group_name
+            if selected_group and groups:
+                for i, group in enumerate(groups):
+                    if group in selected_group:
+                        groups[i].is_selected = True
 
             msg['groups'] = groups
+            msg['public_flag'] = video.public_flag
             msg['video'] = video
             msg['play_list'] = video.files.all()
             for i in range(len(msg['play_list'])):

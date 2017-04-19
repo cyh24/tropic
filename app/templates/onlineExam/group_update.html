@@ -57,6 +57,14 @@
             </div>
         </div>
 
+        <div class="wlfg-wrap" style="width:500px;margin:40px auto 0 auto;text-align:center;">
+            <label  class="my-label" for="nick" style="">有效天数:</label>
+            <div class="rlf-group">
+                <input  type="text" name="valid_day" value='{{valid_day}}'  class="rlf-input rlf-input-pwd">
+                <p class="rlf-tip-wrap"></p>
+            </div>
+        </div>
+
         <div style="width:620px;margin:40px auto 0 auto;text-align:center;">
             <ul id="tags"></ul>
             <button style="margin-top: 40px; cursor: pointer;" class="btn_submit" onclick="goto_submit()" >修改群组</button>
@@ -72,7 +80,7 @@
         <input id="id-form-submit" type="sumbit" style="display:none;" />
     </div>
 
-    <div style="margin:200px auto 0 auto;text-align:center;">
+    <div style="margin:0px auto 0 auto;text-align:center;">
 	    <iframe id="post-status" name="post-status" style="display:; width:50%" frameborder="no"></iframe>
     </div>
 

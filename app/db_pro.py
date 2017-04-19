@@ -81,11 +81,10 @@ def modify_application_post(request):
             status = request.GET['value']
 
         application = ApplyGroup.objects.get(id=application_id)
-        account = get_account_from_user(request.user)
 
         if int(status) == 1:
             application.status = 1
-            application.group.allow_accounts.add(account)
+            application.group.allow_accounts.add(application.account)
             application.delete()
         elif int(status) == -1:
             application.status = -1
@@ -363,15 +362,27 @@ def save_video(request, logo_path, need_authority=True):
 
             video.save()
             if data.has_key('select_group_id'):
-                group_id = int(data['select_group_id'])
-                if group_id == -1:
-                    video.public_flag = True
-                    video.group.clear()
-                else:
-                    video.public_flag = False
-                    with transaction.atomic():
+                group_ids =  data.getlist('select_group_id')
+                video.group.clear()
+                for group_id in group_ids:
+                    group_id = int(str(group_id))
+                    if group_id == -1:
+                        video.public_flag = True
                         video.group.clear()
+                        break
+                    else:
+                        video.public_flag = False
                         video.group.add(group_id)
+            # if data.has_key('select_group_id'):
+                # group_ids =  data.getlist('select_group_id')
+                # if group_id == -1:
+                    # video.public_flag = True
+                    # video.group.clear()
+                # else:
+                    # video.public_flag = False
+                    # with transaction.atomic():
+                        # video.group.clear()
+                        # video.group.add(group_id)
             return True
     except Exception, e:
         print str(e)
@@ -469,15 +480,18 @@ def update_video(request, logo_path="", need_authority=True):
             video.is_customize = is_customize
 
         if data.has_key('select_group_id'):
-            group_id = int(data['select_group_id'])
-            if group_id == -1:
-                video.public_flag = True
+            group_ids =  data.getlist('select_group_id')
+            with transaction.atomic():
                 video.group.clear()
-            else:
-                video.public_flag = False
-                with transaction.atomic():
-                    video.group.clear()
-                    video.group.add(group_id)
+                for group_id in group_ids:
+                    group_id = int(str(group_id))
+                    if group_id == -1:
+                        video.public_flag = True
+                        video.group.clear()
+                        break
+                    else:
+                        video.public_flag = False
+                        video.group.add(group_id)
 
         with transaction.atomic():
             qfiles = []
@@ -1029,15 +1043,15 @@ def get_video_state(user, video):
             return False
         try:
             if video.is_customize == True:
-                group = video.group.all()
-                if group.count() > 0:
-                    group = group[0]
-                    if account in group.allow_accounts.all():
-                        return True
-                    else:
-                        return False
-                else:
-                    return True
+                groups = video.group.all()
+                if groups.count() > 0:
+                    for group in groups:
+                        if check_chaoshi(group.release_date, group.valid_day):
+                            group.is_valid = False
+                            group.save()
+                        if group.is_valid and account in group.allow_accounts.all():
+                            return True
+                return False
         except Exception as e:
             print "get_video_state:", str(e)
 
@@ -1328,7 +1342,13 @@ def get_groups(user):
         if account == None:
             return None, 0
 
-        groups = Group.objects.all()
+        groups = Group.objects.filter(is_valid=True).all()
+        for i, group in enumerate(groups):
+            if check_chaoshi(group.release_date, group.valid_day):
+                group.is_valid = False
+                group.save()
+
+        groups = Group.objects.filter(is_valid=True).all()
         for i, group in enumerate(groups):
             if account in group.allow_accounts.all():
                 groups[i].is_joined = True
@@ -1336,7 +1356,7 @@ def get_groups(user):
                 groups[i].is_applied = True
 
     except Exception, e:
-        printError(e)
+        printError("get_groups:"+ str(e))
 
     return groups, getLen(groups)
 

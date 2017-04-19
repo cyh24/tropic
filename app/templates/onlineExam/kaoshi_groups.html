@@ -34,6 +34,7 @@
                     if( obj['state'] == 'success' ){
                         var data = '删除群组成功！';
 			            window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.info);
+                        location.reload();
                     }
                     else{
                         var data = '删除群组失败！';

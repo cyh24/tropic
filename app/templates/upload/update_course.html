@@ -121,19 +121,32 @@
 								</div>
 
 								<div class="clear"></div>
-								<div class="select_left">
+								<div class="select_leftXXX">
 									<label class="upload_filed_lbl">
-										<span>选择学生群组</span>
+										<span>选择学生群组:&nbsp;&nbsp;</span>
 									</label>
-                                    <select name="select_group_id">
-                                        {% if selected = True %}
-                                        <option value ="{{selected_group_id}}">{{selected_group_name}}</option>
+                                        {% if public_flag = True %}
+                                            <input checked="checked" type="checkbox" name="select_group_id" value='-1' > 全体人员&nbsp;&nbsp;
+                                        {% else %}
+                                            <input type="checkbox" name="select_group_id" value='-1' > 全体人员&nbsp;&nbsp;
                                         {% endif %}
-                                        <option value ="-1">所有人员</option>
+
                                         {% for group in groups %}
-                                        <option value ="{{group.id}}">{{group.group_name}}</option>
+                                            {% if group.is_selected = True %}
+                                            <input checked="checked" type="checkbox" name="select_group_id" value='{{group.id}}' > {{group.group_name}}&nbsp;&nbsp;
+                                            {%else%}
+                                            <input type="checkbox" name="select_group_id" value='{{group.id}}' > {{group.group_name}}&nbsp;&nbsp;
+                                            {%endif%}
                                         {% endfor %}
-                                    </select>
+                                    <!-- <select name="select_group_id"> -->
+                                        <!-- {% if selected = True %} -->
+                                        <!-- <option value ="{{selected_group_id}}">{{selected_group_name}}</option> -->
+                                        <!-- {% endif %} -->
+                                        <!-- <option value ="-1">所有人员</option> -->
+                                        <!-- {% for group in groups %} -->
+                                        <!-- <option value ="{{group.id}}">{{group.group_name}}</option> -->
+                                        <!-- {% endfor %} -->
+                                    <!-- </select> -->
 									</div>
 								</div>
 

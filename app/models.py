@@ -93,6 +93,9 @@ class Group(models.Model):
     detail_intro = models.CharField(max_length=1000)
     img_path     = models.CharField(max_length=200)
 
+    valid_day = models.IntegerField(default=-1)
+    is_valid = models.BooleanField(default=True)
+
     password = models.CharField(max_length=64, default="tropic")
 
     allow_accounts = models.ManyToManyField(Account)
@@ -207,8 +210,11 @@ class Video(models.Model):
 
     def __get_allow_group_name(self):
         try:
+            group_names = []
             if len(self.group.all()) > 0:
-                return self.group.all()[0].group_name
+                for group in self.group.all():
+                    group_names.append((group.group_name).encode('utf8'))
+                return ', '.join(group_names)
         except Exception, e:
             print str(e)
         return u"所有人员"
