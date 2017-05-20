@@ -232,6 +232,14 @@ class Video(models.Model):
 
 class Card(models.Model):
     videos = models.ManyToManyField(Video)
+    def __get_videos_num(self):
+        try:
+            if self.videos is not None:
+                return self.videos.count()
+        except Exception as e:
+            print "Card:", str(e)
+        return 0
+    videos_num = property(__get_videos_num)
 
     card_name   = models.CharField(max_length=100)
     simple_intro = models.CharField(max_length=256)

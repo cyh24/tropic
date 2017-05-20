@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
     <head>
-        <title>创建群组</title>
+        <title>修改会员卡</title>
         <link href="/static/css/onlineExam/autocomplete/css/custom-theme/jquery-ui-1.8.7.custom.css" rel="stylesheet" />
         <link href="/static/css/onlineExam/autocomplete/css/jquery.taghandler.css" rel="stylesheet" />
         <script src="/static/css/onlineExam/autocomplete/js/jquery-1.7.2.min.js"></script>
@@ -27,7 +27,7 @@
     </style>
 
 <body>
-    <h1 style="text-align:center; color: #666;">创建群组</h1>
+    <h1 style="text-align:center; color: #666;">修改会员卡</h1>
 
     <div style="margin-top: 10px;">
     <form  method="post" action="/card-update-post/" enctype="multipart/form-data" target="post-status">
@@ -42,17 +42,9 @@
         </div>
 
         <div class="wlfg-wrap" style="width:500px;margin:40px auto 0 auto;text-align:center;">
-            <label id='id_card_num' class="my-label" for="nick" style="">群组名称:</label>
+            <label id='id_card_num' class="my-label" for="nick" style="">会员卡名称:</label>
             <div class="rlf-card">
-                <input  type="text" name="card_name" value='{{card_name}}' autocomplete="off"  class="rlf-input rlf-input-nick"  placeholder="请输入群组名称.">
-                <p class="rlf-tip-wrap"></p>
-            </div>
-        </div>
-
-        <div class="wlfg-wrap" style="width:500px;margin:40px auto 0 auto;text-align:center;">
-            <label  class="my-label" for="nick" style="">PASSWORD:</label>
-            <div class="rlf-card">
-                <input  type="text" name="password" value='{{password}}'  class="rlf-input rlf-input-pwd">
+                <input  type="text" name="card_name" value='{{card_name}}' autocomplete="off"  class="rlf-input rlf-input-nick"  placeholder="请输入会员卡名称.">
                 <p class="rlf-tip-wrap"></p>
             </div>
         </div>
@@ -65,12 +57,25 @@
             </div>
         </div>
 
+        <div class="wlfg-wrap" style="width:500px;margin:40px auto 0 auto;text-align:center;">
+            <label  class="my-label" for="nick" style="">会员卡费用:</label>
+            <div class="rlf-group">
+                <input  type="text" name="money" value='{{money}}'  class="rlf-input rlf-input-pwd">
+                <p class="rlf-tip-wrap"></p>
+            </div>
+        </div>
+
         <div style="width:620px;margin:40px auto 0 auto;text-align:center;">
-            <ul id="tags"></ul>
-            <button style="margin-top: 40px; cursor: pointer;" class="btn_submit" onclick="goto_submit()" >修改群组</button>
+            会员视频：<ul id="videos"></ul>
+        </div>
+
+        <div style="width:620px;margin:40px auto 0 auto;text-align:center;">
+            用户名：<ul id="tags"></ul>
+            <button style="margin-top: 40px; cursor: pointer;" class="btn_submit" onclick="goto_submit()" >修改会员卡</button>
         </div>
 
         <input type="text" style="display:none;" id="id-select-names" name="names" />
+        <input type="text" style="display:none;" id="id-select-video-names" name="video_names" />
         <input type="text" style="display:none;" name="card_id" value='{{card_id}}' />
 
     </form>
@@ -83,6 +88,57 @@
     <div style="margin:0px auto 0 auto;text-align:center;">
 	    <iframe id="post-status" name="post-status" style="display:; width:50%" frameborder="no"></iframe>
     </div>
+
+<script>
+    var origvideos = '{{exist_videonames}}';
+	var newsvideos = origvideos.split('-=,');
+	var arr_video = new Array(); //将标签放入arr 数组中
+	for (var i = 0; i < newsvideos.length; i++) {
+        if(newsvideos[i] == ""){
+            continue;
+        }
+		arr_video[i] = newsvideos[i];
+	}
+    if(origvideos == ''){
+        arr_video = [];
+    }
+
+    xvideos = '{{videonames}}'.split('-=,')
+	jQuery(document).ready(function () {
+		$('#videos').tagHandler({
+			assignedTags: arr_video, //原有标签,若没有，可以直接写 []
+			availableTags: xvideos,//['动漫', '音乐', '素材', '代码'],//用于自动补全的数据，可从后台获取
+			autocomplete: true, //自动补全功能，true为有提示，false则反之
+			onAdd: function (tag) {
+				var addflag = true, tags = $('#videos').tagHandler("getTags");
+				jQuery.each(tags, function (i, e) {
+					if (tag.toUpperCase() === e.toUpperCase()) {
+						$('#videos').find('.tagItem').each(function () {
+							if ($(this).html().toLocaleUpperCase() === tag.toLocaleUpperCase()) {
+								$(this).animate({ opacity: 0.55 }).delay(20).animate({ opacity: 1 }).animate({ opacity: 0.55 }).delay(20).animate({ opacity: 1 });
+							}
+						});
+						addflag = false;
+					}
+				});
+				return addflag;
+
+			}
+			,
+			onDelete: function (tag) { //删除操作
+                return true;
+			}
+		});
+	});
+
+	$(function () {
+		$("#btnConfirm").click(function () { //提交按钮操作
+			var getTag = $('#tags').tagHandler("getTags");
+			alert(getTag);
+		});
+	});
+
+</script>
 
 <script>
     var origtags = '{{exist_usernames}}';
@@ -143,13 +199,15 @@
 
 </script>
 
-    <script>
-        function goto_submit(){
-			var getTag = $('#tags').tagHandler("getTags");
-            document.getElementById('id-select-names').value = getTag;
-			document.getElementById('id-form-submit').click();
-        }
-    </script>
+<script>
+    function goto_submit(){
+        var getTag = $('#tags').tagHandler("getTags");
+        var getVideo = $('#videos').tagHandler("getTags");
+        document.getElementById('id-select-names').value = getTag;
+        document.getElementById('id-select-video-names').value = getVideo;
+        document.getElementById('id-form-submit').click();
+    }
+</script>
 
 </body>
 
