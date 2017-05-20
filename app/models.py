@@ -93,6 +93,8 @@ class Group(models.Model):
     detail_intro = models.CharField(max_length=1000)
     img_path     = models.CharField(max_length=200)
 
+    money = models.FloatField(default=0.0)
+
     valid_day = models.IntegerField(default=-1)
     is_valid = models.BooleanField(default=True)
 
@@ -228,6 +230,30 @@ class Video(models.Model):
     class Meta:
         db_table = u'video'
 
+class Card(models.Model):
+    videos = models.ManyToManyField(Video)
+
+    card_name   = models.CharField(max_length=100)
+    simple_intro = models.CharField(max_length=256)
+    detail_intro = models.CharField(max_length=1000)
+    img_path     = models.CharField(max_length=200)
+
+    money = models.FloatField(default=0.0)
+
+    valid_day = models.IntegerField(default=-1)
+    is_valid = models.BooleanField(default=True)
+
+    allow_accounts = models.ManyToManyField(Account)
+    def __get_allow_accounts_num(self):
+        try:
+            if self.allow_accounts != None:
+                return self.allow_accounts.count()
+        except Exception, e:
+            print str(e)
+        return 0
+    allow_accounts_num = property(__get_allow_accounts_num)
+
+    release_date = models.DateTimeField(auto_now_add=True)
 
 
 class Order(models.Model):

@@ -666,10 +666,11 @@ def group_create_post(request):
         ids = []
         for i, val in enumerate(names):
             val = val.split('-')
-            # name_ = val[0]
-            id_   = int(val[-1])
-            ids.append(id_)
-
+            try:
+                id_   = int(val[-1])
+                ids.append(id_)
+            except Exception as e:
+                printError(e)
         group = Group()
         set_group(group, group_name, password, img_path, ids, valid_day)
         msg['state'] = 'ok'

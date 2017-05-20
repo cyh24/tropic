@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+	{% include "include.html"%}
+	<link rel="stylesheet" href="/static/css/txkt/manage.css" />
+
+	<link rel="stylesheet" type="text/css" href="/static/css/confirm/xcConfirm.css"/>
+	<script src="/static/css/confirm/jquery-1.9.1.min.js" type="text/javascript"></script>
+	<script src="/static/css/confirm/xcConfirm.js" type="text/javascript"></script>
+
+    <script>
+        function click_delete_card(self)
+        {
+            var data = "确定要删除该会员卡？".toString();
+            document.getElementById('temp-delete-id').value = document.getElementById(self.id).getAttribute('data-card-id');
+			window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.warning);
+        }
+
+        function my_ok_func()
+        {
+            do_delete_card();
+        }
+
+        function do_delete_card()
+        {
+            var card_id = document.getElementById('temp-delete-id').value;
+            $.ajax({
+                url: "/card-delete/",
+                type: "GET",
+                dataType: "json",
+                data:{
+                    card_id: card_id,
+                },
+                success:function(obj){
+                    if( obj['state'] == 'success' ){
+                        var data = '删除会员卡成功！';
+			            window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.info);
+                        location.reload();
+                    }
+                    else{
+                        var data = '删除会员卡失败！';
+			            window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.info);
+                    }
+                }
+            });
+        }
+    </script>
+
+	<body>
+		{% include "header.html" %}
+        <input type="text" id="temp-delete-id" value="" style="display:none;"  >
+
+		<div class="site_container">
+			<div class="container_inner contain_guide">
+				<!-- 导航栏 开始 -->
+				<div class="user_navigate" id="side_nav">
+					<div class="user_info">
+						<div class="navi_avater">
+							<a href="/user/setprofile/">
+								<img src={{account.user_pic}} class="__avatar" width="120" height="120" style="visibility: visible;">
+								<span class="mask"></span>
+							</a>
+						</div>
+						<h4 class="user_title __nickname">{{account.nickname}}</h4>
+						<div class="level_option">
+							<a href="/u/hlw/hlw_index.html" class="_icon_vip" style="visibility: hidden; display: none;" _hot="uc.side.hlwicon"><i class="ico_vip"></i></a>
+							<a target="_blank" href="javascript:" class="_icon_vplus" style="visibility: hidden; display: none;" _hot="uc.side.vplusicon"><i class="icon_vplus"></i></a>
+						</div>
+					</div>
+
+					<ul class="navigate_list">
+
+						<li class="item ">
+							<a href="/kaoshi/groups/" class="navi_inner _vmanage" _hot="uc.side._vmanage"><i class="icon2_vmanage"></i><span class="text">群组管理</span></a>
+						</li>
+
+						<li class="item ">
+							<a href="/banji/application/" class="navi_inner _vmanage" _hot="uc.side._vmanage"><i class="icon2_vmanage"></i><span class="text">群组申请</span></a>
+						</li>
+
+						<li class="item ">
+							<a href="/banji/courses/" class="navi_inner _vmanage" _hot="uc.side._vmanage"><i class="icon2_vmanage"></i><span class="text">课程管理</span></a>
+						</li>
+
+						<li class="item ">
+							<a href="/kaoshi/exams/" class="navi_inner _vmanage" _hot="uc.side._vmanage"><i class="icon2_vmanage"></i><span class="text">试卷管理</span></a>
+						</li>
+
+						<li class="item ">
+							<a href="/cards/" class="navi_inner _vmanage current" _hot="uc.side._vmanage"><i class="icon2_vmanage"></i><span class="text">会员卡管理</span></a>
+						</li>
+
+					</ul>
+				</div>
+				<!-- 导航栏 结束 -->
+
+				<div class="main_content" id="video_view">
+					<ul class="mod_tab_list">
+						<li class="item current _videoBtn">
+							<a class="txt">会员卡 {{cards_num}} </a>
+						</li>
+                        <a href="/card-create/" class="btn btn-primary ml-3" style="float:right; margin-right: 30px;background-color: #60b044; color: #fff; border-color: #5ca941;" target="_blank">
+                            + 新建会员卡
+                        </a>
+					</ul>
+
+
+					<ul class="video_list" id="video_list">
+						<li class="item_title">
+							<div class="item_a">
+								<input type="checkbox" class="_check_all">
+							</div>
+                            <div class="item_b"><span class="text">会员卡详情</span></div>
+							<!-- <div class="item_c">指数</div> -->
+							<!-- <a href="" class="item_d"><i class="icon-delete"></i> 删除</a> -->
+						</li>
+
+						{% for card in cards %}
+						<li class="list_item">
+							<div class="item_a">
+								<input type="checkbox" class="_check_video" data-vid="o0163afhpan"> </div>
+							<div class="item_b">
+                                <a href="" target="_blank" class="img">
+                                    <img onerror="picerr(this)" src='{{card.img_path}}' width="175px" height="100px">
+                                </a>
+								<div class="video_detail" style="margin-top: 10px;">
+									<h3 class="title"> <a title="testd">{{card.card_name}}</a> </h3>
+									<h6 class="desc"> 创建于：{{card.release_date}} <span class="album_info _covers" title="">  </span>
+									</h6>
+									<h4 class="desc"> 人数: {{card.allow_accounts_num}}
+									</h4>
+								</div>
+							</div>
+							<div class="item_c">
+								<ol class="trend_list">
+									<!-- <li class="item"><i class="icon2_play"></i><span class="nums">{{v.watch_num}}</span></li> -->
+									<!-- <li class="item"><i class="icon2_star"></i><span class="nums">{{v.like_num}}</span></li> -->
+								</ol>
+							</div>
+							<div class="item_d">
+								<ol class="option_list">
+									<li class="item">
+										<a href="/card-update/?card_id={{card.id}}" target="_blank" class="btn_normal _edit_video" data-vid={{card.id}}>
+											<i class="icon_edited"></i>
+											<span class="inner">编辑</span>
+										</a>
+                                        <a href="javascript:void(0)" id="id-delete-{{card.id}}" onclick="click_delete_card(this)" class="btn_normal _del_video" data-card-id={{card.id}} >
+											<i class="icon_delete"></i>
+											<span class="inner">删除</span>
+										</a>
+									</li>
+								</ol>
+							</div>
+						</li>
+						{% endfor %}
+
+					</ul>
+
+					<div class="mod_pages">
+						<a href="/cards/?page={{pre_page}}" class="page-btn" style="width: 100px;">上一页</a> {% for i in pages_before %}
+						<a href="/cards/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a> {% endfor %}
+						<a href="/cards/?page={{cur_page}}" data-page={{cur_page}} class="current">{{cur_page}}</a> {% for i in pages_after %}
+						<a href="/cards/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a> {% endfor %}
+						<a href="/cards/?page={{after_page}}" data-page="2" class="page-btn" style="width: 100px;">下一页</a>
+					</div>
+
+				</div>
+
+
+			</div>
+
+		</div>
+
+		{% include "footer.html" %}
+	</body>
+
+</html>

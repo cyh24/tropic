@@ -134,6 +134,12 @@ urlpatterns = patterns('',
     url(r'^kaoshi/groups/$', 'app.exam_pro.kaoshi_groups'),
     url(r'^kaoshi/exams/$', 'app.exam_pro.kaoshi_exams'),
 
+    url(r'^cards/$', 'app.card_pro.cards'),
+    url(r'^card-create/$', 'app.card_pro.card_create'),
+    url(r'^card-update/$', 'app.card_pro.card_update'),
+    url(r'^card-delete/$', 'app.card_pro.card_delete'),
+    url(r'^card-create-post/$', 'app.card_pro.card_create_post'),
+    url(r'^card-update-post/$', 'app.card_pro.card_update_post'),
 
     url(r'^exam/$', 'app.exam_pro.goto_exam'),
     url(r'^submit-exam-post/$', 'app.exam_pro.submit_exam_post'),

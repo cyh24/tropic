@@ -30,46 +30,48 @@
     <h1 style="text-align:center; color: #666;">创建群组</h1>
 
     <div style="margin-top: 10px;">
-    <form  method="post" action="/group-create-post/" enctype="multipart/form-data" target="post-status">
+    <form  method="post" action="/card-update-post/" enctype="multipart/form-data" target="post-status">
         {% csrf_token %}
+
         <div class="wlfg-wrap" style="width:500px;margin:40px auto 0 auto;text-align:center;">
-            <label id='id_group_num' class="my-label" for="nick" style="">Logo:</label>
-            <div class="rlf-group">
-                <input  type="text" name="img_path" value='http://7pn4yt.com1.z0.glb.clouddn.com/Focus-Group.jpg' class="rlf-input rlf-input-nick">
+            <label id='id_card_num' class="my-label" for="nick" style="">Logo:</label>
+            <div class="rlf-card">
+                <input  type="text" name="img_path" value='{{img_path}}' class="rlf-input rlf-input-nick">
                 <!-- <p class="rlf-tip-wrap"></p> -->
             </div>
         </div>
 
         <div class="wlfg-wrap" style="width:500px;margin:40px auto 0 auto;text-align:center;">
-            <label id='id_group_num' class="my-label" for="nick" style="">群组名称:</label>
-            <div class="rlf-group">
-                <input  type="text" name="group_name" autocomplete="off"  class="rlf-input rlf-input-nick"  placeholder="请输入群组名称.">
+            <label id='id_card_num' class="my-label" for="nick" style="">群组名称:</label>
+            <div class="rlf-card">
+                <input  type="text" name="card_name" value='{{card_name}}' autocomplete="off"  class="rlf-input rlf-input-nick"  placeholder="请输入群组名称.">
                 <p class="rlf-tip-wrap"></p>
             </div>
         </div>
 
         <div class="wlfg-wrap" style="width:500px;margin:40px auto 0 auto;text-align:center;">
             <label  class="my-label" for="nick" style="">PASSWORD:</label>
-            <div class="rlf-group">
-                <input  type="text" name="password" value='tropic'  class="rlf-input rlf-input-pwd">
+            <div class="rlf-card">
+                <input  type="text" name="password" value='{{password}}'  class="rlf-input rlf-input-pwd">
                 <p class="rlf-tip-wrap"></p>
             </div>
         </div>
 
         <div class="wlfg-wrap" style="width:500px;margin:40px auto 0 auto;text-align:center;">
             <label  class="my-label" for="nick" style="">有效天数:</label>
-            <div class="rlf-group">
-                <input  type="text" name="valid_day" value='-1'  class="rlf-input rlf-input-pwd">
+            <div class="rlf-card">
+                <input  type="text" name="valid_day" value='{{valid_day}}'  class="rlf-input rlf-input-pwd">
                 <p class="rlf-tip-wrap"></p>
             </div>
         </div>
 
         <div style="width:620px;margin:40px auto 0 auto;text-align:center;">
             <ul id="tags"></ul>
-            <button style="margin-top: 40px; cursor: pointer" class="btn_submit" onclick="goto_submit()" >创建群组</button>
+            <button style="margin-top: 40px; cursor: pointer;" class="btn_submit" onclick="goto_submit()" >修改群组</button>
         </div>
 
         <input type="text" style="display:none;" id="id-select-names" name="names" />
+        <input type="text" style="display:none;" name="card_id" value='{{card_id}}' />
 
     </form>
     </div>
@@ -83,10 +85,13 @@
     </div>
 
 <script>
-	var origtags = '';
-	var newstags = origtags.split(',');
+    var origtags = '{{exist_usernames}}';
+	var newstags = origtags.split('-=,');
 	var arr = new Array(); //将标签放入arr 数组中
 	for (var i = 0; i < newstags.length; i++) {
+        if(newstags[i] == ""){
+            continue;
+        }
 		arr[i] = newstags[i];
 	}
     if(origtags == ''){

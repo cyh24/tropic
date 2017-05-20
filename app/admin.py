@@ -85,3 +85,7 @@ admin.site.register(models.CourseProgress, CourseProgressAdmin)
 class ApplyGroupAdmin(admin.ModelAdmin):
     pass
 admin.site.register(models.ApplyGroup, ApplyGroupAdmin)
+
+class CardAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.Card, CardAdmin)
