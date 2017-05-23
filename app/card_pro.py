@@ -138,6 +138,8 @@ def card_update(request):
         msg['money'] = card.money
         msg['valid_day'] = card.valid_day
         msg['card_id'] = int(card.id)
+        msg['detail_intro'] = card.detail_intro
+        msg['simple_intro'] = card.simple_intro
         msg['usernames'] = names_str
         msg['videonames'] = video_names_str
 
@@ -146,12 +148,14 @@ def card_update(request):
 
     return render_to_response('card/card_update.html', msg)
 
-def set_card(card, card_name, img_path, ids, video_ids, valid_day, money):
+def set_card(card, card_name, img_path, ids, video_ids, valid_day, money, detail_intro="", simple_intro=""):
     with transaction.atomic():
         card.img_path = img_path
         card.card_name = card_name
         card.valid_day = valid_day
         card.money = money
+        card.detail_intro = detail_intro
+        card.simple_intro = simple_intro
         card.save()
         card.allow_accounts.clear()
         for id in video_ids:
@@ -165,6 +169,8 @@ def card_create_post(request):
     try:
         card_name = request.POST['card_name']
         img_path = request.POST['img_path']
+        detail_intro = request.POST['detail_intro']
+        simple_intro = request.POST['simple_intro']
         valid_day = int(request.POST['valid_day'])
         money = float(request.POST['money'])
         if card_name.strip() == "":
@@ -192,7 +198,7 @@ def card_create_post(request):
                 printError(e)
 
         card = Card()
-        set_card(card, card_name, img_path, ids, video_ids, valid_day, money)
+        set_card(card, card_name, img_path, ids, video_ids, valid_day, money, detail_intro, simple_intro)
         msg['state'] = 'ok'
     except Exception, e:
         print "Error in card_create_post:", e
@@ -206,6 +212,8 @@ def card_update_post(request):
         if card_name.strip() == "":
             return render_to_response('info.html', msg)
         names = request.POST['names']
+        detail_intro = request.POST['detail_intro']
+        simple_intro = request.POST['simple_intro']
         names = names.split(',')
         ids = []
         for i, val in enumerate(names):
@@ -232,7 +240,7 @@ def card_update_post(request):
         valid_day = int(request.POST['valid_day'])
         money = float(request.POST['money'])
         card = Card.objects.get(id=card_id)
-        set_card(card, card_name, img_path, ids, video_ids, valid_day, money)
+        set_card(card, card_name, img_path, ids, video_ids, valid_day, money, detail_intro, simple_intro)
         msg['state'] = 'ok'
     except Exception, e:
         print "Error in card_update_post:", e
@@ -258,3 +266,56 @@ def card_delete(request):
     except Exception, e:
         printError(e)
     return JsonResponse(json)
+
+def membership_card(request):
+    try:
+        msg = init_msg(request)
+        card_id = int(request.GET['card_id'])
+        card = Card.objects.get(id=card_id)
+        videos = card.videos.all()
+        for i, v in enumerate(videos):
+            videos[i].tags = (v.tags_str).split()
+        msg['card'] = card
+        msg['videos'] = videos
+    except Exception as e:
+        printError(e)
+
+    return render_to_response('card/membership_card.html', msg)
+
+@login_required(login_url='/wechat-login/')
+@csrf_protect
+def card_ready_pay(request):
+    json = {'state': 'fail'}
+    try:
+        if request.GET.has_key('card_id'):
+            card_id = int(request.GET['card_id'])
+            unpay_order = create_card_unpay_order(request.user, card_id)
+
+            if unpay_order is not None:
+                if unpay_order.pay_state == 1:
+                    json['state'] = 'ok'
+                    json['order_id'] = unpay_order.id
+                    json['order_price'] = unpay_order.price
+                    json['pay_url'] = HOMEPAGE + "/card-pay/?unpay_order_id=" + str(unpay_order.id)
+                elif unpay_order.pay_state == 2:
+                    json['state'] = 'paid'
+
+    except Exception, e:
+        printError("card_ready_pay: " + str(e))
+
+    return JsonResponse(json)
+
+@login_required(login_url='/wechat-login/')
+@csrf_protect
+def card_pay_ui(request):
+    msg = init_msg(request)
+    try:
+        account = get_account_from_user(request.user)
+        if account != None:
+            unpay_order = CardOrder.objects.get(id=request.GET['unpay_order_id'])
+            msg ['unpay_order'] = unpay_order
+
+    except Exception, e:
+        printError(e)
+
+    return render_to_response('pay/pay.html', msg)

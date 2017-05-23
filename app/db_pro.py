@@ -269,7 +269,10 @@ def get_video_by_id(video_id):
 def get_video_by_ordernum(order_num):
     try:
         order = get_order_given_ordernum(order_num)
-        video = order.video
+        if order is instance(CardOrder):
+            video = order.card.videos.all()[0]
+        else:
+            video = order.video
         return video
     except Exception, e:
         printError("get_video_by_ordernum: "+str(e))
@@ -1055,6 +1058,61 @@ def get_video_state(user, video):
         except Exception as e:
             print "get_video_state:", str(e)
 
+        def check_order(o):
+            try:
+                if o.pay_state == 2:
+                    if check_chaoshi(o.release_date, o.order_valid_day) == True:
+                        o.pay_state = 1
+                        o.save()
+                        return False
+                    else:
+                        return True
+                elif o.pay_state == 1:
+                    if check_pay_by_order_num(o.order_num) == True and check_chaoshi(o.release_date, o.order_valid_day) == False:
+                        o.pay_state = 2
+                        o.save()
+                        # add user order info
+                        if o is instance(Order):
+                            add_user_order_info(account, o, pc_flag=1)
+                        return True
+                    else:
+                        if o.price == 0:
+                            if check_chaoshi(o.release_date, o.order_valid_day) == True:
+                                if o.pay_state == 1:
+                                    o.delete()
+                                return False
+                            else:
+                                return True
+            except Exception as e:
+                print "check_order:", str(e)
+            return False
+
+        def card_order_check():
+            try:
+                cards = video.card_set.all()
+                card_orders = account.cardorder_set.all()
+
+                card_ids = []
+                if cards is not None:
+                    for card in cards:
+                        card_ids.append(card.id)
+
+                if card_orders is not None:
+                    for card_order in card_orders:
+                        if card_order.card.id in card_ids:
+                            if check_order(card_order) is True:
+                                card = Card.objects.get(id=card_order.card.id)
+                                if account not in card.allow_accounts.all():
+                                    card.allow_accounts.add(account)
+                                    card.save()
+                                print "card order is paid."
+                                return True
+            except Exception as e:
+                print "card_order_check: ", str(e)
+            return False
+
+        if card_order_check() is True:
+            return True
 
         user_orders = Order.objects.filter(account=account).all()
         is_paid = False
@@ -1065,28 +1123,7 @@ def get_video_state(user, video):
         else:
             for o in user_orders:
                 if o.video == video:
-                    if o.pay_state == 2:
-                        if check_chaoshi(o.release_date, o.order_valid_day) == True:
-                            o.pay_state = 1
-                            o.save()
-                            return False
-                        else:
-                            return True
-                    elif o.pay_state == 1:
-                        if check_pay_by_order_num(o.order_num) == True and check_chaoshi(o.release_date, o.order_valid_day) == False:
-                            o.pay_state = 2
-                            o.save()
-                            # add user order info
-                            add_user_order_info(account, o, pc_flag=1)
-                            return True
-                        else:
-                            if o.price == 0:
-                                if check_chaoshi(o.release_date, o.order_valid_day) == True:
-                                    if o.pay_state == 1:
-                                        o.delete()
-                                    return False
-                                else:
-                                    return True
+                    return check_order(o)
 
     except Exception, e:
         printError("get_video_state: " + str(e))
@@ -1274,7 +1311,11 @@ def get_unpay(user):
 def get_order_given_ordernum(order_num):
     order = Order.objects.all().filter(order_num=order_num)
     if getLen(order) == 0:
-        return None
+        order = CardOrder.objects.all().filter(order_num=order_num)
+        if getLen(order) == 0:
+            return None
+        else:
+            return order[0]
     else:
         return order[0]
 
@@ -1447,6 +1488,68 @@ def update_account(request):
         printError(e)
 
     return False
+
+def create_card_unpay_order(user, card_id):
+    try:
+        created_flag = False
+        unpay_order = CardOrder()
+
+        card   = Card.objects.get(id=card_id)
+        account = get_account_from_user(user)
+        timeStamp = time.time()
+        out_trade_no = "{0}{1}".format(getRandomStr(6),int(timeStamp*100))
+        try:
+            t_order = CardOrder.objects.filter(account=account).all()
+
+            if t_order != None:
+                for o in t_order:
+                    v = o.card
+                    if v == card:
+                        if o.pay_state == 1:
+                            if True:
+                                if check_pay_by_order_num(o.order_num) == True:
+                                    o.pay_state = 2
+                                    o.save()
+                                    return o
+                        elif o.pay_state == 2:
+                            return o
+
+                        created_flag = True
+                        unpay_order = o
+                        break
+        except Exception, e:
+            printError("create_card_unpay_order-1: " + str(e))
+
+        #unpay_order = Order()
+        unpay_order.order_num = out_trade_no
+        unpay_order.account = account
+        unpay_order.card = card
+        unpay_order.name = card.card_name
+        unpay_order.pic  = card.img_path
+
+        if created_flag == False:
+            unpay_order.price = card.money
+            unpay_order.order_valid_day = card.valid_day
+
+        unpay_order.pay_state = 1
+
+        unpay_order.wxpay_qrcode = get_wxpay_qrcode(unpay_order)#"/static/storage/wxpay_qrcode/150831170420-zrOL.png"
+
+        with transaction.atomic():
+            unpay_order.save()
+
+            unpay_order.card = card
+            unpay_order.save()
+
+            if created_flag == False:
+                add_user_order_info(account, unpay_order, pc_flag=True)
+
+            return unpay_order
+
+    except Exception, e:
+        printError("create_card_unpay_order: " + str(e))
+
+    return None
 
 def create_unpay_order(user, video_id):
     try:
@@ -1678,13 +1781,19 @@ def pay_result(request):
         if request.GET.has_key('paid_order_id'):
             paid_order_id = request.GET['paid_order_id']
             paid_orders = Order.objects.filter(id=paid_order_id)
-            paid_order = paid_orders[0]
-            paid_order.pay_state = 2
-            remove_file(paid_order.wxpay_qrcode)
-            paid_order.save()
-
-            # add user order info
-            add_user_order_info_by_request(request, paid_order.order_num)
+            if paid_orders is None:
+                paid_orders = CardOrder.objects.filter(id=paid_order_id)
+                paid_order = paid_orders[0]
+                paid_order.pay_state = 2
+                remove_file(paid_order.wxpay_qrcode)
+                paid_order.save()
+            else:
+                paid_order = paid_orders[0]
+                paid_order.pay_state = 2
+                remove_file(paid_order.wxpay_qrcode)
+                paid_order.save()
+                # add user order info
+                add_user_order_info_by_request(request, paid_order.order_num)
 
             msg['paid_order'] = paid_order
     except Exception, e:

@@ -68,6 +68,9 @@ urlpatterns = patterns('',
 
     url(r'^add-watch-history/$',  'app.playui.watch_history_add'),
 
+    url(r'^card-pay/$',          'app.card_pro.card_pay_ui'),
+    url(r'^card-ready-pay/$',    'app.card_pro.card_ready_pay'),
+
 
     url(r'^space/$',                'app.space.space_index'),
     url(r'^space/index/$',          'app.space.space_index'),
@@ -140,6 +143,8 @@ urlpatterns = patterns('',
     url(r'^card-delete/$', 'app.card_pro.card_delete'),
     url(r'^card-create-post/$', 'app.card_pro.card_create_post'),
     url(r'^card-update-post/$', 'app.card_pro.card_update_post'),
+
+    url(r'^membership-card/$', 'app.card_pro.membership_card'),
 
     url(r'^exam/$', 'app.exam_pro.goto_exam'),
     url(r'^submit-exam-post/$', 'app.exam_pro.submit_exam_post'),

@@ -89,3 +89,7 @@ admin.site.register(models.ApplyGroup, ApplyGroupAdmin)
 class CardAdmin(admin.ModelAdmin):
     pass
 admin.site.register(models.Card, CardAdmin)
+
+class CardOrderAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.CardOrder, CardOrderAdmin)

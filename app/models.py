@@ -232,6 +232,17 @@ class Video(models.Model):
 
 class Card(models.Model):
     videos = models.ManyToManyField(Video)
+    def __get_files_num(self):
+        try:
+            num = 0
+            if self.videos is not None:
+                for v in self.videos.all():
+                    num +=  v.files.count()
+        except Exception as e:
+            print "Card:", str(e)
+        return num
+    files_num = property(__get_files_num)
+
     def __get_videos_num(self):
         try:
             if self.videos is not None:
@@ -263,6 +274,23 @@ class Card(models.Model):
 
     release_date = models.DateTimeField(auto_now_add=True)
 
+class CardOrder(models.Model):
+    # -1: invalidate, 1: unpay, 2: paid,
+    pay_state = models.IntegerField()
+
+    order_num = models.CharField(max_length=32)
+    name = models.CharField(max_length=20)
+    wxpay_qrcode = models.CharField(max_length=200)
+    pic  = models.CharField(max_length=200)
+
+    account = models.ForeignKey(Account)
+    order_valid_day = models.IntegerField(default=-1)
+
+    card  = models.ForeignKey(Card)
+
+    price   = models.FloatField()
+
+    release_date = models.DateTimeField(auto_now=True)
 
 class Order(models.Model):
     # -1: invalidate, 1: unpay, 2: paid,
