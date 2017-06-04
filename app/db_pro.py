@@ -854,10 +854,13 @@ def create_account_given_wx(request, wx_user):
     try:
         wx_unionid = wx_user['unionid']
         with transaction.atomic():
-            user = User()
-            user.username = wx_unionid
-            user.set_password("Z!"+wx_unionid+"1!")
-            user.save()
+            try:
+                user = User.objects.get(username=wx_unionid)
+            except:
+                user = User()
+                user.username = wx_unionid
+                user.set_password("Z!"+wx_unionid+"1!")
+                user.save()
 
             account = Account()
             account.user = user
@@ -882,11 +885,11 @@ def create_account_given_wx(request, wx_user):
             account.info = "这家伙很懒，什么都没留~"
 
             account.save()
-            return True
+            return account
     except Exception, e:
-        printError(e)
+        printError("create_account_given_wx:"+ str(e))
 
-    return False
+    return None
 
 def create_account_given_user(user):
     try:
@@ -907,7 +910,7 @@ def create_account_given_user(user):
 
 def check_wx_unionid(request, wx_user):
     try:
-        wx_unionid = wx_user['unionid']
+        wx_unionid = str(wx_user['unionid'])
         account = Account.objects.filter(wx_unionid=wx_unionid).all()
 
         if getLen(account) < 1:
@@ -928,7 +931,7 @@ def check_wx_unionid(request, wx_user):
             return True
 
     except Exception, e:
-        printError(e)
+        printError("check_wx_unionid" + str(e))
 
     return False
 
@@ -962,6 +965,7 @@ def get_openid_from_user(request):
     open_id = ""
     try:
         account = get_account_from_user(request.user)
+        print "account.id:", account.id
         if checkMobile(request) == True:
             open_id = account.wx_wx_openid
         else:
