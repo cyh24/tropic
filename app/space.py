@@ -41,6 +41,12 @@ def get_space_msg(request, get_videos_method):
             msg['groups_num'] = 0
             print "fff get_space_msg_customize."
 
+        try:
+            aa, bb = get_cards(request.user)
+            msg['cards_num'] = bb
+        except Exception as e:
+            msg['cards_num'] = 0
+
         total_page = (getLen(videos)+8-1)/8
         subVideos, cur_page = paginator_show(request, videos, 8)
 
@@ -129,6 +135,12 @@ def space_groups(request):
     msg = get_space_msg(request, get_groups)
     return render_to_response('space/groups.html', msg)
 
+@login_required(login_url='/wechat-login/')
+@csrf_exempt
+def space_cards(request):
+    msg = get_space_msg(request, get_cards)
+    return render_to_response('space/cards.html', msg)
+
 @csrf_exempt
 def space_apply_group(request):
     msg = {}
@@ -140,7 +152,7 @@ def space_apply_group(request):
         apply_group.save()
         msg['flag'] = 'true'
     except Exception, e:
-        pass
+        print "space_apply_group:", str(e)
     return HttpResponse(json.dumps(msg))
 
 @login_required(login_url='/wechat-login/')

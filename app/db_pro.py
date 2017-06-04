@@ -269,7 +269,7 @@ def get_video_by_id(video_id):
 def get_video_by_ordernum(order_num):
     try:
         order = get_order_given_ordernum(order_num)
-        if order is instance(CardOrder):
+        if isinstance(order, CardOrder):
             video = order.card.videos.all()[0]
         else:
             video = order.video
@@ -1072,7 +1072,7 @@ def get_video_state(user, video):
                         o.pay_state = 2
                         o.save()
                         # add user order info
-                        if o is instance(Order):
+                        if isinstance(o, Order):
                             add_user_order_info(account, o, pc_flag=1)
                         return True
                     else:
@@ -1090,6 +1090,10 @@ def get_video_state(user, video):
         def card_order_check():
             try:
                 cards = video.card_set.all()
+                for card in cards:
+                    if account in card.allow_accounts.all():
+                        return True
+
                 card_orders = account.cardorder_set.all()
 
                 card_ids = []
@@ -1112,6 +1116,8 @@ def get_video_state(user, video):
             return False
 
         if card_order_check() is True:
+            return True
+        elif card_order_check() is True:
             return True
 
         user_orders = Order.objects.filter(account=account).all()
@@ -1400,6 +1406,25 @@ def get_groups(user):
         printError("get_groups:"+ str(e))
 
     return groups, getLen(groups)
+
+def get_cards(user):
+    if user == None:
+        return None, 0
+    cards = None
+    try:
+        account = get_account_from_user(user)
+        if account == None:
+            return None, 0
+
+        cards = Card.objects.all()
+        for i, card in enumerate(cards):
+            if account in card.allow_accounts.all():
+                cards[i].is_joined = True
+
+    except Exception, e:
+        printError("get_cards:"+ str(e))
+
+    return cards, getLen(cards)
 
 def get_customize(user):
     if user == None:
@@ -1753,6 +1778,8 @@ def add_user_watch_info(request, video):
 
 
 def add_user_order_info(account, order, pc_flag):
+    if not isinstance(order, Order):
+        return False
     try:
         user_order = UserOrderInfo()
         user_order.account   = account
@@ -1778,25 +1805,29 @@ def add_user_order_info_by_request(request, order_num):
 def pay_result(request):
     msg = init_msg(request)
     try:
-        if request.GET.has_key('paid_order_id'):
-            paid_order_id = request.GET['paid_order_id']
-            paid_orders = Order.objects.filter(id=paid_order_id)
-            if paid_orders is None:
-                paid_orders = CardOrder.objects.filter(id=paid_order_id)
-                paid_order = paid_orders[0]
-                paid_order.pay_state = 2
-                remove_file(paid_order.wxpay_qrcode)
-                paid_order.save()
-            else:
-                paid_order = paid_orders[0]
-                paid_order.pay_state = 2
-                remove_file(paid_order.wxpay_qrcode)
-                paid_order.save()
-                # add user order info
-                add_user_order_info_by_request(request, paid_order.order_num)
-
+        if request.GET.has_key('order_num'):
+            order_num = request.GET['order_num']
+            print order_num
+            paid_order = Order.objects.get(order_num=order_num)
+            paid_order.pay_state = 2
+            remove_file(paid_order.wxpay_qrcode)
+            paid_order.save()
+            # add user order info
+            add_user_order_info_by_request(request, paid_order.order_num)
             msg['paid_order'] = paid_order
     except Exception, e:
+        printError(e)
+
+    try:
+        if request.GET.has_key('order_num'):
+            order_num = request.GET['order_num']
+            print order_num
+            paid_order = CardOrder.objects.get(order_num=order_num)
+            paid_order.pay_state = 2
+            remove_file(paid_order.wxpay_qrcode)
+            paid_order.save()
+            msg['paid_order'] = paid_order
+    except Exception as e:
         printError(e)
     ###应添加订单状态处理
     return render_to_response('pay/notice.html', msg)

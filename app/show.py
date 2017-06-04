@@ -83,6 +83,17 @@ def videos_ui(request):
 
     pages_before, pages_after = paginator_bar(cur_page, total_page)
 
+    try:
+        cards = Card.objects.all()
+        if cards:
+            for i, video in enumerate(subVideos):
+                for card in cards:
+                    if video in card.videos.all():
+                        subVideos[i].card = card
+                        break
+    except Exception as e:
+        print "videos ui: ", e
+
     msg['videos']     = subVideos
     msg['cur_page']   = cur_page
     msg['pages_before'] = pages_before
@@ -121,6 +132,16 @@ def search_result(request):
 
 
         pages_before, pages_after = paginator_bar(cur_page, total_page)
+        try:
+            cards = Card.objects.all()
+            if cards:
+                for i, video in enumerate(subVideos):
+                    for card in cards:
+                        if video in card.videos.all():
+                            subVideos[i].card = card
+                            break
+        except Exception as e:
+            print "videos ui: ", e
 
         msg['videos']     = subVideos
         msg['cur_page']   = cur_page

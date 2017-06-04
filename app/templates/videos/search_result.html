@@ -107,6 +107,13 @@
 											<span class="course-agency-name">{{v.tags_str}}</span>
 										</a>
 									</div>
+
+                                    {% if v.card %}
+									<div class="course-emphasis course-relations" style="float: left;">
+                                        <span class="course-num item-price-free">  会员免费  |&nbsp;</span>
+									</div>
+                                    {% endif %}
+
 									<div class="course-emphasis course-relations" style="float: left;">
 										<span class="course-num">  {{v.watch_num}} 观看  </span>
 									</div>
@@ -121,7 +128,6 @@
 					</div>
 
 					<div class="clear"></div>
-					
 					<div class="sort-page">
                         <a href="{{get_content}}page={{pre_page}}" class="page-btn" style="width: 100px;">上一页</a>
 						{% for i in pages_before %}

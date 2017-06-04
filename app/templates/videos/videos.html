@@ -107,6 +107,13 @@
 											<span class="course-agency-name">{{v.tags_str}}</span>
 										</a>
 									</div>
+
+                                    {% if v.card %}
+									<div class="course-emphasis course-relations" style="float: left;">
+                                        <span class="course-num item-price-free">  会员免费  |&nbsp;</span>
+									</div>
+                                    {% endif %}
+
 									<div class="course-emphasis course-relations" style="float: left;">
 										<span class="course-num">  {{v.watch_num}} 观看  </span>
 									</div>
@@ -121,7 +128,7 @@
 					</div>
 
 					<div class="clear"></div>
-				
+
 					<div class="sort-page">
                         <a href="{{get_content}}page={{pre_page}}" class="page-btn" style="width: 100px;">上一页</a>
 						{% for i in pages_before %}
@@ -135,13 +142,12 @@
 					</div>
 
 				</div>
-				
+
 				<div class="main-right">
 					<div class="main-right-top">热门推荐</div>
                     {% for v in intrest_videos %}
 					<div class="main-right-list">
 
-						
 						<div class="mlm-item">
 							<div class="course-card course-card2 ">
 								<div class="course-face">
@@ -158,17 +164,16 @@
 										{% else %}
 										<span class="line-cell item-price">¥{{v.money}}</span>
 										{% endif %}
-										
+
 										<span class="icon-sep"></span>
-										
+
 										<span class="item-source">
 											<a href="" class="item-source-link"  >{{v.tags_str}}</a>
-										</span> 
+										</span>
 									</div>
 								</div>
 							</div>
 						</div>
-						
 
 					</div>{% endfor%}
 				</div>

@@ -78,6 +78,7 @@ urlpatterns = patterns('',
     url(r'^space/paid/$',           'app.space.space_paid'),
     url(r'^space/customize/$',      'app.space.space_customize'),
     url(r'^space/groups/$',         'app.space.space_groups'),
+    url(r'^space/cards/$',          'app.space.space_cards'),
     url(r'^space/apply_group/$',   'app.space.space_apply_group'),
     url(r'^space/shopping-cart/$',  'app.space.space_shopping_cart'),
 
