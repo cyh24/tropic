@@ -51,9 +51,11 @@ def get_space_msg(request, get_videos_method):
         subVideos, cur_page = paginator_show(request, videos, 8)
 
         if getLen(subVideos) > 0:
-            for v in subVideos:
+            for i, v in enumerate(subVideos):
                 try:
-                    v.order_id = get_orderid_given_user_video(request.user, v)
+                    if isinstance(v, Card):
+                        if get_card_order_state(request.user, v) is True:
+                            subVideos[i].is_paid = True
                 except Exception, e:
                     print e
 
@@ -139,7 +141,10 @@ def space_groups(request):
 @csrf_exempt
 def space_cards(request):
     msg = get_space_msg(request, get_cards)
-    return render_to_response('space/cards.html', msg)
+    if checkMobile(request):
+        return render_to_response('mobile/space/cards.html', msg)
+    else:
+        return render_to_response('space/cards.html', msg)
 
 @csrf_exempt
 def space_apply_group(request):

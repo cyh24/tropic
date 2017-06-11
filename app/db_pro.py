@@ -1,5 +1,8 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
+import sys
+reload(sys)
+sys.setdefaultencoding( "utf-8" )
 from common import *
 from qiniu_pro import *
 
@@ -67,6 +70,33 @@ def modify_order_post(request):
 
     except Exception, e:
         print "modify_order_post: ", str(e)
+
+    return JsonResponse(json)
+
+def modify_card_order_post(request):
+    json = {'state': 'fail'}
+    try:
+        order_id, name, value = None, None, None
+        if request.GET.has_key("order_id"):
+            order_id = int(request.GET['order_id'])
+
+        if request.GET.has_key("name"):
+            name = request.GET['name']
+
+        if request.GET.has_key("value"):
+            value = request.GET['value']
+
+        order = CardOrder.objects.get(id=order_id)
+        if name == "price":
+            order.price = float(value)
+        elif name == "order_valid_day":
+            order.order_valid_day = int(value)
+        order.save()
+
+        json['state'] = 'ok';
+
+    except Exception, e:
+        print "modify_card_order_post: ", str(e)
 
     return JsonResponse(json)
 
@@ -979,20 +1009,23 @@ def get_openid_from_user(request):
 def paydetail(request):
     """获取支付信息"""
     openid = get_openid_from_user(request)
-    #openid = request.openid
-    print "openid: ", openid
     try:
         jsApi = JsApi_pub()
         unifiedOrder = UnifiedOrder_pub()
         unifiedOrder.setParameter("openid",openid) #商品描述########################
 
-
-        order = create_unpay_order_mobile(request.user, int(request.POST['video_id']) )
+        # order = Order.objects.get(id=409)
+        if 'video_id' in request.POST:
+            print 'video_id:', int(request.POST['video_id'])
+            order = create_unpay_order_mobile(request.user, int(request.POST['video_id']) )
+        elif 'card_id' in request.POST:
+            print "card_id:", int(request.POST['card_id'])
+            order = create_card_unpay_order(request.user, int(request.POST['card_id']), mobile=True)
         money = int(order.price*100)
 
-        unifiedOrder.setParameter("body", order.name.encode('utf-8')) #商品描述
-        #out_trade_no = "{0}{1}".format(getRandomStr(), int(timeStamp*100))
         out_trade_no = order.order_num
+        # unifiedOrder.setParameter("body", body_name) #商品描述
+        unifiedOrder.setParameter("body", order.name.encode('utf-8')) #商品描述
         unifiedOrder.setParameter("out_trade_no", out_trade_no) #商户订单号
         unifiedOrder.setParameter("total_fee", str(money)) #总金额
         unifiedOrder.setParameter("notify_url", WxPayConf_pub.NOTIFY_URL) #通知地址
@@ -1004,12 +1037,12 @@ def paydetail(request):
         jsApiParameters = jsApi.getParameters()
 
         jsApiParameters = eval(jsApiParameters)
-        jsApiParameters['order_num'] = out_trade_no
+        jsApiParameters['order_num'] = str(out_trade_no)
     except Exception as e:
         printError("paydetail: " + str(e))
     else:
         jsApiParameters = str(jsApiParameters)
-        print jsApiParameters, type(jsApiParameters)
+        print "jsApiParameters:", jsApiParameters, type(jsApiParameters)
         return HttpResponse(jsApiParameters)
 
 def create_collect_given_account(account):
@@ -1040,6 +1073,47 @@ def get_collect_from_account(account):
         printError("get_collect_from_account: " + str(e))
 
     return collect_videos
+
+def get_card_order_state(user, card):
+    if user == None:
+        return False
+    try:
+        account = get_account_from_user(user)
+        if account == None:
+            return False
+
+        def join_card(account, card):
+            if account not in card.allow_accounts.all():
+                card.allow_accounts.add(account)
+                card.save()
+
+        orders = CardOrder.objects.filter(account=account, card=card).all()
+        for o in orders:
+            if o.pay_state == 2:
+                if check_chaoshi(o.release_date, o.order_valid_day) == True:
+                    o.pay_state = 1
+                    o.save()
+                    return False
+                join_card(account, card)
+                return True
+            elif o.pay_state == 1:
+                if check_pay_by_order_num(o.order_num) == True and check_chaoshi(o.release_date, o.order_valid_day) == False:
+                    o.pay_state = 2
+                    o.save()
+                    join_card(account, card)
+                    return True
+                else:
+                    if o.price == 0:
+                        if check_chaoshi(o.release_date, o.order_valid_day) == True:
+                            if o.pay_state == 1:
+                                o.delete()
+                            return False
+                        else:
+                            join_card(account, card)
+                            return True
+    except Exception as e:
+        print "get_card_order_state: ", str(e)
+    return False
 
 def get_video_state(user, video):
     if user == None:
@@ -1421,6 +1495,9 @@ def get_cards(user):
             return None, 0
 
         cards = Card.objects.all()
+        for card in cards:
+            get_card_order_state(request.user, card)
+
         for i, card in enumerate(cards):
             if account in card.allow_accounts.all():
                 cards[i].is_joined = True
@@ -1518,7 +1595,7 @@ def update_account(request):
 
     return False
 
-def create_card_unpay_order(user, card_id):
+def create_card_unpay_order(user, card_id, mobile=False):
     try:
         created_flag = False
         unpay_order = CardOrder()
@@ -1535,11 +1612,10 @@ def create_card_unpay_order(user, card_id):
                     v = o.card
                     if v == card:
                         if o.pay_state == 1:
-                            if True:
-                                if check_pay_by_order_num(o.order_num) == True:
-                                    o.pay_state = 2
-                                    o.save()
-                                    return o
+                            if check_pay_by_order_num(o.order_num) == True:
+                                o.pay_state = 2
+                                o.save()
+                                return o
                         elif o.pay_state == 2:
                             return o
 
@@ -1549,8 +1625,7 @@ def create_card_unpay_order(user, card_id):
         except Exception, e:
             printError("create_card_unpay_order-1: " + str(e))
 
-        #unpay_order = Order()
-        unpay_order.order_num = out_trade_no
+        unpay_order.order_num = str(out_trade_no)
         unpay_order.account = account
         unpay_order.card = card
         unpay_order.name = card.card_name
@@ -1562,7 +1637,8 @@ def create_card_unpay_order(user, card_id):
 
         unpay_order.pay_state = 1
 
-        unpay_order.wxpay_qrcode = get_wxpay_qrcode(unpay_order)#"/static/storage/wxpay_qrcode/150831170420-zrOL.png"
+        if mobile is False:
+            unpay_order.wxpay_qrcode = get_wxpay_qrcode(unpay_order)#"/static/storage/wxpay_qrcode/150831170420-zrOL.png"
 
         with transaction.atomic():
             unpay_order.save()
@@ -1570,8 +1646,8 @@ def create_card_unpay_order(user, card_id):
             unpay_order.card = card
             unpay_order.save()
 
-            if created_flag == False:
-                add_user_order_info(account, unpay_order, pc_flag=True)
+            # if created_flag == False:
+                # add_user_order_info(account, unpay_order, pc_flag=True)
 
             return unpay_order
 
@@ -1629,7 +1705,7 @@ def create_unpay_order(user, video_id):
             printError("create_unpay_order-1: " + str(e))
 
         #unpay_order = Order()
-        unpay_order.order_num = out_trade_no
+        unpay_order.order_num = str(out_trade_no)
         unpay_order.account = account
         unpay_order.video = video
         unpay_order.name = video.title
@@ -1692,7 +1768,7 @@ def create_unpay_order_mobile(user, video_id):
 
 
         #unpay_order = Order()
-        unpay_order.order_num = out_trade_no
+        unpay_order.order_num = str(out_trade_no)
         unpay_order.account = account
         unpay_order.video = video
         unpay_order.name = video.title
@@ -1810,8 +1886,7 @@ def pay_result(request):
     msg = init_msg(request)
     try:
         if request.GET.has_key('order_num'):
-            order_num = request.GET['order_num']
-            print order_num
+            order_num = str(request.GET['order_num'])
             paid_order = Order.objects.get(order_num=order_num)
             paid_order.pay_state = 2
             remove_file(paid_order.wxpay_qrcode)
@@ -1824,8 +1899,7 @@ def pay_result(request):
 
     try:
         if request.GET.has_key('order_num'):
-            order_num = request.GET['order_num']
-            print order_num
+            order_num = str(request.GET['order_num'])
             paid_order = CardOrder.objects.get(order_num=order_num)
             paid_order.pay_state = 2
             remove_file(paid_order.wxpay_qrcode)

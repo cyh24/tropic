@@ -68,6 +68,7 @@ def check_pay_by_order_num(order_num):
         orderQuery = OrderQuery_pub()
         orderQuery.setParameter("out_trade_no", order_num)#"1217752501201407033233368056")
         result = orderQuery.getResult()
+        print "check_pay_by_order_num"
         print result
         if result['trade_state'] == "SUCCESS":
             return True

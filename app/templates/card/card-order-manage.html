@@ -145,7 +145,7 @@
 		function ModifyCell(element, value, name, order_id) {
 			$.ajax({
 				type: "GET",
-				url: "/modify-order-post/",
+				url: "/modify-card-order-post/",
 				data: {
 					order_id: order_id,
                     name:     name,
@@ -218,12 +218,14 @@
                         </li>
 
                         <li class="item ">
-							<a href="/manage/order-manage" class="navi_inner _data current" target=""><i class="icon2_vmanage"></i><span class="text">课程订单管理</span></a>
+							<a href="/manage/order-manage" class="navi_inner _data" target=""><i class="icon2_vmanage"></i><span class="text">课程订单管理</span></a>
                         </li>
 
                         <li class="item ">
-							<a href="/manage/card-order-manage" class="navi_inner _data" target=""><i class="icon2_vmanage"></i><span class="text">会员订单管理</span></a>
+							<a href="/manage/card-order-manage" class="navi_inner _data current" target=""><i class="icon2_vmanage"></i><span class="text">会员订单管理</span></a>
                         </li>
+
+
 						<li class="item ">
 							<a href="/offline-upload/" class="navi_inner _upload" _hot="uc.side._upload" target="_blank"><i class="icon2_upload"></i><span class="text">上传线下课程</span></a>
 						</li>
@@ -242,7 +244,7 @@
 				<div class="main_content" id="video_view">
 
                     <div style="line-height:28px;text-align:center;">
-                        <form action="/manage/order-manage/" class="form-search form-inline">
+                        <form action="/manage/card-order-manage/" class="form-search form-inline">
                             <input name="order_id" style="width:200px;" class="input-medium search-query" placeholder="输入订单ID进行搜索" type="text" />
                             <button type="submit" class="btn">查找</button>
                         </form>
@@ -300,11 +302,11 @@
                     </table>
 
 					<div class="mod_pages">
-						<a href="/manage/order-manage/?page={{pre_page}}" class="page-btn" style="width: 100px;">上一页</a> {% for i in pages_before %}
-						<a href="/manage/order-manage/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a> {% endfor %}
-						<a href="/manage/order-manage/?page={{cur_page}}" data-page={{cur_page}} class="current">{{cur_page}}</a> {% for i in pages_after %}
-						<a href="/manage/order-manage/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a> {% endfor %}
-						<a href="/manage/order-manage/?page={{after_page}}" data-page="2" class="page-btn" style="width: 100px;">下一页</a>
+						<a href="/manage/card-order-manage/?page={{pre_page}}" class="page-btn" style="width: 100px;">上一页</a> {% for i in pages_before %}
+						<a href="/manage/card-order-manage/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a> {% endfor %}
+						<a href="/manage/card-order-manage/?page={{cur_page}}" data-page={{cur_page}} class="current">{{cur_page}}</a> {% for i in pages_after %}
+						<a href="/manage/card-order-manage/?page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a> {% endfor %}
+						<a href="/manage/card-order-manage/?page={{after_page}}" data-page="2" class="page-btn" style="width: 100px;">下一页</a>
 					</div>
 
 				</div>

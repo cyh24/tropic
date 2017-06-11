@@ -44,7 +44,7 @@ from .lib import HttpClient, WeixinHelper
 
 
 ###############################支付接口############################
-            
+
 
 class Common_util_pub(object):
     """所有接口的基类"""
@@ -146,8 +146,8 @@ class JsApi_pub(Common_util_pub):
         data = HttpClient().get(url)
         self.openid = json.loads(data)["openid"]
         return self.openid
-        
-    
+
+
     def setPrepayId(self, prepayId):
         """设置prepay_id"""
         self.prepay_id = prepayId
@@ -233,7 +233,7 @@ class UnifiedOrder_pub(Wxpay_client_pub):
 
         self.parameters["appid"] = WxPayConf_pub.APPID  #公众账号ID
         self.parameters["mch_id"] = WxPayConf_pub.MCHID  #商户号
-        self.parameters["spbill_create_ip"] = "101.200.185.180"  #终端ip      
+        self.parameters["spbill_create_ip"] = "101.200.185.180"  #终端ip
         self.parameters["nonce_str"] = self.createNoncestr()  #随机字符串
         self.parameters["sign"] = self.getSign(self.parameters)  #签名
         return  self.arrayToXml(self.parameters)
@@ -427,7 +427,7 @@ class Wxpay_server_pub(Common_util_pub):
 
 class Notify_pub(Wxpay_server_pub):
     """通用通知接口"""
-    
+
 
 
 class NativeCall_pub(Wxpay_server_pub):
@@ -470,7 +470,7 @@ class NativeLink_pub(Common_util_pub):
         time_stamp = int(time.time())
         self.parameters["time_stamp"] = "{0}".format(time_stamp)  #时间戳
         self.parameters["nonce_str"] = self.createNoncestr()  #随机字符串
-        self.parameters["sign"] = self.getSign(self.parameters)  #签名          
+        self.parameters["sign"] = self.getSign(self.parameters)  #签名
         bizString = self.formatBizQueryParaMap(self.parameters, False)
         self.url = "weixin://wxpay/bizpayurl?"+bizString
 

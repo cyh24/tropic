@@ -2,7 +2,7 @@
 
 	<head>
 		{% include "mobile/include.html"%}
-		<link rel="stylesheet" href="/static/css/mobile/space.css?uuid" />
+		<link rel="stylesheet" href="/static/css/mobile/space.css?uui" />
 
 	</head>
 
@@ -58,6 +58,12 @@
 							<a class="banner__link" href="/space/customize/" data-jump="record">
 								<p id="js-record-total" class="banner__count">{{customize_num}}</p>
 								<p class="banner__word">定制课程</p>
+							</a>
+						</li>
+						<li class="banner__item banner__item--card">
+							<a class="banner__link" href="/space/cards/" data-jump="record">
+								<p id="js-record-total" class="banner__count">{{cards_num}}</p>
+								<p class="banner__word">会员卡</p>
 							</a>
 						</li>
 					</ul>

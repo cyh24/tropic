@@ -182,7 +182,5 @@ def order_manage(request):
     msg['pages_after']  = pages_after
     msg['pre_page']   = cur_page - 1
     msg['after_page'] = cur_page + 1
-
-
     return render_to_response('videos/order-manage.html', msg)
 

@@ -56,6 +56,8 @@ urlpatterns = patterns('',
     url(r'^manage/order-manage/$',  'app.videomanage.order_manage'),
     url(r'^modify-order-post/',     'app.db_pro.modify_order_post'),
 
+    url(r'^modify-card-order-post/',     'app.db_pro.modify_card_order_post'),
+
 
     url(r'^pay/$',          'app.playui.pay_ui'),
     url(r'^ready-pay/$',    'app.playui.ready_pay'),
@@ -70,6 +72,7 @@ urlpatterns = patterns('',
 
     url(r'^card-pay/$',          'app.card_pro.card_pay_ui'),
     url(r'^card-ready-pay/$',    'app.card_pro.card_ready_pay'),
+    url(r'^manage/card-order-manage/$',  'app.card_pro.card_order_manage'),
 
 
     url(r'^space/$',                'app.space.space_index'),

@@ -2,10 +2,9 @@
 
 	<head>
 		{% include "mobile/include.html"%}
-		<link rel="stylesheet" href="/static/css/mobile/space.css?1" />
+		<link rel="stylesheet" href="/static/css/mobile/space.css?11" />
 
 	</head>
-	
 	<script>
 		function delete_record(self){
 			var video_id = document.getElementById(self.id).getAttribute('data-video-id')
@@ -54,18 +53,21 @@
 								<p class="banner__word">已购买</p>
 							</a>
 						</li>
-						<li class="banner__item banner__item--customize">
-							<a class="banner__link" href="/space/customize/" data-jump="record">
-								<p id="js-record-total" class="banner__count">{{customize_num}}</p>
-								<p class="banner__word">定制课程</p>
-							</a>
-						</li>
+
+                        <li class="banner__item banner__item--customize">
+                            <a class="banner__link" href="/space/customize/" data-jump="record">
+                                <p id="js-record-total" class="banner__count">{{customize_num}}</p>
+                                <p class="banner__word">定制课程</p>
+                            </a>
+                        </li>
+
 						<li class="banner__item banner__item--card">
 							<a class="banner__link" href="/space/cards/" data-jump="record">
 								<p id="js-record-total" class="banner__count">{{cards_num}}</p>
 								<p class="banner__word">会员卡</p>
 							</a>
 						</li>
+
 					</ul>
 				</div>
 			</nav>
@@ -76,55 +78,46 @@
 					<div class="list-wrapper">
 						<ul id="js-record-list" class="course-list list-view">
 
-							{% if v_num > 0%} 
+							{% if cards_num > 0 %}
 								{% for v in videos%}
 								<li class="course border-top border-bottom" id="id-show-{{v.id}}" >
 									<!--<p class="course__status-bar border-bottom ">已看至第1节，共10节</p>-->
-									<a href="/videos/play/?video-id={{v.id}}">
+									<a href="/videos/play/?MCM=1&card_id={{v.id}}">
 									<div class="course__cnt border-bottom">
-										<div class="course__cover i-play" style="background-image:url({{v.logo_img}})" > </div>
+										<div class="course__cover i-play" style="background-image:url({{v.img_path}})" > </div>
 										<div class="course__info">
-											<h3 class="course__title">{{v.title}}</h3>
-											<p>
-												{% if v.money <= 0 %} 
-													<span class="course__price course__price--free"> 免费 </span>
-												{% else %}
-													<span class="course__price course__price">  ¥{{v.money}}  </span> 
-												{% endif %}
-													<span class="course__sep">|</span><span class="course__agency">{{v.teacher_name}}</span>
+											<h3 class="course__title">{{v.card_name}}</h3>
+                                            <p style="margin-top: -15px; height:20px;">{{v.simple_intro}}</p>
+											<p style="margin-top: 8px;height: 20px;">
+                                                {% if v.is_paid == True %}
+													<span class="course__price course__price--free"> 已购买 </span>
+                                                {% else %}
+                                                    {% if v.money <= 0 %}
+                                                        <span class="course__price course__price--free"> 免费 </span>
+                                                    {% else %}
+                                                        <span class="course__price course__price">  ¥{{v.money}}  </span> 
+                                                    {% endif %}
+                                                {% endif %}
+                                                <span class="course__sep">|</span><span class="course__agency">{{v.videos_num}} 课程</span><span class="course__sep">|</span><span class="course__agency">{{v.files_num}} 课时</span>
 											</p>
 										</div>
 									</div>
 									</a>
-									{% if v.money <= 0.0 %}
-									<div class="course__btn-group">
-										<button class="course__btn " data-video-id='{{v.id}}' id="btn_delete_record_{{v.id}}" onclick="delete_record(this)">删除记录</button>		
-									</div>
-									{% else %}
-									<div class="course__btn-group" >
-										<a href="/videos/play/?video-id={{v.id}}">
-										<button class="course__btn orange" data-operation="pay">去付款</button>
-										</a>
-										<button class="course__btn " data-video-id='{{v.id}}' id="btn_delete_record_{{v.id}}" onclick="delete_record(this)">删除记录</button>
-									</div>
-									{% endif %}
 								</li>
-								
-								{% endfor%} 
-							{% else %} 
+								{% endfor%}
+							{% else %}
 							<li class="course border-top border-bottom">
 								<div class="uncourse">
 									<p>暂无任何关注</p>
 								</div>
 							</li>
 							{% endif %}
-							
 						</ul>
 					</div>
 				</li>
 			</ul>
 		</div>
-		
+
 		<div class="pagination" >
 			<ul>
 				<li >

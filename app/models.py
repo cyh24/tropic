@@ -292,6 +292,7 @@ class CardOrder(models.Model):
 
     release_date = models.DateTimeField(auto_now=True)
 
+
 class Order(models.Model):
     # -1: invalidate, 1: unpay, 2: paid,
     pay_state = models.IntegerField()

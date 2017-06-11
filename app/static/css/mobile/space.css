@@ -86,23 +86,25 @@ ol, ul {
 }
 
 .banner__item--history{
-	left:0
+	left:0;
 }
 
 .banner__item--collect{
-	left:26%;
+	left:20%;
 	/* margin-left:-40px */
 }
 
 .banner__item--paid{
-    right:26%;
-	/* right:0 */
-	/* left:25%; */
+    right:40%;
     /* margin-left:40px */
 }
 
 .banner__item--customize{
-	right:0
+	right:20%;
+}
+
+.banner__item--card{
+	right:0;
 }
 
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td,menu{

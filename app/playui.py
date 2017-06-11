@@ -36,7 +36,12 @@ def add_course_watch(user, video, current_num):
     except Exception as e:
         print "add_course_watch:", str(e)
 
+from card_pro import membership_card
 def play_ui(request):
+    if 'MCM' in request.GET:
+        if int(request.GET['MCM']) == 1:
+            return membership_card(request)
+
     msg = init_msg(request)
     msg['intrest_videos'] = get_intrest_videos()
     msg['nickname'] = "NONE_USER"
