@@ -74,7 +74,8 @@ def videos_ui(request):
 
     msg = init_msg(request)
 
-    videos = Video.objects.filter(is_customize=False).all()
+    videos = Video.objects.all()
+    # videos = Video.objects.filter(is_customize=False).all()
     videos, msg = get_order_videos(request, videos, msg)
 
     total_page = (getLen(videos)+PAGE_SIZE-1)/PAGE_SIZE

@@ -83,7 +83,7 @@
                         </button>
                         <button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal" onclick="apply_group();">
                             <!-- <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存 -->
-                            保存
+                            提交
                         </button>
                     </div>
                 </div>
@@ -234,10 +234,10 @@
 
 									<div class="course-card course-card1  course-card-nobtn mod-course-card_lu" style="height:170px;">
 										<div class="course-face">
-											<!-- <a href=""> -->
+                                            <a href="/banji/banji-list/?group_id={{v.id}}">
 												<img class="item-img" src="{{v.img_path}}"/>
 												<i class="icon-card-lu"></i>
-											<!-- </a> -->
+                                            </a>
 										</div>
 										<div class="course-title">
 											<div href="" class="item-tt-link">{{v.title}}</div>

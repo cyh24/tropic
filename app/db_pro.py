@@ -100,6 +100,37 @@ def modify_card_order_post(request):
 
     return JsonResponse(json)
 
+def modify_superuser_post(request):
+    json = {'state': 'fail'}
+    try:
+        order_id, name, value = None, None, None
+        if request.GET.has_key("order_id"):
+            order_id = int(request.GET['order_id'])
+
+        if request.GET.has_key("name"):
+            name = request.GET['name']
+
+        if request.GET.has_key("value"):
+            value = request.GET['value']
+
+        account = Account.objects.get(id=order_id)
+        if name == "password":
+            account.user.set_password(value)
+            account.user.save()
+        elif name == 'user_name':
+            account.user.username = value
+            account.user.save()
+        elif name == 'nickname':
+            account.nickname = value
+        account.save()
+
+        json['state'] = 'ok';
+
+    except Exception, e:
+        print "modify_card_order_post: ", str(e)
+
+    return JsonResponse(json)
+
 def modify_application_post(request):
     json = {'state': 'fail'}
     try:
@@ -1116,6 +1147,20 @@ def get_card_order_state(user, card):
     return False
 
 def get_video_state(user, video):
+    # cards = Card.objects.all()
+    account = Account.objects.get(id=795)
+    # for card in cards:
+        # if account in card.allow_accounts.all():
+            # card.allow_accounts.remove(account)
+            # card.save()
+    # cgs = CourseProgress.objects.all()
+    # for cg in cgs:
+        # if cg.account.id == 795:
+            # print("aa")
+        # if account == cg.account:
+            # print("aa")
+            # cg.delete()
+
     if user == None:
         return False
     try:
@@ -1477,8 +1522,11 @@ def get_groups(user):
         for i, group in enumerate(groups):
             if account in group.allow_accounts.all():
                 groups[i].is_joined = True
-            if ApplyGroup.objects.filter(account=account, status=0).all():
-                groups[i].is_applied = True
+            apply_groups = ApplyGroup.objects.filter(account=account, status=0).all()
+            if apply_groups:
+                for ag in apply_groups:
+                    if ag.account == account and ag.group == group:
+                        groups[i].is_applied = True
 
     except Exception, e:
         printError("get_groups:"+ str(e))
@@ -1496,7 +1544,7 @@ def get_cards(user):
 
         cards = Card.objects.all()
         for card in cards:
-            get_card_order_state(request.user, card)
+            get_card_order_state(user, card)
 
         for i, card in enumerate(cards):
             if account in card.allow_accounts.all():
@@ -1522,15 +1570,16 @@ def get_customize(user):
         printError(e)
 
     try:
-        customize_videos = Video.objects.filter(is_customize=True).all()
+        customize_videos = Video.objects.filter().all()
+        # customize_videos = Video.objects.filter(is_customize=True).all()
         if customize_videos:
             for v in customize_videos:
                 if v not in order_videos:
                     if v.group.count() > 0:
                         if account in v.group.all()[0].allow_accounts.all():
                             order_videos.append(v)
-                    else:
-                        order_videos.append(v)
+                    # else:
+                        # order_videos.append(v)
     except Exception as e:
         print "get_customize, customize:", str(e)
 

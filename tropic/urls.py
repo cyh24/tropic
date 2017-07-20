@@ -58,6 +58,9 @@ urlpatterns = patterns('',
 
     url(r'^modify-card-order-post/',     'app.db_pro.modify_card_order_post'),
 
+    url(r'^manage/superuser-manage', 'app.superuser.superuser_manage'),
+    url(r'^modify-superuser-post/',     'app.db_pro.modify_superuser_post'),
+
 
     url(r'^pay/$',          'app.playui.pay_ui'),
     url(r'^ready-pay/$',    'app.playui.ready_pay'),
@@ -160,6 +163,7 @@ urlpatterns = patterns('',
 
     url(r'^banji-course/$', 'app.banji.banji_course'),
     url(r'^banji/application/$', 'app.banji.application'),
+    url(r'^banji/banji-list/$', 'app.banji.banji_list'),
     url(r'^modify-application-post/',     'app.db_pro.modify_application_post'),
     url(r'^banji/courses/$', 'app.banji.courses'),
     url(r'^banji/upload-banji-course/$', 'app.banji.upload_banji_course_ui'),

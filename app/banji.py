@@ -140,3 +140,26 @@ def application(request):
 
     return render_to_response('banji/application.html', msg)
 
+def banji_list(request):
+    msg = init_msg(request)
+    try:
+        group_id = int(request.GET['group_id'])
+        group = Group.objects.get(id=group_id)
+        groups, l = get_groups(request.user)
+        for g in groups:
+            if g.id == group.id:
+                group = g
+                break
+        videos = group.video_set.all()
+        files_num = 0
+        for i, v in enumerate(videos):
+            videos[i].tags = (v.tags_str).split()
+            files_num += videos[i].files_num
+        msg['group'] = group
+        msg['videos_num'] = getLen(videos)
+        msg['files_num'] = files_num
+        msg['videos'] = videos
+    except Exception as e:
+        printError(e)
+    return render_to_response('banji/banji_list.html', msg)
+
