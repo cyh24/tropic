@@ -119,12 +119,18 @@
                             <dt>总课时数：{{files_num}} 课时</dt>
                         </dl>
                         <dl style="margin-top:-10px;">
-                            {% if group.valid_day != -1%}
-                            <dt>有效时间：{{group.valid_day}} 天</dt>
-                            {% else %}
-                            <dt>有效时间：永久有效</dt>
-                            {% endif %}
+                            <dt>开始时间：{{group.start_time}}</dt>
                         </dl>
+                        <dl style="margin-top:-10px;">
+                            <dt>结束时间：{{group.end_time}}</dt>
+                        </dl>
+                        <!-- <dl style="margin-top:-10px;"> -->
+                            <!-- {% if group.valid_day != -1%} -->
+                            <!-- <dt>有效时间：{{group.valid_day}} 天</dt> -->
+                            <!-- {% else %} -->
+                            <!-- <dt>有效时间：永久有效</dt> -->
+                            <!-- {% endif %} -->
+                        <!-- </dl> -->
 
 					</div>
 				</div>

@@ -95,6 +95,9 @@ class Group(models.Model):
 
     money = models.FloatField(default=0.0)
 
+    start_time  = models.CharField(max_length=100, default="2017-01-01")
+    end_time    = models.CharField(max_length=100, default="2017-12-01")
+
     valid_day = models.IntegerField(default=-1)
     is_valid = models.BooleanField(default=True)
 

@@ -1148,7 +1148,7 @@ def get_card_order_state(user, card):
 
 def get_video_state(user, video):
     # cards = Card.objects.all()
-    account = Account.objects.get(id=795)
+    # account = Account.objects.get(id=795)
     # for card in cards:
         # if account in card.allow_accounts.all():
             # card.allow_accounts.remove(account)
@@ -1170,14 +1170,15 @@ def get_video_state(user, video):
         try:
             if video.is_customize == True:
                 groups = video.group.all()
+                check_groups_status(groups)
                 if groups.count() > 0:
                     for group in groups:
-                        if check_chaoshi(group.release_date, group.valid_day):
-                            group.is_valid = False
-                            group.save()
+                        # if check_chaoshi(group.release_date, group.valid_day):
+                            # group.is_valid = False
+                            # group.save()
                         if group.is_valid and account in group.allow_accounts.all():
                             return True
-                return False
+                # return False
         except Exception as e:
             print "get_video_state:", str(e)
 
@@ -1503,6 +1504,22 @@ def del_unpay(user, video_id):
 
     return False
 
+def check_group_status(group):
+    now_time = str(datetime.datetime.now()).split()
+    now_time_str = now_time[0] + ',' + now_time[1].split('.')[0]
+    if now_time_str < group.start_time or now_time_str > group.end_time:
+        group.is_valid = False
+        group.save()
+        return False
+    group.is_valid = True
+    group.save()
+    return True
+
+def check_groups_status(groups):
+    if groups and groups.count() > 0:
+        for group in groups:
+            check_group_status(group)
+
 def get_groups(user):
     if user == None:
         return None, 0
@@ -1512,13 +1529,14 @@ def get_groups(user):
         if account == None:
             return None, 0
 
-        groups = Group.objects.filter(is_valid=True).all()
-        for i, group in enumerate(groups):
-            if check_chaoshi(group.release_date, group.valid_day):
-                group.is_valid = False
-                group.save()
+        groups = Group.objects.all()
+        check_groups_status(groups)
+        # for i, group in enumerate(groups):
+            # if check_chaoshi(group.release_date, group.valid_day):
+                # group.is_valid = False
+                # group.save()
 
-        groups = Group.objects.filter(is_valid=True).all()
+        groups = Group.objects.all()
         for i, group in enumerate(groups):
             if account in group.allow_accounts.all():
                 groups[i].is_joined = True

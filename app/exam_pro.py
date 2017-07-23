@@ -628,6 +628,8 @@ def group_update(request):
         msg['img_path'] = group.img_path
         msg['valid_day'] = group.valid_day
         msg['password'] = group.password
+        msg['start_time'] = group.start_time
+        msg['end_time'] = group.end_time
         msg['group_id'] = int(group.id)
         msg['usernames'] = names_str
 
@@ -636,12 +638,14 @@ def group_update(request):
 
     return render_to_response('onlineExam/group_update.html', msg)
 
-def set_group(group, group_name, password, img_path, ids, valid_day):
+def set_group(group, group_name, password, img_path, ids, valid_day, start_time, end_time):
     with transaction.atomic():
         group.img_path = img_path
         group.group_name = group_name
         group.valid_day = valid_day
         group.password = password
+        group.start_time = start_time
+        group.end_time = end_time
         group.save()
         group.allow_accounts.clear()
         for id in ids:
@@ -656,6 +660,8 @@ def group_create_post(request):
 
         group_name = request.POST['group_name']
         password = request.POST['password']
+        start_time = request.POST['start_time']
+        end_time = request.POST['end_time']
         img_path = request.POST['img_path']
         valid_day = int(request.POST['valid_day'])
         if group_name.strip() == "":
@@ -672,7 +678,7 @@ def group_create_post(request):
             except Exception as e:
                 printError(e)
         group = Group()
-        set_group(group, group_name, password, img_path, ids, valid_day)
+        set_group(group, group_name, password, img_path, ids, valid_day, start_time, end_time)
         msg['state'] = 'ok'
 
 
@@ -700,9 +706,11 @@ def group_update_post(request):
         group_id = int(request.POST['group_id'])
         password = request.POST['password']
         img_path = request.POST['img_path']
+        start_time = request.POST['start_time']
+        end_time = request.POST['end_time']
         valid_day = int(request.POST['valid_day'])
         group = Group.objects.filter(id=group_id)[0]
-        set_group(group, group_name, password, img_path, ids, valid_day)
+        set_group(group, group_name, password, img_path, ids, valid_day, start_time, end_time)
         msg['state'] = 'ok'
 
 
