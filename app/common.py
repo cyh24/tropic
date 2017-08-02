@@ -36,6 +36,20 @@ USER_PIC_FOLD = "app/static/storage/user-pic/"
 LOGO_FOLD = "app/static/storage/logo-images/"
 EXAM_EXCEL_FOLD="app/static/storage/exam-excel/"
 
+import redis
+class RedisUtil:
+    EXPIRE_TIME = 60
+    pool = redis.ConnectionPool(host='127.0.0.1', port=6379, db=0)
+    conn = redis.StrictRedis(connection_pool=pool)
+
+    @staticmethod
+    def set(key, value):
+        RedisUtil.conn.set(key, value)
+        RedisUtil.conn.expire(key, RedisUtil.EXPIRE_TIME)
+
+    @staticmethod
+    def get(key):
+        return RedisUtil.conn.get(key)
 
 from functools import wraps
 def super_user(fn):

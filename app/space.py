@@ -4,6 +4,7 @@ from common import *
 from db_pro import *
 from qiniu_pro import *
 from wechat_pro import *
+from django.http import HttpResponseRedirect
 
 
 def get_space_msg(request, get_videos_method):
@@ -79,6 +80,16 @@ def get_space_msg(request, get_videos_method):
 # watching history list
 def space_index(request):
     msg = get_space_msg(request, get_watch_history)
+    try:
+        cli_ip = request.META['REMOTE_ADDR']
+        redirect_url = RedisUtil.get(cli_ip+'_redirect')
+        if redirect_url and redirect_url not in ['/space/', '/wechat-login/']\
+                and '/?code=' not in redirect_url and '/login' not in redirect_url\
+                and '/logout' not in redirect_url and '/wechat' not in redirect_url:
+            return HttpResponseRedirect(redirect_url)
+    except Exception as e:
+        print("SPACE_INDEX:", str(e))
+
     if request.GET.has_key('show_del'):
         if request.GET['show_del'] == 'True':
             msg['show_del'] = 'True'
