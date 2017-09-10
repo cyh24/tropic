@@ -394,39 +394,71 @@
 	</body>
 
     <script>
-    var player = videojs('id_video_player');
-    var first_play_flag = 1;
-    /*
-    // 检测播放时间
-    player.on('timeupdate', function () {
-        console.log('当前播放时间：' = player.currentTime());
-    });
-    */
-    // 开始或恢复播放
-    player.on('play', function() {
-        //console.log('开始/恢复播放');
-        if(first_play_flag == 1){
-            first_play_flag = 0;
-            //add watch_history
-            $.ajax({
-                type: "GET",
-                url: "/add-watch-history/",
-                data: {
-                    video_id: {{video.id}},
-                },
-                dataType: "json",
-                success: function(data) {
-                }
-            });
+        var player = videojs('id_video_player');
+        var first_play_flag = 1;
+        var playing = false;
+        var update_timer;
+        var current_time = 0;
+        var interval = 10000;
+        var duration = 0;
+
+		function do_update_watch_status() {
+			$.ajax({
+				url: "/watch-status/update/",
+				type: "GET",
+				dataType: "json",
+				data: {
+                    "qfile_id": {{qfile.id}},
+					"video_id": {{video.id}},
+                    "duration": duration,
+                    "current_time": current_time
+				},
+				success: function(obj) {
+				}
+			});
+		}
+
+        function update_watch_status() {
+            do_update_watch_status();
+            update_timer = setTimeout("update_watch_status()", interval);
         }
-        first_play_flag = 0;
-    });
-    /*
-    // 暂停播放
-    player.on('pause', function() {
-        console.log('暂停播放');
-    });
-    */
+        // 检测播放时间
+        player.on('timeupdate', function () {
+            current_time = player.currentTime();
+            duration = player.duration();
+            // console.log('当前播放时间：' = player.currentTime());
+        });
+        // 开始或恢复播放
+        player.on('play', function() {
+            //console.log('开始/恢复播放');
+            playing = true;
+            if(first_play_flag == 1){
+                first_play_flag = 0;
+                //add watch_history
+                $.ajax({
+                    type: "GET",
+                    url: "/add-watch-history/",
+                    data: {
+                        video_id: {{video.id}},
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                    }
+                });
+            }
+            first_play_flag = 0;
+
+            update_timer = setTimeout("update_watch_status()", 2000);
+        });
+        // 暂停播放
+        player.on('pause', function() {
+            playing = false;
+            clearTimeout(update_timer);
+        });
+
+        player.on("ended", function(){
+            playing = false;
+        });
     </script>
 
 </html>

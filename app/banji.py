@@ -1,11 +1,14 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
+import os
 from common import *
 from db_pro import *
 from qiniu_pro import *
 from wechat_pro import *
 import random
 import datetime
+from save_excel import write_csv
+from django.http import StreamingHttpResponse
 
 def banji_course(request):
     msg = init_msg(request)
@@ -33,28 +36,58 @@ def banji_course(request):
             msg['video_url'] = video_url
             play_list = [val for val in files]
 
-            try:
-                # course progress
-                course_progress = get_course_progress(request.user, video)
-                status_list = course_progress.get_status()
+            # try:
+                # # course progress
+                # course_progress = get_course_progress(request.user, video)
+                # status_list = course_progress.get_status()
 
-                finished_num = 0
+                # finished_num = 0
+                # next_id = 0
+                # for i in range(getLen(play_list)):
+                    # if status_list[i] == 0:
+                        # next_id = i
+                        # break
+                # for i in range(getLen(play_list)):
+                    # if status_list[i] == 1:
+                        # finished_num += 1
+                    # play_list[i].watched = status_list[i]
+                # msg['finished_num'] = finished_num
+                # msg['total_num'] = getLen(play_list)
+                # msg['percent'] = finished_num*100.0/getLen(play_list)
+                # msg['next_id'] = next_id
+                # msg['next_title'] = play_list[next_id].title
+            # except Exception as e:
+                # print str(e)
+            FILE_STATUS = {}
+            try:
                 next_id = 0
-                for i in range(getLen(play_list)):
-                    if status_list[i] == 0:
+                video_status = get_watch_video_status(request.user, video)
+                files_status = video_status.q_files_status.all()
+                for i in range(files_status.count()):
+                    if not files_status[i].is_finished:
                         next_id = i
                         break
-                for i in range(getLen(play_list)):
-                    if status_list[i] == 1:
-                        finished_num += 1
-                    play_list[i].watched = status_list[i]
-                msg['finished_num'] = finished_num
+                FILE_STATUS = {}
+                for fs in files_status:
+                    if fs.is_finished:
+                        step = 2
+                    else:
+                        if fs.current_time == 0:
+                            step = 0
+                        else:
+                            step = 1
+                    FILE_STATUS[int(fs.q_file.id)] = {"duration": "%02d:%02d"%(int(fs.duration/60), int(fs.duration%60)),
+                            "current_time": "%02d:%02d"%(int(fs.current_time/60), int(fs.current_time%60)),
+                            "step": step}
+                msg['finished_num'] = video_status.finished_num
+                msg['total_watched_time'] = int(video_status.total_watched_time / 60 )
+                msg['total_time'] = int(video_status.total_time / 60)
                 msg['total_num'] = getLen(play_list)
-                msg['percent'] = finished_num*100.0/getLen(play_list)
+                msg['percent'] = video_status.finished_percent * 100
                 msg['next_id'] = next_id
                 msg['next_title'] = play_list[next_id].title
             except Exception as e:
-                print str(e)
+                print("banji_course: ", str(e))
 
             if getLen(play_list) == 0 or play_list[0].chapter_num == -1:
                 chapter_idx = []
@@ -74,6 +107,10 @@ def banji_course(request):
                 if i not in chapter_idx:
                     v_num += 1
                     play_list[i].v_num = v_num
+                    if int(play_list[i].id) in FILE_STATUS:
+                        play_list[i].duration = FILE_STATUS[int(play_list[i].id)]['duration']
+                        play_list[i].current_time = FILE_STATUS[int(play_list[i].id)]['current_time']
+                        play_list[i].step = FILE_STATUS[int(play_list[i].id)]['step']
 
             play_list[current_num].cur_flag = 1
 
@@ -163,3 +200,41 @@ def banji_list(request):
         printError(e)
     return render_to_response('banji/banji_list.html', msg)
 
+def file_iterator(file_name, chunk_size=1024):
+    with open(file_name) as f:
+        while True:
+            c = f.read(chunk_size)
+            if c:
+                yield c
+            else:
+                break
+def user_progress(request):
+    video_id = request.GET['video_id']
+    video = get_video_by_id(video_id)
+    groups = video.group.all()
+    msg = {}
+    data = []
+    for group in groups:
+        for acc in group.allow_accounts.all():
+            try:
+                video_status = WatchVideoStatus.objects.get(account=acc, video=video)
+                data.append([acc.id, acc.nickname, video.title, video_status.total_time,
+                    video_status.total_watched_time, video.files.all().count(),
+                    video_status.finished_num, video_status.finished_percent])
+            except Exception as e:
+                print(e)
+    try:
+        row_title  = ['用户ID', '昵称','视频名称', '视频时长(s)', '观看时间(s)', '总课时数', '已经完成的课时数', '完成比例']
+        data.insert(0, row_title)
+        filename = "user_progress/" + get_uuid()+".csv"
+        filepath = write_csv(filename, data)
+        response = StreamingHttpResponse(file_iterator(filepath))
+        response['Content-Type'] = 'application/octet-stream'
+        response['Content-Disposition'] = 'attachment;filename="{0}"'.format(filename)
+        return response
+
+    except Exception as e:
+        print(e)
+
+    msg['data'] = data
+    return JsonResponse(msg)

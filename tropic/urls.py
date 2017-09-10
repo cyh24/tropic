@@ -168,6 +168,9 @@ urlpatterns = patterns('',
     url(r'^banji/courses/$', 'app.banji.courses'),
     url(r'^banji/upload-banji-course/$', 'app.banji.upload_banji_course_ui'),
     url(r'^banji/upload-banji-course-post/', 'app.banji.upload_banji_course_post'),
+    url(r'^banji/user_progress/$', 'app.banji.user_progress'),
+
+    url(r'^watch-status/update/', 'app.watch_status.watch_status_update'),
 
     url(r'^test/', 'app.views.test')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

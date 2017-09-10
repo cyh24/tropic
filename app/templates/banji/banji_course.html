@@ -92,7 +92,7 @@
                             </div>
                         </div>
                         <div class="proDetail f-cb">
-                            <span class="pFinished j-pFinished f-fl">目前已完成<em> {{finished_num}}/{{total_num}}</em>个课时, 加油啊！</span>
+                            <span class="pFinished j-pFinished f-fl">目前已完成<em> {{finished_num}}/{{total_num}}</em>个课时, 共 <em class="j-total s-fcorange">{{total_time}}分钟</em>, 已学习 <em class="j-remain s-fcorange">{{total_watched_time}}分钟</em></span>
                             <span class="pTaskLeft j-pTaskLeft f-thide f-fr" title="">下一个课时 : {{next_title}}</span>
                         </div>
                     </div>
@@ -163,14 +163,22 @@
                                         <div class="section" >
                                             <a target="_blank" href="/videos/play/?video-id={{video_id}}&current={{v.num}}">
                                                 <span class="f-fl f-thide ks">课时{{v.v_num}}</span>
-                                                {% if v.watched = 1%}
+                                                <!-- {% if v.watched = 1%} -->
+                                                <!-- <span class="f-fl ksicon ksicon-30"></span> -->
+                                                <!-- {% else %} -->
+                                                <!-- <span class="f-fl ksicon ksicon-0"></span> -->
+                                                <!-- {% endif %} -->
+                                                {% if v.step = 2%}
                                                 <span class="f-fl ksicon ksicon-30"></span>
+                                                {% elif v.step = 1%}
+                                                <span class="f-fl ksicon ksicon-20"></span>
                                                 {% else %}
                                                 <span class="f-fl ksicon ksicon-0"></span>
                                                 {% endif %}
                                                 <span class="f-fl f-thide ksname">{{v.title}}</span>
                                                 <span class="f-fr ksinfo j-hoverhide" style="display: block;">
                                                     <!-- <span class="f-fr f-thide kstime">13:08</span> -->
+                                                    <span class="f-fr f-thide kstime">{{v.duration}}</span>
                                                     <span class="f-fr ksinfoicon ksinfoicon-2 title="></span>
                                                     <span class="f-fr flag flag-0" title=""></span>
                                                 </span>

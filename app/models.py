@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+# from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 class Account(models.Model):
     user = models.OneToOneField(User, unique=True, verbose_name='user_account')
@@ -18,8 +18,11 @@ class Account(models.Model):
     sex      = models.IntegerField(default=-1)
     info     = models.CharField(max_length=400)
 
-    # def __str__(self):
-         # return "%s" % (self.nickname).encode("utf8")
+    def __str__(self):
+        try:
+            return "%s<%d>" % ((self.nickname).encode("utf8"), self.id)
+        except Exception:
+            return "<%d>" % (self.id)
 
     class Meta:
         db_table = u'account'
@@ -44,6 +47,12 @@ class QiniuFile(models.Model):
 
     class Meta:
         db_table = u'qiniufile'
+
+    def __str__(self):
+        try:
+            return "%s<%d>" % ((self.title).encode("utf8"), self.id)
+        except Exception:
+            return "<%d>" % (self.id)
 
 class Comment(models.Model):
     user = models.ForeignKey(Account, unique=False)
@@ -115,8 +124,11 @@ class Group(models.Model):
 
     release_date = models.DateTimeField(auto_now_add=True)
 
-    # def __str__(self):
-         # return "%s" % (self.group_name).encode("utf8")
+    def __str__(self):
+        try:
+            return "%s<%d>" % ((self.group_name).encode("utf8"), self.id)
+        except Exception:
+            return "<%d>" % (self.id)
 
     class Meta:
         db_table = u'groups'
@@ -230,6 +242,12 @@ class Video(models.Model):
     public_flag = models.BooleanField(default=False)
 
     release_date = models.DateTimeField(auto_now=False)
+
+    def __str__(self):
+        try:
+            return "%s<%d>" % ((self.title).encode("utf8"), self.id)
+        except Exception:
+            return "<%d>" % (self.id)
     class Meta:
         db_table = u'video'
 
@@ -276,6 +294,12 @@ class Card(models.Model):
     allow_accounts_num = property(__get_allow_accounts_num)
 
     release_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        try:
+            return "%s<%d>" % ((self.card_name).encode("utf8"), self.id)
+        except Exception:
+            return "<%d>" % (self.id)
 
 class CardOrder(models.Model):
     # -1: invalidate, 1: unpay, 2: paid,
@@ -621,3 +645,82 @@ class CourseProgress(models.Model):
     update_date = models.DateTimeField(auto_now=True)
     class Meta:
         db_table = u'course_progress'
+
+class WatchFileStatus(models.Model):
+    account = models.ForeignKey(Account)
+    q_file = models.ForeignKey(QiniuFile)
+
+    duration = models.FloatField(default=0)
+    current_time = models.FloatField(default=0)
+
+    @property
+    def is_finished(self):
+        try:
+            if (self.duration - self.current_time) <= 30:
+                return True
+        except Exception as e:
+            print("watch file status is_finished: ", str(e))
+        return False
+
+    def __str__(self):
+        try:
+            return "%s<%s>" % ((self.q_file.title).encode("utf8"), (self.account.nickname).encode("utf8"))
+        except Exception:
+            return "<%d>" % (self.id)
+
+class WatchVideoStatus(models.Model):
+    account = models.ForeignKey(Account)
+    video   = models.ForeignKey(Video)
+
+    q_files_status = models.ManyToManyField(WatchFileStatus)
+
+    @property
+    def total_time(self):
+        total_time = 0
+        try:
+            if self.q_files_status.all():
+                for q_file_status in self.q_files_status.all():
+                    total_time += q_file_status.duration
+
+        except Exception as e:
+            print("watch video status total_time: ", str(e))
+
+        return total_time
+
+    @property
+    def total_watched_time(self):
+        total_watched_time = 0
+        try:
+            if self.q_files_status.all():
+                for q_file_status in self.q_files_status.all():
+                    total_watched_time += q_file_status.current_time
+
+        except Exception as e:
+            print("watch video status total_watched_time: ", str(e))
+
+        return total_watched_time
+
+    @property
+    def finished_num(self):
+        total_num = 0
+        try:
+            if self.q_files_status.all():
+                for q_file_status in self.q_files_status.all():
+                    if q_file_status.is_finished == True:
+                        total_num += 1
+        except Exception as e:
+            print("watch video status finished_num: ", str(e))
+
+        return total_num
+
+    @property
+    def finished_percent(self):
+        if not self.video or not self.video.files or self.video.files.all().count() == 0:
+            return 0.0
+        return self.finished_num * 1.0 / self.video.files.all().count()
+
+    def __str__(self):
+        try:
+            return "%s<%s>" % ((self.video.title).encode("utf8"), (self.account.nickname).encode("utf8"))
+        except Exception:
+            return "<%d>" % (self.id)

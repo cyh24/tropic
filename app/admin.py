@@ -6,6 +6,10 @@ class AccountAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Account, AccountAdmin)
 
+class QiniuFileAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.QiniuFile, QiniuFileAdmin)
+
 class CommentAdmin(admin.ModelAdmin):
     pass
 admin.site.register(models.Comment, CommentAdmin)
@@ -93,3 +97,11 @@ admin.site.register(models.Card, CardAdmin)
 class CardOrderAdmin(admin.ModelAdmin):
     pass
 admin.site.register(models.CardOrder, CardOrderAdmin)
+
+class WatchFileStatusAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.WatchFileStatus, WatchFileStatusAdmin)
+
+class WatchVideoStatusAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.WatchVideoStatus, WatchVideoStatusAdmin)

@@ -1995,3 +1995,48 @@ def get_course_progress(user, video):
         print "get_course_progress:", str(e)
 
     return None
+
+F = open("/home/www/tropic/db_excel/duration.txt", "r")
+DATA = F.readlines()
+F.close()
+DURATION_MAP = {}
+for line in DATA:
+    try:
+        line = line[:-1].split("___")
+        if len(line) == 2:
+            DURATION_MAP[line[0].encode("utf8")] = line[1]
+    except Exception as e:
+        print("DURATION_MAP:", str(e))
+
+def create_watch_video_status(account, video):
+    try:
+        video_status = WatchVideoStatus.objects.get(account=account, video=video)
+        return video_status
+    except:
+        pass
+    video_status = WatchVideoStatus(account=account, video=video)
+    video_status.save()
+    for q_file in video.files.all():
+        watch_file_status = WatchFileStatus()
+        watch_file_status.q_file = q_file
+        watch_file_status.account = account
+        # print(q_file.key)
+        key = (q_file.key).encode("utf8")
+        if key in DURATION_MAP:
+            watch_file_status.duration = float(DURATION_MAP[key])
+        watch_file_status.save()
+        video_status.q_files_status.add(watch_file_status)
+    video_status.save()
+    return video_status
+
+def get_watch_video_status(user, video):
+    try:
+        account = get_account_from_user(user)
+        try:
+            video_status = WatchVideoStatus.objects.get(account=account, video=video)
+        except:
+            video_status = create_watch_video_status(account, video)
+    except Exception as e:
+        print("get_video_status: ", str(e))
+    return video_status
+

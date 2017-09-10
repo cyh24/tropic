@@ -38,6 +38,31 @@ def add_course_watch(user, video, current_num):
 
 from card_pro import membership_card
 def play_ui(request):
+    # f = open("video_url.txt", "w")
+    # videos = Video.objects.all()
+    # for video in videos:
+        # files = video.files.all()
+        # for file in files:
+            # key = file.key
+            # video_url = Qiniu.download_private_url(key.encode('utf-8'))
+            # f.write(str(file.key)+ " " + video_url + "\n")
+    # f.close()
+    # files = QiniuFile.objects.all()
+    # f = open("video_url.txt", "w")
+    # for file in files:
+        # key = file.key
+        # video_url = Qiniu.download_private_url(key.encode('utf-8'))
+        # f.write(str(file.id)+ " " + video_url + "\n")
+    # f.close()
+
+    # f = open('duration.txt')
+    # data = f.readlines()
+    # f.close()
+    # for line in data:
+        # line = line[:-1].split()
+        # if len(line) == 2:
+            # print(line
+
     if 'MCM' in request.GET:
         if int(request.GET['MCM']) == 1:
             return membership_card(request)
@@ -72,6 +97,7 @@ def play_ui(request):
 
             key = files[current_num].key
             video_url = Qiniu.download_private_url(key.encode('utf-8'))
+            msg['qfile'] = files[current_num]
             msg['video_url'] = video_url
             play_list = [val for val in files]
 

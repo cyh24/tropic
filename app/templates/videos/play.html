@@ -15,8 +15,8 @@
 	<script src="/static/js/july/schollbar.js"></script>
     <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdPic":"","bdStyle":"0","bdSize":"16"},"share":{},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>script>
 
-
 	<script>
+
         function check_auth(){
             var nick_name = '{{nickname}}';
             if(nick_name == 'NONE_USER'){
@@ -160,12 +160,6 @@
 				}
 			})
 
-
-        var player = videojs('id_video_player');
-        // 开始或恢复播放
-        player.on('play', function() {
-            alert("");
-        });
 
 	</script>
 
@@ -443,40 +437,73 @@
 
 		{% include "footer.html"%}
 	</body>
+
     <script>
-    var player = videojs('id_video_player');
-    var first_play_flag = 1;
-    /*
-    // 检测播放时间
-    player.on('timeupdate', function () {
-        console.log('当前播放时间：' = player.currentTime());
-    });
-    */
-    // 开始或恢复播放
-    player.on('play', function() {
-        //console.log('开始/恢复播放');
-        if(first_play_flag == 1){
-            first_play_flag = 0;
-            //add watch_history
+        var player = videojs('id_video_player');
+        var first_play_flag = 1;
+        var playing = false;
+        var update_timer;
+        var current_time = 0;
+        var interval = 10000;
+        var duration = 0;
+
+		function do_update_watch_status() {
 			$.ajax({
+				url: "/watch-status/update/",
 				type: "GET",
-				url: "/add-watch-history/",
-				data: {
-					video_id: {{video.id}},
-				},
 				dataType: "json",
-				success: function(data) {
+				data: {
+                    "qfile_id": {{qfile.id}},
+					"video_id": {{video.id}},
+                    "duration": duration,
+                    "current_time": current_time
+				},
+				success: function(obj) {
 				}
 			});
+		}
+
+        function update_watch_status() {
+            do_update_watch_status();
+            update_timer = setTimeout("update_watch_status()", interval);
         }
-        first_play_flag = 0;
-    });
-    /*
-    // 暂停播放
-    player.on('pause', function() {
-        console.log('暂停播放');
-    });
-    */
+        // 检测播放时间
+        player.on('timeupdate', function () {
+            current_time = player.currentTime();
+            duration = player.duration();
+            // console.log('当前播放时间：' = player.currentTime());
+        });
+        // 开始或恢复播放
+        player.on('play', function() {
+            //console.log('开始/恢复播放');
+            playing = true;
+            if(first_play_flag == 1){
+                first_play_flag = 0;
+                //add watch_history
+                $.ajax({
+                    type: "GET",
+                    url: "/add-watch-history/",
+                    data: {
+                        video_id: {{video.id}},
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                    }
+                });
+            }
+            first_play_flag = 0;
+
+            update_timer = setTimeout("update_watch_status()", 2000);
+        });
+        // 暂停播放
+        player.on('pause', function() {
+            playing = false;
+            clearTimeout(update_timer);
+        });
+
+        player.on("ended", function(){
+            playing = false;
+        });
     </script>
 
 </html>

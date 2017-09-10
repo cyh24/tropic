@@ -11,6 +11,7 @@ import StringIO
 import qrcode
 import base64, zlib
 import os
+import uuid
 
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -38,7 +39,7 @@ EXAM_EXCEL_FOLD="app/static/storage/exam-excel/"
 
 import redis
 class RedisUtil:
-    EXPIRE_TIME = 60
+    EXPIRE_TIME = 3600
     pool = redis.ConnectionPool(host='127.0.0.1', port=6379, db=0)
     conn = redis.StrictRedis(connection_pool=pool)
 
@@ -76,6 +77,9 @@ def ip_request_push(request):
         return False
 
     return False
+
+def get_uuid():
+    return str(uuid.uuid4())
 
 def request_get_vid(request):
     try:
