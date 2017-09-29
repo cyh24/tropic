@@ -162,6 +162,8 @@ def init_msg(request):
     return msg
 
 def paginator_show(request, msg_list, page_size):
+    if not msg_list:
+        return  msg_list, 0
     page = 1
     try:
         if request.GET.has_key('page'):

@@ -105,3 +105,11 @@ admin.site.register(models.WatchFileStatus, WatchFileStatusAdmin)
 class WatchVideoStatusAdmin(admin.ModelAdmin):
     pass
 admin.site.register(models.WatchVideoStatus, WatchVideoStatusAdmin)
+
+class FirstCatalogAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.FirstCatalog, FirstCatalogAdmin)
+
+class SecondCatalogAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(models.SecondCatalog, SecondCatalogAdmin)

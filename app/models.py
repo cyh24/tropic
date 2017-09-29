@@ -27,6 +27,25 @@ class Account(models.Model):
     class Meta:
         db_table = u'account'
 
+class SecondCatalog(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        try:
+            return "%s<%d>" % ((self.name).encode("utf8"), self.id)
+        except Exception:
+            return "<%d>" % (self.id)
+
+class FirstCatalog(models.Model):
+    name = models.CharField(max_length=100)
+    second_catalogs = models.ManyToManyField(SecondCatalog)
+
+    def __str__(self):
+        try:
+            return "%s<%d>" % ((self.name).encode("utf8"), self.id)
+        except Exception:
+            return "<%d>" % (self.id)
+
 class QiniuFile(models.Model):
     title  = models.CharField(max_length=100)
     key    = models.CharField(max_length=200)
@@ -242,6 +261,10 @@ class Video(models.Model):
     public_flag = models.BooleanField(default=False)
 
     release_date = models.DateTimeField(auto_now=False)
+
+    first_catalogs = models.ManyToManyField(FirstCatalog)
+    second_catalogs = models.ManyToManyField(SecondCatalog)
+    upload_file = models.CharField(max_length=200, default="")
 
     def __str__(self):
         try:

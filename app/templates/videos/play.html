@@ -253,6 +253,15 @@
 							<div class="Clearfix">
 								<div class="btn-group pull-right">
 
+                                        {% if download_url%}
+                                        <button title="下载" type="button" class="btn btn-default" style="color:#548cff;">
+                                            <a href="{{download_url}}" download="">
+                                            <span class="fa fa-download" style="padding-right: 5px;"></span>
+                                            <span>下载文件</span>
+                                            </a>
+                                        </button>
+                                        {% endif %}
+
 									<button title="浏览量" type="button" class="disabled btn btn-default" style="color:#548cff;">
 										<span class="fa fa-file-video-o" style="padding-right: 5px;"></span><span class="badge">{{video.watch_num}}</span>
 									</button>

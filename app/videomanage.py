@@ -51,6 +51,11 @@ def videos_manage(request):
             subVideos[i].intrest_flag = 1
         else:
             subVideos[i].intrest_flag = 0
+        try:
+            subVideos[i].first_catalog = subVideos[i].first_catalogs.all()[0]
+            subVideos[i].second_catalog = subVideos[i].second_catalogs.all()[0]
+        except:
+            pass
 
     msg['videos']     = subVideos
     msg['videos_len'] = len(videos)
@@ -142,6 +147,22 @@ def update_course_ui(request):
             msg['play_list'] = video.files.all()
             for i in range(len(msg['play_list'])):
                 msg['play_list'][i].num = i+1
+
+            firsts = {}
+            first_catalogs = get_all_first_catalogs()
+            for first_cata in first_catalogs:
+                second_catas = []
+                for second_cata in first_cata.second_catalogs.all():
+                    second_catas.append({"txt": second_cata.name, "val": second_cata.id})
+                firsts[first_cata.id] = second_catas
+            try:
+                msg['cur_first_cata'] = video.first_catalogs.all()[0]
+                msg['cur_second_cata'] = video.second_catalogs.all()[0]
+                print(msg['cur_first_cata'], msg['cur_second_cata'])
+            except Exception as e:
+                print("cur_cata:", str(e))
+            msg['first_catalogs'] = first_catalogs
+            msg['firsts'] = json.dumps(firsts)
 
             return render_to_response('upload/update_course.html', msg)
     except Exception, e:

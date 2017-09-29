@@ -18,6 +18,7 @@
 	<body style="">
 		{% include "header.html" %}
 
+
 		<div style="margin-left:60px; width: 1300px; ">
 			<div class="container">
 
@@ -36,6 +37,39 @@
 								<div class="upload_filed_area">
 									<input class="rlf-input" type="text" name="title" value="{{video.title}}">
 								</div>
+
+								<div class="clear"></div>
+
+<p></p>
+<span><b>一级目录:</b></span> <select name="province" id="province" onchange="if(this.value != '') setCity(this.options[this.selectedIndex].value);">
+    {% if cur_first_cata %}
+    <option value="{{cur_first_cata.id}}">{{cur_first_cata.name}}</option>
+    {% else %}
+    <option value="-1">-请选择-</option>
+    {% endif %}
+    {% for first_cata in first_catalogs%}
+        <option value="{{first_cata.id}}">{{first_cata.name}}</option>
+    {% endfor %}
+</select>
+<br>
+<p></p>
+<span><b>二级目录:</b></span>
+<select name="city" id="city">
+    {% if cur_second_cata %}
+    <option value="{{cur_second_cata.id}}">{{cur_second_cata.name}}</option>
+    {% else %}
+    <option value="-1">-请选择-</option>
+    {% endif %}
+</select>
+
+<div class="clear"></div>
+<label class="upload_filed_lbl" for="upload_filed_video_title" style="margin-top: 10px;">
+    <span>文件上传</span>
+    <!-- <span class="sign_star">*</span> -->
+</label>
+<div class="upload_filed_area">
+    <input name="upload_file" style="width:100%;" value={{video.upload_file}}></input>
+</div>
 
 								<div class="clear"></div>
 
@@ -639,5 +673,64 @@
 		 // 可一次设置多个，例如：EditTables(tb1,tb2,tb2,......)
 		EditTables(tabProduct);
 	</script>
+
+
+
+<script language="JavaScript" type="text/javascript">
+function removeOptions(selectObj)
+{
+    if (typeof selectObj != 'object')
+    {
+        selectObj = document.getElementById(selectObj);
+    }
+    var len = selectObj.options.length;
+    for (var i=0; i < len; i++)
+    {
+        selectObj.options[0] = null;
+    }
+}
+
+function setSelectOption(selectObj, optionList, firstOption, selected)
+{
+    if (typeof selectObj != 'object')
+    {
+        selectObj = document.getElementById(selectObj);
+    }
+    // 清空选项
+    removeOptions(selectObj);
+    // 选项计数
+    var start = 0;
+    // 如果需要添加第一个选项
+    if (firstOption)
+    {
+        selectObj.options[0] = new Option(firstOption, '');
+        // 选项计数从 1 开始
+        start ++;
+    }
+
+    var len = optionList.length;
+    for (var i=0; i < len; i++)
+    {
+        // 设置 option
+        selectObj.options[start] = new Option(optionList[i].txt, optionList[i].val);
+        // 选中项
+        if(selected == optionList[i].val)
+        {
+            selectObj.options[start].selected = true;
+        }
+        // 计数加 1
+        start ++;
+    }
+}
+</script>
+
+<script language="JavaScript" type="text/javascript">
+var cityArr = {{firsts|safe}};
+
+function setCity(province)
+{
+    setSelectOption('city', cityArr[province], '-请选择-');
+}
+</script>
 
 </html>

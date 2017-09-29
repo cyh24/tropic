@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+	{% include "include.html"%}
+
+	<link rel="stylesheet" href="/static/css/txkt/courseList.css">
+	<link rel="stylesheet" href="/static/css/txkt/common.css">
+    <!-- <link rel="stylesheet" href="/static/css/sb-admin/sb-admin.css"> -->
+	<!-- <link rel="stylesheet" href="/static/css/sb-admin/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" href="/static/css/sb-admin/tree.css"> -->
+    <link rel="stylesheet" href="/static/css/zhonggong/jingpin.css">
+    <script src="/static/css/zhonggong/jquery.min.js"></script>
+    <script src="/static/css/zhonggong/jingpin.js"></script>
+
+	<body>
+		{% include "header.html" %}
+
+        <div class="wrap" style="margin-left: 10%; margin-right: 10%;">
+			<div class="main autoM clearfix">
+				<div class="main-left">
+
+                    <div class="caidan wrap">
+                        <div class="kecfl"><a href="{{get_content}}first_catalog_id=&second_catalog_id=">全部<br>课程</a></div>
+                        {% for first_catalog in first_catalogs%}
+                        <div class="up kec1 " style="">
+                            <a href="{{get_content}}first_catalog_id={{first_catalog.id}}&second_catalog_id=">{{first_catalog.name}}</a><em>&nbsp;</em>
+                            <div class="down" style="display: none;">
+                            {% for second_catalog in first_catalog.second_catalogs_list%}
+                            <a href="{{get_content}}second_catalog_id={{second_catalog.id}}&first_catalog_id={{first_catalog.id}}">{{second_catalog.name}}</a>
+                            {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+			<!-- <div class="" style="margin-top:20px; line-height: 10px;"> -->
+                <!-- <div class="col-md-12"> -->
+					<!-- <ol class="breadcrumb"> -->
+						<!-- <li><a href="/index/">首页</a></li> -->
+						<!-- <li><a href="/videos/">全部视频</a></li> -->
+						<!-- <li class="active">{{video.title}}</li> -->
+					<!-- </ol> -->
+                <!-- </div> -->
+			<!-- </div> -->
+            <div style="margin-top: 20px; margin-bottom: -20px;">
+                <div class="new19">
+                {% if not cur_first_cata%}
+                <span class="lb_19">全部视频</span>
+                {% elif cur_first_cata and not cur_second_cata %}
+                <span class="lb_19">{{cur_first_cata.name}}</span>
+                {% elif cur_first_cata and cur_second_cata%}
+                <span class="lb_19" ><a href="{{get_content}}first_catalog_id={{cur_first_cata.id}}&second_catalog_id=">{{cur_first_cata.name}}</a> / {{cur_second_cata.name}}</span>
+                {% endif %}
+                <p class="moer19">课程总数: {{video_num}},  &nbsp;&nbsp;已学习: {{finish_video_num}},  &nbsp;&nbsp;学习时长: {{study_video_time}} 分钟 </p>
+                </div>
+            </div>
+
+					<div class="sort-nav sort-nav-sml clearfix" style="margin-top:20px;">
+					<div class="clear"></div>
+						<dl class="sort-nav-order sort-nav-order-my">
+                            {% if cur == None or cur == 'customer'%}
+                            <dd id="auto-test-2"><a href="{{get_content}}order_by=customer" class="cur" >综合排序</a>
+							</dd>
+                            {% else %}
+                            <dd id="auto-test-2"><a href="{{get_content}}order_by=customer" class="" >综合排序</a>
+							</dd>
+                            {% endif %}
+
+                            {% if cur == 'new' %}
+                            <dd id="auto-test-4"><a href="{{get_content}}order_by=new" class="cur" >最新</a>
+							</dd>
+                            {% else %}
+                            <dd id="auto-test-4"><a href="{{get_content}}order_by=new" class="" >最新</a>
+							</dd>
+                            {% endif %}
+
+                            {% if cur == 'like' %}
+                            <dd id="auto-test-5"><a href="{{get_content}}order_by=like" class="cur" >评分</a>
+							</dd>
+                            {% else %}
+                            <dd id="auto-test-5"><a href="{{get_content}}order_by=like" class="" >评分</a>
+							</dd>
+                            {% endif %}
+
+                            {% if cur == 'popular' %}
+                            <dd id="auto-test-6"><a href="{{get_content}}order_by=popular" class="cur">人气</a>
+							</dd>
+                            {% else %}
+                            <dd id="auto-test-6"><a href="{{get_content}}order_by=popular" class="" >人气</a>
+							</dd>
+                            {% endif %}
+
+                            {% if cur == 'price' %}
+                            {% if up_down == 'up'%}
+                            <dd id="auto-test-17"><a href="{{get_content}}order_by=price&flag={{up_down}}"
+                                class="price-item-my cur" >价格<i class="iconfont i-arrow-top"></i></a>
+							</dd>
+                            {% else %}
+                            <dd id="auto-test-17"><a href="{{get_content}}order_by=price&flag={{up_down}}"
+                                class="price-item-my cur" >价格<i class="iconfont i-arrow-bottom"></i></a>
+							</dd>
+                            {% endif %}
+                            {% else %}
+                            <dd id="auto-test-17"><a href="{{get_content}}order_by=price&flag={{up_down}}" class="price-item-my " >价格<b class="icon icon-price-unselect pngFix"></b></a>
+							</dd>
+                            {% endif %}
+
+                            <dd id="auto-test-2"><a href="/space/cards/" class="" style="font-weight:bold; color:#039ae3; background-color: #eee;">会员卡</a>
+							</dd>
+
+						</dl>
+
+						<dl class="sort-nav-order sort-nav-right">
+							<dd class="video-type">
+								<!--<a class="video-type-item " href="/upload/cousre/" >上传视频</a>-->
+								<!--<a class="video-type-item curr_video" data-video="lubo" data-action="look_lubo" href="/cgi-bin/courseList?mt=1001&amp;show_video=0"
+							data-video-val="0">只看录播</a>-->
+							</dd>
+							<!--<dd id="auto-test-7">
+							<ul class="date-ctrl">
+								<li class="field-start">
+									<input placeholder="开课日期" id="js_start" data-tdw="action=date-click&amp;ver3=1" readonly="1" class="ipt" type="text">
+									<a href="javascript:void(0)" id="js_start_clear" class="clear-btn" title="清空"></a><i class="calendar icon" data-for="js_start"></i>
+								</li>
+							</ul>
+						</dd>-->
+						</dl>
+
+					</div>
+
+					<div class="market-bd market-bd-6 course-list">
+						<ul class="market-list-mod" id="course_list">
+
+							{% for v in videos%}
+							<li class="mlm-item">
+								<div class="course-card course-card1  course-card-nobtn mod-course-card_lu">
+									<div class="course-face">
+										<a href="/videos/play/?video-id={{v.id}}" target="_blank">
+											<img class="item-img" src="{{v.logo_img}}" onerror="this.src='http://9.url.cn/edu/img/img-err.png';this.onerror=null;">
+											<i class="icon-card-lu"></i>
+										</a>
+									</div>
+									<div class="course-title"> 
+										<div href="/videos/play/?video-id={{v.id}}" target="_blank" class="item-tt-link">{{v.title}}</div> 
+									</div>
+									<div class="course-emphasis">
+										{% if v.money == 0 %}
+										<span class="course-price course-price-free item-price-free" style="float: left;"> 免费 </span>
+										{% else %}
+										<span class="course-price course-price-free item-price" style="float: left;">¥{{v.money}}</span>
+										{% endif %}
+										<span class="icon-sep"></span>
+										<a class="course-agency nor-link" href="" title="">
+											<span class="course-agency-name">{{v.tags_str}}</span>
+										</a>
+									</div>
+
+                                    {% if v.card %}
+									<div class="course-emphasis course-relations" style="float: left;">
+                                        <span class="course-num item-price-free">  会员免费  |&nbsp;</span>
+									</div>
+                                    {% endif %}
+
+									<div class="course-emphasis course-relations" style="float: left;">
+										<span class="course-num">  {{v.watch_num}} 观看  </span>
+									</div>
+									<div class="course-emphasis course-relations" style="float: left;">
+										<span class="course-num">  &nbsp;,&nbsp;{{v.like_num}} 赞  </span>
+									</div>
+								</div>
+							</li>
+							{% endfor %}
+
+						</ul>
+					</div>
+
+					<div class="clear"></div>
+
+					<div class="sort-page">
+                        <a href="{{get_content}}page={{pre_page}}" class="page-btn" style="width: 100px;">上一页</a>
+						{% for i in pages_before %}
+                        <a href="{{get_content}}page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a>
+						{% endfor %}
+                        <a href="{{get_content}}page={{cur_page}}" data-page={{cur_page}} class="page-btn page-btn-cur">{{cur_page}}</a>
+						{% for i in pages_after %}
+                        <a href="{{get_content}}page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a>
+						{% endfor %}
+                        <a href="{{get_content}}page={{after_page}}" class="page-btn" style="width: 100px;">下一页</a>
+					</div>
+
+				</div>
+
+				<div class="main-right">
+					<div class="main-right-top">热门推荐</div>
+                    {% for v in intrest_videos %}
+					<div class="main-right-list">
+
+						<div class="mlm-item">
+							<div class="course-card course-card2 ">
+								<div class="course-face">
+									<a href="/videos/play/?video-id={{v.id}}" target="_blank">
+										<img alt="" width="220" height="124" src={{v.logo_img}} onerror="this.src='http://9.url.cn/edu/img/img-err.png';this.onerror=null;">
+										<span class=""></span>
+									</a>
+								</div>
+								<div class="course-title">
+									<div href="/videos/play/?video-id={{v.id}}" class="item-tt-link" target="_blank">{{v.title}}</div>
+									<div class="item-line" style="width:220px; white-space:nowrap;overflow:hidden; text-overflow:ellipsis;" >
+										{% if v.money == 0%}
+										<span class="line-cell item-price-free" style="float: left;"> 免费 </span>
+										{% else %}
+										<span class="line-cell item-price">¥{{v.money}}</span>
+										{% endif %}
+
+										<span class="icon-sep"></span>
+
+										<span class="item-source">
+											<a href="" class="item-source-link"  >{{v.tags_str}}</a>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>{% endfor%}
+				</div>
+
+			</div>
+		</div>
+		{% include "footer.html" %}
+	</body>
+
+</html>

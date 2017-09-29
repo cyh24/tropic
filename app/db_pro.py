@@ -163,7 +163,7 @@ def update_course_post(request):
     try:
         # if request.method == "POST":
             # for x in request.POST:
-                # print x, request.POST[x]
+                # print x
 
         if request.FILES.has_key('logo'):
             if request.FILES['logo'] != None:
@@ -485,7 +485,6 @@ def get_qiniu_files(data):
 
 
 def update_video(request, logo_path="", need_authority=True):
-    print "update_video"
     try:
         data = request.POST
 
@@ -496,6 +495,30 @@ def update_video(request, logo_path="", need_authority=True):
             video.logo_img = logo_path
 
         data = request.POST
+        if data.has_key('province') and data.has_key('city'):
+            try:
+                if int(data['province']) == -1:
+                    video.first_catalogs.clear()
+                else:
+                    first_catalog = FirstCatalog.objects.get(id=int(data['province']))
+                    video.first_catalogs.clear()
+                    video.first_catalogs.add(first_catalog)
+
+                if int(data['city']) == -1:
+                    video.second_catalogs.clear()
+                else:
+                    second_catalog = SecondCatalog.objects.get(id=int(data['city']))
+                    video.second_catalogs.clear()
+                    video.second_catalogs.add(second_catalog)
+            except Exception as e:
+                print("update_video, set catalogs:", str(e))
+        if data.has_key('upload_file'):
+            try:
+                upload_file = data['upload_file']
+                video.upload_file = upload_file
+            except Exception as e:
+                print("update_video, set upload_file:", str(e))
+
         if data.has_key('title'):
             video.title = data['title'].encode('utf-8')
             if video.title.strip() == "":
@@ -760,17 +783,44 @@ def get_order_videos(request, videos, msg):
                     order_key = 'money'
             else:
                 order_key = '-watch_num'
-            m_videos = videos.order_by(order_key)
+            if videos:
+                m_videos = videos.order_by(order_key)
 
             return m_videos, msg
         else:
-            m_videos = videos.order_by('-watch_num')
+            if videos:
+                m_videos = videos.order_by('-watch_num')
 
     except Exception, e:
         printError(e)
 
     return m_videos, msg
 
+
+def get_catalog_videos(request, videos, msg):
+    try:
+        if request.GET.has_key('first_catalog_id'):
+            first_catalog_id = int(request.GET['first_catalog_id'])
+            first_catalog = FirstCatalog.objects.get(id=first_catalog_id)
+            select_id = []
+            for video in videos:
+                if first_catalog in video.first_catalogs.all():
+                    select_id.append(video.id)
+            videos = videos.filter(id__in=select_id)
+            msg['cur_first_cata'] = first_catalog
+
+        if request.GET.has_key('second_catalog_id'):
+            second_catalog_id = int(request.GET['second_catalog_id'])
+            second_catalog = SecondCatalog.objects.get(id=second_catalog_id)
+            select_id = []
+            for video in videos:
+                if second_catalog in video.second_catalogs.all():
+                    select_id.append(video.id)
+            videos = videos.filter(id__in=select_id)
+            msg['cur_second_cata'] = second_catalog
+    except Exception as e:
+        print("get_catalog_videos: ", str(e))
+    return videos, msg
 
 
 def add_like_num(video_id):
@@ -2040,3 +2090,39 @@ def get_watch_video_status(user, video):
         print("get_video_status: ", str(e))
     return video_status
 
+def get_all_first_catalogs():
+    try:
+        first_catalogs = FirstCatalog.objects.all()
+        return first_catalogs
+    except Exception as e:
+        print("get_all_first_catalogs: ", str(e))
+    return None
+
+def get_all_second_catalogs():
+    try:
+        second_catalogs = SecondCatalog.objects.all()
+        return second_catalogs
+    except Exception as e:
+        print("get_all_second_catalogs: ", str(e))
+    return None
+
+def get_study_time(account, videos, msg):
+    try:
+        msg['video_num'] = 0
+        msg['finish_video_num'] = 0
+        msg['study_video_time'] = 0
+        for video in videos:
+            msg['video_num'] += getLen(video.files.all())
+
+        for video in videos:
+            try:
+                video_status = WatchVideoStatus.objects.get(account=account, video=video)
+                if video_status:
+                    msg['finish_video_num'] += video_status.finished_num
+                    msg['study_video_time'] += video_status.total_watched_time
+            except Exception as e:
+                pass
+        msg['study_video_time'] = int(msg['study_video_time']/60)
+    except Exception as e:
+        print("get_study_time: ", str(e))
+    return msg

@@ -76,6 +76,7 @@ def videos_ui(request):
 
     videos = Video.objects.all()
     # videos = Video.objects.filter(is_customize=False).all()
+    videos, msg = get_catalog_videos(request, videos, msg)
     videos, msg = get_order_videos(request, videos, msg)
 
     total_page = (getLen(videos)+PAGE_SIZE-1)/PAGE_SIZE
@@ -126,6 +127,7 @@ def search_result(request):
     try:
         #videos, msg = get_order_videos(request, msg)
         videos = get_search_videos(request)
+        videos, msg = get_catalog_videos(request, videos, msg)
         videos, msg = get_order_videos(request, videos, msg)
 
         total_page = (getLen(videos)+PAGE_SIZE-1)/PAGE_SIZE

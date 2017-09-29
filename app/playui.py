@@ -97,6 +97,11 @@ def play_ui(request):
 
             key = files[current_num].key
             video_url = Qiniu.download_private_url(key.encode('utf-8'))
+            try:
+                if video.upload_file:
+                    msg['download_url'] = Qiniu.download_private_url(video.upload_file.encode('utf-8'))
+            except Exception as e:
+                print("download url:", str(e))
             msg['qfile'] = files[current_num]
             msg['video_url'] = video_url
             play_list = [val for val in files]
