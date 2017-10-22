@@ -362,6 +362,14 @@ def save_video(request, logo_path, need_authority=True):
         video.teacher = Account.objects.filter(user=request.user).all()[0]
 
         data = request.POST
+
+        if data.has_key('upload_file'):
+            try:
+                upload_file = data['upload_file']
+                video.upload_file = upload_file
+            except Exception as e:
+                print("save_video, set upload_file:", str(e))
+
         if data.has_key('title'):
             video.title = data['title'].encode('utf-8')
             if video.title.strip() == "":
@@ -437,6 +445,18 @@ def save_video(request, logo_path, need_authority=True):
                     else:
                         video.public_flag = False
                         video.group.add(group_id)
+
+            if data.has_key('province') and data.has_key('city'):
+                try:
+                    if int(data['province']) != -1:
+                        first_catalog = FirstCatalog.objects.get(id=int(data['province']))
+                        video.first_catalogs.add(first_catalog)
+
+                    if int(data['city']) != -1:
+                        second_catalog = SecondCatalog.objects.get(id=int(data['city']))
+                        video.second_catalogs.add(second_catalog)
+                except Exception as e:
+                    print("save_video, set catalogs:", str(e))
             # if data.has_key('select_group_id'):
                 # group_ids =  data.getlist('select_group_id')
                 # if group_id == -1:

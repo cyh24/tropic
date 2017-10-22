@@ -119,6 +119,19 @@ def upload_course_ui(request):
     groups = Group.objects.all()
     msg['groups'] = groups
 
+    try:
+        firsts = {}
+        first_catalogs = get_all_first_catalogs()
+        for first_cata in first_catalogs:
+            second_catas = []
+            for second_cata in first_cata.second_catalogs.all():
+                second_catas.append({"txt": second_cata.name, "val": second_cata.id})
+            firsts[first_cata.id] = second_catas
+        msg['first_catalogs'] = first_catalogs
+        msg['firsts'] = json.dumps(firsts)
+    except Exception as e:
+        print("upload_course_ui:", str(e))
+
     return render_to_response('upload/upload_course.html', msg)
 
 

@@ -4,11 +4,55 @@
 		{% include "mobile/include.html"%}
 		<link rel="stylesheet" type="text/css" href="/static/css/mobile/videos.css">
 		<link rel="stylesheet" type="text/css" href="/static/css/txkt/common.css">
+
+        <link type="text/css" rel="stylesheet" href="/static/css/shaixuan/css/demo.css?af">
+        <!-- <script src="/static/css/shaixuan/js/jquery-1.8.2.min.js"></script> -->
+        <script src="/static/css/shaixuan/js/demo.js?addfaaa34ad2f"></script>
 	</head>
 
 	<body>
-		{% include "mobile/header.html"%}
-		<div class="media" style="margin-top: 42px;">
+    {%include "mobile/header.html"%}
+
+<div style="height:42px;">
+</div>
+
+<!-- screening -->
+<div class="screening">
+    <ul>
+        <li class="Regional">
+            <span>课程分类</span>
+        </li>
+        <p style="margin-top:14px; font-size: 12px; float: left;">
+        {% if not cur_first_cata%}
+        {% elif cur_first_cata and not cur_second_cata %}
+        <a href="{{get_content}}second_catalog_id=&first_catalog_id={{cur_first_cata.id}}">{{cur_first_cata.name}}</a>
+        {% elif cur_first_cata and cur_second_cata%}
+        <a href="{{get_content}}second_catalog_id=&first_catalog_id={{cur_first_cata.id}}">{{cur_first_cata.name}}</a> / <a href="{{get_content}}second_catalog_id={{cur_second_cata.id}}&first_catalog_id={{cur_first_cata.id}}">{{cur_second_cata.name}}</a>
+        {% endif %}
+        </p>
+        <p style="margin-top:14px; font-size: 12px;float:right;margin-right:10px;">学习: {{finish_video_num}}/{{video_num}}, 时长: {{study_video_time}}分</p>
+    </ul>
+</div>
+<!-- End screening -->
+
+<!--工作城市-->
+<div class="grade-eject" style="">
+    <ul class="grade-w" id="gradew">
+        {% for first_cata in first_catalogs %}
+        <li name="province" onclick="grade1(this, 'grade-t-{{first_cata.id}}');">{{first_cata.name}}  </li>
+        {% endfor %}
+    </ul>
+    {% for first_cata in first_catalogs %}
+    <ul class="grade-t" id="grade-t-{{first_cata.id}}">
+        {% for second_cata in first_cata.second_catalogs_list%}
+        <li name="city" onclick="location.href='{{get_content}}second_catalog_id={{second_cata.id}}&first_catalog_id={{first_cata.id}}';" value='{{second_cata.id}}' id='second_id_{{first_cata.id}}_{{second_cata.id}}'>{{second_cata.name}}  </li>
+        {% endfor %}
+    </ul>
+    {% endfor %}
+</div>
+
+
+		<div class="media" style="margin-top: 45px;">
 			<div class="sort-nav sort-nav-sml clearfix">
 						<dl class="sort-nav-order sort-nav-order-my">
                             <!-- {% if cur == None %} -->
@@ -20,10 +64,10 @@
                             <!-- {% endif %} -->
 
                             {% if cur == 'new' %}
-							<dd id="auto-test-4"><a href="/videos/?order_by=new" class="cur" >最新</a>
+                            <dd id="auto-test-4"><a href="{{get_content}}order_by=new" class="cur" >最新</a>
 							</dd>
                             {% else %}
-							<dd id="auto-test-4"><a href="/videos/?order_by=new" class="" >最新</a>
+                            <dd id="auto-test-4"><a href="{{get_content}}order_by=new" class="" >最新</a>
 							</dd>
                             {% endif %}
 
@@ -36,25 +80,25 @@
                             {% endif %}-->
 
                             {% if cur == 'popular' %}
-							<dd id="auto-test-6"><a href="/videos/?order_by=popular" class="cur">人气</a>
+                            <dd id="auto-test-6"><a href="{{get_content}}order_by=popular" class="cur">人气</a>
 							</dd>
                             {% else %}
-							<dd id="auto-test-6"><a href="/videos/?order_by=popular" class="" >人气</a>
+                            <dd id="auto-test-6"><a href="{{get_content}}order_by=popular" class="" >人气</a>
 							</dd>
                             {% endif %}
 
                             {% if cur == 'price' %}
 	                            {% if up_down == 'up'%}
-								<dd id="auto-test-17"><a href="/videos/?order_by=price&flag={{up_down}}"
+                                <dd id="auto-test-17"><a href="{{get_content}}order_by=price&flag={{up_down}}"
 	                                class="cur" >价格<i class="iconfont i-arrow-top"></i></a>
 								</dd>
 	                            {% else %}
-								<dd id="auto-test-17"><a href="/videos/?order_by=price&flag={{up_down}}"
+                                <dd id="auto-test-17"><a href="{{get_content}}order_by=price&flag={{up_down}}"
 	                                class="cur" >价格<i class="iconfont i-arrow-bottom"></i></a>
 								</dd>
 	                            {% endif %}
                             {% else %}
-								<dd id="auto-test-17"><a href="/videos/?order_by=price&flag={{up_down}}" class="price-item-my " >价格<b class="icon icon-price-unselect pngFix"></b></a>
+                            <dd id="auto-test-17"><a href="{{get_content}}order_by=price&flag={{up_down}}" class="price-item-my " >价格<b class="icon icon-price-unselect pngFix"></b></a>
 								</dd>
                             {% endif %}
 

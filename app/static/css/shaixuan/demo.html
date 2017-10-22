@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>screening</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="x-rim-auto-match" content="none"/>
+    <meta name="HandheldFriendly" content="true"/>
+    <link type="text/css" rel="stylesheet" href="css/demo.css">
+    <script src="js/jquery-1.8.2.min.js"></script>
+    <script src="js/demo.js"></script>
+</head>
+<body>
+<div style="height:200px;"></div>
+<!-- screening -->
+<div class="screening">
+    <ul>
+        <li class="Regional"><span>工作城市</span></li>
+        <li class="Sort"><span>企业性质</span></li>
+        <li class="Brand"><span>专     业</span></li>
+        <li class="meishi"><span>更     多</span></li>
+    </ul>
+</div>
+<!-- End screening -->
+
+<!--工作城市-->
+<div class="grade-eject">
+    <ul class="grade-w" id="gradew">
+        <li onclick="grade1(this)">哈尔滨 </li>
+        <li onclick="grade1(this)">全国  </li>
+        <li onclick="grade1(this)">北京  </li>
+        <li onclick="grade1(this)">天津  </li>
+        <li onclick="grade1(this)">河北  </li>
+        <li onclick="grade1(this)">山西  </li>
+        <li onclick="grade1(this)">内蒙古  </li>
+        <li onclick="grade1(this)">辽宁  </li>
+        <li onclick="grade1(this)">吉林  </li>
+        <li onclick="grade1(this)">黑龙江  </li>
+        <li onclick="grade1(this)">上海  </li>
+        <li onclick="grade1(this)">江苏  </li>
+        <li onclick="grade1(this)">山东  </li>
+        <li onclick="grade1(this)">河南  </li>
+        <li onclick="grade1(this)">湖北  </li>
+        <li onclick="grade1(this)">湖南  </li>
+        <li onclick="grade1(this)">广东  </li>
+        <li onclick="grade1(this)">广西  </li>
+        <li onclick="grade1(this)">海南  </li>
+    </ul>
+    <ul class="grade-t" id="gradet">
+    	<div class="zimu">A</div>
+        <li onclick="gradet(this)">全河北  </li>
+        <div class="zimu">B</div>
+        <li onclick="gradet(this)">石家庄  </li>
+        <li onclick="gradet(this)">唐山  </li>
+        <li onclick="gradet(this)">秦皇岛  </li>
+        <div class="zimu">C</div>
+        <li onclick="gradet(this)">邢台  </li>
+        <li onclick="gradet(this)">保定  </li>
+        <li onclick="gradet(this)">张家口  </li>
+        <div class="zimu">D</div>
+        <li onclick="gradet(this)">承德  </li>
+        <li onclick="gradet(this)">沧州  </li>
+        <div class="zimu">E</div>
+        <li onclick="gradet(this)">廊坊  </li>
+        <li onclick="gradet(this)">衡水  </li>
+    </ul>
+</div>
+<!-- End 工作城市 -->
+
+<!-- 企业性质-->
+<div class="Sort-eject Sort-height">
+    <ul class="Sort-Sort" id="Sort-Sort">
+        <li onclick="Sorts(this)">国有企业</li>
+        <li onclick="Sorts(this)">集体企业</li>
+        <li onclick="Sorts(this)">联营企业</li>
+        <li onclick="Sorts(this)">股份合作制企业</li>
+        <li onclick="Sorts(this)">私营企业</li>
+        <li onclick="Sorts(this)">合伙企业</li>
+    </ul>
+</div>
+
+<!--专业-->
+<div class="Category-eject">
+    <ul class="Category-w" id="Categorytw">
+        <li onclick="Categorytw(this)">计算机专业</li>
+        <li onclick="Categorytw(this)">机电专业</li>
+        <li onclick="Categorytw(this)">建筑专业</li>
+        <li onclick="Categorytw(this)">生物专业</li>
+        <li onclick="Categorytw(this)">金融专业</li>
+    </ul>
+</div>
+<!-- End 专业 -->
+
+<!-- 更多 -->
+<div class="meishi22">
+    <ul class="meishia-w" id="meishia">
+        <li onclick="meishia(this)">行     业</li>
+        <li onclick="meishia(this)">热门招聘</li>
+    </ul>
+    <ul class="meishia-t" id="meishib">
+        <li onclick="meishib(this)"><a href="#">地质学</a> </li>
+        <li onclick="meishib(this)"><a href="#">临床医学  </a></li>
+        <li onclick="meishib(this)"><a href="#">工商管理</a> </li>
+        <li onclick="meishib(this)"><a href="#">生物学 </a></li>
+        <li onclick="meishib(this)"><a href="#">材料科学与工程 </a></li>
+    </ul>
+</div>
+
+
+</body>
+</html>

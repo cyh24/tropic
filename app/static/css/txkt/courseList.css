@@ -792,8 +792,9 @@
 	overflow: visible
 }
 .market-bd-6 .market-list-mod {
-	width: 980px!important;
-	margin-left: -55px
+	/* width: 980px!important; */
+	/* margin-left: -55px */
+    margin-left: -8px
 }
 .market-bd-6 .mlm-item {
 	float: left;
@@ -858,7 +859,7 @@
 	margin-top: 2px
 }
 .course-card1 {
-	padding: 6px 7px!important;
+	/* padding: 6px 7px!important; */
 	width: 220px;
 	height: 210px;
 	overflow: hidden;
