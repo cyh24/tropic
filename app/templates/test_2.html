@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% include "include.html"%}
+    <link rel="stylesheet" href="/static/css/txkt/courseList.css">
+    <link rel="stylesheet" href="/static/css/txkt/common.css">
+
+    <link rel="stylesheet" href="/static/css/bootstrap/bootstrap-combined.min.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+</head>
+
+<body style="background: #F7F9FC;">
+    {% include "header.html" %}
+
+    <div style="min-height:220px; width:100%; margin-top: -100px; z-index: 1; position:relative;">
+        <img src="/static/images/tropic_res/pc/assets/bg3.png"></img>
+    </div>
+
+<div class="container-fluid" style="margin-top: -170px; z-index: 2; position:relative;">
+
+    <div class="row-fluid">
+        <div class="span2">
+        </div>
+
+
+        <div class="span8">
+
+            <div>
+                <center style="font-size: 40px; font-color: #fff">让您的工作更加专业高效</center>
+                <center style="font-size: 15px;" >图表，不仅仅好看，更重要是要让图表说话，使你的数据分析工作更加专业</center>
+            </div>
+
+            <div style="height: 125px; margin-top: 25px; background: #fff; border: 1px solid #eee;">
+                <div style="float: left; width:20%;">
+                    <div style="position:relative; text-align: center; margin-left: auto; margin-right: auto; margin-top:20px;">
+                        <a href="{{get_content}}first_catalog_id=1&second_catalog_id=">
+                            <img src="/static/images/tropic_res/pc/assets/jichu.png"></img>
+                            <p>基础知识</p>
+                        </a>
+                    </div>
+                </div>
+                <hr style="float: left; width:1px; height:65px; background:#ddd;"></hr>
+                <div style="float: left; width:20%;">
+                    <div style="position:relative; text-align: center; margin-left: auto; margin-right: auto; margin-top:20px;">
+                        <a href="{{get_content}}first_catalog_id=2&second_catalog_id=">
+                            <img src="/static/images/tropic_res/pc/assets/hanshu.png"></img>
+                            <p>函数应用</p>
+                        </a>
+                    </div>
+                </div>
+                <hr style="float: left; width:1px; height:65px; background:#ddd;"></hr>
+                <div style="float: left; width:20%;">
+                    <div style="position:relative; text-align: center; margin-left: auto; margin-right: auto; margin-top:20px;">
+                        <a href="{{get_content}}first_catalog_id=3&second_catalog_id=">
+                            <img src="/static/images/tropic_res/pc/assets/shuju2.png"></img>
+                            <p>数据处理技术</p>
+                        </a>
+                    </div>
+                </div>
+                <hr style="float: left; width:1px; height:65px; background:#ddd;"></hr>
+                <div style="float: left; width:20%;">
+                    <div style="position:relative; text-align: center; margin-left: auto; margin-right: auto; margin-top:20px;">
+                        <a href="{{get_content}}first_catalog_id=4&second_catalog_id=">
+                            <img src="/static/images/tropic_res/pc/assets/fenxi.png"></img>
+                            <p>数据分析及报表制作</p>
+                        </a>
+                    </div>
+                </div>
+                <hr style="float: left; width:1px; height:65px; background:#ddd;"></hr>
+                <div style="float: left; width:19%;">
+                    <div style="position:relative; text-align: center; margin-left: auto; margin-right: auto; margin-top:20px;">
+                        <a href="{{get_content}}first_catalog_id=5&second_catalog_id=">
+                            <img src="/static/images/tropic_res/pc/assets/keshi.png"></img>
+                            <p>数据可视化</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                {% if not cur_first_cata %}
+                <div>
+                    <span>全部课程</span>
+                </div>
+                {% else %}
+                <div>
+                    <span>{{cur_first_cata.name}} / {{cur_second_cata.name}}</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <div style="margin-top: 10px;">
+                <div class="span9">
+                    {% if cur_first_cata %}
+                    <div style="background: #fff; border: 1px solid #eee;">
+                        <div style="margin-top: 15px; margin-bottom: 15px; margin-left: 20px;">
+                        {% for x in first_catalogs%}
+                        {% if x = cur_first_cata%}
+                            {% for second_catalog in x.second_catalogs_list%}
+                                <a style="margin-right: 18px; line-height: 25px;" href="{{get_content}}second_catalog_id={{second_catalog.id}}&first_catalog_id={{cur_first_cata.id}}">{{second_catalog.name}}</a>
+                            {% endfor %}
+                        {% endif %}
+                        {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div style="background: #fff; border: 1px solid #eee; margin-top: 10px;">
+                    {% for v in videos%}
+                        <div style="margin-left: 20px; margin-right: 20px; margin-top: 20px;">
+                            <p style="font-color: #000; font-size: 22px; font-weight:bold;">{{v.title}}</p>
+                            <p style="font-color: #ddd;"><font color="#999">{{v.create_time}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 访问次数: {{v.watch_num}}</font></p>
+                            <p>{{v.info}}</p>
+                            <a href="/videos/play/?video-id={{v.id}}">查看详情</a>
+                            <hr>
+                        </div>
+                    {% endfor %}
+                    </div>
+
+                    <div class="clear"></div>
+
+                    <div class="sort-page" style="margin-top: 20px;">
+                        <a href="{{get_content}}page={{pre_page}}" class="page-btn" style="width: 100px;">上一页</a>
+                        {% for i in pages_before %}
+                        <a href="{{get_content}}page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a>
+                        {% endfor %}
+                        <a href="{{get_content}}page={{cur_page}}" data-page={{cur_page}} class="page-btn page-btn-cur">{{cur_page}}</a>
+                        {% for i in pages_after %}
+                        <a href="{{get_content}}page={{i}}" data-page={{i}} class="page-btn ">{{i}}</a>
+                        {% endfor %}
+                        <a href="{{get_content}}page={{after_page}}" class="page-btn" style="width: 100px;">下一页</a>
+                    </div>
+
+                </div>
+
+                <div class="span3">
+                    <div style="background: #fff; border: 1px solid #eee;">
+                        <div>
+                            <div style="margin-top: 15px; margin-left: 20px; font-weight:bold;">
+                                <span>
+                                    <p style="font-size: 16px;">银卡会员</p>
+                                </span>
+                                <hr style="margin-right: 20px; margin-top: -5px;">
+                                <span>
+                                    <p style="font-weight:normal; margin-top: -10px; font-size: 13px; margin-right: 10px;">银卡会员可以免费学习回归线Excel+的所有课程。包括技巧类课程，知识点系列课程，专题课程及回归线开发的系统性课程。</p>
+                                    <p style="font-weight:normal; margin-top: ; font-size: 13px; margin-right: 10px;"><b>学习时限</b>：一个月（自购买日起</p>
+                                    <p style="font-weight:normal; margin-top: ; font-size: 13px; margin-right: 10px;"><b>会员费用</b>：198/每月（会员为月度付费）</p>
+                                </span>
+                            </div>
+                            <div style="text-align: center; margin-bottom:10px; margin-bottom: 20px;">
+                                <a href="/membership-card/?card_id=12">
+                                    <div style="text-align: center;  margin-left: auto; margin-right: auto; width:80%; height:8px; background-color:#039ae3; color: #fff;">
+                                    </div>
+                                    <div style="text-align: center;  margin-left: auto; margin-right: auto; width:80%; height:20px; background-color:#039ae3; color: #fff;">
+                                        成为会员
+                                    </div>
+                                    <div style="text-align: center;  margin-left: auto; margin-right: auto; width:80%; height:8px; background-color:#039ae3; color: #fff;">
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="span2">
+        </div>
+    </div>
+
+</div>
+
+    {% include "footer.html" %}
+</body>
+
+</html>

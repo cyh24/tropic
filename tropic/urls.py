@@ -172,5 +172,6 @@ urlpatterns = patterns('',
 
     url(r'^watch-status/update/', 'app.watch_status.watch_status_update'),
 
+    url(r'^test_2/', 'app.views.test_2'),
     url(r'^test/', 'app.views.test')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

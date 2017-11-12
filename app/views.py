@@ -103,6 +103,65 @@ def tree(request):
     else:
         return render_to_response('tree.html', msg)
 
+def test_2(request):
+    msg = init_msg(request)
+
+    try:
+        first_catalogs = get_all_first_catalogs()
+        for first_cata in first_catalogs:
+            second_catas = []
+            for second_cata in first_cata.second_catalogs.all():
+                second_catas.append(second_cata)
+            first_cata.second_catalogs_list = second_catas
+        msg['first_catalogs'] = first_catalogs
+    except Exception as e:
+        print("get all catalogs error:", str(e))
+
+    videos = Video.objects.all()
+    videos, msg = get_catalog_videos(request, videos, msg)
+    # videos = Video.objects.filter(is_customize=False).all()
+    videos, msg = get_order_videos(request, videos, msg)
+
+    msg = get_study_time(get_account_from_user(request.user), videos, msg)
+    total_page = (getLen(videos)+PAGE_SIZE-1)/PAGE_SIZE
+    subVideos, cur_page = paginator_show(request, videos, PAGE_SIZE)
+
+
+    pages_before, pages_after = paginator_bar(cur_page, total_page)
+
+    try:
+        cards = Card.objects.all()
+        if cards:
+            for i, video in enumerate(subVideos):
+                for card in cards:
+                    if video in card.videos.all():
+                        subVideos[i].card = card
+                        break
+    except Exception as e:
+        print "videos ui: ", e
+
+    msg['videos']     = subVideos
+    msg['cur_page']   = cur_page
+    msg['pages_before'] = pages_before
+    msg['pages_after']  = pages_after
+    msg['pre_page']   = cur_page - 1
+    msg['after_page'] = cur_page + 1
+    msg['total_page'] = total_page
+
+
+    get_content = "/test_2/?"
+    for key in request.GET:
+        if key != "page":
+            get_content += "%s=%s&"%(key, request.GET[key])
+    msg['get_content'] = get_content
+
+    msg['intrest_videos'] = get_intrest_videos()
+
+    if checkMobile(request):
+        return render_to_response('mobile/test_2.html', msg)
+    else:
+        return render_to_response('test_2.html', msg)
+
 def test(request):
     msg = init_msg(request)
 

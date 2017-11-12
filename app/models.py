@@ -188,6 +188,15 @@ class Video(models.Model):
             print str(e)
 
         return None
+
+    @property
+    def create_time(self):
+        try:
+            time_format = '%Y-%m-%d %H:%M'
+            return self.release_date.strftime(time_format)
+        except Exception as e:
+            print(e)
+        return ""
     teacher_name = property(__get_teacher_name)
     teacher_pic  = property(__get_teacher_pic)
     teacher_info = property(__get_teacher_info)
